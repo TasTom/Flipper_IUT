@@ -267,9 +267,19 @@ public static class EnsureMvpStructure
     }
 
     /// <summary>
-    /// Un flipper est un pivot (Rigidbody + HingeJoint + <see cref="Flipper"/>) dont l'enfant
-    /// porte le collider de la batte. Séparer les deux évite qu'un collider centré sur le pivot
-    /// empêche la rotation.
+    /// Un flipper est un pivot (<see cref="Rigidbody"/> cinématique + <see cref="Flipper"/>) dont
+    /// l'enfant porte le collider de la batte. Séparer les deux évite qu'un collider centré sur
+    /// le pivot empêche la rotation.
+    ///
+    /// <para><b>Plus de <c>HingeJoint</c>.</b> Le flipper est tourné par script : l'angle est écrit
+    /// directement par <see cref="Flipper"/> et le corps est cinématique. Le joint à ressort qui
+    /// équipait ce pivot était instable — mesuré : 359° de balayage pour des butées de ±30°, et un
+    /// angle qui passait à <c>NaN</c> dès le 3ᵉ pas physique. La cause tenait au tenseur d'inertie
+    /// rendu <b>singulier</b> par les contraintes de rotation gelée ci-dessous.</para>
+    ///
+    /// <para><b>Ni contraintes de rotation.</b> <c>FreezeRotationX | FreezeRotationY</c> annule
+    /// l'inertie de ces axes, ce qui fait diverger tout joint à ressort. C'est le diagnostic qui a
+    /// été payé pour être trouvé : ne pas le réintroduire.</para>
     /// </summary>
     private static void EnsureFlipper(string name, Transform parent, int side)
     {
@@ -289,43 +299,11 @@ public static class EnsureMvpStructure
         if (isNew)
         {
             body.useGravity = false;
-            // La position reste figée : seule la rotation autour de Z doit bouger.
-            body.constraints = RigidbodyConstraints.FreezePosition |
-                               RigidbodyConstraints.FreezeRotationX |
-                               RigidbodyConstraints.FreezeRotationY;
+            body.isKinematic = true;                    // il commande, il ne subit pas
+            body.constraints = RigidbodyConstraints.None;
             body.linearDamping = 0.5f;
             body.angularDamping = 1.5f;
             body.mass = 1f;
-        }
-
-        HingeJoint hinge = EnsureComponent<HingeJoint>(pivot);
-
-        if (isNew)
-        {
-            hinge.axis = new Vector3(0f, 0f, 1f);
-
-            // L'ancrage d'un joint est un point du MONDE : le `HingeJoint` n'a pas de
-            // `connectedBody`, donc Unity lit `connectedAnchor` dans le repère de la SCÈNE et
-            // non dans celui de l'hôte. Écrit à zéro, il accrochait le flipper à l'ORIGINE —
-            // mesuré à 2,15 u de son propre pivot. La position étant gelée par les contraintes
-            // du `Rigidbody`, la seule liberté qui restait était la rotation autour de Z, et
-            // c'est par là que l'erreur d'ancrage se déchargeait : le joint tordait le flipper
-            // au lieu de le tenir.
-            //
-            // `autoConfigureConnectedAnchor` est le filet : Unity recalcule le point depuis la
-            // pose réelle, ce qui reste juste même si le transform n'est pas encore à sa place
-            // définitive au moment où ce code s'exécute (`PlaceImportedTable` repasse ensuite).
-            hinge.autoConfigureConnectedAnchor = true;
-            hinge.connectedAnchor = pivot.transform.position;
-            hinge.useSpring = true;
-            hinge.useLimits = true;
-            hinge.limits = new JointLimits { min = -30f, max = 30f };
-
-            JointSpring spring = hinge.spring;
-            spring.spring = 1500f;
-            spring.damper = 40f;
-            spring.targetPosition = -30f;
-            hinge.spring = spring;
         }
 
         EnsureComponent<Flipper>(pivot);

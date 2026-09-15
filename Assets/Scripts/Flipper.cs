@@ -12,32 +12,33 @@ public enum FlipperSide
 /// <summary>
 /// Flipper à rotation PILOTÉE PAR SCRIPT (GDD §Flippers principaux).
 ///
-/// <para><b>Pourquoi pas un <c>HingeJoint</c> à ressort.</b> Le montage d'origine — un
-/// <c>HingeJoint</c> dont <see cref="JointSpring.targetPosition"/> bascule entre deux angles —
-/// s'est révélé <b>catastrophiquement instable</b> sur cette table. Mesuré en jeu le 2026-09-15 :
-/// le flipper balayait <b>354°</b> pour des butées de ±30°, avec une vitesse angulaire de
-/// <b>1,7 × 10¹⁰ °/s</b> et un déplacement de <b>118 mm</b> alors que sa position était gelée par
-/// <c>FreezePosition</c>. Dix configurations ont été éprouvées — ressort de 40 à 4000, butées
-/// élargies, colliders coupés, script coupé, amortissement multiplié par sept — <b>aucune n'a
-/// stabilisé le joint</b>, et l'anomalie la plus parlante reste celle-ci : l'angle du joint
-/// changeait d'image en image pendant que la vitesse angulaire mesurée restait à 0,38 °/s. Un
-/// corps simulé ne peut pas faire ça.</para>
+/// <para><b>Pas de <c>HingeJoint</c>.</b> Le montage d'origine — un joint à ressort dont la cible
+/// basculait entre deux angles — s'est révélé instable sur cette table : mesuré en jeu, le
+/// flipper balayait <b>359°</b> pour des butées de ±30°, avec une vitesse angulaire de
+/// <b>1,1 × 10¹⁰ °/s</b> et un déplacement de <b>85 mm</b> alors que sa position était gelée. Et
+/// l'angle du joint passait à <c>NaN</c> dès le 3ᵉ pas physique.</para>
 ///
-/// <para><b>Ce que fait le remplacement.</b> L'angle est écrit directement, par pas physiques, à
-/// vitesse bornée. Le <c>Rigidbody</c> devient <b>cinématique</b> : il ne subit plus rien, il
-/// commande. C'est un choix de conception, pas un contournement — sur une vraie machine un flipper
-/// est actionné par un solénoïde, donc <b>position-commandé</b>, et il n'est jamais poussé par la
-/// bille. Le comportement de jeu est identique ; c'est la source d'instabilité qui disparaît.</para>
+/// <para><b>La cause, trouvée après coup.</b> Le tenseur d'inertie du corps valait
+/// <c>(0 ; 0 ; 0,159)</c> — les axes X et Y avaient une inertie <b>exactement nulle</b>, ce qui
+/// rend le tenseur singulier et fait diverger n'importe quel solveur de contraintes. Elle venait
+/// des contraintes <c>FreezeRotationX | FreezeRotationY</c> : <b>geler une rotation annule
+/// l'inertie de cet axe.</b> Vérifié : en ne gardant que <c>FreezePosition</c>, l'inertie
+/// redevient <c>(0,026 ; 0,164 ; 0,159)</c> et le flipper se pose proprement à son angle de
+/// repos. Ce diagnostic est conservé ici parce qu'il vaut pour tout joint à ressort de ce projet.</para>
+///
+/// <para><b>Le choix retenu, néanmoins : l'angle est écrit directement.</b> Le <c>Rigidbody</c>
+/// devient <b>cinématique</b> — il ne subit plus rien, il commande. C'est aussi le comportement
+/// d'un vrai flipper : actionné par un solénoïde, donc <b>position-commandé</b>, et jamais poussé
+/// par la bille.</para>
 ///
 /// <para><b>Le piège évité : <c>MoveRotation</c>, pas <c>transform.rotation</c>.</b> Déplacer un
 /// collider par son transform ne déclenche aucune détection de collision balayée : un flipper qui
-/// monte en 30 ms traverserait la bille sans la toucher. <c>MoveRotation</c> sur un corps
+/// monte en 27 ms traverserait la bille sans la toucher. <c>MoveRotation</c> sur un corps
 /// cinématique passe par le moteur physique, qui balaie alors le volume entre les deux poses.</para>
 ///
-/// <para><b>Le script se répare lui-même.</b> Un <c>HingeJoint</c> encore présent sur l'objet est
-/// détruit au démarrage : laissé en place, il continuerait d'appliquer ses forces sur un corps
-/// cinématique et fausserait tout. Aucune manipulation d'Inspector n'est donc nécessaire — il
-/// suffit que le script soit là.</para>
+/// <para><b>Aucun composant à retirer à la main.</b> Le joint est supprimé de la scène par
+/// `retirer_joints_flippers.cs`, et `EnsureMvpStructure` n'en crée plus. Ce script ne fait donc
+/// aucune référence à <c>HingeJoint</c> : il n'a rien à réparer.</para>
 ///
 /// <para>Un seul composant sert les trois flippers : le côté détermine la touche (via
 /// <see cref="InputRouter"/>) et le sens de rotation. Si aucun routeur n'est présent dans la
@@ -91,21 +92,6 @@ public class Flipper : MonoBehaviour
     {
         resolvedSide = ResolveSide(side, name);
 
-        // --- le joint résiduel : détruit, il ne doit plus rien commander ---
-        var ancienJoint = GetComponent<HingeJoint>();
-
-        if (ancienJoint != null)
-        {
-            // `Destroy` et non `DestroyImmediate` : on est en jeu, et l'objet peut encore être
-            // référencé ailleurs dans cette image. Le joint disparaît à la fin de la frame
-            // courante, ce qui est trop tard pour nuire — mais on le neutralise tout de suite
-            // pour que sa dernière image ne produise aucun effort.
-            ancienJoint.useSpring = false;
-            ancienJoint.useLimits = false;
-
-            Destroy(ancienJoint);
-        }
-
         // --- le corps : cinématique, il commande sans jamais subir ---
         body = GetComponent<Rigidbody>();
 
@@ -118,7 +104,13 @@ public class Flipper : MonoBehaviour
 
         body.isKinematic = true;
         body.useGravity = false;
-        body.constraints = RigidbodyConstraints.None;   // inutiles sur un corps cinématique
+
+        // AUCUNE contrainte de rotation. `FreezeRotationX | FreezeRotationY` annulerait l'inertie
+        // de ces deux axes — c'est la cause de l'instabilité du joint à ressort qui équipait ce
+        // flipper avant (voir le résumé de classe). Sur un corps cinématique les contraintes ne
+        // servent de toute façon à rien : il ne subit aucune force.
+        body.constraints = RigidbodyConstraints.None;
+
         body.interpolation = RigidbodyInterpolation.Interpolate;
         body.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
 

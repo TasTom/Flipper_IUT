@@ -23,7 +23,7 @@ public class Slingshot : MonoBehaviour
 
     [Tooltip("Part de la poussée dirigée vers le haut de la table (GDD : direction.y 0.2 à 0.25).")]
     [Range(0f, 0.5f)]
-    [SerializeField] private float upwardBias = 0.25f;
+    [SerializeField] private float upwardBias = 0.05f;
 
     [Tooltip("Délai minimum entre deux impulsions, en secondes.")]
     [SerializeField] private float cooldown = 0.12f;

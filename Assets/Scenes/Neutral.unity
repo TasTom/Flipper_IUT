@@ -857,7 +857,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bumper
   bounceForce: 125
-  upwardBias: 0.22
+  upwardBias: 0.05
   cooldown: 0.1
   scoreValue: 150
   hitsBeforeExtinguish: 0
@@ -1563,7 +1563,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bumper
   bounceForce: 125
-  upwardBias: 0.22
+  upwardBias: 0.05
   cooldown: 0.1
   scoreValue: 150
   hitsBeforeExtinguish: 0
@@ -3903,7 +3903,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Slingshot
   kickForce: 150
-  upwardBias: 0.25
+  upwardBias: 0.05
   cooldown: 0.12
   scoreValue: 100
   flashRenderers: []
@@ -4998,7 +4998,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bumper
   bounceForce: 125
-  upwardBias: 0.22
+  upwardBias: 0.05
   cooldown: 0.1
   scoreValue: 150
   hitsBeforeExtinguish: 0
@@ -5079,7 +5079,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Slingshot
   kickForce: 150
-  upwardBias: 0.25
+  upwardBias: 0.05
   cooldown: 0.12
   scoreValue: 100
   flashRenderers: []

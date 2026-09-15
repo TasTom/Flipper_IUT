@@ -112,3 +112,42 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# ---------------------------------------------------------------------------
+# Flipper_IUT — règles propres au projet
+# ---------------------------------------------------------------------------
+#
+# Principe : **tous les assets sont versionnés** — `Assets/Models/Parts/` (146 Mo), les
+# prototypes Modly, l'archive Sketchfab, les captures. Le projet doit s'ouvrir tel quel sur un
+# autre poste, sans avoir à rejouer le pipeline d'assets.
+#
+# Ne sont ignorées que deux familles, nommées explicitement plus bas :
+#   1. les SORTIES D'OUTIL régénérées à chaque exécution (rapports de sondes, rendus du
+#      pipeline Krea/Hunyuan3D, inventaires intermédiaires) ;
+#   2. le CLONE EXTERNE `Tools/pinball-parts/` — voir pourquoi ci-dessous.
+
+# --- Clone externe du dépôt de pièces ---
+#
+# `vbousquet/pinball-parts` (739 Mo) est un dépôt git à part entière, avec son propre `.git`.
+# Ce n'est pas un choix de rangement : git refuse d'ajouter un dépôt imbriqué autrement que
+# comme sous-module, et `git add` n'y verrait qu'une référence vide (`gitlink`) — le contenu
+# ne serait de toute façon pas transféré. Il se reconstitue par `git clone`, et se met à jour
+# par `git pull`.
+/Tools/pinball-parts/
+
+# --- Sorties du pipeline d'assets locaux ---
+#
+# Krea 2 -> normalisation -> Hunyuan3D -> décimation. Ce sont des rendus intermédiaires,
+# volumineux et re-téléchargeables — voir `.github/skills/local-asset-pipeline/SKILL.md`.
+# Les assets FINAUX qu'ils produisent vivent dans `Assets/` et sont, eux, versionnés.
+/Tools/_dl/
+/Tools/modly-output/
+/Tools/modly-input/
+/Tools/comfyui/out/
+
+# --- Rapports des sondes d'outillage ---
+#
+# `Tools/unity/out/` reçoit les rapports des sondes, les captures décodées et les journaux
+# d'export. Tout est régénéré à chaque exécution et n'a aucune valeur de source.
+/Tools/unity/out/
+/Temp/pipeline-screenshots/

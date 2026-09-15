@@ -1,0 +1,11 @@
+Model Information:
+* title:	Pinball Machine
+* source:	https://sketchfab.com/3d-models/pinball-machine-cc2a49ca2ad14910abce89b5a78bb09f
+* author:	Ranguel (https://sketchfab.com/Ranguel)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Pinball Machine" (https://sketchfab.com/3d-models/pinball-machine-cc2a49ca2ad14910abce89b5a78bb09f) by Ranguel (https://sketchfab.com/Ranguel) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

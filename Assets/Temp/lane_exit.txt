@@ -1,0 +1,52 @@
+=== repère du bouchon au repos ===
+  origine (4.6700, 0.4094, 0.1180)
+  bille au repos : avance 17,2380   hauteur -0,1670   latéral -6,3830
+  rayon 0,2250
+
+=== 1. tir droit devant, à hauteur de bille ===
+     depuis    premier obstacle             à l'avance   hauteur   latéral
+       12,0    Rail                             16,9129900    -0,1670    -6,3830
+       14,0    Rail                             16,9129900    -0,1670    -6,3830
+       15,5    Rail                             16,9129900    -0,1670    -6,3830
+       16,0    Rail                             16,9130000    -0,1670    -6,3830
+       16,5    Rail                             16,9130000    -0,1670    -6,3830
+       17,0    Top                              17,6130000    -0,1670    -6,3830
+       17,3    Top                              17,6130000    -0,1670    -6,3830
+
+=== 2. les parois, vers le haut du couloir ===
+     avance    gauche   (nom)                      droite   (nom)
+       15,0     0,2838  Divider                   0,2829  LaneOuter
+       16,0     0,2838  Divider                   0,2829  LaneOuter
+       16,5     0,2838  Divider                   0,2829  LaneOuter
+       17,0     0,3838  Rail                      0,2049  FilletRight
+       17,3     (rien)                            0,0090  FilletRight
+       17,6     0,2320  FilletRight               (rien)
+       18,0     (rien)                            (rien)
+       18,5     (rien)                            (rien)
+       19,0     (rien)                            (rien)
+
+=== 3. le sol, vers le haut (rayon vers le bas depuis 0,10 au-dessus de la bille) ===
+       15,0   Surface à l'hauteur -0,3920
+       16,0   Surface à l'hauteur -0,3920
+       16,8   Surface à l'hauteur -0,3920
+       17,2   Surface à l'hauteur -0,3920
+       17,5   Surface à l'hauteur -0,3920
+       18,0   AUCUN SOL sur 4 u
+       19,0   AUCUN SOL sur 4 u
+       20,0   AUCUN SOL sur 4 u
+
+=== 4. ce qu'il y a au-dessus du couloir ===
+     avance   au-dessus de la bille          au-dessus du couloir (latéral 0)
+      16,0   rien sur 3 u                                    rien sur 3 u
+      16,5   rien sur 3 u                                    rien sur 3 u
+      17,0   rien sur 3 u                                    rien sur 3 u
+      17,3   rien sur 3 u                                    rien sur 3 u
+      17,6   rien sur 3 u                                    rien sur 3 u
+      18,0   rien sur 3 u                                    rien sur 3 u
+
+=== 5. autour du point d'arrêt de la bille (avance 17,238, hauteur -0,167) ===
+    latéral −  rien sur 2 u
+    latéral +  FilletRight à 0,0065  (latéral 0,0635)
+    hauteur −  LaneFloor à 0,1250  (hauteur -0,2920)
+    hauteur +  rien sur 1 u
+    avance +   FilletRight à 0,0077  (avance 17,2457)

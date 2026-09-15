@@ -11,7 +11,7 @@ public class Plunger : MonoBehaviour
 {
     [Header("Charge")]
     [Tooltip("Vitesse de charge, par seconde.")]
-    [SerializeField] private float pullSpeed = 10f;
+    [SerializeField] private float pullSpeed = 3f;
 
     [Tooltip("Course maximale du lanceur, en unités.")]
     [SerializeField] private float maxPull = 0.8f;

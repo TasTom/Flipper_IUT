@@ -53,6 +53,50 @@ configuration claire. » `InputRouter` fournit donc deux dispositions, échangea
 
 Le routeur vérifie le conflit au démarrage et avertit si une même touche sert aux deux.
 
+### Borne physique (xin-mo) — nouvel Input System
+
+La table se joue aussi sur une **borne physique** : l'asset d'actions `PinballControls`
+(map `GamePlayPF`) pilote le bornier *xin-mo Xinmotek*. Ses quatre actions sont
+`LeftFlipper` (`/trigger`), `RightFlipper` (`/button5`), `LaunchBall` (`/button4`) et
+`Quit` (`/button2`).
+
+`Flipper` lit les **trois sources en parallèle** et s'arrête à la première qui presse :
+
+| Ordre | Source | Quand |
+| --- | --- | --- |
+| 1 | `PinballControls.GamePlayPF.LeftFlipper` / `RightFlipper` | case `useCabinetController` cochée (défaut) |
+| 2 | `InputRouter` | routeur présent dans la scène |
+| 3 | `activationKey` (KeyCode) | repli pour une scène sans routeur |
+
+Elles **se cumulent** au lieu de s'exclure : la borne n'a aucune liaison clavier dans son
+asset, donc s'en remettre à elle seule rendrait le jeu injouable sans matériel. C'est ce qui
+permet de mettre au point au clavier sur un poste où la borne n'est pas branchée.
+
+Le **flipper secondaire n'existe pas sur la borne** — l'asset ne déclare pas d'action
+`UpperFlipper`. `FlipperSide.Upper` reste donc clavier, et ne retombe volontairement sur
+**aucune** action voisine : un appui sur la borne ne doit pas faire sauter un flipper que le
+joueur n'a pas demandé.
+
+`ProjectSettings.asset` est en `activeInputHandler: 2` (**Both**) : `Input.GetKey` et le nouvel
+Input System fonctionnent ensemble, c'est ce qui permet aux deux sources de cohabiter.
+
+La lecture se fait par `IsPressed()` au pas physique, **jamais** par un abonnement à
+`performed` : un rappel manqué pendant un pic de charge laisserait le flipper baissé alors que
+le joueur appuie encore.
+
+⚠️ **L'asset source `Assets/PinballControls.inputactions` n'existe pas.** Seul le fichier
+généré `Assets/Scripts/PinballControls.cs` est là — et il **n'est pas suivi par Git**. Il
+compile seul (le JSON des actions est embarqué dans le `.cs`), mais deux conséquences :
+
+- les liaisons ne sont **pas éditables** dans la fenêtre *Input Actions* ;
+- `Flipper.cs` en dépend désormais : **si ce fichier disparaît, le projet tombe en Safe Mode.**
+
+Pour rétablir une situation saine : **supprimer d'abord** `Assets/Scripts/PinballControls.cs`
+(et son `.meta`), **puis** créer `Assets/Scripts/PinballControls.inputactions`. Unity régénère
+le `.cs` au même chemin, le nom de classe ne change pas, `Flipper.cs` reste valide. Faire
+l'inverse — créer l'asset en laissant le `.cs` orphelin — produit **deux fois la même classe
+partielle** et une erreur de compilation.
+
 ## Contrat de scène
 
 Interface entre le travail de l'utilisateur et les scripts. Les noms ci-dessous sont **normatifs** :
@@ -118,6 +162,41 @@ Layers : ajouter `Ball`, `Table`, `TableElement`, `Environment` (le GDD §Tags e
 
 ## Outillage
 
+### 0. Prérequis — les assets sont en Git LFS
+
+**864 fichiers** sont suivis par Git LFS : tout le binaire d'asset (`*.fbx`, `*.glb`, `*.gltf`,
+`*.png`, `*.jpg`, `*.hdr`, `*.tga`, `*.wav`, `*.dll`…). Sans hydratation, ils arrivent sur le
+disque sous forme de **pointeurs texte de 131 octets** et Unity ne peut pas les importer.
+
+C'est la cause n°1 d'un projet « qui s'ouvre mal ». Symptômes :
+
+- `ImportFBX Errors: Couldn't read file .../Plunger.fbx. None of the registered readers can
+  process the file`
+- `Failed to import Assets/Models/Kenney/.../*.glb (see inspector for details)` (GLTFast)
+- Objets absents ou roses ; ouverture très longue, éditeur qui semble figé.
+
+Diagnostic puis correction :
+
+```powershell
+git lfs ls-files | Select-String '^\w+ - '   # '-' = pointeur, '*' = vrai binaire
+Remove-Item ".git\lfs\tmp\*" -Recurse -Force # purge les tmp d'un pull interrompu
+git lfs install --local
+git lfs pull
+```
+
+Un `.fbx` valide pèse des centaines de Ko. **131 octets = pointeur LFS.**
+
+⚠️ Après le pull, l'import ne se déclenche pas tout seul si la fenêtre Unity n'a pas le focus.
+Forcer via `eval_file` : `AssetDatabase.ImportAsset(path, ForceUpdate | ForceSynchronousImport)`
+sur chaque asset. Compter ensuite les échecs réels —
+`AssetDatabase.LoadMainAssetAtPath(p) == null` — plutôt que se fier à la console :
+
+| Type | Attendu | Échecs |
+| --- | --- | --- |
+| FBX / OBJ | 726 | 0 |
+| GLB / GLTF | 96 | 0 |
+| Textures | 101 | 0 |
+
 ### 1. Unity CLI (Pipeline) — outil principal
 
 Pilote l'éditeur Unity **ouvert** via le package `com.unity.pipeline` 0.6.0-exp.1.
@@ -134,6 +213,16 @@ unity command <nom> <arg1> <arg2>   # ⚠️ arguments POSITIONNELS, pas du JSON
 - Les arguments sont **positionnels** : `unity command eval 'return 1+1;'`.
   Passer `'{"code":"..."}'` fait compiler le JSON comme du C# → `; expected`.
 - `eval_file` exige un chemin absolu vers un fichier **`.cs`**.
+- `eval` casse dès que le code contient des guillemets internes ou des `+` non nommés :
+  `Invalid arguments for eval: --timeout expects Int32 but got ok;`. **Passer par `eval_file`**
+  pour tout ce qui dépasse une ligne triviale.
+- ⚠️ `eval` et `eval_file` **expirent au bout de 5 s** sur le thread principal, même pour
+  `return 1+1;`. Ce n'est pas un plantage : le titre de la fenêtre Unity dit ce qu'il fait.
+  Guetter sa disparition au lieu de conclure à un blocage :
+  ```powershell
+  (Get-Process -Id <pid>).MainWindowTitle   # "Importing (iteration 2) - Compress 50% (busy for 04:48)..."
+  ```
+  Un réimport de ~900 modèles prend plusieurs minutes et enchaîne deux passes.
 - Si `unity status` ne répond pas, l'éditeur est probablement en **Safe Mode** (erreur de
   compilation) : `unity pipeline list` le confirme. Corriger le C# puis redémarrer Unity.
 - Ne **jamais** éditer `.unity` / `.prefab` / `.asset` à la main quand l'éditeur est joignable.
@@ -145,7 +234,8 @@ unity command <nom> <arg1> <arg2>   # ⚠️ arguments POSITIONNELS, pas du JSON
 | Exécuter du C# arbitraire | `unity command eval '<code>'` |
 | Exécuter un fichier C# | `unity command eval_file D:/.../probe.cs` |
 | Lire la hiérarchie | `unity command get_scene_hierarchy --format json` |
-| Erreurs console | `unity command get_console_logs --format json` |
+| Erreurs console | `unity command console --format json` |
+| Compteurs console | `unity command console_status --format json` |
 | Créer / modifier un GameObject | `create_gameobject`, `set_transform`, `add_component`, `set_component_properties` |
 | Créer / attacher un script | `create_script`, puis `recompile`, puis `attach_script` |
 | Lire/écrire un champ sérialisé | `get_serialized_fields`, `set_serialized_field` |
@@ -793,6 +883,7 @@ faut un **en déclencheur**, sinon aucune bille n'est comptée perdue. Sa forme 
 | Bloc GDD | Scripts | Scène |
 | --- | --- | --- |
 | Contrôles clavier | ✅ `InputRouter` (2 dispositions) | présents |
+| Contrôles borne xin-mo | ✅ `Flipper.useCabinetController` lit `PinballControls` (cumulé au clavier) | bornier détecté, liaisons résolues |
 | Bille, lanceur | ✅ `Plunger`, `BallManager` | **bille posée (27 mm) et réutilisée ; lanceur posé et éprouvé en physique** — reste la porte à sens unique en haut du couloir |
 | Flippers principaux | ✅ `Flipper` (3 côtés, miroir auto) | hôtes posés (2), **bats à habiller** |
 | Flipper secondaire | ✅ `Flipper` (côté `Upper`) | absent |

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -6,8 +7,28 @@ public class MissionManager : MonoBehaviour
 {
     public static MissionManager Instance;
 
+    /// <summary>Progression des matières : (validées, total).
+    ///
+    /// <para>Émis à chaque validation et à chaque remise à zéro. Un affichage s'y abonne au lieu
+    /// d'écrire dans <see cref="missionText"/> — sinon un seul écran pourrait montrer les missions,
+    /// et ce script devrait connaître l'existence de chacun d'eux.</para>
+    ///
+    /// <para>Le champ <see cref="missionText"/> reste alimenté : il évite de casser le HUD existant,
+    /// mais c'est désormais un abonné parmi d'autres.</para>
+    /// </summary>
+    public event Action<int, int> ProgressChanged;
+
+    /// <summary>Message ponctuel à afficher (Nuit de l'Info…). Vide quand il n'y en a pas.</summary>
+    public event Action<string> Announced;
+
     [SerializeField] private TMP_Text missionText;
     [SerializeField] private int missionBonusScore = 500;
+
+    /// <summary>Nombre de matières validées.</summary>
+    public int CompletedCount => completedSubjects.Count;
+
+    /// <summary>Nombre de matières à valider (5 — voir la divergence GDD/code dans CLAUDE.md).</summary>
+    public int SubjectCount => allSubjects.Length;
 
     private readonly HashSet<string> completedSubjects = new HashSet<string>();
     private readonly string[] allSubjects =
@@ -72,6 +93,10 @@ public class MissionManager : MonoBehaviour
             GameManager.Instance.AddScore(2000);
         }
 
+        // L'annonce passe par l'evenement, comme la progression : l'affichage qui la montre
+        // choisit son texte, ce script ne connait aucun ecran.
+        Announced?.Invoke("NUIT DE L'INFO");
+
         if (missionText != null)
         {
             missionText.text = "NUIT DE L'INFO DECLENCHEE !";
@@ -89,6 +114,8 @@ public class MissionManager : MonoBehaviour
 
     private void UpdateMissionUI()
     {
+        ProgressChanged?.Invoke(completedSubjects.Count, allSubjects.Length);
+
         if (missionText == null)
         {
             return;

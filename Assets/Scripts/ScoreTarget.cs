@@ -1,9 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ScoreTarget : MonoBehaviour
 {
     [SerializeField] private int points = 100;
-    [SerializeField] private float impulseForce = 7f;
+    [SerializeField] private float impulseForce = 117f;   // echelle : 7 x 16,67
 
     private void OnCollisionEnter(Collision collision)
     {

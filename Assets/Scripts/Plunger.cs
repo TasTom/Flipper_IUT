@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 /// <summary>
 /// Lanceur à ressort (GDD §Bille et lanceur) : le joueur charge en maintenant la touche,
@@ -18,7 +18,7 @@ public class Plunger : MonoBehaviour
 
     [Header("Lancement")]
     [Tooltip("Impulsion à pleine charge, en unités/s.")]
-    [SerializeField] private float launchForce = 18f;
+    [SerializeField] private float launchForce = 100f;   // 6 m/s réels — mesuré : la bille sort du couloir à 4,79 m/s
 
     [Tooltip("Demi-largeur de la zone de recherche, en travers du couloir.")]
     [SerializeField] private float catchHalfWidth = 0.5f;
@@ -185,3 +185,5 @@ public class Plunger : MonoBehaviour
         return plungerKey != KeyCode.None && Input.GetKey(plungerKey);
     }
 }
+
+

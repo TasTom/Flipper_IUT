@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -19,7 +19,7 @@ public class Bumper : MonoBehaviour
 {
     [Header("Effet")]
     [Tooltip("Impulsion de répulsion, en unités/s.")]
-    [SerializeField] private float bounceForce = 7.5f;
+    [SerializeField] private float bounceForce = 125f;   // echelle : 7,5 x 16,67
 
     [Tooltip("Part de la poussée dirigée vers le haut de la table (GDD : direction.y 0.2 à 0.25).")]
     [Range(0f, 0.5f)]
@@ -235,3 +235,4 @@ public class Bumper : MonoBehaviour
         }
     }
 }
+

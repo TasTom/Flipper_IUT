@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,17 +20,17 @@ public class BallManager : MonoBehaviour
 
     [Header("Physique")]
     [Tooltip("Vitesse maximale d'une bille, en unités/s. Au-delà, la bille traverse les murs.")]
-    [SerializeField] private float maxSpeed = 22f;
+    [SerializeField] private float maxSpeed = 170f;   // 10 m/s réels — la vitesse terminale d'une bille à l'échelle de la table (1 u = 60 mm)
 
     [Tooltip("En dessous de cette vitesse, le chronomètre d'anti-blocage démarre.")]
-    [SerializeField] private float restSpeedThreshold = 0.6f;
+    [SerializeField] private float restSpeedThreshold = 5f;   // échelle : 0,6 × 16,67
 
     [Header("Anti-blocage")]
     [Tooltip("Durée d'immobilité avant la première relance, en secondes.")]
     [SerializeField] private float stuckDelay = 4f;
 
     [Tooltip("Force de la relance, en impulsion.")]
-    [SerializeField] private float nudgeImpulse = 1.2f;
+    [SerializeField] private float nudgeImpulse = 20f;   // échelle : 1,2 × 16,67
 
     [Tooltip("Nombre de relances avant de replacer la bille au point de départ.")]
     [SerializeField] private int maxNudges = 3;
@@ -498,3 +498,4 @@ public class BallManager : MonoBehaviour
         return null;
     }
 }
+

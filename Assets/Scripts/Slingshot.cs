@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -19,7 +19,7 @@ public class Slingshot : MonoBehaviour
 {
     [Header("Effet")]
     [Tooltip("Impulsion appliquée à la bille, en unités/s.")]
-    [SerializeField] private float kickForce = 9f;
+    [SerializeField] private float kickForce = 150f;   // echelle : 9 x 16,67
 
     [Tooltip("Part de la poussée dirigée vers le haut de la table (GDD : direction.y 0.2 à 0.25).")]
     [Range(0f, 0.5f)]
@@ -193,3 +193,4 @@ public class Slingshot : MonoBehaviour
         }
     }
 }
+

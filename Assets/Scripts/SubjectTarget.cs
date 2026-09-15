@@ -1,10 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SubjectTarget : MonoBehaviour
 {
     [SerializeField] private string subjectId = "Programmation";
     [SerializeField] private int points = 150;
-    [SerializeField] private float impulseForce = 6f;
+    [SerializeField] private float impulseForce = 100f;   // echelle : 6 x 16,67
 
     private void OnCollisionEnter(Collision collision)
     {

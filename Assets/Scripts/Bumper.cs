@@ -49,6 +49,11 @@ public class Bumper : MonoBehaviour
     private float flashEndTime;
     private int hitCount;
 
+    public void ApplyDifficulty(float difficultyBounceForce)
+    {
+        bounceForce = Mathf.Max(0f, difficultyBounceForce);
+    }
+
     /// <summary>Nombre de fois où ce bumper a été touché depuis le début de la partie.</summary>
     public int HitCount => hitCount;
 

@@ -78,6 +78,8 @@ public class Flipper : MonoBehaviour
     private bool pressed;
     private float angle;                      // angle courant, en degrés, signé pour ce côté
     private Quaternion poseZero;              // rotation du pivot à l'angle zéro
+    private Transform batTransform;
+    private Vector3 batBaseScale = Vector3.one;
 
     /// <summary>Vrai pendant que le flipper est en butée haute.</summary>
     public bool IsPressed => pressed;
@@ -91,6 +93,11 @@ public class Flipper : MonoBehaviour
     private void Awake()
     {
         resolvedSide = ResolveSide(side, name);
+        batTransform = FindBatTransform();
+        if (batTransform != null)
+        {
+            batBaseScale = batTransform.localScale;
+        }
 
         // --- le corps : cinématique, il commande sans jamais subir ---
         body = GetComponent<Rigidbody>();
@@ -131,6 +138,51 @@ public class Flipper : MonoBehaviour
         // --- la pose de départ ---
         angle = restAngle * AngleSign(resolvedSide);
         Appliquer();
+    }
+
+    public void ApplyDifficulty(float batScale)
+    {
+        if (batTransform == null)
+        {
+            batTransform = FindBatTransform();
+            if (batTransform != null)
+            {
+                batBaseScale = batTransform.localScale;
+            }
+        }
+
+        if (batTransform != null)
+        {
+            batTransform.localScale = batBaseScale * Mathf.Max(0.1f, batScale);
+        }
+    }
+
+    private Transform FindBatTransform()
+    {
+        Transform[] children = GetComponentsInChildren<Transform>(true);
+
+        foreach (Transform child in children)
+        {
+            if (child == transform)
+            {
+                continue;
+            }
+
+            if (child.name == "Bat_Mesh" || child.name == "Flipper_Bat")
+            {
+                return child;
+            }
+        }
+
+        foreach (Transform child in children)
+        {
+            if (child != transform && child.name.IndexOf("Bat", System.StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return child;
+            }
+        }
+
+        return null;
     }
 
     private void OnValidate()

@@ -264,6 +264,7 @@ public static class EnsureMvpStructure
         EnsureObjectWith<InputRouter>("InputRouter");
         EnsureObjectWith<ScoreManager>("ScoreManager");
         EnsureObjectWith<BallManager>("BallManager");
+        EnsureObjectWith<DifficultyManager>("DifficultyManager");
     }
 
     /// <summary>

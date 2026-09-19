@@ -124,7 +124,14 @@ public class GameManager : MonoBehaviour
 
         if (autoStartOnPlay)
         {
-            StartGame();
+            if (DifficultyManager.Instance != null)
+            {
+                DifficultyManager.Instance.BeginSelection();
+            }
+            else
+            {
+                StartGame();
+            }
         }
         else
         {
@@ -137,7 +144,15 @@ public class GameManager : MonoBehaviour
     {
         if (ValidatePressed() && (State == GameState.GameOver || State == GameState.Attract))
         {
-            StartGame();
+            if (DifficultyManager.Instance != null)
+            {
+                DifficultyManager.Instance.BeginSelection();
+            }
+            else
+            {
+                StartGame();
+            }
+
             return;
         }
 
@@ -176,6 +191,12 @@ public class GameManager : MonoBehaviour
 
         SpawnBall();
         Broadcast("BONNE PARTIE !", 2f);
+    }
+
+    public void BeginDifficultySelection()
+    {
+        SetState(GameState.Attract);
+        Broadcast("CHOISISSEZ LA DIFFICULTE : 1 FACILE | 2 NORMAL | 3 DIFFICILE", 0f);
     }
 
     /// <summary>

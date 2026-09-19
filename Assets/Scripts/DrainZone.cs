@@ -20,6 +20,10 @@ public class DrainZone : MonoBehaviour
     [SerializeField] private float graceDelay;
 
     private Collider pendingBall;
+    private Collider ownCollider;
+    private Vector3 baseColliderSize;
+    private bool lateralRescueEnabled;
+    private float lateralRescueForce;
 
     private void Reset()
     {
@@ -35,9 +39,14 @@ public class DrainZone : MonoBehaviour
 
     private void Awake()
     {
-        Collider own = GetComponent<Collider>();
+        ownCollider = GetComponent<Collider>();
 
-        if (own == null)
+        if (ownCollider is BoxCollider box)
+        {
+            baseColliderSize = box.size;
+        }
+
+        if (ownCollider == null)
         {
             // Cas de l'hôte encore vide. On le dit une fois, puis on se tait : la zone ne
             // comptera simplement aucune bille tant qu'un asset ne l'aura pas meublée.
@@ -46,10 +55,23 @@ public class DrainZone : MonoBehaviour
             return;
         }
 
-        if (!own.isTrigger)
+        if (!ownCollider.isTrigger)
         {
             Debug.LogWarning($"[DrainZone] Le collider de '{name}' n'est pas un déclencheur : " +
                              "la bille rebondira dessus au lieu d'être comptée comme perdue.", this);
+        }
+    }
+
+    public void ApplyDifficulty(float widthMultiplier, bool enableLateralRescue, float rescueForce)
+    {
+        lateralRescueEnabled = enableLateralRescue;
+        lateralRescueForce = Mathf.Max(0f, rescueForce);
+
+        if (ownCollider is BoxCollider box && baseColliderSize != Vector3.zero)
+        {
+            Vector3 size = baseColliderSize;
+            size.x *= Mathf.Max(0.1f, widthMultiplier);
+            box.size = size;
         }
     }
 
@@ -64,6 +86,19 @@ public class DrainZone : MonoBehaviour
             !other.transform.root.CompareTag("Ball"))
         {
             return;
+        }
+
+        if (lateralRescueEnabled && ball != null)
+        {
+            Vector3 localPosition = transform.InverseTransformPoint(ball.position);
+            float halfWidth = ownCollider != null ? ownCollider.bounds.extents.x : 0f;
+
+            if (halfWidth > 0f && Mathf.Abs(localPosition.x) > halfWidth * 0.35f)
+            {
+                Vector3 rescueDirection = localPosition.x > 0f ? -transform.right : transform.right;
+                ball.AddForce(rescueDirection * lateralRescueForce, ForceMode.Impulse);
+                return;
+            }
         }
 
         if (graceDelay <= 0f)

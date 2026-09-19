@@ -50,6 +50,11 @@ public class BallManager : MonoBehaviour
     private readonly Dictionary<Rigidbody, float> stuckTimers = new Dictionary<Rigidbody, float>();
     private readonly Dictionary<Rigidbody, int> nudgeCounts = new Dictionary<Rigidbody, int>();
 
+    public void ApplyDifficulty(float difficultyMaxSpeed)
+    {
+        maxSpeed = Mathf.Max(0f, difficultyMaxSpeed);
+    }
+
     /// <summary>
     /// La bille de scène, tant qu'elle est <b>hors jeu</b> — c'est-à-dire absente de
     /// <see cref="liveBalls"/>. Elle se reconnaît à cela seul : aucun état à tenir à jour,
@@ -300,6 +305,7 @@ public class BallManager : MonoBehaviour
 
         ball.gameObject.SetActive(true);
         ball.isKinematic = false;
+        ConfigureBallPhysics(ball);
         ball.linearVelocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
 
@@ -314,10 +320,18 @@ public class BallManager : MonoBehaviour
             return;
         }
 
+        ConfigureBallPhysics(ball);
         liveBalls.Add(ball);
         stuckTimers[ball] = 0f;
         nudgeCounts[ball] = 0;
         BallCountChanged?.Invoke();
+    }
+
+    private static void ConfigureBallPhysics(Rigidbody ball)
+    {
+        ball.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+        ball.interpolation = RigidbodyInterpolation.Interpolate;
+        ball.detectCollisions = true;
     }
 
     public void Unregister(Rigidbody ball)
@@ -401,7 +415,13 @@ public class BallManager : MonoBehaviour
 
         Debug.LogWarning("[BallManager] Bille passée sous la table : elle est comptée comme perdue. " +
                          "Vérifie qu'aucun trou ne subsiste dans les murs.", ball);
-        NotifyDrained(ball.GetComponent<Collider>());
+        Collider ballCollider = ball.GetComponent<Collider>();
+        if (ballCollider == null)
+        {
+            ballCollider = ball.GetComponentInChildren<Collider>();
+        }
+
+        NotifyDrained(ballCollider);
     }
 
     /// <summary>

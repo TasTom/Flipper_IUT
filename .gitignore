@@ -146,3 +146,24 @@ __pycache__/
 # Les rapports de `Tools/unity/out/` et les captures du CLI tombent déjà sous `/Tools/`, mais
 # `Temp/` est à la racine du projet.
 /Temp/pipeline-screenshots/
+
+# Et ici le `Temp/` que Unity crée **sous `Assets/`** — ce n'est pas celui de la racine, la
+# règle `/[Tt]emp/` ci-dessus ne le couvre donc pas. Les sondes y écrivent leurs captures et
+# leurs relevés (flipcheck.png, lane_exit.txt, cam_phi75.png…), Unity les importe pour rien et
+# ils s'étaient retrouvés versionnés : 40 fichiers retirés du suivi le 2026-09-19. Vérifié avant
+# de les retirer : aucun asset du projet ne référence leurs guid.
+/[Aa]ssets/[Tt]emp/
+
+# --- Fichiers .meta : à NE PAS ignorer ---
+#
+# Unity identifie chaque asset par le guid de son `.meta`. Un `.meta` manquant casse tout ce
+# qui pointait dessus : la scène perd ses composants, les prefabs leurs matériaux, et les
+# références deviennent « Missing ». Ils sont donc versionnés, un par un.
+#
+# Les seules exceptions sont les `.meta` de fichiers qui sont eux-mêmes générés et ignorés
+# (*.pidb.meta, *.pdb.meta, *.mdb.meta, *.unitypackage.meta) : les ignorer est correct, leur
+# fichier n'existe pas dans le dépôt.
+#
+# Contrôle : « git ls-files Assets » doit rendre autant de `.meta` que de fichiers, et
+# « git ls-files --others --exclude-standard -- Assets » ne doit rien rendre.
+

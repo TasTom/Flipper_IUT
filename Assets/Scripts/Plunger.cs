@@ -4,8 +4,16 @@
 /// Lanceur à ressort (GDD §Bille et lanceur) : le joueur charge en maintenant la touche,
 /// la puissance monte avec la durée d'appui, puis le relâchement propulse la bille.
 ///
-/// Passe par <see cref="InputRouter"/> pour la touche, ce qui garde la table des contrôles
-/// du GDD en un seul endroit.
+/// <para><b>Deux sources, cumulatives</b>, comme les flippers : le <b>bouton start de la
+/// borne</b> (action <c>GamePlayPF/LaunchBall</c> de <see cref="PinballControls"/>) et le
+/// <b>clavier</b> via <see cref="InputRouter"/>. La borne n'a aucune liaison clavier dans son
+/// asset : s'en remettre à elle seule rendrait le jeu injouable sans matériel.</para>
+///
+/// <para>Contrairement aux flippers, il n'y a <b>rien à configurer ici</b> : un lanceur n'a
+/// qu'une action possible, <c>LaunchBall</c>. Les flippers avaient besoin d'un champ réglable
+/// parce que gauche et droite sont symétriques et que le câblage d'une borne ne se déduit pas
+/// du nom des actions ; un lanceur, lui, ne peut pas être « inversé ». Si le bouton start ne
+/// répond pas, c'est la <i>liaison</i> de l'asset qu'il faut corriger, pas ce script.</para>
 /// </summary>
 public class Plunger : MonoBehaviour
 {
@@ -38,10 +46,24 @@ public class Plunger : MonoBehaviour
     [Tooltip("Utilisée seulement si la scène n'a pas d'InputRouter.")]
     [SerializeField] private KeyCode plungerKey = KeyCode.Space;
 
+    [Header("Borne physique (Input System)")]
+    [Tooltip("Lit GamePlayPF/LaunchBall sur le contrôleur (bornier xin-mo). " +
+             "Le clavier reste actif en parallèle : les deux se cumulent.")]
+    [SerializeField] private bool useCabinetController = true;
+
+    [Header("Diagnostic")]
+    [Tooltip("Journalise chaque appui et chaque relâchement, avec la source réelle (borne ou " +
+             "clavier) et le contrôle physique. À décocher une fois le câblage vérifié.")]
+    [SerializeField] private bool logInput = true;
+
     private Vector3 restPosition;
     private Vector3 restWorldPosition;
     private float pullAmount;
     private bool launching;
+    private PinballControls cabinet;          // actions de la borne, null si désactivée
+    private bool heldLastFrame;               // état de l'appui à la frame précédente
+    private string currentSource = "aucune";  // qui presse en ce moment
+    private string lastSource = "aucune";     // qui a chargé en dernier, pour le log de relâche
 
     /// <summary>
     /// Avance maximale du bouchon par frame, en unités. 0,1 u = 6 mm, soit moins de la moitié
@@ -81,17 +103,85 @@ public class Plunger : MonoBehaviour
     {
         restPosition = transform.localPosition;
         restWorldPosition = transform.position;
+
+        // Chaque lanceur construit son propre exemplaire plutôt que de partager un statique :
+        // `PinballControls` n'est qu'un emballage autour d'un JSON, et un statique survivrait
+        // d'une session de Play à l'autre dans l'éditeur en gardant une action map périmée.
+        if (useCabinetController)
+        {
+            cabinet = new PinballControls();
+
+            Debug.Log($"[Plunger] {name} : borne='LaunchBall' ({CabinetPath()}), clavier=" +
+                      (InputRouter.Instance != null ? "InputRouter" : plungerKey.ToString()), this);
+        }
+    }
+
+    /// <summary>
+    /// Active l'action map de la borne. Sans cet appel les actions ne reçoivent rien : le nouvel
+    /// Input System n'écoute pas une action laissée désactivée, et <c>IsPressed()</c> renverrait
+    /// <c>false</c> en silence — la panne la plus difficile à diagnostiquer.
+    /// </summary>
+    private void OnEnable()
+    {
+        if (cabinet != null)
+        {
+            cabinet.GamePlayPF.Enable();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (cabinet != null)
+        {
+            cabinet.GamePlayPF.Disable();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (cabinet == null)
+        {
+            return;
+        }
+
+        cabinet.GamePlayPF.Disable();
+
+        // `DestroyImmediate` en toutes circonstances : `Dispose()` — qui appelle
+        // `Object.Destroy` — produit « Destroy may not be called from edit mode » quand la
+        // session de Play se termine. Mesuré sur `Flipper`, même motif.
+        DestroyImmediate(cabinet.asset);
+
+        cabinet = null;
     }
 
     private void Update()
     {
+        // La source n'est interrogée qu'UNE fois par frame : `IsPressed()` au pas physique et
+        // `Input.GetKey` dans `Update` ne verraient pas la même chose si on les appelait deux
+        // fois, et la transition d'appui deviendrait incohérente.
+        bool avant = heldLastFrame;
+        heldLastFrame = PlungerHeld();
+
+        if (logInput && heldLastFrame != avant)
+        {
+            if (heldLastFrame)
+            {
+                lastSource = currentSource;
+                Debug.Log($"[Plunger] {name}  CHARGEMENT  <- {lastSource}", this);
+            }
+            else
+            {
+                Debug.Log($"[Plunger] {name}  relâché  (source : {lastSource})", this);
+            }
+        }
+
         if (launching)
         {
             // Course de retour : le bouchon revient au repos en poussant la bille devant lui,
             // au lieu de la traverser d'un coup. Voir ReturnSpeed pour la borne de vitesse.
             pullAmount = Mathf.MoveTowards(pullAmount, 0f, ReturnSpeed * Time.deltaTime);
         }
-        else if (PlungerHeld())
+        else if (heldLastFrame)
         {
             pullAmount = Mathf.Clamp(pullAmount + pullSpeed * Time.deltaTime, 0f, maxPull);
         }
@@ -175,14 +265,66 @@ public class Plunger : MonoBehaviour
         launching = false;
     }
 
+    /// <summary>
+    /// Charge demandée par la borne ou par le clavier, et <b>se souvient de laquelle</b>.
+    ///
+    /// <para>La source est mémorisée dans <see cref="currentSource"/> : c'est ce qui permet au
+    /// journal de dire <i>quel</i> bouton a répondu. Sans cela, un bouton start câblé sur le
+    /// mauvais connecteur ne se distingue pas d'une touche Espace restée enfoncée.</para>
+    /// </summary>
     private bool PlungerHeld()
     {
-        if (InputRouter.Instance != null)
+        if (cabinet != null && cabinet.GamePlayPF.LaunchBall.IsPressed())
         {
-            return InputRouter.Instance.PlungerHeld;
+            currentSource = "BORNE " + CabinetPath();
+            return true;
         }
 
-        return plungerKey != KeyCode.None && Input.GetKey(plungerKey);
+        if (InputRouter.Instance != null)
+        {
+            if (InputRouter.Instance.PlungerHeld)
+            {
+                currentSource = "CLAVIER (InputRouter, lanceur)";
+                return true;
+            }
+
+            currentSource = "aucune";
+            return false;
+        }
+
+        if (plungerKey != KeyCode.None && Input.GetKey(plungerKey))
+        {
+            currentSource = "CLAVIER (" + plungerKey + ")";
+            return true;
+        }
+
+        currentSource = "aucune";
+        return false;
+    }
+
+    /// <summary>
+    /// Chemin du contrôle physique écouté — par exemple
+    /// <c>&lt;HID::xin-mo.com Xinmotek Controller&gt;/button4</c>.
+    ///
+    /// <para>C'est ce qui rend le diagnostic possible : le nom de l'action ne dit pas quel bouton
+    /// le joueur doit presser, le chemin si. Affiché au démarrage et à chaque appui, il
+    /// transforme « le bouton start ne fait rien » en une correspondance lisible.</para>
+    /// </summary>
+    private string CabinetPath()
+    {
+        if (cabinet == null)
+        {
+            return "aucune borne";
+        }
+
+        var action = cabinet.GamePlayPF.LaunchBall;
+
+        if (action == null || action.bindings.Count == 0)
+        {
+            return "action non liée";
+        }
+
+        return action.bindings[0].path;
     }
 }
 

@@ -21,7 +21,7 @@ public class SubjectTarget : MonoBehaviour
         if (ballRigidbody != null)
         {
             Vector3 direction = (collision.transform.position - transform.position).normalized;
-            direction.y = 0.2f;
+            direction.y = 0.05f;
             ballRigidbody.AddForce(direction * impulseForce, ForceMode.Impulse);
         }
     }

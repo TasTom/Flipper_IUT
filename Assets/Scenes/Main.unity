@@ -5278,7 +5278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TableGravity
   tiltAngle: 7
-  gravityStrength: 9.81
+  gravityStrength: 163.5
 --- !u!1001 &2109237001
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -57,13 +57,12 @@ public class TableGravity : MonoBehaviour
 
     private void Awake()
     {
-        Physics.gravity = new Vector3(0f, -gravityStrength, 0f);
+        Transform root = ResolveRoot();
+        Physics.gravity = CalculateGravity(root);
 
         // Le pas et le solveur vont avec la gravité : les trois forment un seul réglage.
         Time.fixedDeltaTime = PasPhysique;
         Physics.defaultSolverIterations = IterationsSolveur;
-
-        Transform root = ResolveRoot();
 
         if (root == null)
         {
@@ -84,6 +83,30 @@ public class TableGravity : MonoBehaviour
                 "rencontré vers l'aval et la partie se bloque.\n" +
                 "Menu Flipper > Incliner la table à 7° pour corriger.", this);
         }
+    }
+
+    private Vector3 CalculateGravity(Transform root)
+    {
+        if (root == null)
+        {
+            return Vector3.down * gravityStrength;
+        }
+
+        float actual = Mathf.DeltaAngle(0f, root.eulerAngles.x);
+        float expected = -tiltAngle;
+
+        if (Mathf.Abs(actual - expected) <= 0.5f)
+        {
+            return Vector3.down * gravityStrength;
+        }
+
+        // Compatibilité avec les scènes legacy dont le plateau est encore horizontal :
+        // la composante -Z locale remplace la pente absente et empêche la bille de remonter.
+        Vector3 tableDownhill = new Vector3(
+            0f,
+            -Mathf.Cos(tiltAngle * Mathf.Deg2Rad),
+            -Mathf.Sin(tiltAngle * Mathf.Deg2Rad));
+        return root.TransformDirection(tableDownhill.normalized) * gravityStrength;
     }
 
     private Transform ResolveRoot()

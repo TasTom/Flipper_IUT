@@ -38,10 +38,24 @@ public class Plunger : MonoBehaviour
     [Tooltip("Utilisée seulement si la scène n'a pas d'InputRouter.")]
     [SerializeField] private KeyCode plungerKey = KeyCode.Space;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip pullSound;
+    [Range(0f, 1f)]
+    [SerializeField] private float pullVolume = 1f;
+
+    [SerializeField] private AudioClip launchSound;
+    [Range(0f, 1f)]
+    [SerializeField] private float launchVolume = 1f;
+
+    [SerializeField] private AudioClip releaseImpactSound;
+    [Range(0f, 1f)]
+    [SerializeField] private float impactVolume = 1f;
+
     private Vector3 restPosition;
     private Vector3 restWorldPosition;
     private float pullAmount;
     private bool launching;
+    private bool wasHolding;
 
     /// <summary>
     /// Avance maximale du bouchon par frame, en unités. 0,1 u = 6 mm, soit moins de la moitié
@@ -55,17 +69,6 @@ public class Plunger : MonoBehaviour
     /// <summary>
     /// Vitesse de la course de retour, bornée pour que le bouchon n'avance jamais de plus de
     /// <see cref="ReturnStep"/> par frame.
-    ///
-    /// Pourquoi une borne : au relâchement le bouchon est reculé de 0,8 u et la bille est posée
-    /// contre sa face. Le remettre au repos d'un coup fait sauter le collider *dans* la bille —
-    /// et PhysX résout un enfoncement profond par un désenfoncement positionnel, dans un sens qui
-    /// dépend de quel côté de la boîte tombe le centre de la bille, donc parfois à contresens.
-    /// Une course progressive forme toujours le contact par l'arrière : la bille ne peut qu'être
-    /// poussée vers l'avant.
-    ///
-    /// La borne dépend de la durée de la frame, et non du pas physique : le bouchon est bougé
-    /// depuis <see cref="Update"/>, donc une frame longue (hitch, chargement) ferait à elle seule
-    /// l'avance qu'on cherche à interdire.
     /// </summary>
     private float ReturnSpeed
     {
@@ -85,14 +88,22 @@ public class Plunger : MonoBehaviour
 
     private void Update()
     {
+        bool isHolding = PlungerHeld();
+
         if (launching)
         {
             // Course de retour : le bouchon revient au repos en poussant la bille devant lui,
             // au lieu de la traverser d'un coup. Voir ReturnSpeed pour la borne de vitesse.
             pullAmount = Mathf.MoveTowards(pullAmount, 0f, ReturnSpeed * Time.deltaTime);
         }
-        else if (PlungerHeld())
+        else if (isHolding)
         {
+            // Début du tirage du ressort : jouer le son de charge (une fois au moment où l'appui commence)
+            if (!wasHolding && pullSound != null)
+            {
+                AudioSource.PlayClipAtPoint(pullSound, transform.position, pullVolume);
+            }
+
             pullAmount = Mathf.Clamp(pullAmount + pullSpeed * Time.deltaTime, 0f, maxPull);
         }
         else if (pullAmount > 0f)
@@ -100,6 +111,7 @@ public class Plunger : MonoBehaviour
             Launch();
         }
 
+        wasHolding = isHolding;
         transform.localPosition = restPosition + Vector3.back * pullAmount;
     }
 
@@ -115,6 +127,12 @@ public class Plunger : MonoBehaviour
         {
             PushBalls(power);
             NotifyLaunched();
+
+            // Son de tir lors de la propulsion de la bille
+            if (launchSound != null)
+            {
+                AudioSource.PlayClipAtPoint(launchSound, transform.position, launchVolume * power);
+            }
         }
 
         // Le bouchon ne revient plus d'un coup : `pullAmount` décroît dans Update et `launching`
@@ -168,6 +186,12 @@ public class Plunger : MonoBehaviour
 
     private void ResetLaunch()
     {
+        // Son de choc du ressort revenant au repos
+        if (launching && releaseImpactSound != null)
+        {
+            AudioSource.PlayClipAtPoint(releaseImpactSound, transform.position, impactVolume);
+        }
+
         // Filet de sécurité : `MoveTowards` peut s'arrêter à un cheveu du repos, et la position
         // locale est écrite à chaque frame depuis `pullAmount`.
         pullAmount = 0f;
@@ -185,5 +209,3 @@ public class Plunger : MonoBehaviour
         return plungerKey != KeyCode.None && Input.GetKey(plungerKey);
     }
 }
-
-

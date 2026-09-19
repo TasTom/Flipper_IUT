@@ -38550,6 +38550,12 @@ MonoBehaviour:
   relaunchDelay: 0.3
   returnSpeed: 100
   plungerKey: 32
+  pullSound: {fileID: 8300000, guid: 8faac63643e8979468c88227929b3d02, type: 3}
+  pullVolume: 1
+  launchSound: {fileID: 8300000, guid: 8e83f77d96d382f4782ca1f387405202, type: 3}
+  launchVolume: 1
+  releaseImpactSound: {fileID: 0}
+  impactVolume: 1
 --- !u!1001 &1384851268
 PrefabInstance:
   m_ObjectHideFlags: 0

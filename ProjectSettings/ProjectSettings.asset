@@ -913,7 +913,13 @@ PlayerSettings:
   XboxOneXTitleMemory: 8
   XboxOneOverrideIdentityName: 
   XboxOneOverrideIdentityPublisher: 
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    Build: 0
+    Game Performance: 0
+    Legacy Analytics: 0
+    Purchasing: 0
+    UDP: 0
+    Unity Ads: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -936,11 +942,11 @@ PlayerSettings:
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
   enableDirectStorage: 0
-  cloudProjectId: a9edea51-c663-452a-b02d-9916aef21639
+  cloudProjectId: db951cc7-be31-4290-893b-cb95318c0e64
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: Flipper_IUT
-  organizationId: unity_62e1710485c9c43a206b
+  organizationId: valoudu88
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

@@ -189,7 +189,9 @@ public class BallManager : MonoBehaviour
             return;
         }
 
-        Rigidbody body = ballCollider.attachedRigidbody;
+        Rigidbody body = ballCollider.attachedRigidbody != null
+            ? ballCollider.attachedRigidbody
+            : ballCollider.GetComponentInParent<Rigidbody>();
 
         Unregister(body);
 
@@ -218,7 +220,9 @@ public class BallManager : MonoBehaviour
             return;
         }
 
-        Rigidbody body = ballCollider.attachedRigidbody;
+        Rigidbody body = ballCollider.attachedRigidbody != null
+            ? ballCollider.attachedRigidbody
+            : ballCollider.GetComponentInParent<Rigidbody>();
         GameObject objet = body != null ? body.gameObject : ballCollider.gameObject;
 
         // Désactivé AVANT d'être détruit, et ce n'est pas cosmétique : `Destroy` ne prend effet
@@ -485,8 +489,7 @@ public class BallManager : MonoBehaviour
     /// </summary>
     private static Rigidbody FindSceneBall()
     {
-        foreach (Rigidbody body in FindObjectsByType<Rigidbody>(
-                     FindObjectsInactive.Include, FindObjectsSortMode.None))
+        foreach (Rigidbody body in FindObjectsByType<Rigidbody>(FindObjectsInactive.Include))
         {
             // Un Rigidbody de prefab n'appartient à aucune scène : il ne doit pas être retenu.
             if (body.CompareTag("Ball") && body.gameObject.scene.IsValid())

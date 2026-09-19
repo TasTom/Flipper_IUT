@@ -51,6 +51,13 @@ public class HudController : MonoBehaviour
 
     private void OnEnable()
     {
+        Subscribe();
+    }
+
+    private void Subscribe()
+    {
+        Unsubscribe();
+
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.ScoreChanged += OnScoreChanged;
@@ -65,6 +72,11 @@ public class HudController : MonoBehaviour
     }
 
     private void OnDisable()
+    {
+        Unsubscribe();
+    }
+
+    private void Unsubscribe()
     {
         if (ScoreManager.Instance != null)
         {
@@ -91,6 +103,8 @@ public class HudController : MonoBehaviour
     {
         // Les gestionnaires ont fini leur Awake : on récupère l'état initial plutôt que
         // d'attendre le premier événement, qui n'arrivera qu'au premier point marqué.
+        Subscribe();
+
         if (ScoreManager.Instance != null)
         {
             OnScoreChanged(ScoreManager.Instance.Score);

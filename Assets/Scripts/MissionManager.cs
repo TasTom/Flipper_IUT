@@ -30,6 +30,9 @@ public class MissionManager : MonoBehaviour
     /// <summary>Nombre de matières à valider (5 — voir la divergence GDD/code dans CLAUDE.md).</summary>
     public int SubjectCount => allSubjects.Length;
 
+    /// <summary>Indique si le bonus Nuit de l'Info est actuellement actif.</summary>
+    public bool IsNuitDeLInfoActive => nuitDeLInfoTriggered;
+
     private readonly HashSet<string> completedSubjects = new HashSet<string>();
     private readonly string[] allSubjects =
     {

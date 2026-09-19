@@ -12,9 +12,6 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
 
-    /// <summary>Clé historique : conservée pour ne pas perdre le record déjà enregistré.</summary>
-    private const string HighScoreKey = "VosgesTilt_HighScore";
-
     [Header("Départ")]
     [SerializeField] private int startingScore;
 
@@ -47,8 +44,13 @@ public class ScoreManager : MonoBehaviour
         }
 
         Instance = this;
+        if (GetComponent<HighScoreManager>() == null)
+        {
+            gameObject.AddComponent<HighScoreManager>();
+        }
+
         Score = startingScore;
-        HighScore = PlayerPrefs.GetInt(HighScoreKey, 0);
+        HighScore = HighScoreManager.Instance != null ? HighScoreManager.Instance.HighScore : 0;
     }
 
     private void OnDestroy()
@@ -79,6 +81,18 @@ public class ScoreManager : MonoBehaviour
         ScoreChanged?.Invoke(Score);
     }
 
+    /// <summary>Ajoute un nombre exact de points sans appliquer le multiplicateur.</summary>
+    public void AddExact(int points)
+    {
+        if (points == 0)
+        {
+            return;
+        }
+
+        Score = Mathf.Max(0, Score + points);
+        ScoreChanged?.Invoke(Score);
+    }
+
     /// <summary>Remet le score à zéro pour une nouvelle partie. Le record est conservé.</summary>
     public void ResetScore()
     {
@@ -106,9 +120,12 @@ public class ScoreManager : MonoBehaviour
             return false;
         }
 
-        HighScore = Score;
-        PlayerPrefs.SetInt(HighScoreKey, HighScore);
-        PlayerPrefs.Save();
+        if (HighScoreManager.Instance != null)
+        {
+            HighScoreManager.Instance.SaveIfHigher(Score);
+            HighScore = HighScoreManager.Instance.HighScore;
+        }
+
         HighScoreChanged?.Invoke(HighScore);
         return true;
     }

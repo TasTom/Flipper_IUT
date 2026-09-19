@@ -1,0 +1,4 @@
+repository "cours1_sensi_multimedia/Flipper_IUT@1375605881322@cloud"
+  path "/"
+    br "/main"
+    co "/main"

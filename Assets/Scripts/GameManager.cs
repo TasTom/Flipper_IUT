@@ -192,6 +192,17 @@ public class GameManager : MonoBehaviour
         ScoreManager.Instance.Add(points);
     }
 
+    /// <summary>Ajoute un nombre exact de points sans appliquer le multiplicateur.</summary>
+    public void AddExactScore(int points)
+    {
+        if (State == GameState.GameOver || ScoreManager.Instance == null)
+        {
+            return;
+        }
+
+        ScoreManager.Instance.AddExact(points);
+    }
+
     /// <summary>Appelé par le lanceur quand la bille part réellement.</summary>
     public void NotifyBallLaunched()
     {

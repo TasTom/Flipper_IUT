@@ -55,7 +55,13 @@ public class DrainZone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Ball"))
+        Rigidbody ball = other.attachedRigidbody != null
+            ? other.attachedRigidbody
+            : other.GetComponentInParent<Rigidbody>();
+
+        if (!other.CompareTag("Ball") &&
+            (ball == null || !ball.gameObject.CompareTag("Ball")) &&
+            !other.transform.root.CompareTag("Ball"))
         {
             return;
         }

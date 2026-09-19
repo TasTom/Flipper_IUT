@@ -7,11 +7,12 @@ TagManager:
   - Pinball
   - Ball
   - Flipper
+  - Kicker
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Kicker
   - Water
   - UI
   - 

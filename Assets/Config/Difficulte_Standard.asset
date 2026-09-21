@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc5e3c27a2994ab418f6bcac8a6fe494, type: 3}
+  m_Name: Difficulte_Standard
+  m_EditorClassIdentifier: Assembly-CSharp::DifficultyConfig
+  difficultyName: Standard
+  secoussesAvantAvertissement: 2
+  secoussesAvantTilt: 4
+  maxBallSpeed: 170
+  firstExtraBallThreshold: 30000
+  extraBallThresholdStep: 30000
+  maxExtraBalls: 3

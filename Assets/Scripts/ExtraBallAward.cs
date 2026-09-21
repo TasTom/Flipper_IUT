@@ -59,6 +59,18 @@ public class ExtraBallAward : MonoBehaviour
         awarded = 0;
     }
 
+    /// <summary>
+    /// Fixe les paliers (GDD §Difficultés). Appelé par <see cref="DifficultyManager"/> ;
+    /// les valeurs viennent d'un <see cref="DifficultyConfig"/>, jamais en dur.
+    /// </summary>
+    public void ConfigurerPaliers(int premierPalier, int pas, int maxBillets)
+    {
+        firstThreshold = premierPalier;
+        thresholdStep = pas;
+        maxExtraBalls = maxBillets;
+        ResetThresholds();
+    }
+
     private void OnScoreChanged(int score)
     {
         // Un score qui baisse = nouvelle partie (ResetScore) : remettre les jalons à zéro,

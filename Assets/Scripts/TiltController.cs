@@ -71,6 +71,17 @@ public class TiltController : MonoBehaviour
     /// <summary>Émis au premier avertissement.</summary>
     public event System.Action<TiltController> Averti;
 
+    /// <summary>
+    /// Fixe la tolérance aux secousses (GDD §Difficultés). Appelé par
+    /// <see cref="DifficultyManager"/> ; les valeurs viennent d'un
+    /// <see cref="DifficultyConfig"/>, jamais en dur.
+    /// </summary>
+    public void ConfigurerSecousses(int avantAvertissement, int avantTilt)
+    {
+        secoussesAvantAvertissement = Mathf.Max(1, avantAvertissement);
+        secoussesAvantTilt = Mathf.Max(secoussesAvantAvertissement, avantTilt);
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)

@@ -233,6 +233,17 @@ public class BallManager : MonoBehaviour
         Destroy(objet);
     }
 
+    /// <summary>
+    /// Fixe la vitesse plafond de la bille (GDD §Difficultés). Appelé par
+    /// <see cref="DifficultyManager"/> ; la valeur vient d'un <see cref="DifficultyConfig"/>,
+    /// jamais en dur. Les billes déjà en jeu sont ramenées dans le nouveau plafond au
+    /// prochain pas physique.
+    /// </summary>
+    public void SetMaxSpeed(float value)
+    {
+        maxSpeed = Mathf.Max(1f, value);
+    }
+
     /// <summary>Retire toutes les billes en jeu, sans émettre <see cref="BallDrained"/>.</summary>
     public void ClearAll()
     {
@@ -242,8 +253,7 @@ public class BallManager : MonoBehaviour
 
             if (ball == null)
             {
-                continue;
-            }
+                continue;            }
 
             // La bille de scène survit à un redémarrage de partie : c'est elle que
             // `SpawnBall` réutilise juste après. La détruire ici priverait la partie suivante

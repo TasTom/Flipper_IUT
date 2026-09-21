@@ -537,7 +537,7 @@ public static class EnsureMvpStructure
     /// </remarks>
     internal static void FillEmptyGameManagerFields()
     {
-        GameManager manager = Object.FindFirstObjectByType<GameManager>();
+        GameManager manager = Object.FindAnyObjectByType<GameManager>();
 
         if (manager == null)
         {

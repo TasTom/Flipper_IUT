@@ -31,8 +31,17 @@ public class Plunger : MonoBehaviour
     [Tooltip("Demi-largeur de la zone de recherche, en travers du couloir.")]
     [SerializeField] private float catchHalfWidth = 0.5f;
 
-    [Tooltip("Distance devant la position de repos jusqu'où la bille est cherchée.")]
+    [Tooltip("Demi-hauteur de la zone de recherche, dans l'axe de la gravité de table.")]
+    [SerializeField] private float catchHalfHeight = 0.5f;
+
+    [Tooltip("Distance devant le BOUT DU BOUCHON jusqu'où la bille est cherchée.")]
     [SerializeField] private float catchOffset = 0.6f;
+
+    [Header("Bouchon")]
+    [Tooltip("Collider de la pièce qui touche réellement la bille. La zone de recherche se mesure "
+           + "depuis SA géométrie, jamais depuis cet hôte — voir PushBalls. Laissé vide, il est "
+           + "cherché dans le sous-arbre.")]
+    [SerializeField] private Collider headCollider;
 
     [Tooltip("Délai avant de pouvoir relancer, en secondes.")]
     [SerializeField] private float relaunchDelay = 0.3f;
@@ -58,6 +67,14 @@ public class Plunger : MonoBehaviour
 
     private Vector3 restPosition;
     private Vector3 restWorldPosition;
+
+    /// <summary>
+    /// Collider du bouchon, et son emprise AU REPOS. C'est depuis cette emprise que se mesure la
+    /// zone de recherche des billes — jamais depuis la position de cet hôte.
+    /// </summary>
+    private Collider tete;
+    private Bounds teteAuRepos;
+
     private float pullAmount;
     private bool launching;
     private PinballControls cabinet;          // actions de la borne, null si désactivée
@@ -104,6 +121,29 @@ public class Plunger : MonoBehaviour
         restPosition = transform.localPosition;
         restWorldPosition = transform.position;
 
+        // --- le bouchon -----------------------------------------------------------------------
+        //
+        // ⚠ Le bouchon n'est PAS forcément au même endroit que cet hôte, et cette différence a
+        // coûté un lanceur muet. Mesuré sur `Neutral` : l'hôte était à x = 4,670 (dans l'aire de
+        // jeu) alors que `Plunger_Rod/Rod`, qui porte le collider, était à x = 6,969 (dans le
+        // couloir) — soit 2,299 u = 137,9 mm d'écart EN TRAVERS du couloir. Le bouchon est un
+        // enfant décalé, et rien ne garantit qu'il soit à l'aplomb de son hôte.
+        //
+        // La zone de recherche se mesure donc depuis la GÉOMÉTRIE DU BOUCHON. C'est aussi ce qui
+        // rend le script insensible à la longueur du bouchon et à l'endroit où tombe son origine.
+        tete = headCollider != null ? headCollider : GetComponentInChildren<Collider>();
+
+        if (tete == null)
+        {
+            Debug.LogWarning($"[Plunger] {name} : aucun collider dans le sous-arbre — le bouchon " +
+                             "ne pourra pas pousser la bille. Poser le collider du bouchon sur un " +
+                             "enfant de cet objet.", this);
+        }
+        else
+        {
+            teteAuRepos = tete.bounds;
+        }
+
         // Chaque lanceur construit son propre exemplaire plutôt que de partager un statique :
         // `PinballControls` n'est qu'un emballage autour d'un JSON, et un statique survivrait
         // d'une session de Play à l'autre dans l'éditeur en gardant une action map périmée.
@@ -112,7 +152,8 @@ public class Plunger : MonoBehaviour
             cabinet = new PinballControls();
 
             Debug.Log($"[Plunger] {name} : borne='LaunchBall' ({CabinetPath()}), clavier=" +
-                      (InputRouter.Instance != null ? "InputRouter" : plungerKey.ToString()), this);
+                      (InputRouter.Instance != null ? "InputRouter" : plungerKey.ToString())
+                      + (tete != null ? $", bouchon='{tete.name}'" : ", BOUCHON SANS COLLIDER"), this);
         }
     }
 
@@ -217,14 +258,30 @@ public class Plunger : MonoBehaviour
 
     private void PushBalls(float power)
     {
-        // La zone de recherche couvre toute la course du lanceur, de sa position reculée
-        // jusqu'à catchOffset devant sa position de repos : au relâchement, la bille a suivi
-        // le lanceur vers l'arrière et ne se trouve donc pas devant sa position courante.
-        Vector3 front = restWorldPosition + transform.forward * catchOffset;
-        Vector3 back = restWorldPosition - transform.forward * maxPull;
+        if (tete == null)
+        {
+            return;
+        }
 
-        Vector3 center = (front + back) * 0.5f;
-        Vector3 halfExtents = new Vector3(catchHalfWidth, 0.5f, (front - back).magnitude * 0.5f);
+        // La zone se mesure depuis l'emprise du BOUCHON, et non depuis cet hôte : les deux
+        // peuvent être très éloignés l'un de l'autre (voir le commentaire de `Awake`).
+        //
+        // ⚠ On garde la position AU REPOS, capturee dans `Awake`. Au relachement le bouchon est
+        // recule de `maxPull` et la bille peut etre restee en arriere : la zone doit couvrir
+        // TOUTE la course, pas seulement la position courante.
+        //
+        // ⚠ La portee se mesure depuis le BOUT du bouchon, pas depuis son origine. Sur cette
+        // piece l'origine du maillage tombe a une extremite : la bille se pose contre l'autre
+        // bout, a 1,95 u de l'origine. Une portee comptee depuis l'origine ne l'aurait pas
+        // atteinte — c'est la deuxieme moitie du meme defaut.
+        var axe = transform.forward;
+        var pointe = teteAuRepos.center + axe * Etendue(teteAuRepos.extents, axe);
+        var reculee = pointe - axe * maxPull;
+        var devant = pointe + axe * catchOffset;
+
+        Vector3 center = (devant + reculee) * 0.5f;
+        Vector3 halfExtents = new Vector3(catchHalfWidth, catchHalfHeight,
+                                          (devant - reculee).magnitude * 0.5f);
 
         Collider[] hits = Physics.OverlapBox(center, halfExtents, transform.rotation);
 
@@ -242,10 +299,29 @@ public class Plunger : MonoBehaviour
                 continue;
             }
 
+            // ⚠ La bille peut dormir : `Rigidbody.Sleep` la rend insensible a une impulsion
+            // posee par un corps qui ne la touche pas. On la reveille avant de pousser, sans
+            // quoi `AddForce` s'applique a un corps endormi et le lancer reste sans effet.
+            if (ball.IsSleeping())
+            {
+                ball.WakeUp();
+            }
+
             // Le plafond de vitesse de BallManager s'applique après coup : une charge maximale
             // peut donc être écrêtée, ce qui est voulu.
             ball.AddForce(transform.forward * launchForce * power, ForceMode.Impulse);
         }
+    }
+
+    /// <summary>
+    /// Demi-etendue d'une boite alignee sur le monde le long d'une direction : la somme des
+    /// contributions de chaque axe. C'est le support d'une AABB dans la direction donnee.
+    /// </summary>
+    private static float Etendue(Vector3 extents, Vector3 direction)
+    {
+        return Mathf.Abs(extents.x * direction.x)
+             + Mathf.Abs(extents.y * direction.y)
+             + Mathf.Abs(extents.z * direction.z);
     }
 
     private void NotifyLaunched()

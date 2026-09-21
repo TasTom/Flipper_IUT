@@ -35,8 +35,11 @@ public class BackglassDisplay : MonoBehaviour
     [Tooltip("Billes restantes.")]
     [SerializeField] private TMP_Text ballsText;
 
-    [Tooltip("Progression des matières.")]
+    [Tooltip("Progression de la mission en cours.")]
     [SerializeField] private TMP_Text missionsText;
+
+    [Tooltip("Nom de la mission en cours — le libellé au-dessus de la progression.")]
+    [SerializeField] private TMP_Text missionsLabelText;
 
     [Tooltip("Message temporaire — Nuit de l'Info, perte de bille…")]
     [SerializeField] private TMP_Text messageText;
@@ -58,6 +61,7 @@ public class BackglassDisplay : MonoBehaviour
             Resolve("HighScoreValue", ref highScoreText);
             Resolve("BallsValue", ref ballsText);
             Resolve("MissionsValue", ref missionsText);
+            Resolve("MissionsLabel", ref missionsLabelText);
             Resolve("MessageValue", ref messageText);
         }
 
@@ -110,6 +114,7 @@ public class BackglassDisplay : MonoBehaviour
         if (MissionManager.Instance != null)
         {
             MissionManager.Instance.ProgressChanged += OnProgressChanged;
+            MissionManager.Instance.MissionChanged += OnMissionChanged;
             MissionManager.Instance.Announced += OnAnnounced;
         }
     }
@@ -131,6 +136,7 @@ public class BackglassDisplay : MonoBehaviour
         if (MissionManager.Instance != null)
         {
             MissionManager.Instance.ProgressChanged -= OnProgressChanged;
+            MissionManager.Instance.MissionChanged -= OnMissionChanged;
             MissionManager.Instance.Announced -= OnAnnounced;
         }
     }
@@ -165,8 +171,9 @@ public class BackglassDisplay : MonoBehaviour
 
         if (MissionManager.Instance != null)
         {
-            OnProgressChanged(MissionManager.Instance.CompletedCount,
-                              MissionManager.Instance.SubjectCount);
+            OnMissionChanged();
+            OnProgressChanged(MissionManager.Instance.ActiveProgress,
+                              MissionManager.Instance.ActiveRequired);
         }
     }
 
@@ -198,6 +205,24 @@ public class BackglassDisplay : MonoBehaviour
     private void OnProgressChanged(int completed, int total)
     {
         if (missionsText != null) { missionsText.text = completed + " / " + total; }
+    }
+
+    /// <summary>
+    /// La mission en cours a changé : on écrit son nom sur le libellé au-dessus de la
+    /// progression.
+    ///
+    /// <para>C'est le libellé qui porte le nom, et non la valeur : à 44 px dans une colonne de
+    /// 340 px de large, « DÉCOUVERTE DU CAMPUS  0 / 1 » ne tiendrait pas. Le nom en petit
+    /// au-dessus, le compte en gros dessous, se lisent à trois mètres — la distance réelle du
+    /// fronton.</para>
+    /// </summary>
+    private void OnMissionChanged()
+    {
+        if (missionsLabelText == null || MissionManager.Instance == null) { return; }
+
+        string nom = MissionManager.Instance.ActiveName;
+
+        missionsLabelText.text = string.IsNullOrEmpty(nom) ? "MISSIONS" : nom;
     }
 
     /// <summary>Message du jeu, avec sa duree. `GameManager.MessageChanged` est un

@@ -364,6 +364,16 @@ public class Flipper : MonoBehaviour
     /// </summary>
     private bool ReadInput()
     {
+        // ⚠ Le tilt passe AVANT tout le reste. Une fois la table tiltée, les flippers sont morts :
+        // c'est la sanction du GDD §Contrôles, et elle doit s'appliquer quelle que soit la source —
+        // borne, routeur ou touche de repli. Placer ce test après aurait laissé la borne continuer
+        // à répondre sur une table tiltée.
+        if (TiltController.Instance != null && TiltController.Instance.IsTilted)
+        {
+            activeSource = "TILT";
+            return false;
+        }
+
         if (CabinetHeld())
         {
             activeSource = "BORNE " + CheminCabinet();

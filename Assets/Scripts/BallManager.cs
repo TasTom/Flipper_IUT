@@ -107,6 +107,8 @@ public class BallManager : MonoBehaviour
             sceneBall = FindSceneBall();
         }
 
+        EnsureRollingSpeed(sceneBall);
+
         // Elle est mise hors jeu dès le démarrage : laissée en jeu, elle roulerait dans le
         // couloir pendant l'attract et la partie pourrait la compter perdue avant d'avoir
         // commencé.
@@ -310,10 +312,74 @@ public class BallManager : MonoBehaviour
             return;
         }
 
+        EnsureRollingSpeed(ball);
+
         liveBalls.Add(ball);
         stuckTimers[ball] = 0f;
         nudgeCounts[ball] = 0;
         BallCountChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// S'assure que la bille peut <b>tourner</b> assez vite pour rouler à <see cref="maxSpeed"/>.
+    ///
+    /// <para>⚠ <c>Rigidbody.maxAngularVelocity</c> n'est <b>pas sérialisé par composant</b> : il est
+    /// recopié depuis <c>Physics.defaultMaxAngularSpeed</c> à la création du corps. Le régler sur
+    /// le prefab ou sur l'instance de scène ne persiste donc <b>jamais</b> — vérifié : la valeur y
+    /// revenait à 50 à chaque rechargement, et <c>m_MaxAngularVelocity</c> n'apparaît même pas dans
+    /// les propriétés sérialisées du Rigidbody. Le seul endroit où l'exigence peut vivre est ici.</para>
+    ///
+    /// <para>Pourquoi c'est indispensable — une bille de rayon 0,225 u plafonnée à 50 rad/s ne peut
+    /// pas rouler plus vite que 11,25 u/s. Au-delà elle <b>glisse</b>, et le frottement de
+    /// glissement la freine bien plus fort que le roulement. Mesuré dans le couloir, à
+    /// g = 163,5 u/s² et θ = 7° : <b>44,27 u/s² en glissement</b> contre <b>14,23 u/s² en
+    /// roulement</b> — 3,1 fois plus de perte, et la bascule se fait exactement à 11,25 u/s, ce
+    /// qui a confirmé que le plafond était la cause. La bille ne montait plus assez haut pour
+    /// basculer dans l'aire de jeu : le lanceur poussait, et rien ne se passait.</para>
+    /// </summary>
+    private void EnsureRollingSpeed(Rigidbody ball)
+    {
+        if (ball == null)
+        {
+            return;
+        }
+
+        float rayon = RayonDe(ball);
+
+        if (rayon <= 0f)
+        {
+            return;
+        }
+
+        float necessaire = maxSpeed / rayon;
+
+        if (ball.maxAngularVelocity < necessaire)
+        {
+            ball.maxAngularVelocity = necessaire;
+        }
+    }
+
+    /// <summary>
+    /// Rayon de la bille en unités de scène. On le lit sur le collider plutôt que de le codder :
+    /// une sphère est le cas normal, et son échelle est celle qui compte.
+    /// </summary>
+    private static float RayonDe(Rigidbody ball)
+    {
+        foreach (Collider c in ball.GetComponentsInChildren<Collider>())
+        {
+            if (c is SphereCollider sphere)
+            {
+                Vector3 e = ball.transform.lossyScale;
+                return sphere.radius * Mathf.Max(Mathf.Abs(e.x), Mathf.Max(Mathf.Abs(e.y), Mathf.Abs(e.z)));
+            }
+        }
+
+        // Pas de sphère : on retombe sur la plus petite demi-dimension de l'emprise, qui est le
+        // rayon effectif d'un corps qui roule.
+        Collider principal = ball.GetComponent<Collider>();
+        Vector3 demi = principal != null ? principal.bounds.extents : Vector3.zero;
+
+        return Mathf.Min(demi.x, Mathf.Min(demi.y, demi.z));
     }
 
     public void Unregister(Rigidbody ball)
@@ -486,7 +552,7 @@ public class BallManager : MonoBehaviour
     private static Rigidbody FindSceneBall()
     {
         foreach (Rigidbody body in FindObjectsByType<Rigidbody>(
-                     FindObjectsInactive.Include, FindObjectsSortMode.None))
+                     FindObjectsInactive.Include))
         {
             // Un Rigidbody de prefab n'appartient à aucune scène : il ne doit pas être retenu.
             if (body.CompareTag("Ball") && body.gameObject.scene.IsValid())

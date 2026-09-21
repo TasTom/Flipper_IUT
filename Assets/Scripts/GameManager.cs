@@ -192,6 +192,22 @@ public class GameManager : MonoBehaviour
         ScoreManager.Instance.Add(points);
     }
 
+    /// <summary>
+    /// Ajoute une bille supplémentaire (GDD §Modes avancés). Le compteur monte immédiatement :
+    /// la bille en jeu n'est pas affectée, c'est la <i>prochaine</i> perte qui ne coûtera rien.
+    /// </summary>
+    public void AwardExtraBall()
+    {
+        if (State == GameState.GameOver || State == GameState.Attract)
+        {
+            return;
+        }
+
+        BallsRemaining++;
+        BallsChanged?.Invoke(BallsRemaining);
+        Broadcast("BILLE SUPPLÉMENTAIRE !", 2f);
+    }
+
     /// <summary>Appelé par le lanceur quand la bille part réellement.</summary>
     public void NotifyBallLaunched()
     {
@@ -296,6 +312,15 @@ public class GameManager : MonoBehaviour
 
     private void SpawnBall()
     {
+        // Une nouvelle bille absout le tilt de la précédente. C'est ICI et pas sur
+        // `BallsChanged` : mesuré, ce compteur ne monte jamais en cours de partie (3 → 2 à la
+        // perte d'une bille, puis il reste à 2), donc il ne peut pas servir de signal. Sans cette
+        // remise à zéro, un seul tilt condamnerait toutes les billes suivantes.
+        if (TiltController.Instance != null)
+        {
+            TiltController.Instance.ResetTilt();
+        }
+
         if (ballSpawnPoint == null)
         {
             Debug.LogError("[GameManager] Aucun point d'apparition de bille : la partie ne peut pas " +
@@ -363,6 +388,23 @@ public class GameManager : MonoBehaviour
     private void Broadcast(string message, float duration)
     {
         MessageChanged?.Invoke(message, duration);
+    }
+
+    /// <summary>
+    /// Affiche un message au joueur pendant <paramref name="duration"/> secondes.
+    ///
+    /// <para>Exposé pour les éléments de table qui récompensent le joueur — rampes, loop, porte —
+    /// et qui n'ont aucun autre moyen de parler à l'affichage : <see cref="MessageChanged"/> est
+    /// un événement, on ne peut que s'y abonner, pas le déclencher de l'extérieur. Sans cette
+    /// porte d'entrée, une rampe réussie ne produirait aucun retour visible.</para>
+    ///
+    /// <para>⚠ <paramref name="duration"/> = 0 veut dire <b>permanent</b>, pas « durée non
+    /// fournie » : c'est la convention déjà en place dans ce script pour `APPUIE SUR ENTRÉE` ou
+    /// `GAME OVER`. Un appelant qui veut un message temporaire doit donner une durée.</para>
+    /// </summary>
+    public void ShowMessage(string message, float duration)
+    {
+        Broadcast(message, duration);
     }
 
     private bool ValidatePressed()

@@ -186,7 +186,7 @@ public static class NeutralScene
 
     private static void EnsureManager<T>(string name, List<string> log) where T : Component
     {
-        if (Object.FindFirstObjectByType<T>(FindObjectsInactive.Include) != null)
+        if (Object.FindAnyObjectByType<T>(FindObjectsInactive.Include) != null)
         {
             log.Add($"conservé : {name}");
             return;
@@ -218,7 +218,7 @@ public static class NeutralScene
     private static GameObject Find(string name)
     {
         foreach (GameObject candidate in Object.FindObjectsByType<GameObject>(
-                     FindObjectsInactive.Include, FindObjectsSortMode.None))
+                     FindObjectsInactive.Include))
         {
             if (candidate.name == name)
             {

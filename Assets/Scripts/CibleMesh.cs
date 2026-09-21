@@ -82,11 +82,11 @@ public class CibleMesh : MonoBehaviour
             ScoreManager.Instance.Add(scoreValue);
         }
 
-        if (!string.IsNullOrWhiteSpace(subjectId) && MissionManager.Instance != null)
-        {
-            MissionManager.Instance.CompleteSubject(subjectId);
-        }
-
+        // ⚠ Ce composant n'est posé NULLE PART dans la scène : les cibles utilisent
+        // `SubjectTarget`, qui gère le cycle « éteinte → active → validée » du GDD et les
+        // groupes de cibles. `CibleMesh` ne connaît qu'un identifiant de matière à plat, et son
+        // `DisableLegacyTargets` désactiverait justement le `SubjectTarget` qui fait marcher les
+        // missions. Il est conservé le temps que quelqu'un tranche, mais il ne faut pas le poser.
         Flash();
     }
 

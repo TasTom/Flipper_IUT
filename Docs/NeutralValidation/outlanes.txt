@@ -1,0 +1,7 @@
+PASS Outlane -1 speed=5 losses=1 remaining=2 state=BallDrained
+PASS Outlane -1 speed=25 losses=1 remaining=2 state=BallDrained
+PASS Outlane -1 speed=60 losses=1 remaining=2 state=BallDrained
+PASS Outlane 1 speed=5 losses=1 remaining=2 state=BallDrained
+PASS Outlane 1 speed=25 losses=1 remaining=2 state=BallDrained
+PASS Outlane 1 speed=60 losses=1 remaining=2 state=BallDrained
+PASS real-time next ball after outlane: remaining=2 live=1 state=ReadyToLaunch

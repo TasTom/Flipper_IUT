@@ -1,0 +1,21 @@
+PASS one live scene ball / 3 balls / ready
+PASS presentation has no colliders
+PASS pause freezes game
+PASS resume preserves state
+Settled ball=(7.040, 0.225, 2.119)
+PASS plunger actually accelerates ball
+PASS launch reaches playfield
+Launch max z=21,56
+PASS bumper 1 hit and score
+PASS bumper 2 hit and score
+PASS bumper 3 hit and score
+PASS five SFX assigned
+PASS no duplicated music
+PASS game over after three losses
+PASS game over panel visible
+PASS restart restores three balls
+PASS mission advances after IUT ramp
+PASS restart resets missions
+PASS restart resets bumper hits
+PASS multiball balls tracked
+PASS restart clears extra balls

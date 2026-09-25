@@ -1,0 +1,5 @@
+PASS Left slingshot collision scores
+PASS Right slingshot collision scores
+PASS physical drain removes exactly one ball
+PASS Bumper supports missing flash slot
+PASS Slingshot supports missing flash slot

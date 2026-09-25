@@ -1,0 +1,6 @@
+PASS Vosges speed=40 successful timings=8/8 escapes=0 peak z=19,87 x thresholds=1,85,1,65,1,45,1,25,1,05,0,85,0,65,0,45
+PASS Vosges speed=60 successful timings=8/8 escapes=0 peak z=19,90 x thresholds=1,85,1,65,1,45,1,25,1,05,0,85,0,65,0,45
+PASS Vosges speed=85 successful timings=7/8 escapes=0 peak z=20,08 x thresholds=1,65,1,45,1,25,1,05,0,85,0,65,0,45
+PASS IUT speed=40 successful timings=8/8 escapes=0 peak z=21,57 x thresholds=1,85,1,65,1,45,1,25,1,05,0,85,0,65,0,45
+PASS IUT speed=60 successful timings=8/8 escapes=0 peak z=21,55 x thresholds=1,85,1,65,1,45,1,25,1,05,0,85,0,65,0,45
+PASS IUT speed=85 successful timings=8/8 escapes=0 peak z=21,55 x thresholds=1,85,1,65,1,45,1,25,1,05,0,85,0,65,0,45

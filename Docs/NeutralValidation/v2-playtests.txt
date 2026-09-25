@@ -1,0 +1,15 @@
+PASS Vosges speed=25 count=0 return=False maxZ=13,40 last=(-4.920, 0.246, 10.254)
+PASS Vosges speed=40 count=1 return=True maxZ=17,25 last=(4.419, 0.306, 6.567)
+PASS Vosges speed=60 count=1 return=True maxZ=17,61 last=(4.460, 0.313, 6.529)
+PASS Vosges speed=85 count=1 return=True maxZ=17,63 last=(4.359, 0.299, 6.483)
+PASS IUT speed=25 count=0 return=False maxZ=15,15 last=(-6.095, 0.247, 11.438)
+PASS IUT speed=40 count=1 return=True maxZ=18,50 last=(-4.552, 0.270, 6.560)
+PASS IUT speed=60 count=1 return=True maxZ=18,36 last=(-4.573, 0.241, 6.532)
+PASS IUT speed=85 count=1 return=True maxZ=18,52 last=(-4.543, 0.343, 6.588)
+PASS exactly six reward targets
+PASS Target_Matieres_01 physical hit, reward and light state
+PASS Target_Matieres_02 physical hit, reward and light state
+PASS Target_Matieres_03 physical hit, reward and light state
+PASS Target_Java_01 physical hit, reward and light state
+PASS Target_Projet_01 physical hit, reward and light state
+PASS Target_Cafe_01 physical hit, reward and light state

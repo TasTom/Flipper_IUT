@@ -1,0 +1,12 @@
+PASS outer orbit speed=35
+orbit final=(5.99, 0.32, 17.23)
+PASS outer orbit speed=55
+orbit final=(6.00, 0.41, 17.21)
+PASS another ball cannot consume ramp reward
+PASS same ball reward exactly once
+PASS reverse entrance rejected
+PASS restart clears armed ramps
+PASS three Matieres rewards required
+PASS Matieres bank advances reward mission
+PASS Cafe bank advances reward mission
+PASS Java bank advances reward mission

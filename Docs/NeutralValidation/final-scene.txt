@@ -1,0 +1,6 @@
+Scene=Assets/Scenes/Neutral.unity dirty=False play=True missing scripts=0
+Reward targets=6 ramp gates=4
+Left inner/outer rails=True
+Right inner/outer rails=True
+missionsText=0 / 1
+missionsLabelText=DÉCOUVERTE DU CAMPUS

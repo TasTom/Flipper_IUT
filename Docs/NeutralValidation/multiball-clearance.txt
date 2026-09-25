@@ -1,0 +1,6 @@
+PASS three tracked balls
+PASS no ball overlap, minimum distance=0,600
+PASS release volumes clear of solid obstacles
+PASS extra balls released toward flippers
+PASS released balls enter open playfield
+PASS restart removes extra balls

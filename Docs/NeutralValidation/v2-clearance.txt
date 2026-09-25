@@ -1,0 +1,2 @@
+PASS Ramp_Vosges_V2 foreign obstacles=
+PASS Ramp_IUT_V2 foreign obstacles=

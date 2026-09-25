@@ -61,7 +61,10 @@ public class RampGate : MonoBehaviour
              "le loop @ »). À cocher sur la rampe IUT, PAS sur la Vosges.")]
     [SerializeField] private bool corrigeLeBug;
 
-    private float armedAt = float.NegativeInfinity;
+    [Tooltip("Valider seulement un passage dans le sens local +Z du détecteur.")]
+    [SerializeField] private bool requireForwardPassage;
+    private readonly System.Collections.Generic.Dictionary<EntityId, float> armedBalls
+        = new System.Collections.Generic.Dictionary<EntityId, float>();
     private bool warned;
 
     /// <summary>Émis quand une rampe est réussie. Le nom de la rampe et la bille sont fournis.</summary>
@@ -111,10 +114,12 @@ public class RampGate : MonoBehaviour
             return;
         }
 
+        var body = other.attachedRigidbody;
+        if (requireForwardPassage && (body == null || Vector3.Dot(body.linearVelocity, transform.forward) <= 0f)) return;
         if (end == RampEnd.Entree)
         {
             // On arme sans condition : c'est la SORTIE qui jugera si la rampe a été faite.
-            armedAt = Time.time;
+            armedBalls[BallId(other)] = Time.time;
             return;
         }
 
@@ -139,7 +144,7 @@ public class RampGate : MonoBehaviour
             return;
         }
 
-        if (!partner.TryConsume(Time.time))
+        if (!partner.TryConsume(ball, Time.time))
         {
             // Deux cas, tous deux normaux : l'entrée n'a jamais été armée (la bille est arrivée
             // par le haut de la table), ou elle l'a été il y a trop longtemps.
@@ -181,14 +186,30 @@ public class RampGate : MonoBehaviour
     /// dans ce cas. Consommer plutôt que lire est délibéré : une bille qui repasserait par la
     /// sortie sans reprendre l'entrée ne doit pas compter une seconde rampe.
     /// </summary>
-    private bool TryConsume(float now)
+    private bool TryConsume(Collider ball, float now)
     {
+        var id = BallId(ball);
+        if (!armedBalls.TryGetValue(id, out float armedAt)) return false;
+        armedBalls.Remove(id);
         if (now - armedAt > window)
         {
             return false;
         }
 
-        armedAt = float.NegativeInfinity;
         return true;
+    }
+
+    static EntityId BallId(Collider ball) => ball.attachedRigidbody != null
+        ? ball.attachedRigidbody.GetEntityId() : ball.GetEntityId();
+
+    public void ResetTracking() => armedBalls.Clear();
+    private void OnDisable() => ResetTracking();
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!requireForwardPassage || end != RampEnd.Entree || !other.CompareTag("Ball")) return;
+        var body = other.attachedRigidbody;
+        if (body != null && Vector3.Dot(body.linearVelocity, transform.forward) < 0f)
+            armedBalls.Remove(BallId(other));
     }
 }

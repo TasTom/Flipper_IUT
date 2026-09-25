@@ -114,6 +114,9 @@ public class Slingshot : MonoBehaviour
         {
             if (target == null)
             {
+                // A missing renderer must not shift the cache of later valid renderers.
+                blocks.Add(null);
+                baseColors.Add(Color.white);
                 continue;
             }
 

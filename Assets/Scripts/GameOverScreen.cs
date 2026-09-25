@@ -27,16 +27,27 @@ public class GameOverScreen : MonoBehaviour
 
     private void OnEnable()
     {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.StateChanged += OnStateChanged;
-        }
+        Subscribe();
 
         // L'écran ne doit pas traîner au démarrage.
-        if (panel != null)
+        if (panel != null && GameManager.Instance == null)
         {
             panel.SetActive(false);
         }
+    }
+
+    private void Start()
+    {
+        // All manager Awakes have completed, independent of scene object ordering.
+        Subscribe();
+    }
+
+    private void Subscribe()
+    {
+        if (GameManager.Instance == null) { return; }
+        GameManager.Instance.StateChanged -= OnStateChanged;
+        GameManager.Instance.StateChanged += OnStateChanged;
+        OnStateChanged(GameManager.Instance.State);
     }
 
     private void OnDisable()

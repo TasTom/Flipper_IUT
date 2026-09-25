@@ -264,6 +264,8 @@ public class BallManager : MonoBehaviour
             }
             else
             {
+                // Destroy is deferred: make the old ball invisible to physics/tag scans now.
+                ball.gameObject.SetActive(false);
                 Destroy(ball.gameObject);
             }
         }
@@ -574,4 +576,3 @@ public class BallManager : MonoBehaviour
         return null;
     }
 }
-

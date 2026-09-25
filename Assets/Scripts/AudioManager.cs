@@ -53,11 +53,20 @@ public class AudioManager : MonoBehaviour
 
         Instance = this;
 
-        // Une source pour la musique, N pour les effets (voix round-robin).
-        musicSource = gameObject.AddComponent<AudioSource>();
-        musicSource.playOnAwake = false;
-        musicSource.loop = true;
-        musicSource.volume = musicVolume;
+        // Reuse an authored scene source instead of playing an offset second copy.
+        var background = GameObject.Find("BackgroundMusic");
+        if (background != null && background.TryGetComponent<AudioSource>(out var source)
+            && source.clip != null && source.clip == musicClip)
+        {
+            musicSource = source;
+        }
+        else
+        {
+            musicSource = gameObject.AddComponent<AudioSource>();
+            musicSource.playOnAwake = false;
+            musicSource.loop = true;
+            musicSource.volume = musicVolume;
+        }
 
         for (int i = 0; i < Mathf.Max(1, sfxVoices); i++)
         {
@@ -68,7 +77,7 @@ public class AudioManager : MonoBehaviour
             sfxSources.Add(src);
         }
 
-        foreach (var clip in sfxClips)
+        foreach (var clip in sfxClips ?? System.Array.Empty<AudioClip>())
         {
             if (clip != null && !registry.ContainsKey(clip.name))
             {
@@ -80,6 +89,11 @@ public class AudioManager : MonoBehaviour
     private void Start()
     {
         PlayMusic();
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this) { Instance = null; }
     }
 
     /// <summary>Lance la musique de fond en boucle. Sans effet si déjà en cours.</summary>

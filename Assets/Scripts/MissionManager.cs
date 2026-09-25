@@ -105,6 +105,7 @@ public class MissionManager : MonoBehaviour
     private int activeIndex = -1;
     private int progress;
     private bool nuitDeLInfoTriggered;
+    private BossTarget[] bosses;
 
     /// <summary>Index de la mission active, -1 si la partie n'a pas commencé.</summary>
     public int ActiveIndex => activeIndex;
@@ -172,6 +173,7 @@ public class MissionManager : MonoBehaviour
         }
 
         Instance = this;
+        bosses = FindObjectsByType<BossTarget>(FindObjectsSortMode.None);
 
         if (missions == null || missions.Length == 0)
         {
@@ -627,6 +629,10 @@ public class MissionManager : MonoBehaviour
     public void ResetMissions()
     {
         nuitDeLInfoTriggered = false;
+        foreach (var boss in bosses)
+        {
+            if (boss != null) { boss.ResetBoss(); }
+        }
         ActivateMission(0);
     }
 }

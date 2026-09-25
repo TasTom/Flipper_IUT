@@ -150,6 +150,9 @@ public class Bumper : MonoBehaviour
         {
             if (target == null)
             {
+                // Keep the same indices as the serialized array, including missing slots.
+                blocks.Add(null);
+                baseColors.Add(Color.white);
                 continue;
             }
 

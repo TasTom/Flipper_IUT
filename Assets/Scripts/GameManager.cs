@@ -75,6 +75,9 @@ public class GameManager : MonoBehaviour
     private Coroutine respawnRoutine;
     private float timeScaleBeforePause = 1f;
     private GameState stateBeforePause = GameState.Playing;
+    private Bumper[] bumpers;
+    private LoopGate[] loopGates;
+    private RampGate[] rampGates;
 
     private void Awake()
     {
@@ -86,6 +89,9 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+        bumpers = FindObjectsByType<Bumper>(FindObjectsSortMode.None);
+        loopGates = FindObjectsByType<LoopGate>(FindObjectsSortMode.None);
+        rampGates = FindObjectsByType<RampGate>(FindObjectsSortMode.None);
     }
 
     private void OnEnable()
@@ -169,6 +175,23 @@ public class GameManager : MonoBehaviour
         if (BallManager.Instance != null)
         {
             BallManager.Instance.ClearAll();
+        }
+
+        foreach (var gate in loopGates)
+        {
+            if (gate != null) { gate.ResetCompletions(); }
+        }
+        foreach (var gate in rampGates)
+        {
+            if (gate != null) { gate.ResetTracking(); }
+        }
+        if (MissionManager.Instance != null)
+        {
+            MissionManager.Instance.ResetMissions();
+        }
+        foreach (var bumper in bumpers)
+        {
+            if (bumper != null) { bumper.ResetHits(); }
         }
 
         BallsRemaining = startingBalls;

@@ -1,0 +1,23 @@
+if(Application.isPlaying)throw new Exception("Edit required");
+var root=GameObject.Find("PinballTable/ReferencePlayfield").transform;var art=root.Find("ProfessionalArt");
+var clear=UnityEditor.AssetDatabase.LoadAssetAtPath<Material>("Assets/Generated/NeutralReference/Art/ClearRamp.mat");
+var steel=UnityEditor.AssetDatabase.LoadAssetAtPath<Material>("Assets/Generated/NeutralReference/Art/PolishedSteel.mat");
+var wireClear=new Material(clear){name="WireformClearLiner"};wireClear.color=new Color(.55f,.72f,.70f,.035f);UnityEditor.AssetDatabase.CreateAsset(wireClear,"Assets/Generated/NeutralReference/Art/WireformClearLiner.mat");
+var cover=UnityEditor.AssetDatabase.LoadAssetAtPath<Material>("Assets/Generated/NeutralReference/Art/ClearGuard.mat");UnityEditor.Undo.RecordObject(cover,"Affiner les protections");cover.color=new Color(.65f,.85f,.88f,.012f);
+UnityEditor.Undo.RecordObject(steel,"Acier poli lisible");steel.SetFloat("_Metallic",.68f);steel.SetFloat("_Smoothness",.72f);steel.color=new Color(.73f,.79f,.82f);
+var type=typeof(StyleNeutralProfessional);var flags=System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Static;
+type.GetField("art",flags).SetValue(null,art);type.GetField("meshId",flags).SetValue(null,200);
+var tube=type.GetMethod("Tube",flags);
+foreach(var name in new[]{"Vosges","IUT"}){
+var tr=root.Find("Ramp_"+name);var source=tr.GetComponent<MeshFilter>().sharedMesh;var mesh=UnityEngine.Object.Instantiate(source);mesh.name="RampVisual_"+name;
+var ascent=new System.Collections.Generic.List<int>();var returning=new System.Collections.Generic.List<int>();var tt=source.triangles;
+for(int i=0;i<tt.Length;i+=3){int row=Mathf.Min(tt[i],Mathf.Min(tt[i+1],tt[i+2]))/8;var dest=row<94?ascent:returning;dest.AddRange(new[]{tt[i],tt[i+1],tt[i+2]});}
+mesh.subMeshCount=2;mesh.SetTriangles(ascent,0);mesh.SetTriangles(returning,1);UnityEditor.AssetDatabase.CreateAsset(mesh,"Assets/Generated/NeutralReference/Art/"+mesh.name+".asset");
+UnityEditor.Undo.RecordObject(tr.GetComponent<MeshFilter>(),"Piste acrylique et retour filaire");tr.GetComponent<MeshFilter>().sharedMesh=mesh;
+UnityEditor.Undo.RecordObject(tr.GetComponent<Renderer>(),"Piste acrylique et retour filaire");tr.GetComponent<Renderer>().sharedMaterials=new[]{clear,wireClear};
+// Collider retains the original tested mesh, independent from the visual submeshes.
+var v=source.vertices;var path=new System.Collections.Generic.List<Vector3>();for(int i=0;i<v.Length/8;i++)path.Add((v[i*8+4]+v[i*8+5])*.5f);
+foreach(int s in new[]{-1,1})foreach(bool upper in new[]{false,true}){var line=new System.Collections.Generic.List<Vector3>();for(int i=94;i<path.Count;i++){var d=path[Math.Min(i+1,path.Count-1)]-path[Math.Max(0,i-1)];var n=new Vector3(d.z,0,-d.x).normalized;line.Add(path[i]+n*s*(upper?.35f:.16f)+Vector3.up*(upper?.27f:-.018f));}tube.Invoke(null,new object[]{name+"_WireRunner_"+s+"_"+upper,line,.028f,steel});}
+}
+var cam=Camera.main;var data=cam.GetComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>();if(data!=null){UnityEditor.Undo.RecordObject(data,"Anticrénelage des rails");data.antialiasing=UnityEngine.Rendering.Universal.AntialiasingMode.SubpixelMorphologicalAntiAliasing;data.antialiasingQuality=UnityEngine.Rendering.Universal.AntialiasingQuality.High;data.renderPostProcessing=true;}
+UnityEditor.AssetDatabase.SaveAssets();return "Transparent return liners and four steel runners; physical meshes preserved.";

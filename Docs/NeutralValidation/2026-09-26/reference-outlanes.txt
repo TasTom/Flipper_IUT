@@ -1,0 +1,6 @@
+PASS outlane -1 speed=5 losses=1 remaining=2
+PASS outlane -1 speed=25 losses=1 remaining=2
+PASS outlane -1 speed=60 losses=1 remaining=2
+PASS outlane 1 speed=5 losses=1 remaining=2
+PASS outlane 1 speed=25 losses=1 remaining=2
+PASS outlane 1 speed=60 losses=1 remaining=2

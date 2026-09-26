@@ -1,0 +1,17 @@
+RETURN L threshold=3,1 fired=True peak=13,62
+RETURN L threshold=3 fired=True peak=12,37
+RETURN L threshold=2,9 fired=True peak=16,24
+RETURN L threshold=2,8 fired=True peak=17,36
+RETURN L threshold=2,7 fired=True peak=2,67
+RETURN L threshold=2,6 fired=True peak=16,17
+SUMMARY L relaunches=5/6
+RETURN R threshold=3,1 fired=True peak=15,02
+RETURN R threshold=3 fired=True peak=8,40
+RETURN R threshold=2,9 fired=True peak=8,48
+RETURN R threshold=2,8 fired=True peak=3,03
+RETURN R threshold=2,7 fired=True peak=11,46
+RETURN R threshold=2,6 fired=True peak=2,57
+SUMMARY R relaunches=2/6
+SERVE 0,65 strikes=2 fieldStall=0,00 duration=30,00 end=(3.92, 0.23, 2.29) active=True
+SERVE 0,8 strikes=1 fieldStall=0,25 duration=3,65 end=(-3.33, 0.92, 1.83) active=False
+SERVE 1 strikes=5 fieldStall=0,05 duration=8,03 end=(3.15, 0.23, 2.11) active=False

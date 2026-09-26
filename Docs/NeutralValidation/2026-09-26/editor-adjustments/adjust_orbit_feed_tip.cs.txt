@@ -1,0 +1,5 @@
+var tr=GameObject.Find("PinballTable/ReferencePlayfield/OrbitExitFeed").transform;
+var points=new[]{new Vector3(-4.15f,0,11.2f),new Vector3(-4,0,10.6f),new Vector3(-3.7f,0,10.15f),new Vector3(-3.2f,0,9.75f),new Vector3(-2.60f,0,9.61f),new Vector3(-2.05f,0,9.60f)};
+var mesh=tr.GetComponent<MeshFilter>().sharedMesh;UnityEditor.Undo.RecordObject(mesh,"Dégager la cible BDD");var v=new Vector3[points.Length*4];
+for(int i=0;i<points.Length;i++){var d=points[Math.Min(i+1,points.Length-1)]-points[Math.Max(0,i-1)];var n=new Vector3(d.z,0,-d.x).normalized*.05f;v[i*4]=points[i]-n;v[i*4+1]=points[i]+n;v[i*4+2]=points[i]+n+Vector3.up*.55f;v[i*4+3]=points[i]-n+Vector3.up*.55f;}
+mesh.vertices=v;mesh.RecalculateNormals();mesh.RecalculateBounds();UnityEditor.EditorUtility.SetDirty(mesh);var c=tr.GetComponent<MeshCollider>();c.sharedMesh=null;c.sharedMesh=mesh;Physics.SyncTransforms();return "Tip raised along Z by .60 to uncover BDD shot.";

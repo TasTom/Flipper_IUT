@@ -1,0 +1,9 @@
+if(Application.isPlaying)throw new Exception("Edit required");
+var t=GameObject.Find("PinballTable").transform;var root=t.Find("ReferencePlayfield");
+// Edit-mode preview shows the resting state, not values left by an earlier layout.
+var panel=t.Find("Backglass");var texts=panel.GetComponentsInChildren<TMPro.TMP_Text>();
+foreach(var txt in texts){UnityEditor.Undo.RecordObject(txt,"Aperçu cohérent du score");if(txt.name=="MissionsLabel")txt.text="DÉCOUVERTE DU CAMPUS";if(txt.name=="MissionsValue")txt.text="0 / 1";if(txt.name=="MessageValue")txt.text="ESPACE : CHARGER ET LANCER";}
+var fit=Camera.main.GetComponent<CabinetViewport>();fit.Fit();
+foreach(var mesh in root.GetComponentsInChildren<MeshFilter>().Select(m=>m.sharedMesh).Distinct())if(mesh!=null&&UnityEditor.AssetDatabase.GetAssetPath(mesh).StartsWith("Assets/Generated/NeutralReference"))UnityEditor.EditorUtility.SetDirty(mesh);
+UnityEditor.AssetDatabase.SaveAssets();UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+return "Final meshes and preview persisted; scene ready for explicit save.";

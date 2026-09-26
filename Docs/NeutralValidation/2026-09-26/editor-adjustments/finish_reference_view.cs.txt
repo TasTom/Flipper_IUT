@@ -1,0 +1,21 @@
+if(Application.isPlaying)throw new System.Exception("Edit required");
+var t=GameObject.Find("PinballTable").transform;var panel=t.Find("Backglass") as RectTransform;var root=t.Find("ReferencePlayfield");
+UnityEditor.Undo.IncrementCurrentGroup();int group=UnityEditor.Undo.GetCurrentGroup();UnityEditor.Undo.SetCurrentGroupName("Cadrage et lecture de la borne");
+var glass=root.Find("RearOrbit").GetComponent<Renderer>();UnityEditor.Undo.RecordObject(glass,"Reflets de la vitre");glass.enabled=false;
+void Place(string name,Vector2 p,Vector2 size,float font){var tr=panel.Find(name) as RectTransform;if(tr==null)return;UnityEditor.Undo.RecordObject(tr,"Disposition du score");tr.anchorMin=tr.anchorMax=new Vector2(.5f,.5f);tr.pivot=new Vector2(.5f,.5f);tr.anchoredPosition=p;tr.sizeDelta=size;var txt=tr.GetComponent<TMPro.TMP_Text>();if(txt!=null){UnityEditor.Undo.RecordObject(txt,"Typographie du score");txt.fontSize=font;txt.enableAutoSizing=false;txt.alignment=TMPro.TextAlignmentOptions.Center;txt.textWrappingMode=TMPro.TextWrappingModes.NoWrap;}}
+Place("ScoreGhost",new Vector2(0,25),new Vector2(1450,250),185);
+Place("ScoreValue",new Vector2(0,25),new Vector2(1450,250),185);
+Place("HighScoreLabel",new Vector2(-380,200),new Vector2(650,75),36);
+Place("HighScoreValue",new Vector2(320,200),new Vector2(650,75),56);
+Place("MessageValue",new Vector2(0,-130),new Vector2(1450,70),38);
+Place("BallsLabel",new Vector2(-585,-225),new Vector2(300,65),28);
+Place("BallsValue",new Vector2(-270,-225),new Vector2(290,65),40);
+Place("MissionsLabel",new Vector2(225,-225),new Vector2(510,65),25);
+Place("MissionsValue",new Vector2(615,-225),new Vector2(200,65),38);
+var bg=panel.Find("Fond") as RectTransform;if(bg!=null){UnityEditor.Undo.RecordObject(bg,"Fond du score");bg.anchorMin=Vector2.zero;bg.anchorMax=Vector2.one;bg.offsetMin=bg.offsetMax=Vector2.zero;}
+foreach(var f in t.GetComponentsInChildren<Flipper>()){UnityEditor.Undo.RecordObject(f.transform,"Pose de repos lisible");f.transform.localRotation=Quaternion.Euler(90,0,0)*Quaternion.AngleAxis(f.name.Contains("Left")?-30:30,Vector3.forward);}
+// Low graphic ridgelines keep the centre open; purely decorative, never colliders.
+var art=new GameObject("VosgesRidgelines");UnityEditor.Undo.RegisterCreatedObjectUndo(art,"Graphisme du plateau");art.transform.SetParent(root,false);
+var lineMat=UnityEditor.AssetDatabase.LoadAssetAtPath<Material>("Assets/Generated/NeutralReference/Teal.mat");
+for(int j=0;j<4;j++){var go=new GameObject("Ridge_"+j);UnityEditor.Undo.RegisterCreatedObjectUndo(go,"Graphisme du plateau");go.transform.SetParent(art.transform,false);var line=go.AddComponent<LineRenderer>();line.useWorldSpace=false;line.sharedMaterial=lineMat;line.startWidth=line.endWidth=.013f;line.positionCount=7;line.alignment=LineAlignment.TransformZ;go.transform.localRotation=Quaternion.Euler(90,0,0);var points=new[]{new Vector3(-1.8f,7.6f+j*.22f,0),new Vector3(-1.45f,7.9f+j*.22f,0),new Vector3(-1.1f,7.75f+j*.22f,0),new Vector3(-.55f,8.3f+j*.22f,0),new Vector3(.02f,7.85f+j*.22f,0),new Vector3(.45f,8.05f+j*.22f,0),new Vector3(.9f,7.6f+j*.22f,0)};line.SetPositions(points);go.transform.localPosition=new Vector3(0,.012f,0);line.shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;}
+UnityEditor.Undo.CollapseUndoOperations(group);UnityEditor.AssetDatabase.SaveAssets();return "Score fields inside panel, guard reflections removed, rest poses and central artwork fitted.";

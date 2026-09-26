@@ -1,0 +1,187 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+
+/// <summary>
+/// Explicit reconstruction requested by the user. Dimensions: classic 20.25 x 42 inch
+/// blank, 27 mm ball = .45 units. Bally Xenon operator manual: lower return/outlanes,
+/// open fan of shots, upper mechanisms. This is an original two-ramp adaptation, not a replica.
+/// Parts meshes retain their imported scale. Never executes at runtime or saves the scene.
+/// </summary>
+public static class ReconstructNeutralReference
+{
+    const string Folder = "Assets/Generated/NeutralReference";
+    const string UndoName = "Reconstruire Neutral aux proportions classiques";
+    public const float Center = -.4f;
+    static Transform table, gp, root;
+    static Material steel, navy, teal, amber, clear, rubber;
+    static PhysicsMaterial surface;
+    static Vector3 V(float x,float y,float z) => new Vector3(x+Center,y,z);
+
+    [MenuItem("Flipper/Neutral/Reconstruction documentée du plateau")]
+    public static void Apply()
+    {
+        if(Application.isPlaying || SceneManagerPath()!= "Assets/Scenes/Neutral.unity")
+            throw new InvalidOperationException("Ouvrir Neutral hors Play.");
+        table=GameObject.Find("PinballTable").transform; gp=table.Find("Gameplay");
+        if(table.Find("ReferencePlayfield")!=null) throw new InvalidOperationException("Reconstruction déjà présente. Préserver les ajustements.");
+        if(gp.GetComponentsInChildren<SubjectTarget>().Length!=6)throw new InvalidOperationException("Six cibles requises.");
+        if(!AssetDatabase.IsValidFolder(Folder))AssetDatabase.CreateFolder("Assets/Generated","NeutralReference");
+        Undo.IncrementCurrentGroup();int group=Undo.GetCurrentGroup();Undo.SetCurrentGroupName(UndoName);
+        try {
+            steel=Mat("Steel",new Color(.36f,.43f,.46f),.8f);
+            navy=Mat("Playfield",new Color(.019f,.055f,.080f),.05f);
+            teal=Mat("Teal",new Color(.08f,.56f,.54f),.35f);
+            amber=Mat("Amber",new Color(.95f,.55f,.12f),.25f);
+            rubber=Mat("Rubber",new Color(.16f,.045f,.035f),0);
+            clear=AssetDatabase.LoadAssetAtPath<Material>("Assets/Generated/NeutralPresentation/RampCover.mat");
+            surface=AssetDatabase.LoadAssetAtPath<PhysicsMaterial>("Assets/Generated/NeutralPresentation/RampSurface.physicMaterial");
+            root=New("ReferencePlayfield",table);
+            // Preserve gameplay hosts and all input/force settings; retire obsolete physical furniture.
+            foreach(string p in new[]{"Gameplay/Ramps_V2","Gameplay/Guides","PerimeterEnclosure","Vitre","VosgesPresentation"})Disable(table.Find(p));
+            foreach(Transform tr in gp)if(tr.name.StartsWith("Outlane_Inner")||tr.name.StartsWith("Outlane_Outer")||tr.name.StartsWith("Outlane_Fill"))Disable(tr);
+            foreach(var c in table.Find("Table").GetComponentsInChildren<Collider>(true)){Undo.RecordObject(c,UndoName);c.enabled=false;}
+            // Bumper models belong to their physical host, avoiding unrelated transform adjustments.
+            var parts=table.Find("Table/Pinball_Table");
+            for(int i=1;i<=3;i++)foreach(Transform tr in parts.Cast<Transform>().ToArray())
+                if(tr.name.StartsWith("Bumper_0"+i+"_")) {
+                    // A model-prefab child cannot be reparented. Clone its visual into the host.
+                    var copy=UnityEngine.Object.Instantiate(tr.gameObject);Undo.RegisterCreatedObjectUndo(copy,UndoName);
+                    copy.transform.SetParent(gp.Find("Bumper_0"+i),true);copy.name=tr.name;
+                }
+            var display=table.GetComponentInChildren<BackglassDisplay>(true);
+            if(display!=null) {
+                var tr=display.transform;Undo.SetTransformParent(tr,table,UndoName);Undo.RecordObject(tr,UndoName);
+                tr.name="Backglass";tr.localPosition=new Vector3(0,.07f,19.65f);
+                tr.localRotation=Quaternion.Euler(90,0,0);tr.localScale=new Vector3(.006f,.006f,.006f);
+            }
+            Disable(table.Find("Table"));Disable(gp.Find("Inserts"));Disable(gp.Find("Eclairage"));
+            // Precisely sized floor and apron. Only the central drain is open below z=1.0.
+            Box("Playfield",new Vector3(0,-.11f,9.39f),new Vector3(8.573f,.22f,16.78f),navy,true);
+            Box("Apron",new Vector3(0,.06f,.45f),new Vector3(8.573f,.12f,.9f),navy,false);
+            Box("LeftCabinet",new Vector3(-4.40f,-.65f,8.9f),new Vector3(.22f,1.6f,18f),navy,false);
+            Box("RightCabinet",new Vector3(4.40f,-.65f,8.9f),new Vector3(.22f,1.6f,18f),navy,false);
+            Box("BackCabinet",new Vector3(0,-.65f,17.89f),new Vector3(8.8f,1.6f,.22f),navy,false);
+            Wall("LeftBoundary",new[]{new Vector3(-4.2f,0,1),new Vector3(-4.2f,0,15.5f)},.10f,.75f);
+            Wall("ShooterOuter",new[]{new Vector3(4.2f,0,1),new Vector3(4.2f,0,15.5f)},.10f,.75f);
+            Wall("ShooterDivider",new[]{new Vector3(3.5f,0,1),new Vector3(3.5f,0,14.7f)},.10f,.65f);
+            var rear=new List<Vector3>();for(int i=0;i<=80;i++){float a=Mathf.PI*i/80;rear.Add(new Vector3(4.2f*Mathf.Cos(a),0,15.5f+2.15f*Mathf.Sin(a)));}
+            // No upper shelf: the curved outer boundary reaches the glass. The metal rail
+            // is a low decorative fascia, with a transparent continuation above it.
+            Sweep("RearOrbit",rear,new[]{new Vector2(-.05f,0),new Vector2(.05f,0),new Vector2(.05f,2.65f),new Vector2(-.05f,2.65f)},clear,true);
+            Sweep("RearOrbitSteel",rear,new[]{new Vector2(-.053f,0),new Vector2(.053f,0),new Vector2(.053f,.55f),new Vector2(-.053f,.55f)},steel,false);
+            // Rounded shooter exit bends the upward launch into the upper playfield, never a hard dead end.
+            Wall("ShooterExit",Curve(new Vector3(3.5f,0,14.7f),new Vector3(3.5f,0,16.5f),new Vector3(1.8f,0,16.8f),new Vector3(.9f,0,16.3f)),.10f,.6f);
+            // Side lanes are .65 units clear (1.44 ball diameters), with a continuous return guide.
+            foreach(int s in new[]{-1,1}) {
+                string side=s<0?"Left":"Right";
+                float outside=s<0?-4.2f:3.5f;
+                float divider=s<0?-3.45f:2.75f;
+                float inner=s<0?-2.7f:2.0f;
+                float pivot=s<0?-2.1f:1.3f;
+                var outerPath=new List<Vector3>{new Vector3(divider,0,6.0f),new Vector3(divider,0,4.3f)};
+                outerPath.AddRange(Curve(new Vector3(divider,0,4.3f),new Vector3(divider,0,3.8f),new Vector3(pivot+s*.15f,0,3.5f),new Vector3(pivot-s*.55f,0,3.38f)).Skip(1));
+                Wall("InlaneOuter_"+side,outerPath,.09f,.55f);
+                var inside=new List<Vector3>{new Vector3(inner,0,6.0f),new Vector3(inner,0,4.65f)};
+                inside.AddRange(Curve(new Vector3(inner,0,4.65f),new Vector3(inner,0,4.3f),new Vector3(pivot+s*.1f,0,4.05f),new Vector3(pivot-s*.1f,0,3.84f)).Skip(1));
+                Wall("InlaneInner_"+side,inside,.09f,.55f);
+                // The outlane runs to its drain; a post narrows only its entrance, as in the Bally manual.
+                Post("OutlanePost_"+side,new Vector3(divider,0,6.0f),.045f,.5f);
+                Move(gp.Find("Flipper_"+side+"_Pivot"),new Vector3(pivot,0,3.0f));
+                var sling=gp.Find("Slingshot_"+side);Undo.RecordObject(sling,UndoName);
+                sling.localScale=new Vector3(.72f,.85f,.72f);
+                sling.localPosition=new Vector3(s<0?-2.18f:1.43f,.15f,s<0?4.9f:5.1f);
+                var drain=gp.Find("Outlane_Drain_"+side);Move(drain,new Vector3((outside+divider)/2,.3f,1.6f));
+                SetBox(drain,new Vector3(.72f,.9f,.6f),Vector3.zero,true);
+                Label("Return_"+side,"RETOUR",new Vector3((divider+inner)/2,.025f,5.7f),.7f,teal.color);
+                Label("Out_"+side,"SORTIE",new Vector3((outside+divider)/2,.025f,4.8f),.65f,amber.color);
+                // Low apron guides continue the main loss path below each flipper, without an open side gap.
+                Wall("ApronGuide_"+side,new[]{new Vector3(divider,0,2.3f),new Vector3(pivot-s*.25f,0,1.5f),new Vector3(Center+s*.55f,0,1.05f)},.10f,.4f);
+            }
+            // Two separate, accessible upper shots. Narrow side returns leave the centre readable.
+            BuildRamp("Vosges",true);BuildRamp("IUT",false);
+            Vector3[] bumperPos={V(-.65f,0,12.25f),V(.65f,0,13.35f),V(-.70f,0,14.45f)};
+            for(int i=0;i<3;i++)Move(gp.Find("Bumper_0"+(i+1)),bumperPos[i]);
+            string[] targets={"Target_Matieres_01","Target_Matieres_02","Target_Matieres_03","Target_Cafe_01","Target_Projet_01","Target_Java_01"};
+            for(int i=0;i<6;i++) {
+                var tr=gp.Find(targets[i]);bool left=i<3;Move(tr,new Vector3(left?-2.68f:1.95f,0,7.0f+(i%3)*.72f));
+                Undo.RecordObject(tr,UndoName);tr.localRotation=Quaternion.Euler(0,left?-55:55,0);
+                var text=tr.GetComponentInChildren<TextMeshPro>();if(text!=null){Undo.RecordObject(text.transform,UndoName);text.transform.rotation=table.rotation*Quaternion.Euler(90,0,0);}
+            }
+            Move(gp.Find("Boss_ProjetFinal"),V(0,0,16f));
+            var boss=gp.Find("Boss_ProjetFinal");Undo.RecordObject(boss,UndoName);boss.localScale=Vector3.one*.6f;
+            Move(gp.Find("Spinner"),V(0,.225f,10.2f));
+            Move(gp.Find("BallSpawnPoint"),new Vector3(3.85f,.26f,2.15f));
+            Move(gp.Find("Ball"),gp.Find("BallSpawnPoint").localPosition);
+            var plunger=gp.Find("Plunger");Move(plunger,plunger.localPosition+new Vector3(3.85f-7.04f,0,.17f));
+            Move(gp.Find("Gate_Lane"),new Vector3(3.85f,0,14.25f));Disable(gp.Find("Gate_Lane"));
+            Move(gp.Find("DrainZone"),new Vector3(Center,.4f,.85f));SetBox(gp.Find("DrainZone"),new Vector3(7.5f,1.5f,.25f),Vector3.zero,true);
+            Move(gp.Find("Kickback_Left"),new Vector3(-3.82f,.2f,2.3f));
+            Gate("Loop_At_Entry",new Vector3(-3.7f,.28f,14.4f),Vector3.forward,.7f);
+            Gate("Loop_At_Exit",new Vector3(2.98f,.28f,14.4f),Vector3.back,.7f);
+            int k=0;foreach(var r in gp.GetComponentsInChildren<Rollover>()){Move(r.transform,new Vector3(-1.3f+k*.9f,.25f,16.9f));k++;}
+            var release=gp.Find("MultiballRelease");if(release!=null){k=0;foreach(Transform r in release)Move(r,V(-.9f+(k++)*.6f,.3f,10.8f));}
+            // Glass collider has unit scale and finite thickness, rather than scaling a zero-thickness plane.
+            Box("Glass",new Vector3(0,2.6f,9.4f),new Vector3(8.5f,.08f,17.2f),clear,true).GetComponent<Renderer>().enabled=false;
+            Box("GuardLeft",new Vector3(-4.25f,1.4f,9.4f),new Vector3(.08f,2.5f,17.2f),clear,true).GetComponent<Renderer>().enabled=false;
+            Box("GuardRight",new Vector3(4.25f,1.4f,9.4f),new Vector3(.08f,2.5f,17.2f),clear,true).GetComponent<Renderer>().enabled=false;
+            Box("GuardRear",new Vector3(0,1.4f,17.75f),new Vector3(8.5f,2.5f,.08f),clear,true).GetComponent<Renderer>().enabled=false;
+            Label("Title","VOSGES\nM A N I A",V(0,.025f,6.05f),2.0f,new Color(.75f,.94f,.92f));
+            Label("Rules","6 CIBLES  •  2 RAMPES  •  3 BILLES",V(0,.026f,1.9f),.65f,amber.color);
+            Label("ApronTitle","IUT  /  SAINT-DIÉ-DES-VOSGES",new Vector3(0,.13f,.48f),.75f,new Color(.6f,.75f,.8f));
+            var contact=Undo.AddComponent<RampSurfaceContact>(root.gameObject);var so=new SerializedObject(contact);so.FindProperty("surface").objectReferenceValue=surface;so.ApplyModifiedProperties();
+            var camera=Camera.main;Undo.RecordObject(camera,UndoName);Undo.RecordObject(camera.transform,UndoName);
+            camera.orthographic=true;camera.orthographicSize=6.15f;
+            camera.transform.position=table.TransformPoint(new Vector3(0,27,10.1f));
+            camera.transform.rotation=Quaternion.LookRotation(-table.up,table.forward)*Quaternion.Euler(0,0,90);
+            AssetDatabase.SaveAssets();Physics.SyncTransforms();
+        }catch{Undo.RevertAllDownToGroup(group);throw;}finally{Undo.CollapseUndoOperations(group);}
+    }
+    static string SceneManagerPath()=>EditorSceneManager.GetActiveScene().path;
+    static void BuildRamp(string name,bool left) {
+        float entry=left?-1.8f:1.05f, exit=left?-3.08f:2.36f;
+        float top=left?14.9f:14.05f;
+        var p=new List<Vector3>();
+        p.AddRange(Curve(new Vector3(entry,0,9.5f),new Vector3(entry,0,11),new Vector3(entry,1.05f,top-1.4f),new Vector3(entry,1.05f,top)));
+        p.AddRange(Curve(new Vector3(entry,1.05f,top),new Vector3(entry,1.05f,top+1.15f),new Vector3(exit,1.05f,top+1.15f),new Vector3(exit,1.05f,top)).Skip(1));
+        p.AddRange(Curve(new Vector3(exit,1.05f,top),new Vector3(exit,1.05f,top-2),new Vector3(exit,1.0f,8.5f),new Vector3(exit,.72f,7.4f)).Skip(1));
+        p.AddRange(Curve(new Vector3(exit,.72f,7.4f),new Vector3(exit,.42f,6.4f),new Vector3(exit,0,6.0f),new Vector3(exit,0,5.1f)).Skip(1));
+        Trough("Ramp_"+name,p,left?teal:amber);
+        Gate("Ramp_"+name+"_In",new Vector3(entry,.28f,9.7f),Vector3.forward,.85f);
+        Gate("Ramp_"+name+"_Out",new Vector3(exit,1.30f,top-.8f),Vector3.back,.65f);
+        Label("Shot_"+name,name.ToUpperInvariant(),new Vector3(entry,.025f,9.05f),.85f,left?teal.color:amber.color);
+        // Actual support feet, kept outside the .64-unit ball path and above/below the playfield appropriately.
+        foreach(float z in new[]{8.5f,11f,13f})Post("RampSupport_"+name+"_"+z,new Vector3(exit+(left?-.43f:.43f),0,z),.055f,.95f);
+    }
+    static void Gate(string name,Vector3 p,Vector3 forward,float width){var tr=gp.Find(name);if(tr==null)return;Move(tr,p);Undo.RecordObject(tr,UndoName);tr.localRotation=Quaternion.LookRotation(forward);SetBox(tr,new Vector3(width,.5f,.12f),Vector3.zero,true);}
+    static void Move(Transform tr,Vector3 p){if(tr==null)return;Undo.RecordObject(tr,UndoName);tr.position=table.TransformPoint(p);}
+    static void SetBox(Transform tr,Vector3 size,Vector3 center,bool trigger){var c=tr.GetComponent<BoxCollider>();if(c==null)return;Undo.RecordObject(c,UndoName);c.size=size;c.center=center;c.isTrigger=trigger;c.enabled=true;}
+    static void Disable(Transform tr){if(tr==null)return;foreach(var c in tr.GetComponentsInChildren<Collider>(true)){Undo.RecordObject(c,UndoName);c.enabled=false;}foreach(var r in tr.GetComponentsInChildren<Renderer>(true)){Undo.RecordObject(r,UndoName);r.enabled=false;}}
+    static Transform New(string name,Transform parent){var go=new GameObject(name);Undo.RegisterCreatedObjectUndo(go,UndoName);go.transform.SetParent(parent,false);return go.transform;}
+    static Material Mat(string name,Color color,float metallic){var p=Folder+"/"+name+".mat";var m=AssetDatabase.LoadAssetAtPath<Material>(p);if(m!=null)return m;m=new Material(Shader.Find("Universal Render Pipeline/Lit")){name=name,color=color};m.SetFloat("_Metallic",metallic);m.SetFloat("_Smoothness",.38f);AssetDatabase.CreateAsset(m,p);return m;}
+    static GameObject Box(string name,Vector3 p,Vector3 size,Material m,bool collision){var go=GameObject.CreatePrimitive(PrimitiveType.Cube);Undo.RegisterCreatedObjectUndo(go,UndoName);go.name=name;go.transform.SetParent(root,false);go.transform.localPosition=p;go.transform.localScale=size;go.GetComponent<Renderer>().sharedMaterial=m;if(!collision)Undo.DestroyObjectImmediate(go.GetComponent<Collider>());else go.GetComponent<Collider>().sharedMaterial=surface;return go;}
+    static void Post(string name,Vector3 p,float radius,float h){var go=GameObject.CreatePrimitive(PrimitiveType.Cylinder);Undo.RegisterCreatedObjectUndo(go,UndoName);go.name=name;go.transform.SetParent(root,false);go.transform.localPosition=p+Vector3.up*h*.5f;go.transform.localScale=new Vector3(radius*2,h*.5f,radius*2);go.GetComponent<Renderer>().sharedMaterial=steel;go.GetComponent<Collider>().sharedMaterial=surface;}
+    static List<Vector3> Curve(Vector3 a,Vector3 b,Vector3 c,Vector3 d){var p=new List<Vector3>();for(int i=0;i<=48;i++){float t=i/48f,u=1-t;p.Add(u*u*u*a+3*u*u*t*b+3*u*t*t*c+t*t*t*d);}return p;}
+    static void Wall(string name,IEnumerable<Vector3> points,float width,float height){Sweep(name,points.ToList(),new[]{new Vector2(-width/2,0),new Vector2(width/2,0),new Vector2(width/2,height),new Vector2(-width/2,height)},steel,true);}
+    static void Trough(string name,List<Vector3> p,Material accent){
+        Sweep(name,p,new[]{new Vector2(-.37f,-.035f),new Vector2(.37f,-.035f),new Vector2(.37f,.52f),new Vector2(.32f,.52f),new Vector2(.32f,0),new Vector2(-.32f,0),new Vector2(-.32f,.52f),new Vector2(-.37f,.52f)},steel,true);
+        foreach(int s in new[]{-1,1}){var edge=p.Select((v,i)=>v+Normal(p,i)*s*.347f+Vector3.up*.525f).ToList();Sweep(name+"_Rim"+s,edge,new[]{new Vector2(-.022f,-.018f),new Vector2(.022f,-.018f),new Vector2(.022f,.018f),new Vector2(-.022f,.018f)},accent,false);}
+    }
+    static Vector3 Normal(List<Vector3> p,int i){var d=p[Math.Min(p.Count-1,i+1)]-p[Math.Max(0,i-1)];return new Vector3(d.z,0,-d.x).normalized;}
+    static void Sweep(string name,List<Vector3> p,Vector2[] section,Material m,bool collision){
+        var v=new List<Vector3>();var tri=new List<int>();int n=section.Length;
+        for(int i=0;i<p.Count;i++)foreach(var q in section)v.Add(p[i]+Normal(p,i)*q.x+Vector3.up*q.y);
+        for(int i=0;i<p.Count-1;i++)for(int j=0;j<n;j++){int a=i*n+j,b=i*n+(j+1)%n;tri.AddRange(new[]{a,b,b+n,a,b+n,a+n});}
+        // End caps of a U profile must follow its concavity; use three rectangles, never a solid end wall.
+        int[] caps=n==8?new[]{0,1,4,0,4,5,1,2,3,1,3,4,0,5,6,0,6,7}:new[]{0,1,2,0,2,3};
+        for(int i=0;i<caps.Length;i+=3){tri.AddRange(new[]{caps[i+2],caps[i+1],caps[i]});int end=(p.Count-1)*n;tri.AddRange(new[]{end+caps[i],end+caps[i+1],end+caps[i+2]});}
+        var mesh=new Mesh{name=name};mesh.SetVertices(v);mesh.SetTriangles(tri,0);mesh.RecalculateNormals();mesh.RecalculateBounds();
+        AssetDatabase.CreateAsset(mesh,Folder+"/"+name+".asset");var tr=New(name,root);tr.gameObject.AddComponent<MeshFilter>().sharedMesh=mesh;tr.gameObject.AddComponent<MeshRenderer>().sharedMaterial=m;
+        if(collision){var c=tr.gameObject.AddComponent<MeshCollider>();c.sharedMesh=mesh;c.sharedMaterial=surface;}
+    }
+    static void Label(string name,string value,Vector3 p,float size,Color color){var tr=New(name,root);tr.localPosition=p;tr.localRotation=Quaternion.Euler(90,0,0);var text=Undo.AddComponent<TextMeshPro>(tr.gameObject);text.font=AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset");text.text=value;text.fontSize=size;text.color=color;text.alignment=TextAlignmentOptions.Center;text.textWrappingMode=TextWrappingModes.NoWrap;text.rectTransform.sizeDelta=new Vector2(6,1);}
+}

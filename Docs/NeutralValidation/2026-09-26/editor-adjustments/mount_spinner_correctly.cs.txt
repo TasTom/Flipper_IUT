@@ -1,0 +1,13 @@
+if(Application.isPlaying)throw new Exception("Edit required");
+var t=GameObject.Find("PinballTable").transform;var host=t.Find("Gameplay/Spinner");var blade=host.Find("Spinner_Blade");var bracket=t.Find("ReferencePlayfield/ProfessionalArt/SpinnerMount");
+UnityEditor.Undo.IncrementCurrentGroup();int group=UnityEditor.Undo.GetCurrentGroup();UnityEditor.Undo.SetCurrentGroupName("Montage cohérent du spinner Stern");
+UnityEditor.Undo.RecordObject(host,"Hauteur de l'axe du spinner");host.localPosition=new Vector3(-.4f,.52f,10.2f);
+UnityEditor.Undo.RecordObject(blade,"Axe sans échelle déformée");blade.localScale=Vector3.one;blade.localPosition=Vector3.zero;blade.localRotation=Quaternion.identity;
+var old=blade.GetComponent<Renderer>();UnityEditor.Undo.RecordObject(old,"Remplacer l'ailette par sa pièce réelle");old.enabled=false;
+var asset=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Models/Parts/Switches/Spinner_Stern_-_Flap.fbx");var model=(GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(asset);UnityEditor.Undo.RegisterCreatedObjectUndo(model,"Ailette Stern");model.name="SternFlap";model.transform.SetParent(blade,false);model.transform.localPosition=Vector3.zero;model.transform.localRotation=Quaternion.Euler(-90,0,0);
+var teal=UnityEditor.AssetDatabase.LoadAssetAtPath<Material>("Assets/Generated/NeutralReference/Art/ForestEnamel.mat");foreach(var r in model.GetComponentsInChildren<Renderer>())r.sharedMaterial=teal;
+UnityEditor.Undo.RecordObject(bracket,"Aligner le support sur son axe");bracket.localPosition=host.localPosition;
+var c=blade.GetComponent<BoxCollider>();UnityEditor.Undo.RecordObject(c,"Volume de l'ailette");c.center=new Vector3(0,-.10f,0);c.size=new Vector3(.53f,.40f,.055f);
+var rb=blade.GetComponent<Rigidbody>();UnityEditor.Undo.RecordObject(rb,"Retour gravitaire du spinner");rb.useGravity=true;rb.ResetCenterOfMass();rb.ResetInertiaTensor();
+var joint=blade.GetComponent<HingeJoint>();UnityEditor.Undo.RecordObject(joint,"Ancre du spinner après déplacement");joint.anchor=Vector3.zero;joint.axis=Vector3.right;joint.autoConfigureConnectedAnchor=false;joint.connectedAnchor=blade.position;
+UnityEditor.Undo.CollapseUndoOperations(group);Physics.SyncTransforms();return "Stern bracket/flap share their source origin. Hinge anchor updated from obsolete world position; gravity restores the flap.";

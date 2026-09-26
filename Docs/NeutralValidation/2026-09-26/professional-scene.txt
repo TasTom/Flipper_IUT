@@ -1,0 +1,10 @@
+PASS six reward targets
+PASS decorative art has no collider
+PASS no missing script
+PASS joint anchor Spinner_Blade delta=0,0000
+PASS score corners (1920, 1080) x=0,850..1,000 y=0,000..1,000
+PASS score corners (2560, 1440) x=0,850..1,000 y=0,000..1,000
+PASS score corners (1920, 1200) x=0,850..1,000 y=0,000..1,000
+PASS spinner rotates on impact degrees=161,08
+PASS spinner impact scores
+PASS relaunch possible after return to shooter

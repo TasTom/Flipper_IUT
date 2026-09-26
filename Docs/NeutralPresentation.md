@@ -1,5 +1,7 @@
 # Neutral — Vosges Mania
 
+> **Historique du 25 septembre.** La géométrie décrite ci-dessous est remplacée par la [version du 26 septembre](NeutralProfessional.md). Les anciens résultats ne valident pas l'implantation actuelle.
+
 État du 25 septembre 2026. La scène `Assets/Scenes/Neutral.unity` est enregistrée et reprend la disposition générale du plan fourni : orbit supérieur, bumpers regroupés en haut, rampe diagonale, centre dégagé et retours latéraux vers les flippers. L’orientation de la caméra de borne et les réglages des flippers sont conservés. [Capture en jeu](NeutralFinal.png).
 
 ## Implantation et corrections

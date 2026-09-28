@@ -42,6 +42,12 @@ public class AudioManager : MonoBehaviour
     private readonly Dictionary<string, AudioClip> registry = new Dictionary<string, AudioClip>();
     private int nextVoice;
 
+    /// <summary>Nom d'un clip présent au registre, ou null si absent ou muet.</summary>
+    public bool HasClip(string clipName)
+    {
+        return !string.IsNullOrEmpty(clipName) && registry.TryGetValue(clipName, out var clip) && clip != null;
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -123,6 +129,21 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     public void Play(string clipName)
     {
+        Play(clipName, 1f, 1f);
+    }
+
+    /// <summary>
+    /// Joue un effet sonore en dosant son volume et sa hauteur.
+    /// </summary>
+    /// <param name="clipName">Nom du clip au registre.</param>
+    /// <param name="volumeScale">Multiplicateur du volume des effets. 0 = muet.</param>
+    /// <param name="pitch">Hauteur de lecture. 1 = normale.</param>
+    /// <remarks>
+    /// Les deux paramètres sont réécrits à chaque lecture, jamais composés : une voix
+    /// déjà jouée plus fort ne doit pas laisser un pitch derrière elle pour le clip suivant.
+    /// </remarks>
+    public void Play(string clipName, float volumeScale, float pitch)
+    {
         if (string.IsNullOrEmpty(clipName) || sfxSources.Count == 0)
         {
             return;
@@ -133,15 +154,17 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        var src = sfxSources[nextVoice];
-        nextVoice = (nextVoice + 1) % sfxSources.Count;
-
-        src.clip = clip;
-        src.Play();
+        Play(clip, volumeScale, pitch);
     }
 
     /// <summary>Joue un effet sonore déjà chargé. Silencieux si null.</summary>
     public void Play(AudioClip clip)
+    {
+        Play(clip, 1f, 1f);
+    }
+
+    /// <summary>Joue un effet sonore déjà chargé, en dosant volume et hauteur.</summary>
+    public void Play(AudioClip clip, float volumeScale, float pitch)
     {
         if (clip == null || sfxSources.Count == 0)
         {
@@ -152,6 +175,8 @@ public class AudioManager : MonoBehaviour
         nextVoice = (nextVoice + 1) % sfxSources.Count;
 
         src.clip = clip;
+        src.volume = Mathf.Clamp01(sfxVolume * volumeScale);
+        src.pitch = Mathf.Clamp(pitch, 0.25f, 3f);
         src.Play();
     }
 }

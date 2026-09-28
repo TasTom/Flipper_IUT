@@ -8044,7 +8044,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: target
   onTrigger: 0
+  variants: []
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!65 &276373755
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9825,13 +9830,22 @@ MonoBehaviour:
   cooldown: 0.1
   scoreValue: 150
   hitsBeforeExtinguish: 0
+  cap: {fileID: 847555123}
+  scalePunch: 0.14
+  minTravel: 0.04
+  maxTravel: 0.1
+  travelSpeedMin: 18
+  travelSpeedMax: 55
+  travelTime: 0.02
+  springFrequency: 14
+  springDamping: 0.5
   flashRenderers:
   - {fileID: 469267006}
   - {fileID: 1944105292}
   - {fileID: 1399997941}
   - {fileID: 320865351}
   flashColor: {r: 1, g: 0.4, b: 0.2, a: 1}
-  flashDuration: 0.1
+  flashIntensity: 2.2
 --- !u!136 &346087640
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9869,7 +9883,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: bumper
   onTrigger: 0
+  variants:
+  - bumper_soft
+  - bumper_mid
+  - bumper_hard
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!1 &350855639
 GameObject:
   m_ObjectHideFlags: 0
@@ -14594,6 +14616,7 @@ Transform:
   - {fileID: 719971622}
   - {fileID: 1456826965}
   - {fileID: 1908366448}
+  - {fileID: 1920269526}
   m_Father: {fileID: 1044489919}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &537849202 stripped
@@ -16072,13 +16095,22 @@ MonoBehaviour:
   cooldown: 0.1
   scoreValue: 150
   hitsBeforeExtinguish: 0
+  cap: {fileID: 803780413}
+  scalePunch: 0.14
+  minTravel: 0.04
+  maxTravel: 0.1
+  travelSpeedMin: 18
+  travelSpeedMax: 55
+  travelTime: 0.02
+  springFrequency: 14
+  springDamping: 0.5
   flashRenderers:
   - {fileID: 1825004212}
   - {fileID: 442225236}
   - {fileID: 1531402518}
   - {fileID: 1927909495}
   flashColor: {r: 1, g: 0.4, b: 0.2, a: 1}
-  flashDuration: 0.1
+  flashIntensity: 2.2
 --- !u!136 &595225492
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16116,7 +16148,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: bumper
   onTrigger: 0
+  variants:
+  - bumper_soft
+  - bumper_mid
+  - bumper_hard
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!1 &601813590
 GameObject:
   m_ObjectHideFlags: 0
@@ -23002,6 +23042,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 5706db45e58b15d42964f3fe1dc4c20e, type: 3}
   - {fileID: 8300000, guid: 8fba863413488f24e9f3753862ce368b, type: 3}
   - {fileID: 8300000, guid: 23bc1f94ce05e9c41b0181ad5b685924, type: 3}
+  - {fileID: 8300000, guid: 08f5f7c9fc588174e94bf064a6814b78, type: 3}
+  - {fileID: 8300000, guid: a3d1ff8ec45024a4480aa19dd7027c78, type: 3}
+  - {fileID: 8300000, guid: 511535beb9743a14588b3247fb8655b7, type: 3}
   sfxVolume: 0.8
   sfxVoices: 8
 --- !u!114 &796815586
@@ -24175,7 +24218,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: target
   onTrigger: 0
+  variants: []
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!65 &825068836
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -25125,7 +25173,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: target
   onTrigger: 0
+  variants: []
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!65 &868632731
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -25448,7 +25501,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: spinner
   onTrigger: 0
+  variants: []
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!1001 &877660833
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35888,7 +35946,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: slingshot
   onTrigger: 0
+  variants: []
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!64 &1256252170
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -37025,7 +37088,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: target
   onTrigger: 0
+  variants: []
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!65 &1298209077
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -41818,13 +41886,22 @@ MonoBehaviour:
   cooldown: 0.1
   scoreValue: 150
   hitsBeforeExtinguish: 0
+  cap: {fileID: 1821880558}
+  scalePunch: 0.14
+  minTravel: 0.04
+  maxTravel: 0.1
+  travelSpeedMin: 18
+  travelSpeedMax: 55
+  travelTime: 0.02
+  springFrequency: 14
+  springDamping: 0.5
   flashRenderers:
   - {fileID: 286608710}
   - {fileID: 1427692793}
   - {fileID: 888585350}
   - {fileID: 1873933252}
   flashColor: {r: 1, g: 0.4, b: 0.2, a: 1}
-  flashDuration: 0.1
+  flashIntensity: 2.2
 --- !u!136 &1413309721
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -41862,7 +41939,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: bumper
   onTrigger: 0
+  variants:
+  - bumper_soft
+  - bumper_mid
+  - bumper_hard
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!1 &1417223894
 GameObject:
   m_ObjectHideFlags: 0
@@ -43798,7 +43883,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: slingshot
   onTrigger: 0
+  variants: []
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!64 &1507132617
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -45020,7 +45110,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: target
   onTrigger: 0
+  variants: []
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!65 &1536024075
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -49465,7 +49560,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: drain
   onTrigger: 1
+  variants: []
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!1001 &1731383734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -54974,6 +55074,119 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2b350e6136855f6428e5970a3d5e3b3c, type: 3}
   m_PrefabInstance: {fileID: 1917221430}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1920269525
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1920269526}
+  - component: {fileID: 1920269529}
+  - component: {fileID: 1920269528}
+  - component: {fileID: 1920269527}
+  m_Layer: 0
+  m_Name: OrbitFeedCurve_right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1920269526
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920269525}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
+  m_LocalPosition: {x: -0.59, y: 0.415, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 537486145}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
+--- !u!64 &1920269527
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920269525}
+  m_Material: {fileID: 13400000, guid: 2fbdbf5b92f7a924f9dbb2a3a620a599, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 2a458e8bc4e48a54ba8f3f96a90d7aba, type: 2}
+--- !u!23 &1920269528
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920269525}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 15f723bc9907ef8449fba05e6a886237, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1920269529
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920269525}
+  m_Mesh: {fileID: 4300000, guid: 2a458e8bc4e48a54ba8f3f96a90d7aba, type: 2}
 --- !u!1 &1922793081
 GameObject:
   m_ObjectHideFlags: 0
@@ -58117,7 +58330,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CollisionSound
   soundName: target
   onTrigger: 0
+  variants: []
+  silentBelowSpeed: 6
+  weakestSpeed: 18
+  strongestSpeed: 55
   cooldown: 0.08
+  pitchJitter: 0.12
 --- !u!65 &2015987170
 BoxCollider:
   m_ObjectHideFlags: 0

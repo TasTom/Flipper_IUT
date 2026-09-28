@@ -1,6 +1,6 @@
-# Neutral — Vosges Mania
+> État historique du 26 septembre. La scène actuelle est décrite dans [NeutralProfessional](../../NeutralProfessional.md).
 
-> Rapport historique du 26 septembre. Voir [la reprise des proportions et de la circulation du 28 septembre](NeutralRefinement.md) pour l'état actuel et ses vérifications.
+# Neutral — Vosges Mania
 
 État du **26 septembre 2026**. Scène : `Assets/Scenes/Neutral.unity`. [Capture Unity](NeutralFinal.png).
 

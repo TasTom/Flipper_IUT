@@ -1,0 +1,23 @@
+if(!Application.isPlaying)throw new System.Exception("Play required");
+var t=GameObject.Find("PinballTable").transform;var ball=t.Find("Gameplay/Ball").GetComponent<Rigidbody>();var mode=Physics.simulationMode;var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;var sb=new System.Text.StringBuilder();
+var flips=new[]{t.Find("Gameplay/Flipper_Left_Pivot").GetComponent<Flipper>(),t.Find("Gameplay/Flipper_Right_Pivot").GetComponent<Flipper>()};var angle=typeof(Flipper).GetField("angle",flags);var apply=typeof(Flipper).GetMethod("Appliquer",flags);var clamp=typeof(BallManager).GetMethod("ClampSpeed",flags);bool[] pressed={false,false};float[] current={-30,30};
+try{Physics.simulationMode=SimulationMode.Script;
+void Tick(){for(int j=0;j<2;j++){float target=(pressed[j]?30:-30)*(j==0?1:-1);current[j]=Mathf.MoveTowards(current[j],target,(pressed[j]?2200:700)*.005f);angle.SetValue(flips[j],current[j]);apply.Invoke(flips[j],null);}clamp.Invoke(BallManager.Instance,new object[]{ball});Physics.Simulate(.005f);}
+void Reset(){GameManager.Instance.StartGame();ball.gameObject.SetActive(true);ball.isKinematic=false;ball.useGravity=true;pressed[0]=pressed[1]=false;for(int n=0;n<30;n++)Tick();}
+foreach(bool left in new[]{true,false}){
+int good=0;foreach(float threshold in new[]{3.5f,3.4f,3.3f,3.2f,3.1f,3.0f}){
+Reset();ball.position=t.TransformPoint(new Vector3(left?-3.1f:2.34f,.90f,6.9f));ball.linearVelocity=-t.forward*12;ball.angularVelocity=Vector3.zero;Physics.SyncTransforms();bool fired=false;float peak=0;int after=0;
+for(int n=0;n<1800&&ball.gameObject.activeSelf;n++){var p=t.InverseTransformPoint(ball.position);if(!fired&&p.z<threshold&&p.z>1.9f&&Mathf.Abs(p.x+.4f)<1.8f){fired=true;pressed[0]=pressed[1]=true;}Tick();if(fired){peak=Mathf.Max(peak,t.InverseTransformPoint(ball.position).z);if(++after>600)break;}}
+if(fired&&peak>9)good++;sb.AppendLine("RETURN "+(left?"L":"R")+" threshold="+threshold+" fired="+fired+" peak="+peak.ToString("F2"));
+}sb.AppendLine("SUMMARY "+(left?"L":"R")+" relaunches="+good+"/6");}
+var plunger=t.GetComponentInChildren<Plunger>();var pull=typeof(Plunger).GetField("pullAmount",flags);var launch=typeof(Plunger).GetMethod("Launch",flags);
+foreach(float power in new[]{.65f,.8f,1f}){
+Reset();pull.SetValue(plunger,.8f*power);launch.Invoke(plunger,null);int presses=0;float maxStall=0,stall=0;var last=t.InverseTransformPoint(ball.position);int[] hold={0,0};int frames=0;
+for(int n=0;n<6000&&ball.gameObject.activeSelf;n++){
+var p=t.InverseTransformPoint(ball.position);for(int j=0;j<2;j++){bool hit=p.z<3.45f&&p.z>2.0f&&Mathf.Abs(p.x+.4f)<1.4f&&(j==0?p.x<-.4f:p.x>=-.4f);if(hit&&hold[j]==0){hold[j]=25;presses++;}pressed[j]=hold[j]>0;if(hold[j]>0)hold[j]--;}
+Tick();if((p-last).magnitude<.002f&&p.x<3.5f)stall+=.005f;else stall=0;maxStall=Mathf.Max(maxStall,stall);last=p;frames++;
+}
+sb.AppendLine("SERVE "+power+" strikes="+presses+" fieldStall="+maxStall.ToString("F2")+" duration="+(frames*.005f).ToString("F2")+" end="+last.ToString("F2")+" active="+ball.gameObject.activeSelf);
+}
+}finally{for(int j=0;j<2;j++){angle.SetValue(flips[j],j==0?-30f:30f);apply.Invoke(flips[j],null);}Physics.simulationMode=mode;GameManager.Instance.StartGame();}
+System.IO.File.WriteAllText("Tools/unity/out/refined-strikes.txt",sb.ToString());return sb.ToString();

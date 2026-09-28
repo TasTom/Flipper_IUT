@@ -1,0 +1,23 @@
+LAUNCH 0,5 end=(3.925, 0.225, 2.289) peak=16,66 maxStall=5,87 field=True escape=False active=True
+LAUNCH 0,65 end=(0.000, 0.000, 0.000) peak=17,33 maxStall=0,16 field=True escape=False active=False
+LAUNCH 0,8 end=(0.000, 0.000, 0.000) peak=17,37 maxStall=0,00 field=True escape=False active=False
+LAUNCH 1 end=(0.000, 0.000, 0.000) peak=17,34 maxStall=0,35 field=True escape=False active=False
+AERIAL 20 end=(3.923, 0.225, 2.289) peak=16,12 maxStall=6,05 field=False escape=False active=True
+AERIAL 45 end=(3.925, 0.225, 2.289) peak=16,77 maxStall=5,66 field=True escape=False active=True
+AERIAL 70 end=(0.000, 0.000, 0.000) peak=17,19 maxStall=0,15 field=True escape=False active=False
+AERIAL 90 end=(0.000, 0.000, 0.000) peak=17,30 maxStall=0,14 field=True escape=False active=False
+AERIAL 115 end=(0.000, 0.000, 0.000) peak=17,13 maxStall=0,14 field=True escape=False active=False
+AERIAL 140 end=(0.000, 0.000, 0.000) peak=16,66 maxStall=0,15 field=True escape=False active=False
+AERIAL 160 end=(0.000, 0.000, 0.000) peak=16,12 maxStall=0,08 field=True escape=False active=False
+BUMPER Bumper_01 pos=(-1.20, 0.00, 13.15)
+Bumper_01_0_Bumper Base - Williams/Bally enabled=True center=(-1.20, 0.31, 13.15) size=(0.91, 0.73, 0.98)
+Bumper_01_1_Bumper Ring enabled=True center=(-1.20, 0.25, 13.15) size=(0.50, 0.76, 0.59)
+Bumper_01_2_Bumper Cap - Clear 3" enabled=True center=(-1.20, 0.66, 13.15) size=(1.10, 0.35, 1.11)
+BUMPER Bumper_02 pos=(0.12, 0.00, 14.20)
+Bumper_02_0_Bumper Base - Williams/Bally enabled=True center=(0.12, 0.31, 14.20) size=(0.91, 0.73, 0.98)
+Bumper_02_1_Bumper Ring enabled=True center=(0.12, 0.25, 14.20) size=(0.50, 0.76, 0.59)
+Bumper_02_2_Bumper Cap - Clear 3" enabled=True center=(0.12, 0.66, 14.20) size=(1.10, 0.35, 1.11)
+BUMPER Bumper_03 pos=(-1.22, 0.00, 15.20)
+Bumper_03_0_Bumper Base - Williams/Bally enabled=True center=(-1.22, 0.31, 15.20) size=(0.91, 0.73, 0.98)
+Bumper_03_1_Bumper Ring enabled=True center=(-1.22, 0.25, 15.20) size=(0.50, 0.76, 0.59)
+Bumper_03_2_Bumper Cap - Clear 3" enabled=True center=(-1.22, 0.66, 15.20) size=(1.10, 0.35, 1.11)

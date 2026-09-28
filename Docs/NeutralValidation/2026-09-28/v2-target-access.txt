@@ -1,0 +1,6 @@
+PASS Target_Matieres_01 accessible from centre
+PASS Target_Matieres_02 accessible from centre
+PASS Target_Matieres_03 accessible from centre
+PASS Target_Java_01 accessible from centre
+PASS Target_Projet_01 accessible from centre
+PASS Target_Cafe_01 accessible from centre

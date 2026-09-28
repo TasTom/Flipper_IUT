@@ -1,0 +1,10 @@
+CLEARANCE Vosges
+RAMP Vosges speed=25 completed=0 fieldStall=0,33 escape=False maxY=1,18 end=(0.000, 0.000, 0.000)
+RAMP Vosges speed=35 completed=1 fieldStall=0,00 escape=False maxY=1,47 end=(0.000, 0.000, 0.000)
+RAMP Vosges speed=50 completed=1 fieldStall=0,17 escape=False maxY=1,49 end=(0.000, 0.000, 0.000)
+RAMP Vosges speed=70 completed=1 fieldStall=0,00 escape=False maxY=1,61 end=(0.000, 0.000, 0.000)
+CLEARANCE IUT
+RAMP IUT speed=25 completed=0 fieldStall=0,11 escape=False maxY=1,51 end=(0.000, 0.000, 0.000)
+RAMP IUT speed=35 completed=1 fieldStall=0,10 escape=False maxY=2,01 end=(0.000, 0.000, 0.000)
+RAMP IUT speed=50 completed=1 fieldStall=0,13 escape=False maxY=2,00 end=(0.000, 0.000, 0.000)
+RAMP IUT speed=70 completed=1 fieldStall=0,05 escape=False maxY=2,10 end=(0.000, 0.000, 0.000)

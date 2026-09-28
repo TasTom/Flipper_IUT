@@ -109,7 +109,7 @@ public class DifficultyManager : MonoBehaviour
         }
 
         // Bille supplémentaire : les paliers.
-        var extra = FindFirstObjectByType<ExtraBallAward>();
+        var extra = FindAnyObjectByType<ExtraBallAward>();
         if (extra != null)
         {
             extra.ConfigurerPaliers(Active.firstExtraBallThreshold,

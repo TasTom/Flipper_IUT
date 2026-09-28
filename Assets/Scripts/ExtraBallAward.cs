@@ -103,6 +103,7 @@ public class ExtraBallAward : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.AwardExtraBall();
+            GameManager.Instance.ShowMessage("BILLE SUPPLÉMENTAIRE", messageDuration);
         }
     }
 }

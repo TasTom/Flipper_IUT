@@ -1,0 +1,78 @@
+PASS unchanged collider Bat_Mesh
+PASS unchanged collider Bat_Mesh
+PASS unchanged collider Slingshot_Left
+PASS unchanged collider Slingshot_Right
+PASS unchanged collider Bumper_01
+PASS unchanged collider Bumper_02
+PASS unchanged collider Bumper_03
+PASS unchanged collider Rod
+PASS unchanged collider DrainZone
+PASS unchanged collider Ball
+PASS unchanged collider Target_Matieres_01
+PASS unchanged collider Target_Matieres_02
+PASS unchanged collider Target_Matieres_03
+PASS unchanged collider Target_Java_01
+PASS unchanged collider Target_Projet_01
+PASS unchanged collider Target_Cafe_01
+PASS unchanged collider Ramp_Vosges_Out
+PASS unchanged collider Ramp_IUT_Out
+PASS unchanged collider Loop_At_Entry
+PASS unchanged collider Loop_At_Exit
+PASS unchanged collider Outlane_Drain_Left
+PASS unchanged collider Outlane_Drain_Right
+PASS unchanged collider Rollover_01
+PASS unchanged collider Rollover_02
+PASS unchanged collider Rollover_03
+PASS unchanged collider Kickback_Left
+PASS unchanged collider Boss_ProjetFinal
+PASS unchanged collider Spinner_Blade
+PASS unchanged collider Playfield
+PASS unchanged collider LeftBoundary
+PASS unchanged collider ShooterOuter
+PASS unchanged collider ShooterDivider
+PASS unchanged collider RearOrbit
+PASS unchanged collider ShooterExit
+PASS unchanged collider Glass
+PASS unchanged collider GuardLeft
+PASS unchanged collider GuardRight
+PASS unchanged collider GuardRear
+PASS unchanged collider InlaneOuter_Left
+PASS unchanged collider InlaneInner_Left
+PASS unchanged collider OutlanePost_Left
+PASS unchanged collider CoveredDrainGuide_Left
+PASS unchanged collider InlaneOuter_Right
+PASS unchanged collider InlaneInner_Right
+PASS unchanged collider OutlanePost_Right
+PASS unchanged collider CoveredDrainGuide_Right
+PASS unchanged collider OrbitFeedCurve
+PASS unchanged collider OrbitFeedCurve_right
+UNCHANGED_COLLIDERS=48
+PASS six reward targets preserved
+PASS ball diameter .414 preserved
+PASS Flipper_Left_Pivot pose and settings preserved
+PASS Flipper_Right_Pivot pose and settings preserved
+PASS Vosges upper track unchanged from slice 34
+PASS Vosges original topology retained
+PASS Vosges flared mouth
+PASS Vosges_Track visible and physical vertices match
+PASS Vosges_Track dedicated mesh asset
+PASS Vosges_Cover visible and physical vertices match
+PASS Vosges_Cover dedicated mesh asset
+PASS Vosges_UndercutGuard visible and physical vertices match
+PASS Vosges_UndercutGuard dedicated mesh asset
+PASS Vosges paired detectors preserved
+PASS IUT upper track unchanged from slice 34
+PASS IUT original topology retained
+PASS IUT flared mouth
+PASS IUT_Track visible and physical vertices match
+PASS IUT_Track dedicated mesh asset
+PASS IUT_Cover visible and physical vertices match
+PASS IUT_Cover dedicated mesh asset
+PASS IUT_UndercutGuard visible and physical vertices match
+PASS IUT_UndercutGuard dedicated mesh asset
+PASS IUT paired detectors preserved
+PASS no missing scripts
+PASS compilation healthy
+PASS Console errors=0
+SCENE=Assets/Scenes/Neutral.unity dirty=False Console warnings=0
+FAILURES=0

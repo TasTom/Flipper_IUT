@@ -1,0 +1,22 @@
+SHOT Right -> Vosges threshold=3,75 fired=True shotP=(0.479, 0.207, 5.582) shotV=(-4.58, 0.00, 26.48) entered=False entryV=0,00 offset=99,000 completed=0 closest=1,735 maxY=0,21
+SHOT Right -> Vosges threshold=3,73 fired=True shotP=(0.583, 0.207, 5.575) shotV=(-2.19, 0.00, 31.31) entered=False entryV=0,00 offset=99,000 completed=0 closest=1,895 maxY=1,53
+SHOT Right -> Vosges threshold=3,70 fired=True shotP=(-0.357, 0.207, 5.529) shotV=(-15.11, 0.00, 28.90) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,889 maxY=0,24
+SHOT Right -> Vosges threshold=3,68 fired=True shotP=(-0.003, 0.207, 5.542) shotV=(-9.94, 0.00, 34.23) entered=True entryV=14,15 offset=0,032 completed=0 closest=0,033 maxY=0,25
+SHOT Right -> Vosges threshold=3,65 fired=True shotP=(-0.011, 0.207, 5.587) shotV=(-8.54, 0.00, 43.61) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,716 maxY=0,24
+SHOT Right -> Vosges threshold=3,63 fired=True shotP=(-0.942, 0.207, 5.611) shotV=(-22.28, 0.00, 34.21) entered=False entryV=0,00 offset=99,000 completed=0 closest=1,677 maxY=0,27
+SHOT Right -> Vosges threshold=3,60 fired=True shotP=(-0.852, 0.207, 5.546) shotV=(-23.79, 0.00, 45.44) entered=False entryV=0,00 offset=99,000 completed=0 closest=1,312 maxY=0,26
+SHOT Right -> Vosges threshold=3,58 fired=True shotP=(-0.848, 0.207, 5.522) shotV=(-24.54, 0.00, 50.99) entered=False entryV=0,00 offset=99,000 completed=0 closest=1,147 maxY=0,21
+SHOT Right -> Vosges threshold=3,55 fired=True shotP=(-0.946, 0.207, 5.619) shotV=(-26.04, 0.00, 61.93) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,677 maxY=0,75
+SHOT Right -> Vosges threshold=3,53 fired=True shotP=(-1.056, 0.207, 5.794) shotV=(-26.80, 0.00, 67.33) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,231 maxY=0,21
+SHOT Right -> Vosges threshold=3,50 fired=True shotP=(-1.029, 0.207, 5.605) shotV=(-27.54, 0.00, 72.85) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,875 maxY=0,26
+SHOT Right -> Vosges threshold=3,48 fired=True shotP=(-1.291, 0.207, 5.595) shotV=(-33.57, 0.00, 72.95) entered=False entryV=0,00 offset=99,000 completed=0 closest=1,811 maxY=0,33
+SHOT Right -> Vosges threshold=3,45 fired=True shotP=(-3.188, 0.212, 5.624) shotV=(-2.25, 0.95, 26.26) entered=False entryV=0,00 offset=99,000 completed=0 closest=1,533 maxY=1,44
+SHOT Right -> Vosges threshold=3,43 fired=True shotP=(0.000, 0.000, 0.000) shotV=(0.00, 0.00, 0.00) entered=False entryV=0,00 offset=99,000 completed=0 closest=4,393 maxY=0,21
+SHOT Right -> Vosges threshold=3,40 fired=True shotP=(-0.370, 0.207, 5.524) shotV=(-10.86, 0.00, 27.76) entered=True entryV=11,25 offset=0,059 completed=0 closest=0,045 maxY=0,22
+SHOT Right -> Vosges threshold=3,38 fired=True shotP=(-0.404, 0.207, 5.674) shotV=(-13.26, 0.00, 45.85) entered=True entryV=45,65 offset=0,062 completed=1 closest=0,067 maxY=1,45
+SHOT Right -> Vosges threshold=3,35 fired=True shotP=(-0.442, 0.207, 5.730) shotV=(-13.63, 0.00, 47.10) entered=True entryV=46,34 offset=0,060 completed=1 closest=0,046 maxY=1,46
+SHOT Right -> Vosges threshold=3,33 fired=True shotP=(-0.117, 0.207, 5.539) shotV=(-5.64, 0.00, 57.45) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,719 maxY=0,23
+SHOT Right -> Vosges threshold=3,30 fired=True shotP=(-0.127, 0.207, 5.662) shotV=(-4.73, 0.00, 60.01) entered=True entryV=40,06 offset=0,162 completed=0 closest=0,104 maxY=1,36
+SHOT Right -> Vosges threshold=3,28 fired=True shotP=(-0.197, 0.207, 5.724) shotV=(-5.76, 0.00, 61.78) entered=False entryV=0,00 offset=99,000 completed=0 closest=1,072 maxY=0,24
+SHOT Right -> Vosges threshold=3,25 fired=True shotP=(-0.232, 0.207, 5.754) shotV=(-6.28, 0.00, 62.63) entered=False entryV=0,00 offset=99,000 completed=0 closest=1,009 maxY=0,28
+SUMMARY Left->IUT fired=0 aimed=0 completed=0/21; Right->Vosges fired=21 aimed=5 completed=2/21

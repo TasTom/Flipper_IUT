@@ -1,0 +1,13 @@
+if(Application.isPlaying)throw new Exception("Edit required");var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();var table=GameObject.Find("PinballTable").transform;var routes=table.Find("ReferencePlayfield/FlowRefinement/CorrectedRoutes");var sb=new System.Text.StringBuilder();
+sb.AppendLine("SCENE="+scene.path+" dirty="+scene.isDirty+" UNITY="+Application.unityVersion);
+foreach(var f in table.GetComponentsInChildren<Flipper>()){sb.AppendLine("FLIPPER "+f.name+" pos="+table.InverseTransformPoint(f.transform.position).ToString("F4")+" data="+UnityEditor.EditorJsonUtility.ToJson(f));foreach(var c in f.GetComponentsInChildren<Collider>())sb.AppendLine("FLIPPER_COLLIDER "+c.name+" data="+UnityEditor.EditorJsonUtility.ToJson(c));}
+foreach(var name in new[]{"Vosges","IUT"}){
+ var tr=routes.Find(name+"_Track");var m=tr.GetComponent<MeshFilter>().sharedMesh;var v=m.vertices;var p=Enumerable.Range(0,v.Length/8).Select(i=>(v[i*8+4]+v[i*8+5])*.5f).ToArray();float maxSlope=0;
+ for(int i=1;i<Math.Min(65,p.Length);i++)maxSlope=Mathf.Max(maxSlope,Mathf.Atan2(p[i].y-p[i-1].y,new Vector2(p[i].x-p[i-1].x,p[i].z-p[i-1].z).magnitude)*Mathf.Rad2Deg);
+ sb.AppendLine("RAMP "+name+" asset="+UnityEditor.AssetDatabase.GetAssetPath(m)+" points="+p.Length+" mouth="+p[0].ToString("F4")+" width="+Vector3.Distance(v[4],v[5])+" maximumEntrySlope="+maxSlope+" transform="+tr.localToWorldMatrix.ToString("F4"));
+ foreach(int i in new[]{0,4,8,16,24,32,48,64})sb.AppendLine("PATH "+name+" "+i+" "+p[i].ToString("F4"));
+ foreach(string suffix in new[]{"Track","Cover","UndercutGuard"}){var c=routes.Find(name+"_"+suffix).GetComponent<MeshCollider>();sb.AppendLine("RAMP_COLLIDER "+c.name+" enabled="+c.enabled+" material="+(c.sharedMaterial==null?"null":UnityEditor.EditorJsonUtility.ToJson(c.sharedMaterial)));}
+}
+var e=typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.LogEntries");object[] counts={0,0,0};e.GetMethod("GetCountsByType",System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.Public).Invoke(null,counts);sb.AppendLine("CONSOLE_ERRORS="+counts[0]+" warnings="+counts[1]);
+string fingerprint=string.Join("\n",table.GetComponentsInChildren<Collider>(true).Where(c=>c.enabled&&c.gameObject.activeInHierarchy).OrderBy(c=>c.GetEntityId().ToString()).Select(c=>c.GetEntityId()+"|"+UnityEditor.EditorJsonUtility.ToJson(c)+"|"+c.transform.localToWorldMatrix.ToString("F6")));System.IO.File.WriteAllText("Tools/unity/out/ramp-access-colliders-before.txt",fingerprint);
+System.IO.File.WriteAllText("Tools/unity/out/ramp-access-setup-before.txt",sb.ToString());return sb.ToString();

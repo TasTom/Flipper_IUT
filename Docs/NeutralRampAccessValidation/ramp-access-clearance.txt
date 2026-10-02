@@ -1,0 +1,3 @@
+Vosges max ascent slope=16,44 foreign overlaps=0
+IUT max ascent slope=33,92 foreign overlaps=0
+SPINNER Spinner_Blade pos=(-0.400, 0.456, 10.133) size=(0.488, 0.317, 0.272)

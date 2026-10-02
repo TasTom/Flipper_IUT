@@ -1,0 +1,10 @@
+var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();bool dirty=scene.isDirty;
+var c=Camera.main;var vp=c.GetComponent<CabinetViewport>();var panel=GameObject.Find("PinballTable/Backglass").transform;
+var camPos=c.transform.localPosition;var camRot=c.transform.localRotation;var camScale=c.transform.localScale;
+var panelPos=panel.localPosition;var panelRot=panel.localRotation;var panelScale=panel.localScale;
+var old=c.targetTexture;var active=RenderTexture.active;var rect=c.rect;var ortho=c.orthographic;float orthoSize=c.orthographicSize,near=c.nearClipPlane,far=c.farClipPlane;
+var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;var prevAspect=typeof(CabinetViewport).GetField("previousAspect",flags);var prevTable=typeof(CabinetViewport).GetField("previousTable",flags);var savedAspect=prevAspect.GetValue(vp);var savedTable=prevTable.GetValue(vp);
+var rt=new RenderTexture(1920,1080,24);var tex=new Texture2D(1920,1080,TextureFormat.RGB24,false);
+try{c.targetTexture=rt;vp.Fit();c.Render();RenderTexture.active=rt;tex.ReadPixels(new Rect(0,0,1920,1080),0,0);tex.Apply();System.IO.File.WriteAllBytes("Tools/unity/out/neutral-ramp-access.png",tex.EncodeToPNG());}
+finally{c.targetTexture=old;c.transform.localPosition=camPos;c.transform.localRotation=camRot;c.transform.localScale=camScale;c.rect=rect;c.orthographic=ortho;c.orthographicSize=orthoSize;c.nearClipPlane=near;c.farClipPlane=far;panel.localPosition=panelPos;panel.localRotation=panelRot;panel.localScale=panelScale;prevAspect.SetValue(vp,savedAspect);prevTable.SetValue(vp,savedTable);RenderTexture.active=active;UnityEngine.Object.DestroyImmediate(rt);UnityEngine.Object.DestroyImmediate(tex);}
+return "Capture written; framing restored; dirty before="+dirty+" after="+scene.isDirty;

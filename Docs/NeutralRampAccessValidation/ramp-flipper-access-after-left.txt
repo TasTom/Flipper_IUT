@@ -1,0 +1,22 @@
+SHOT Left -> IUT threshold=3,75 fired=True shotP=(-1.289, 0.207, 5.579) shotV=(4.42, 0.00, 26.44) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,914 maxY=0,23
+SHOT Left -> IUT threshold=3,73 fired=True shotP=(-1.393, 0.207, 5.569) shotV=(2.02, 0.00, 31.20) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,948 maxY=0,22
+SHOT Left -> IUT threshold=3,70 fired=True shotP=(-0.459, 0.207, 5.520) shotV=(14.89, 0.00, 28.77) entered=False entryV=0,00 offset=99,000 completed=0 closest=1,001 maxY=0,31
+SHOT Left -> IUT threshold=3,68 fired=True shotP=(-0.807, 0.207, 5.532) shotV=(9.81, 0.00, 34.03) entered=True entryV=32,99 offset=0,023 completed=1 closest=0,062 maxY=1,99
+SHOT Left -> IUT threshold=3,65 fired=True shotP=(-0.803, 0.207, 5.578) shotV=(8.36, 0.00, 43.41) entered=True entryV=19,35 offset=0,059 completed=0 closest=0,030 maxY=0,29
+SHOT Left -> IUT threshold=3,63 fired=True shotP=(0.143, 0.207, 5.695) shotV=(22.76, 0.00, 39.40) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,722 maxY=0,22
+SHOT Left -> IUT threshold=3,60 fired=True shotP=(0.032, 0.207, 5.528) shotV=(23.49, 0.00, 45.01) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,711 maxY=0,22
+SHOT Left -> IUT threshold=3,58 fired=True shotP=(0.027, 0.207, 5.503) shotV=(24.23, 0.00, 50.48) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,390 maxY=0,21
+SHOT Left -> IUT threshold=3,55 fired=True shotP=(0.124, 0.207, 5.597) shotV=(25.71, 0.00, 61.28) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,722 maxY=0,22
+SHOT Left -> IUT threshold=3,53 fired=True shotP=(0.232, 0.207, 5.770) shotV=(26.46, 0.00, 66.60) entered=False entryV=0,00 offset=99,000 completed=0 closest=1,151 maxY=0,86
+SHOT Left -> IUT threshold=3,50 fired=True shotP=(0.205, 0.207, 5.583) shotV=(27.19, 0.00, 72.04) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,740 maxY=0,51
+SHOT Left -> IUT threshold=3,48 fired=True shotP=(0.347, 0.207, 5.696) shotV=(29.18, 0.00, 76.24) entered=False entryV=0,00 offset=99,000 completed=0 closest=0,635 maxY=0,31
+SHOT Left -> IUT threshold=3,45 fired=True shotP=(2.403, 0.226, 5.515) shotV=(1.14, 3.80, 16.99) entered=False entryV=0,00 offset=99,000 completed=0 closest=2,901 maxY=0,85
+SHOT Left -> IUT threshold=3,43 fired=True shotP=(-0.724, 0.207, 5.505) shotV=(10.16, 0.00, 4.68) entered=False entryV=0,00 offset=99,000 completed=0 closest=2,196 maxY=0,21
+SHOT Left -> IUT threshold=3,40 fired=True shotP=(-0.485, 0.207, 5.646) shotV=(11.67, 0.00, 59.92) entered=True entryV=59,27 offset=0,099 completed=1 closest=0,100 maxY=2,05
+SHOT Left -> IUT threshold=3,38 fired=True shotP=(-0.454, 0.207, 5.671) shotV=(12.16, 0.00, 60.65) entered=True entryV=60,56 offset=0,055 completed=1 closest=0,081 maxY=2,03
+SHOT Left -> IUT threshold=3,35 fired=True shotP=(-0.454, 0.207, 5.671) shotV=(12.16, 0.00, 60.65) entered=True entryV=60,56 offset=0,055 completed=1 closest=0,081 maxY=2,03
+SHOT Left -> IUT threshold=3,33 fired=True shotP=(-0.462, 0.207, 5.618) shotV=(12.30, 0.00, 58.79) entered=True entryV=58,65 offset=0,007 completed=1 closest=0,094 maxY=2,05
+SHOT Left -> IUT threshold=3,30 fired=True shotP=(-0.462, 0.207, 5.618) shotV=(12.30, 0.00, 58.79) entered=True entryV=58,65 offset=0,007 completed=1 closest=0,094 maxY=2,05
+SHOT Left -> IUT threshold=3,28 fired=True shotP=(2.397, 0.211, 5.522) shotV=(-0.07, 0.19, 5.59) entered=False entryV=0,00 offset=99,000 completed=0 closest=3,835 maxY=0,26
+SHOT Left -> IUT threshold=3,25 fired=True shotP=(2.397, 0.211, 5.522) shotV=(-0.07, 0.19, 5.59) entered=False entryV=0,00 offset=99,000 completed=0 closest=3,835 maxY=0,26
+SUMMARY Left->IUT fired=21 aimed=7 completed=6/21; Right->Vosges fired=0 aimed=0 completed=0/21

@@ -4,7 +4,8 @@ Date : 2 octobre 2026. Révision examinée : `8df1903`.
 
 Évolutions après cet audit : [réduction de 8 %](NeutralScale.md),
 [finition mécanique et alignement des légendes](NeutralMechanical.md), puis
-[combos, multiplicateur et bonus de bille](NeutralScoreRules.md).
+[combos, multiplicateur et bonus de bille](NeutralScoreRules.md), puis
+[accès aux rampes depuis les flippers](NeutralRampAccess.md).
 Les mesures et réserves ci-dessous décrivent la révision examinée. Les principaux
 écarts de score (combos, progression jusqu'à ×5, affichage et bonus de bille) sont
 désormais traités et validés. Les jackpots, récompenses spécifiques de missions

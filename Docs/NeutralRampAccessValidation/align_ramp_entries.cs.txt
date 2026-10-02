@@ -1,0 +1,30 @@
+// Explicit user-authorized ramp entrance correction. Prototype in Play; Undo transaction in Edit.
+// Changes the entrance segment and its matching surfaces only; never saves the scene.
+var table=GameObject.Find("PinballTable").transform;var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();if(scene.path!="Assets/Scenes/Neutral.unity")throw new Exception("Neutral required");
+bool prototype=Application.isPlaying;const string folder="Assets/Generated/NeutralRampAccess";const string action="Aligner les entrées de rampe avec les tirs des flippers";
+if(prototype&&GameObject.Find("RampAccessPrototype")!=null)throw new Exception("Prototype already installed; stop and re-enter Play to compare again.");
+if(!prototype&&UnityEditor.AssetDatabase.IsValidFolder(folder))throw new Exception("Correction assets already exist; preserve manual adjustments.");
+var root=table.Find("ReferencePlayfield/FlowRefinement/CorrectedRoutes");int group=-1,meshIndex=0;GameObject holder=null;
+if(prototype){holder=new GameObject("RampAccessPrototype");}else{UnityEditor.Undo.IncrementCurrentGroup();group=UnityEditor.Undo.GetCurrentGroup();UnityEditor.Undo.SetCurrentGroupName(action);UnityEditor.AssetDatabase.CreateFolder("Assets/Generated","NeutralRampAccess");}
+var cache=new System.Collections.Generic.Dictionary<Mesh,Mesh>();var report=new System.Text.StringBuilder();var savedPaths=new System.Collections.Generic.List<RefineNeutralFlow.Route>();
+Vector3 Normal(Vector3[] p,int i){var d=p[Math.Min(i+1,p.Length-1)]-p[Math.Max(0,i-1)];return new Vector3(d.z,0,-d.x).normalized;}
+void Record(UnityEngine.Object o){if(!prototype)UnityEditor.Undo.RecordObject(o,action);}
+Mesh Copy(Mesh source,Func<Vector3[],Vector3[]> edit){if(cache.TryGetValue(source,out var found))return found;var m=UnityEngine.Object.Instantiate(source);m.name=source.name+"_Access";m.vertices=edit(source.vertices);m.RecalculateNormals();m.RecalculateBounds();if(prototype){var go=new GameObject(m.name);go.transform.SetParent(holder.transform,false);go.AddComponent<MeshFilter>().sharedMesh=m;}else{UnityEditor.AssetDatabase.CreateAsset(m,folder+"/"+(meshIndex++).ToString("D2")+"_"+m.name+".asset");UnityEditor.Undo.RegisterCreatedObjectUndo(m,action);}cache.Add(source,m);return m;}
+void Replace(Transform tr,Func<Vector3[],Vector3[]> edit){var mf=tr.GetComponent<MeshFilter>();Record(mf);mf.sharedMesh=Copy(mf.sharedMesh,edit);var col=tr.GetComponent<MeshCollider>();if(col!=null){Record(col);var m=Copy(col.sharedMesh,edit);col.sharedMesh=null;col.sharedMesh=m;}}
+try{
+ foreach(string name in new[]{"Vosges","IUT"}){
+  var original=root.Find(name+"_Track").GetComponent<MeshFilter>().sharedMesh.vertices;var old=Enumerable.Range(0,original.Length/8).Select(i=>(original[i*8+4]+original[i*8+5])*.5f).ToArray();var p=(Vector3[])old.Clone();
+  if(name=="IUT")for(int i=0;i<=32;i++){float t=i/32f,u=1-t;var a=new Vector3(.25f,0,8.9f);var b=new Vector3(.50f,0,10.2f);var c=new Vector3(.95f,1.10f,11.3f);p[i]=u*u*u*a+3*u*u*t*b+3*u*t*t*c+t*t*t*old[32];}
+  float Half(int i){float t=Mathf.Clamp01(i/12f);t=t*t*(3-2*t);return Mathf.Lerp(name=="IUT"?.475f:.450f,.3036f,t);}
+  Replace(root.Find(name+"_Track"),v=>{for(int i=0;i<=33;i++){float h=Half(i),o=h+.0368f;var section=new[]{new Vector2(-o,-.0276f),new Vector2(o,-.0276f),new Vector2(o,.3312f),new Vector2(h,.3312f),new Vector2(h,0),new Vector2(-h,0),new Vector2(-h,.3312f),new Vector2(-o,.3312f)};var n=Normal(p,i);for(int j=0;j<8;j++)v[i*8+j]=p[i]+n*section[j].x+Vector3.up*section[j].y;}return v;});
+  Replace(root.Find(name+"_Cover"),v=>{for(int i=0;i<=33;i++){var d=p[Math.Min(i+1,p.Length-1)]-p[Math.Max(0,i-1)];float horizontal=new Vector2(d.x,d.z).magnitude;float rise=.5428f*Mathf.Sqrt(1+d.y*d.y/Mathf.Max(.000001f,horizontal*horizontal));var n=Normal(p,i);for(int j=0;j<4;j++)v[i*4+j]=p[i]+Vector3.up*(rise+(j<2?0:.0184f))+n*(j==0||j==3?-1:1)*(Half(i)+.0368f);}return v;});
+  Replace(root.Find(name+"_UndercutGuard"),v=>{for(int i=0;i<=33;i++){var n=Normal(p,i);var l=p[i]-n*(Half(i)+.0368f);var r=p[i]+n*(Half(i)+.0368f);v[i*4]=new Vector3(l.x,-.012f,l.z);v[i*4+1]=new Vector3(r.x,-.012f,r.z);v[i*4+2]=r-Vector3.up*.0276f;v[i*4+3]=l-Vector3.up*.0276f;}return v;});
+  foreach(int side in new[]{-1,1})Replace(root.Find(name+"_Rim_"+side),v=>{for(int i=0;i<=33;i++){var n=Normal(p,i);var d=(p[Math.Min(i+1,p.Length-1)]-p[Math.Max(0,i-1)]).normalized;var up=Vector3.Cross(d,n).normalized;var center=p[i]+n*side*(Half(i)+.0184f)+Vector3.up*.3358f;for(int j=0;j<10;j++){float a=j*Mathf.PI*2/10;v[i*10+j]=center+.01932f*(n*Mathf.Cos(a)+up*Mathf.Sin(a));}}return v;});
+  var entrance=table.Find("Gameplay/Ramp_"+name+"_In");Record(entrance);float height=table.InverseTransformPoint(entrance.position).y-old[2].y;entrance.position=table.TransformPoint(p[2]+Vector3.up*height);var dir=p[4]-p[0];dir.y=0;entrance.rotation=table.rotation*Quaternion.LookRotation(dir);
+  var marker=table.Find("ReferencePlayfield/Shot_"+name);if(marker!=null){Record(marker);var tangent=p[1]-p[0];tangent.y=0;marker.position=table.TransformPoint(p[0]-tangent.normalized*.6f+Vector3.up*.028f);}
+  savedPaths.Add(new RefineNeutralFlow.Route{name=name,points=p});report.AppendLine(name+" mouth="+p[0].ToString("F3")+" entry width="+(Half(0)*2).ToString("F3")+" unchanged upper path from point 34");
+ }
+ if(!prototype){UnityEditor.AssetDatabase.SaveAssets();UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);}Physics.SyncTransforms();
+ System.IO.File.WriteAllText("Tools/unity/out/ramp-access-paths.json",JsonUtility.ToJson(new RefineNeutralFlow.Routes{routes=savedPaths.ToArray()},true));System.IO.File.WriteAllText("Tools/unity/out/ramp-access-modified.flag",prototype?"Play prototype":"Permanent Undo correction");
+}catch{if(!prototype)UnityEditor.Undo.RevertAllDownToGroup(group);throw;}finally{if(!prototype)UnityEditor.Undo.CollapseUndoOperations(group);}
+return report.ToString()+(prototype?"Play prototype only; stop restores original scene.":"Undoable correction installed; scene NOT saved.");

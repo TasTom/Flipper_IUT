@@ -1,0 +1,38 @@
+SCENE=Assets/Scenes/Neutral.unity dirty=False UNITY=6000.6.0f1
+FLIPPER Flipper_Left_Pivot pos=(-1.8260, 0.0000, 3.2000) data={"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"Assembly-CSharp::Flipper","side":0,"activationKey":97,"useCabinetController":true,"cabinetAction":0,"logInput":true,"restAngle":-30.0,"activeAngle":30.0,"mirrorAngles":true,"swingSpeed":2200.0,"returnSpeed":700.0}}
+FLIPPER_COLLIDER Bat_Mesh data={"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.0008000995730981231,"y":0.00021180158364586532,"z":0.0002598784922156483},"m_Center":{"x":-0.00029717152938246727,"y":1.5507585260365886e-7,"z":0.00013584957923740149}}}
+FLIPPER Flipper_Right_Pivot pos=(1.0260, 0.0000, 3.2000) data={"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"Assembly-CSharp::Flipper","side":0,"activationKey":97,"useCabinetController":true,"cabinetAction":0,"logInput":true,"restAngle":-30.0,"activeAngle":30.0,"mirrorAngles":true,"swingSpeed":2200.0,"returnSpeed":700.0}}
+FLIPPER_COLLIDER Bat_Mesh data={"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.0008000999805517495,"y":0.00021180159819778055,"z":0.000259878346696496},"m_Center":{"x":-0.00029717152938246727,"y":1.550618691226191e-7,"z":0.00013584955013357103}}}
+RAMP Vosges asset=Assets/Generated/NeutralScale8/00_Vosges_Visual_92.asset points=161 mouth=(-1.6500, 0.0000, 9.6500) width=0,6072 maximumEntrySlope=16,43941 transform=1.0000	0.0000	0.0000	0.0000
+0.0000	0.9925	0.1219	0.0000
+0.0000	-0.1219	0.9925	0.0000
+0.0000	0.0000	0.0000	1.0000
+
+PATH Vosges 0 (-1.6500, 0.0000, 9.6500)
+PATH Vosges 4 (-1.7792, 0.0185, 9.9507)
+PATH Vosges 8 (-1.9336, 0.0692, 10.2836)
+PATH Vosges 16 (-2.2688, 0.2388, 11.0063)
+PATH Vosges 24 (-2.5570, 0.4514, 11.7383)
+PATH Vosges 32 (-2.7000, 0.6500, 12.4000)
+PATH Vosges 48 (-2.5250, 1.0500, 14.8250)
+PATH Vosges 64 (-1.3000, 1.2400, 16.2000)
+RAMP_COLLIDER Vosges_Track enabled=True material={"PhysicsMaterial":{"m_Name":"RampSurface","serializedVersion":"2","m_DynamicFriction":0.02500000037252903,"m_StaticFriction":0.02500000037252903,"m_Bounciness":0.0,"m_FrictionCombine":2,"m_BounceCombine":2}}
+RAMP_COLLIDER Vosges_Cover enabled=True material={"PhysicsMaterial":{"m_Name":"RampSurface","serializedVersion":"2","m_DynamicFriction":0.02500000037252903,"m_StaticFriction":0.02500000037252903,"m_Bounciness":0.0,"m_FrictionCombine":2,"m_BounceCombine":2}}
+RAMP_COLLIDER Vosges_UndercutGuard enabled=True material={"PhysicsMaterial":{"m_Name":"RampSurface","serializedVersion":"2","m_DynamicFriction":0.02500000037252903,"m_StaticFriction":0.02500000037252903,"m_Bounciness":0.0,"m_FrictionCombine":2,"m_BounceCombine":2}}
+RAMP IUT asset=Assets/Generated/NeutralScale8/22_IUT_Visual_92.asset points=161 mouth=(0.9000, 0.0000, 9.6500) width=0,6072 maximumEntrySlope=40,24514 transform=1.0000	0.0000	0.0000	0.0000
+0.0000	0.9925	0.1219	0.0000
+0.0000	-0.1219	0.9925	0.0000
+0.0000	0.0000	0.0000	1.0000
+
+PATH IUT 0 (0.9000, 0.0000, 9.6500)
+PATH IUT 4 (0.8882, 0.0399, 9.9624)
+PATH IUT 8 (0.8898, 0.1508, 10.2648)
+PATH IUT 16 (0.9313, 0.5313, 10.8563)
+PATH IUT 24 (1.0195, 1.0336, 11.4570)
+PATH IUT 32 (1.1500, 1.5500, 12.1000)
+PATH IUT 48 (1.0250, 1.7338, 13.3375)
+PATH IUT 64 (0.0000, 1.7000, 13.1500)
+RAMP_COLLIDER IUT_Track enabled=True material={"PhysicsMaterial":{"m_Name":"RampSurface","serializedVersion":"2","m_DynamicFriction":0.02500000037252903,"m_StaticFriction":0.02500000037252903,"m_Bounciness":0.0,"m_FrictionCombine":2,"m_BounceCombine":2}}
+RAMP_COLLIDER IUT_Cover enabled=True material={"PhysicsMaterial":{"m_Name":"RampSurface","serializedVersion":"2","m_DynamicFriction":0.02500000037252903,"m_StaticFriction":0.02500000037252903,"m_Bounciness":0.0,"m_FrictionCombine":2,"m_BounceCombine":2}}
+RAMP_COLLIDER IUT_UndercutGuard enabled=True material={"PhysicsMaterial":{"m_Name":"RampSurface","serializedVersion":"2","m_DynamicFriction":0.02500000037252903,"m_StaticFriction":0.02500000037252903,"m_Bounciness":0.0,"m_FrictionCombine":2,"m_BounceCombine":2}}
+CONSOLE_ERRORS=0 warnings=0

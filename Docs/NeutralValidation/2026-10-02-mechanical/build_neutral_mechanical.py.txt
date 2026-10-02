@@ -1,0 +1,125 @@
+"""Decorative Neutral assemblies fitted to the measured, unchanged collision envelope.
+
+Run after export_mechanical_geometry.cs. Table units -> metres -> FBX, using the
+project's measured axis conversion. Plastic outlines derive from pinball-parts
+(CC BY-SA 4.0); no colliders are exported. Explicit editor placement follows.
+"""
+import json, math, os, sys
+from pathlib import Path
+import bpy, bmesh
+from mathutils import Vector
+sys.path.insert(0, str(Path(__file__).parent))
+from build_table import export
+
+ROOT=Path(__file__).resolve().parents[2]
+OUT=ROOT/'Assets/Models/NeutralMechanical'
+OUT.mkdir(parents=True,exist_ok=True)
+data=json.loads((ROOT/'Tools/unity/out/mechanical-geometry.json').read_text())
+bpy.ops.wm.read_factory_settings(use_empty=True)
+root=bpy.data.objects.new('NeutralMechanical',None)
+bpy.context.collection.objects.link(root)
+materials={}
+for name in ('RubberIvory','ForestPlastic','IvoryPrint','BrushedSteel','EnamelShell','TerminalScreen','TerminalGlyph'):
+    m=bpy.data.materials.new(name);m.diffuse_color=(.35,.35,.35,1);materials[name]=m
+
+def mesh(name,verts,faces,mat,bevel=0,smooth=False):
+    # Vertices are table-space units. Root scale carries the sole unit conversion.
+    vv=[(-v[0]*.06,-v[2]*.06,v[1]*.06) for v in verts]
+    m=bpy.data.meshes.new(name);m.from_pydata(vv,[],faces);m.update()
+    bm=bmesh.new();bm.from_mesh(m);bmesh.ops.recalc_face_normals(bm,faces=bm.faces);bm.to_mesh(m);bm.free()
+    o=bpy.data.objects.new(name,m);bpy.context.collection.objects.link(o);o.parent=root
+    m.materials.append(materials[mat])
+    if smooth:
+        for p in m.polygons:p.use_smooth=True
+    if bevel:
+        mod=o.modifiers.new('Machined edges','BEVEL');mod.width=bevel*.06;mod.segments=3
+        mod=o.modifiers.new('Weighted corner normals','WEIGHTED_NORMAL');mod.keep_sharp=True
+    return o
+
+def hull(vertices):
+    points=sorted(set((round(p[0],6),round(p[2],6)) for p in vertices))
+    def cross(a,b,c):return (b[0]-a[0])*(c[1]-a[1])-(b[1]-a[1])*(c[0]-a[0])
+    def half(points):
+        out=[]
+        for p in points:
+            while len(out)>1 and cross(out[-2],out[-1],p)<=0:out.pop()
+            out.append(p)
+        return out
+    return half(points)[:-1]+half(points[::-1])[:-1]
+
+def plate(name,points,y,thickness,mat,bevel=.005):
+    count=len(points);v=[(p[0],y+h,p[1]) for h in (-thickness/2,thickness/2) for p in points]
+    f=[tuple(range(count-1,-1,-1)),tuple(range(count,2*count))]
+    f += [(i,(i+1)%count,(i+1)%count+count,i+count) for i in range(count)]
+    return mesh(name,v,f,mat,bevel)
+
+def tube(name,path,radius,mat,vertical_radius=None,closed=False,sides=12):
+    path=[Vector(p) for p in path];verts=[];faces=[]
+    ry=radius if vertical_radius is None else vertical_radius
+    for i,p in enumerate(path):
+        prev=path[(i-1)%len(path)] if closed else path[max(i-1,0)]
+        nxt=path[(i+1)%len(path)] if closed else path[min(i+1,len(path)-1)]
+        d=(nxt-prev).normalized();n=Vector((d.z,0,-d.x)).normalized();up=d.cross(n).normalized()
+        for k in range(sides):
+            a=2*math.pi*k/sides;verts.append(p+n*math.cos(a)*radius+up*math.sin(a)*ry)
+    for i in range(len(path) if closed else len(path)-1):
+        for j in range(sides):
+            ni=(i+1)%len(path);faces.append((i*sides+j,i*sides+(j+1)%sides,ni*sides+(j+1)%sides,ni*sides+j))
+    if not closed:faces.extend([tuple(range(sides-1,-1,-1)),tuple(range((len(path)-1)*sides,len(path)*sides))])
+    return mesh(name,verts,faces,mat,smooth=True)
+
+layout={'slings':[]}
+for sling in data['slings']:
+    side=sling['side'];polygon=hull(sling['plastic']['vertices']);band=hull(sling['band']['vertices'])
+    edges=sorted([(Vector(band[i]),Vector(band[(i+1)%len(band)])) for i in range(len(band))],key=lambda e:(e[1]-e[0]).length,reverse=True)[:2]
+    a,b=min(edges,key=lambda e:abs((e[0].x+e[1].x)/2+.4))
+    if a.y<b.y:a,b=b,a
+    direction=(b-a).normalized();normal=Vector((-direction.y,direction.x))
+    centroid=sum((Vector(p) for p in polygon),Vector((0,0)))/len(polygon)
+    if normal.dot((a+b)/2-centroid)<0:normal=-normal
+    first=a+direction*.20-normal*.114;second=b-direction*.20-normal*.114
+    back=max((Vector(p) for p in polygon),key=lambda p:normal.dot(a-p))
+    third=back+(centroid-back).normalized()*.15
+    centres=hull([(p.x,0,p.y) for p in (first,second,third)])
+    # Minkowski boundary around post centres: rubber bears on the posts rather
+    # than making an unsupported triangular prism. Its active side follows the old band.
+    ring=[]
+    for i,c in enumerate(centres):
+        c=Vector(c);prev=Vector(centres[i-1]);nxt=Vector(centres[(i+1)%len(centres)])
+        dp=(c-prev).normalized();dn=(nxt-c).normalized()
+        ap=math.atan2(-dp.x,dp.y);an=math.atan2(-dn.x,dn.y)
+        while an<ap:an+=2*math.pi
+        for k in range(17):
+            t=ap+(an-ap)*k/16;ring.append((c.x+math.cos(t)*.086,.163,c.y+math.sin(t)*.086))
+    tube('SlingRubber_'+side,ring,.028,'RubberIvory',.072,True,16)
+    plate('SlingPlastic_'+side,polygon,.418,.045,'ForestPlastic')
+    # Thin screen-printed perimeter, not a raised obstacle.
+    inset=[Vector(p)*.89+centroid*.11 for p in polygon]
+    tube('SlingPrintBorder_'+side,[(p.x,.444,p.y) for p in inset],.008,'IvoryPrint',.0025,True,8)
+    # Printed mountain silhouette + circuit traces aligned to the long axis.
+    midpoint=(first+second)/2-normal*.12
+    for j in range(3):
+        base=midpoint+direction*(j-1)*.10
+        tube('SlingGraphic_'+side+'_'+str(j),[(base.x,.445,base.y),(base.x-normal.x*.09-direction.x*.04,.445,base.y-normal.y*.09-direction.y*.04),(base.x+direction.x*.045,.445,base.y+direction.y*.045)],.009,'IvoryPrint',.002,False,6)
+    layout['slings'].append({'side':side,'posts':[[p.x,0,p.y] for p in (first,second,third)],'label':[centroid.x,.450,centroid.y]})
+
+# Terminal: the impact face and volume match the existing boss BoxCollider.
+cx,cz=.9,15.600003
+shell=[(cx+x,y,cz+z) for y,z in ((.03,-.103),(.03,.103),(.610,.103),(.235,-.103)) for x in (-.521,.521)]
+mesh('TerminalShell',shell,[(0,1,3,2),(2,3,5,4),(4,5,7,6),(6,7,1,0),(0,2,4,6),(1,7,5,3)],'EnamelShell',.018)
+def screenpoint(x,t,lift=0):return (cx+x,.253+t*.324+lift,cz-.107+t*.189-lift*.55)
+outline=[screenpoint(-.470,0),screenpoint(.470,0),screenpoint(.470,1),screenpoint(-.470,1)]
+tube('TerminalBezel',outline,.020,'BrushedSteel',closed=True, sides=12)
+mesh('TerminalScreen',[screenpoint(-.43,.075,.003),screenpoint(.43,.075,.003),screenpoint(.43,.93,.003),screenpoint(-.43,.93,.003)],[(0,1,2,3)],'TerminalScreen')
+# Restrained terminal chevron and code lines, on the slanted screen.
+tube('TerminalPrompt',[screenpoint(-.30,.33,.008),screenpoint(-.23,.50,.008),screenpoint(-.30,.67,.008)],.011,'TerminalGlyph',sides=8)
+for i in range(3):
+    tube('TerminalCode_'+str(i),[screenpoint(-.14,.30+i*.19,.008),screenpoint(.25-i*.05,.30+i*.19,.008)],.009,'TerminalGlyph',sides=8)
+for x in (-.425,.425):
+    tube('TerminalFoot_'+str(x),[(cx+x,.015,cz-.103),(cx+x,.015,cz+.103)],.028,'BrushedSteel',sides=10)
+
+export(root,str(OUT/'NeutralMechanical.fbx'),1/.06)
+layout['mesh_count']=len([o for o in bpy.data.objects if o.type=='MESH'])
+layout['triangles_before_modifiers']=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in bpy.data.objects if o.type=='MESH')
+(ROOT/'Tools/unity/out/mechanical-layout.json').write_text(json.dumps(layout,indent=2))
+print('MECHANICAL',layout['mesh_count'],'meshes',layout['triangles_before_modifiers'],'base triangles')

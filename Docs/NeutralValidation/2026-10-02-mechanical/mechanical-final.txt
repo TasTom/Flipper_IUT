@@ -1,0 +1,13 @@
+SCENE=Assets/Scenes/Neutral.unity dirty=False play=False
+NEW_RENDERERS=57 NEW_TRIANGLES=13296 NEW_COLLIDERS=0
+VISIBLE_TABLE_RENDERERS=201 VISIBLE_TABLE_TRIANGLES=101428
+NULL_NEW_MATERIALS=0
+TABLE_TRANSFORM={"Transform":{"serializedVersion":"2","m_LocalRotation":{"x":-0.06104854494333267,"y":0.0,"z":0.0,"w":0.9981348514556885},"m_LocalPosition":{"x":0.0,"y":0.0,"z":0.0},"m_LocalScale":{"x":1.0,"y":1.0,"z":1.0},"m_ConstrainProportionsScale":false,"m_LocalEulerAnglesHint":{"x":0.0,"y":0.0,"z":0.0}}}
+Flipper_Left_Pivot {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"Assembly-CSharp::Flipper","side":0,"activationKey":97,"useCabinetController":true,"cabinetAction":0,"logInput":true,"restAngle":-30.0,"activeAngle":30.0,"mirrorAngles":true,"swingSpeed":2200.0,"returnSpeed":700.0}}
+Flipper_Right_Pivot {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"Assembly-CSharp::Flipper","side":0,"activationKey":97,"useCabinetController":true,"cabinetAction":0,"logInput":true,"restAngle":-30.0,"activeAngle":30.0,"mirrorAngles":true,"swingSpeed":2200.0,"returnSpeed":700.0}}
+LEGEND ALGO centerError=0,000000
+LEGEND WEB centerError=0,000000
+LEGEND BDD centerError=0,000000
+LEGEND JAVA centerError=0,000000
+LEGEND PROJET centerError=0,000000
+LEGEND CAFÉ centerError=0,000000

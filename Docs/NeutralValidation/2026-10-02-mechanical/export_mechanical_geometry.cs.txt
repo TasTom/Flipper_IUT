@@ -1,0 +1,6 @@
+var table=GameObject.Find("PinballTable").transform;
+float[] Vec(Vector3 p)=>new[]{p.x,p.y,p.z};
+object MeshData(Transform t){var mf=t.GetComponent<MeshFilter>();return new {name=t.name, vertices=mf.sharedMesh.vertices.Select(v=>Vec(table.InverseTransformPoint(t.TransformPoint(v)))).ToArray()};}
+var slings=new[]{"Left","Right"}.Select(side=>{var h=table.Find("Gameplay/Slingshot_"+side);return new {side,band=MeshData(h.Find("Slingshot_Band")),plastic=MeshData(h.Find("Plastique_Decal"))};}).ToArray();
+System.IO.File.WriteAllText("Tools/unity/out/mechanical-geometry.json",Newtonsoft.Json.JsonConvert.SerializeObject(new {slings},Newtonsoft.Json.Formatting.Indented));
+return "Exported two sling footprints, scene dirty="+UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty;

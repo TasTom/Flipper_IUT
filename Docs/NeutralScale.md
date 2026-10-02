@@ -2,6 +2,9 @@
 
 2 octobre 2026. Demande utilisateur : réduire légèrement la bille et les assets de la table.
 
+La [finition mécanique suivante](NeutralMechanical.md) reprend les slingshots,
+les fixations des retours et le terminal, puis corrige l'alignement des six légendes.
+
 La passe applique un facteur **0,92** aux pièces concernées, sans réduire la table entière. Elle est enregistrée dans `Assets/Scenes/Neutral.unity`. Correspondance GDD : bille et lanceur, flippers, bumpers, slingshots, cibles, rampes et circulation de la bille.
 
 ## Changements

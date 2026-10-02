@@ -1,0 +1,6 @@
+Target_Matieres_01 from=(-1.523, 0.029, 7.336) to=(-1.582, 0.029, 7.250) centreOffset=0,00000
+Target_Matieres_02 from=(-1.523, 0.029, 8.016) to=(-1.582, 0.029, 7.930) centreOffset=0,00000
+Target_Matieres_03 from=(-1.523, 0.029, 8.696) to=(-1.586, 0.029, 8.610) centreOffset=0,00000
+Target_Java_01 from=(1.325, 0.029, 6.478) to=(0.783, 0.029, 7.251) centreOffset=0,00000
+Target_Projet_01 from=(0.702, 0.029, 8.047) to=(0.781, 0.029, 7.930) centreOffset=0,00000
+Target_Cafe_01 from=(0.080, 0.029, 9.616) to=(0.783, 0.029, 8.603) centreOffset=0,00000

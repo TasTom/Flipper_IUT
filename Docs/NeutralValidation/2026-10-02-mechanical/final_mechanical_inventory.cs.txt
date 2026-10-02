@@ -1,0 +1,15 @@
+var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();var table=GameObject.Find("PinballTable").transform;var sb=new System.Text.StringBuilder();
+var roots=new[]{table.Find("Gameplay/Slingshot_Left/MechanicalAssembly"),table.Find("Gameplay/Slingshot_Right/MechanicalAssembly"),table.Find("Gameplay/Boss_ProjetFinal/TerminalAssembly"),table.Find("ReferencePlayfield/MechanicalFinish")};
+var newRenderers=roots.SelectMany(r=>r.GetComponentsInChildren<MeshRenderer>(true)).Distinct().ToArray();
+int tris=newRenderers.Sum(r=>r.GetComponent<MeshFilter>().sharedMesh.triangles.Length/3);
+var all=table.GetComponentsInChildren<MeshRenderer>().Where(r=>r.enabled&&r.gameObject.activeInHierarchy).ToArray();
+sb.AppendLine("SCENE="+scene.path+" dirty="+scene.isDirty+" play="+Application.isPlaying);
+sb.AppendLine("NEW_RENDERERS="+newRenderers.Length+" NEW_TRIANGLES="+tris+" NEW_COLLIDERS="+roots.SelectMany(r=>r.GetComponentsInChildren<Collider>(true)).Distinct().Count());
+sb.AppendLine("VISIBLE_TABLE_RENDERERS="+all.Length+" VISIBLE_TABLE_TRIANGLES="+all.Sum(r=>{var mf=r.GetComponent<MeshFilter>();return mf==null||mf.sharedMesh==null?0:mf.sharedMesh.triangles.Length/3;}));
+sb.AppendLine("NULL_NEW_MATERIALS="+newRenderers.Sum(r=>r.sharedMaterials.Count(m=>m==null)));sb.AppendLine("TABLE_TRANSFORM="+UnityEditor.EditorJsonUtility.ToJson(table));
+foreach(var name in new[]{"Flipper_Left_Pivot","Flipper_Right_Pivot"})sb.AppendLine(name+" "+UnityEditor.EditorJsonUtility.ToJson(table.Find("Gameplay/"+name).GetComponent<Flipper>()));
+foreach(var target in table.GetComponentsInChildren<SubjectTarget>()){
+ var label=target.transform.Find("RewardLabel").GetComponent<TMPro.TextMeshPro>();var plaque=target.transform.Find("Plaque_"+target.name).GetComponent<Renderer>();
+ label.ForceMeshUpdate();sb.AppendLine("LEGEND "+label.text+" centerError="+(label.GetComponent<Renderer>().bounds.center-(plaque.bounds.center+table.up*.012f)).magnitude.ToString("F6"));
+}
+System.IO.File.WriteAllText("Tools/unity/out/mechanical-final.txt",sb.ToString());return sb.ToString();

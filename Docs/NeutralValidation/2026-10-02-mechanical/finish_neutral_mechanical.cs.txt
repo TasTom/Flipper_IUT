@@ -1,0 +1,94 @@
+// Explicit user-authorized visual pass. Undoable; no automatic build or scene save.
+if(Application.isPlaying)throw new Exception("Edit mode required");
+var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+if(scene.path!="Assets/Scenes/Neutral.unity")throw new Exception("Neutral required");
+const string action="Finition mécanique de Neutral";
+const string folder="Assets/Models/NeutralMechanical";
+var table=GameObject.Find("PinballTable").transform;var reference=table.Find("ReferencePlayfield");var gp=table.Find("Gameplay");
+if(reference.Find("MechanicalFinish")!=null)throw new Exception("Already applied; inspect rather than replay.");
+UnityEditor.AssetDatabase.ImportAsset(folder+"/NeutralMechanical.fbx",UnityEditor.ImportAssetOptions.ForceUpdate|UnityEditor.ImportAssetOptions.ForceSynchronousImport);
+var prefab=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(folder+"/NeutralMechanical.fbx");
+if(prefab==null)throw new Exception("Missing Blender assembly");
+var input=Newtonsoft.Json.Linq.JObject.Parse(System.IO.File.ReadAllText("Tools/unity/out/mechanical-layout.json"));
+UnityEditor.Undo.IncrementCurrentGroup();int undo=UnityEditor.Undo.GetCurrentGroup();UnityEditor.Undo.SetCurrentGroupName(action);
+Transform New(string name,Transform parent){var o=new GameObject(name);UnityEditor.Undo.RegisterCreatedObjectUndo(o,action);o.transform.SetParent(parent,false);return o.transform;}
+void Change(UnityEngine.Object o){UnityEditor.Undo.RecordObject(o,action);}
+void Hide(Renderer r){Change(r);r.enabled=false;}
+Material Material(string name,Color color,float metal,float smooth){
+ var path=folder+"/"+name+".mat";var m=UnityEditor.AssetDatabase.LoadAssetAtPath<Material>(path);if(m!=null)return m;
+ m=new Material(Shader.Find("Universal Render Pipeline/Lit")){name=name};m.SetColor("_BaseColor",color);m.SetFloat("_Metallic",metal);m.SetFloat("_Smoothness",smooth);UnityEditor.AssetDatabase.CreateAsset(m,path);return m;
+}
+var rubber=Material("RubberIvory",new Color(.87f,.83f,.67f),0,.27f);
+var plastic=Material("ForestPlastic",new Color(.025f,.15f,.125f),.10f,.62f);
+plastic.EnableKeyword("_EMISSION");plastic.SetColor("_EmissionColor",Color.black);
+var print=Material("IvoryPrint",new Color(.94f,.75f,.42f),.04f,.43f);
+var steel=Material("BrushedSteel",new Color(.62f,.69f,.70f),.88f,.73f);
+var shell=Material("EnamelShell",new Color(.014f,.028f,.035f),.25f,.57f);
+var screenMat=Material("TerminalScreen",new Color(.09f,.13f,.16f),0,.46f);
+screenMat.EnableKeyword("_EMISSION");screenMat.SetColor("_EmissionColor",new Color(.07f,.10f,.12f));screenMat.SetFloat("_Cull",0);
+var glyph=Material("TerminalGlyph",new Color(.98f,.84f,.55f),0,.40f);glyph.EnableKeyword("_EMISSION");glyph.SetColor("_EmissionColor",new Color(.36f,.22f,.06f));
+var map=new System.Collections.Generic.Dictionary<string,Material>{{"RubberIvory",rubber},{"ForestPlastic",plastic},{"IvoryPrint",print},{"BrushedSteel",steel},{"EnamelShell",shell},{"TerminalScreen",screenMat},{"TerminalGlyph",glyph}};
+var root=New("MechanicalFinish",reference);
+var model=(GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(prefab,scene);UnityEditor.Undo.RegisterCreatedObjectUndo(model,action);
+model.transform.SetParent(root,false);UnityEditor.PrefabUtility.UnpackPrefabInstance(model,UnityEditor.PrefabUnpackMode.Completely,UnityEditor.InteractionMode.UserAction);
+var parts=model.GetComponentsInChildren<MeshRenderer>();
+foreach(var r in parts){Change(r);r.sharedMaterials=r.sharedMaterials.Select(m=>map[m.name]).ToArray();}
+var left=New("MechanicalAssembly",gp.Find("Slingshot_Left"));var right=New("MechanicalAssembly",gp.Find("Slingshot_Right"));var boss=gp.Find("Boss_ProjetFinal");var terminal=New("TerminalAssembly",boss);
+foreach(var r in parts){var parent=r.name.Contains("_Left")?left:r.name.Contains("_Right")?right:terminal;UnityEditor.Undo.SetTransformParent(r.transform,parent,action);}
+UnityEditor.Undo.DestroyObjectImmediate(model);
+Vector3 Vec(Newtonsoft.Json.Linq.JToken v)=>new Vector3((float)v[0],(float)v[1],(float)v[2]);
+Bounds MeshBounds(GameObject obj){
+ var points=obj.GetComponentsInChildren<MeshFilter>().SelectMany(m=>m.sharedMesh.vertices.Select(v=>table.InverseTransformPoint(m.transform.TransformPoint(v)))).ToArray();
+ if(points.Length==0)throw new Exception("No vertices: "+obj.name);var b=new Bounds(points[0],Vector3.zero);foreach(var p in points)b.Encapsulate(p);return b;
+}
+GameObject Part(string path,string name,Transform parent,Vector3 position,Quaternion rotation,float scale){
+ var asset=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(path);if(asset==null)throw new Exception("Missing "+path);
+ var o=(GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(asset,scene);UnityEditor.Undo.RegisterCreatedObjectUndo(o,action);o.name=name;
+ o.transform.SetParent(root,false);o.transform.localRotation=rotation;o.transform.localScale*=scale;
+ var b=MeshBounds(o);o.transform.position+=table.TransformVector(position-new Vector3(b.center.x,b.min.y,b.center.z));
+ UnityEditor.Undo.SetTransformParent(o.transform,parent,action);
+ foreach(var c in o.GetComponentsInChildren<Collider>(true))UnityEditor.Undo.DestroyObjectImmediate(c);
+ foreach(var r in o.GetComponentsInChildren<Renderer>()){Change(r);r.sharedMaterials=r.sharedMaterials.Select(m=>steel).ToArray();UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(r);}
+ UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(o.transform);return o;
+}
+const string metalPost="Assets/Models/Parts/Posts/Post_-_Metal_-_114_-_Round.fbx";
+const string bolt="Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx";
+foreach(var s in input["slings"]){
+ string side=(string)s["side"];var host=gp.Find("Slingshot_"+side);var assembly=side=="Left"?left:right;
+ Hide(host.Find("Slingshot_Band").GetComponent<Renderer>());Hide(host.Find("Plastique_Decal").GetComponent<Renderer>());
+ int i=0;foreach(var pos in s["posts"]){var p=Vec(pos);Part(metalPost,"SlingPost_"+(++i),assembly,p,Quaternion.Euler(-90,0,0),.75f);Part(bolt,"SlingFastener_"+i,assembly,p+Vector3.up*.403f,Quaternion.Euler(-90,0,0),.92f);}
+ var so=new UnityEditor.SerializedObject(host.GetComponent<Slingshot>());var flashes=so.FindProperty("flashRenderers");flashes.arraySize=1;flashes.GetArrayElementAtIndex(0).objectReferenceValue=assembly.Find("SlingPlastic_"+side).GetComponent<Renderer>();so.ApplyModifiedProperties();
+ var legend=host.Find("SlingLegend_"+side);Change(legend);legend.position=table.TransformPoint(Vec(s["label"])+new Vector3(0,.008f,.19f));
+}
+foreach(var r in boss.GetComponentsInChildren<MeshRenderer>(true))if(!r.transform.IsChildOf(terminal))Hide(r);
+var bossSo=new UnityEditor.SerializedObject(boss.GetComponent<BossTarget>());var display=terminal.Find("TerminalScreen").GetComponent<Renderer>();
+bossSo.FindProperty("ecran").objectReferenceValue=display;var visuals=bossSo.FindProperty("visuels");visuals.arraySize=1;visuals.GetArrayElementAtIndex(0).objectReferenceValue=display;bossSo.ApplyModifiedProperties();
+foreach(string name in new[]{"FinalProjectChrome","FinalProjectLegend"}){var old=reference.Find("ProfessionalArt/"+name);if(old!=null)foreach(var r in old.GetComponentsInChildren<Renderer>(true))Hide(r);}
+
+// Retaining clamps on the wire returns: follow existing frame sections, outside
+// the inner channel, with shoes below the continuous collision floor.
+var routes=reference.Find("FlowRefinement/CorrectedRoutes");var mounts=New("RampMountings",root);
+int meshIndex=0;
+void Tube(string name,Vector3[] p,float radius){
+ const int count=10;var v=new System.Collections.Generic.List<Vector3>();var t=new System.Collections.Generic.List<int>();
+ for(int i=0;i<p.Length;i++){
+  var d=(p[Math.Min(i+1,p.Length-1)]-p[Math.Max(i-1,0)]).normalized;var n=Vector3.Cross(d,Vector3.up).normalized;if(n.sqrMagnitude<.01f)n=Vector3.right;var up=Vector3.Cross(d,n).normalized;
+  for(int j=0;j<count;j++){float a=j*Mathf.PI*2/count;v.Add(p[i]+radius*(Mathf.Cos(a)*n+Mathf.Sin(a)*up));}
+ }
+ for(int i=0;i<p.Length-1;i++)for(int j=0;j<count;j++){int a=i*count+j,b=i*count+(j+1)%count;t.AddRange(new[]{a,b,b+count,a,b+count,a+count});}
+ var m=new Mesh{name=name};m.SetVertices(v);m.SetTriangles(t,0);m.RecalculateNormals();m.RecalculateBounds();UnityEditor.AssetDatabase.CreateAsset(m,folder+"/"+(meshIndex++)+"_"+name+".asset");
+ var go=New(name,mounts).gameObject;go.AddComponent<MeshFilter>().sharedMesh=m;go.AddComponent<MeshRenderer>().sharedMaterial=steel;
+}
+foreach(string name in new[]{"Vosges","IUT"}){
+ var vertices=routes.Find(name+"_Track").GetComponent<MeshFilter>().sharedMesh.vertices;var p=new Vector3[vertices.Length/8];for(int i=0;i<p.Length;i++)p[i]=(vertices[i*8+4]+vertices[i*8+5])*.5f;
+ foreach(int index in name=="Vosges"?new[]{98,116,132}:new[]{98,116,132}){
+  var d=p[index+1]-p[index-1];var n=new Vector3(d.z,0,-d.x).normalized;
+  foreach(int sign in new[]{-1,1}){
+   var outside=p[index]+n*sign*.3312f;var lower=p[index]+n*sign*.29f-Vector3.up*.045f;
+   Tube(name+"_RetainingClamp_"+index+"_"+sign,new[]{lower,outside-Vector3.up*.045f,outside+Vector3.up*.1848f},.018f);
+   Part(bolt,name+"_FrameBolt_"+index+"_"+sign,mounts,outside+Vector3.up*.158f,Quaternion.Euler(-90,0,0),.66f);
+  }
+ }
+}
+UnityEditor.AssetDatabase.SaveAssets();Physics.SyncTransforms();UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);UnityEditor.Undo.CollapseUndoOperations(undo);
+return "21 fitted Blender meshes; 6 metal posts + 6 sling fasteners; 12 return clamps. Scene not saved; Undo group="+undo;

@@ -1,0 +1,10 @@
+var table=GameObject.Find("PinballTable").transform;var previous=RenderTexture.active;
+void Capture(string name,Vector3 pos,Vector3 target,float size){
+ var go=new GameObject("Temporary inspection camera");var cam=go.AddComponent<Camera>();cam.enabled=false;cam.orthographic=true;cam.orthographicSize=size;cam.nearClipPlane=.02f;cam.farClipPlane=100;cam.clearFlags=CameraClearFlags.SolidColor;cam.backgroundColor=new Color(.015f,.02f,.025f);cam.transform.position=table.TransformPoint(pos);cam.transform.rotation=Quaternion.LookRotation(table.TransformPoint(target)-cam.transform.position,table.up);
+ var rt=new RenderTexture(1280,900,24);var tex=new Texture2D(1280,900,TextureFormat.RGB24,false);
+ try{cam.targetTexture=rt;cam.Render();RenderTexture.active=rt;tex.ReadPixels(new Rect(0,0,1280,900),0,0);tex.Apply();System.IO.File.WriteAllBytes("Tools/unity/out/"+name+".png",tex.EncodeToPNG());}
+ finally{RenderTexture.active=previous;UnityEngine.Object.DestroyImmediate(go);UnityEngine.Object.DestroyImmediate(rt);UnityEngine.Object.DestroyImmediate(tex);}
+}
+Capture("mechanical-lower",new Vector3(-.4f,5.8f,2.4f),new Vector3(-.4f,.2f,4.85f),2.85f);
+Capture("mechanical-terminal",new Vector3(.9f,3.4f,12.1f),new Vector3(.9f,.30f,15.55f),1.10f);
+return "Two temporary camera captures written";

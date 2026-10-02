@@ -2,6 +2,11 @@
 
 Date : 2 octobre 2026. Révision examinée : `8df1903`.
 
+Évolutions après cet audit : [réduction de 8 %](NeutralScale.md), puis
+[finition mécanique et alignement des légendes](NeutralMechanical.md).
+Les mesures et réserves ci-dessous décrivent la révision examinée ; les écarts
+de règles de score et de parcours utilisateur restent ouverts.
+
 Source de conception : [GameDesignDocument.docx](../GameDesignDocument.docx). Les décisions explicites de l'utilisateur prévalent : **six cibles de récompense**, caméra tournée pour la borne, plateau et scores occupant l'écran.
 
 Cet audit porte sur la scène ouverte `Assets/Scenes/Neutral.unity`, ses composants et leurs références, les scripts et les configurations présents. Il comprend une capture avec cadrage adapté à 1920 × 1080 et des mesures dans le repère du plateau. Aucune modification persistante des objets ou réglages de scène et aucun enregistrement de scène n'ont été effectués. La scène est restée non modifiée dans l'éditeur. La présence d'un système dans le code ne constitue pas une validation de son parcours complet en partie.

@@ -1,0 +1,25 @@
+ACTIVE_COLLIDERS_IDENTICAL=True
+SLING Left decorColliders=0
+BOUNDS MechanicalAssembly/SlingPlastic_Left min=(-2.6169, 0.3955, 4.7886) max=(-1.8623, 0.4405, 6.2105)
+BOUNDS MechanicalAssembly/SlingRubber_Left min=(-2.5988, 0.0910, 4.8561) max=(-1.8528, 0.2350, 6.0732)
+BOUNDS MechanicalAssembly/SlingPost_1 min=(-2.4310, 0.0000, 5.9011) max=(-2.3145, 0.3969, 6.0176)
+BOUNDS MechanicalAssembly/SlingFastener_1 min=(-2.4397, 0.4030, 5.8913) max=(-2.3057, 0.4707, 6.0274)
+BOUNDS MechanicalAssembly/SlingPost_2 min=(-2.0248, 0.0000, 4.9116) max=(-1.9082, 0.3969, 5.0282)
+BOUNDS MechanicalAssembly/SlingFastener_2 min=(-2.0335, 0.4030, 4.9019) max=(-1.8995, 0.4707, 5.0379)
+BOUNDS MechanicalAssembly/SlingPost_3 min=(-2.5431, 0.0000, 5.2439) max=(-2.4265, 0.3969, 5.3604)
+BOUNDS MechanicalAssembly/SlingFastener_3 min=(-2.5518, 0.4030, 5.2342) max=(-2.4178, 0.4707, 5.3702)
+FLASH=1:SlingPlastic_Left
+SLING Right decorColliders=0
+BOUNDS MechanicalAssembly/SlingPlastic_Right min=(1.0756, 0.3955, 4.6123) max=(1.8303, 0.4405, 6.0342)
+BOUNDS MechanicalAssembly/SlingRubber_Right min=(1.0453, 0.0910, 4.6743) max=(1.8074, 0.2350, 5.8912)
+BOUNDS MechanicalAssembly/SlingPost_1 min=(1.5070, 0.0000, 5.7192) max=(1.6235, 0.3969, 5.8357)
+BOUNDS MechanicalAssembly/SlingFastener_1 min=(1.4983, 0.4030, 5.7094) max=(1.6322, 0.4707, 5.8454)
+BOUNDS MechanicalAssembly/SlingPost_2 min=(1.1008, 0.0000, 4.7297) max=(1.2173, 0.3969, 4.8462)
+BOUNDS MechanicalAssembly/SlingFastener_2 min=(1.0920, 0.4030, 4.7200) max=(1.2260, 0.4707, 4.8560)
+BOUNDS MechanicalAssembly/SlingPost_3 min=(1.6352, 0.0000, 5.0639) max=(1.7517, 0.3969, 5.1805)
+BOUNDS MechanicalAssembly/SlingFastener_3 min=(1.6265, 0.4030, 5.0542) max=(1.7604, 0.4707, 5.1902)
+FLASH=1:SlingPlastic_Right
+TERMINAL_DECOR_COLLIDERS=0
+MOUNTS_DECOR_COLLIDERS=0
+MISSING_SCRIPTS=0
+REWARD_TARGETS=6

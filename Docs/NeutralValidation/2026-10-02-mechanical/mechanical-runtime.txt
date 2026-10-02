@@ -1,0 +1,17 @@
+PASS runtime physical step=0,004999993
+PASS Slingshot_Left contact score=100 rebound=(12.61, 0.00, 5.78)
+PASS Slingshot_Left new plastic flashes: RGBA(1.000, 0.850, 0.250, 1.000)
+PASS Slingshot_Left decorative hardware has no collider
+PASS Slingshot_Right contact score=100 rebound=(-12.61, 0.00, 5.78)
+PASS Slingshot_Right new plastic flashes: RGBA(1.000, 0.850, 0.250, 1.000)
+PASS Slingshot_Right decorative hardware has no collider
+PASS boss unlocked screen turns red
+BOSS_REAL_HIT 1 state=Initialise touches=1
+BOSS_REAL_HIT 2 state=Initialise touches=2
+BOSS_REAL_HIT 3 state=Correction touches=3
+PASS three actual impacts -> correction screen amber
+PASS correction notification -> compilation screen blue
+PASS final actual impact -> defeated screen green
+PASS boss existing score total=165000
+PASS six reward targets preserved
+FAILURES=0

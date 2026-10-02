@@ -1,0 +1,279 @@
+40591:256|{"BoxCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":1.0,"y":1.0,"z":1.0},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|0.080000	0.000000	0.000000	4.250000
+0.000000	2.481365	2.096153	2.535137
+0.000000	-0.304673	17.071790	9.159316
+0.000000	0.000000	0.000000	1.000000
+
+40595:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"38f07a2b5b1b9da4ba2ae02798a2940f","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+40645:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.7200000286102295,"y":0.8999999761581421,"z":0.6000000238418579},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|1.000000	0.000000	0.000000	3.080000
+0.000000	0.992546	0.121869	0.608531
+0.000000	-0.121869	0.992546	2.494432
+0.000000	0.000000	0.000000	1.000000
+
+40651:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.6999998092651367,"y":0.4000000059604645,"z":0.7999999523162842},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|1.000000	0.000000	0.000000	-3.820000
+0.000000	0.992546	0.121869	0.478809
+0.000000	-0.121869	0.992546	2.258482
+0.000000	0.000000	0.000000	1.000000
+
+40764:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.6624000668525696,"y":0.46000000834465027,"z":0.10000000149011612},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|-1.000000	0.000000	0.000003	-3.100000
+0.000000	0.992546	-0.121869	1.286695
+-0.000003	-0.121869	-0.992546	6.113729
+0.000000	0.000000	0.000000	1.000000
+
+40789:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"b1bdad361bdffc7468732c0a6fc6167e","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+40855:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.3400000035762787,"y":0.5099999904632568,"z":0.12999999523162842},"m_Center":{"x":0.0,"y":0.2549999952316284,"z":0.0}}}|0.527690	0.000000	-0.753620	-2.550000
+0.091843	0.913142	0.064309	0.883553
+0.748003	-0.112120	0.523757	7.195960
+0.000000	0.000000	0.000000	1.000000
+
+40862:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.7200000286102295,"y":0.8999999761581421,"z":0.6000000238418579},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|1.000000	0.000000	0.000000	-3.830000
+0.000000	0.992546	0.121869	0.608531
+0.000000	-0.121869	0.992546	2.494432
+0.000000	0.000000	0.000000	1.000000
+
+40886:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"d04a27e57ec3054428d69a6cd690683b","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+40932:256|{"CapsuleCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"2","m_Radius":0.45721435546875,"m_Height":0.9244287014007568,"m_Direction":1,"m_Center":{"x":0.0,"y":0.18693244457244873,"z":0.000331878662109375}}}|0.920000	0.000000	0.000000	-1.220000
+0.000000	0.913142	0.112120	1.852414
+0.000000	-0.112120	0.913142	15.086700
+0.000000	0.000000	0.000000	1.000000
+
+40994:256|{"BoxCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":1.0,"y":1.0,"z":1.0},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|0.080000	0.000000	0.000000	-4.250000
+0.000000	2.481365	2.096153	2.535137
+0.000000	-0.304673	17.071790	9.159316
+0.000000	0.000000	0.000000	1.000000
+
+41021:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":23.5,"y":163.81448364257813,"z":23.500003814697266},"m_Center":{"x":-0.0003790855407714844,"y":21.691162109375,"z":0.000004153916506766109}}}|-0.016667	0.000000	0.000000	3.839000
+0.000000	0.002031	0.016542	0.430148
+0.000000	0.016542	-0.002031	0.286715
+0.000000	0.000000	0.000000	1.000000
+
+41053:256|{"CapsuleCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"2","m_Radius":0.5,"m_Height":2.0,"m_Direction":1,"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|0.138000	0.000000	0.000000	2.630000
+0.000000	0.173497	0.016818	0.947368
+0.000000	-0.021303	0.136971	6.281365
+0.000000	0.000000	0.000000	1.000000
+
+41089:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"7966c064b650bbd45b51ab5d5e40e798","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+41145:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"2f3517061dbcbdc43985ce81f20f5f98","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+41169:256|{"CapsuleCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"2","m_Radius":0.4572131633758545,"m_Height":0.9244263172149658,"m_Direction":1,"m_Center":{"x":-0.00033342838287353516,"y":0.18693161010742188,"z":-0.0000019073486328125}}}|0.920000	0.000000	0.000000	0.120000
+0.000000	0.913142	0.112120	1.730545
+0.000000	-0.112120	0.913142	14.094160
+0.000000	0.000000	0.000000	1.000000
+
+41225:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"a3284307e0d5e46488a5c4acdd6337de","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+41302:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"fa4e3891f7844d54399a47fcd42dda93","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+41437:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"275830a51ec98c4489aa61480773b090","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+41446:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"8767681dfff25b34cb7847c96d85ccf7","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+41463:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.3400000035762787,"y":0.5099999904632568,"z":0.12999999523162842},"m_Center":{"x":0.0,"y":0.2549999952316284,"z":0.0}}}|0.527690	0.000000	0.753620	1.750000
+-0.091843	0.913142	0.064309	0.966424
+-0.748003	-0.112120	0.523757	7.870891
+0.000000	0.000000	0.000000	1.000000
+
+41481:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.0008000995730981231,"y":0.00021180158364586532,"z":0.0002598784922156483},"m_Center":{"x":-0.00029717152938246727,"y":1.5507585260365886e-7,"z":0.00013584957923740149}}}|-1327.906000	766.666700	0.000375	-1.665604
+93.433320	161.830300	1521.904000	0.387931
+760.952100	1318.008000	-186.865800	3.082823
+0.000000	0.000000	0.000000	1.000000
+
+41485:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.6624000668525696,"y":0.46000000834465027,"z":0.10000000149011612},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|-1.000000	0.000000	-0.000003	2.340000
+0.000000	0.992546	-0.121869	1.286695
+0.000003	-0.121869	-0.992546	6.113729
+0.000000	0.000000	0.000000	1.000000
+
+41499:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.3400000035762787,"y":0.5099999904632568,"z":0.12999999523162842},"m_Center":{"x":0.0,"y":0.2549999952316284,"z":0.0}}}|0.527690	0.000000	0.753620	1.750000
+-0.091843	0.913142	0.064309	0.883553
+-0.748003	-0.112120	0.523757	7.195960
+0.000000	0.000000	0.000000	1.000000
+
+41509:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.5299999713897705,"y":0.4000000059604645,"z":0.054999999701976776},"m_Center":{"x":0.0,"y":-0.10000000149011612,"z":0.0}}}|0.920000	0.000000	0.000000	-0.400000
+0.000000	0.913142	0.112120	1.759192
+0.000000	-0.112120	0.913142	10.060600
+0.000000	0.000000	0.000000	1.000000
+
+41529:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":1.1999998092651367,"y":0.30000001192092896,"z":2.6000003814697266},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|0.920000	0.000000	0.000000	-1.300000
+0.000000	0.913142	0.112120	2.287878
+0.000000	-0.112120	0.913142	16.746000
+0.000000	0.000000	0.000000	1.000000
+
+41558:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"2b495ea0b41e55b4ebe240ff9cb7a61e","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+41586:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.6624000668525696,"y":0.46000000834465027,"z":0.10000000149011612},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|0.999286	0.000000	-0.037797	0.892371
+0.004606	0.992546	0.121782	1.442865
+0.037515	-0.121869	0.991837	9.704196
+0.000000	0.000000	0.000000	1.000000
+
+41608:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"b955be4e16d433749b30248d7291980f","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+41632:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.699999988079071,"y":0.5,"z":0.11999999731779099},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|-1.000000	0.000000	0.000000	2.980000
+0.000000	0.992546	-0.121869	2.032832
+0.000000	-0.121869	-0.992546	14.258540
+0.000000	0.000000	0.000000	1.000000
+
+41661:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":1.2000000476837158,"y":0.30000001192092896,"z":2.6000003814697266},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|0.920000	0.000000	0.000000	0.500000
+0.000000	0.913142	0.112120	2.287878
+0.000000	-0.112120	0.913142	16.746000
+0.000000	0.000000	0.000000	1.000000
+
+41858:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"8e01da8000194a54f800155fe5f9a554","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+41884:256|{"MeshCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":true,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"23df422b9d0e9a045a94f88b67891ace","type":2}}}|0.216632	0.000000	-0.527662	1.320000
+0.064306	0.684857	0.026401	0.782879
+0.523729	-0.084090	0.215017	5.243677
+0.000000	0.000000	0.000000	1.000000
+
+41927:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.3400000035762787,"y":0.5099999904632568,"z":0.12999999523162842},"m_Center":{"x":0.0,"y":0.2549999952316284,"z":0.0}}}|0.527690	0.000000	-0.753620	-2.550000
+0.091843	0.913142	0.064309	0.966424
+0.748003	-0.112120	0.523757	7.870891
+0.000000	0.000000	0.000000	1.000000
+
+41979:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":1.1999998092651367,"y":0.30000001192092896,"z":2.6000003814697266},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|0.920000	0.000000	0.000000	-0.400000
+0.000000	0.913142	0.112120	2.287878
+0.000000	-0.112120	0.913142	16.746000
+0.000000	0.000000	0.000000	1.000000
+
+42068:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":2.4000000953674316,"y":1.399999976158142,"z":0.5},"m_Center":{"x":0.0,"y":0.699999988079071,"z":0.0}}}|0.441600	0.000000	0.000000	0.900000
+0.000000	0.438308	0.053818	1.901163
+0.000000	-0.053818	0.438308	15.483720
+0.000000	0.000000	0.000000	1.000000
+
+42076:256|{"CapsuleCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"2","m_Radius":0.4572131633758545,"m_Height":0.9244263172149658,"m_Direction":1,"m_Center":{"x":0.00033342838287353516,"y":0.18693161010742188,"z":-0.0000019073486328125}}}|0.920000	0.000000	0.000000	-1.200000
+0.000000	0.913142	0.112120	1.602582
+0.000000	-0.112120	0.913142	13.051980
+0.000000	0.000000	0.000000	1.000000
+
+42091:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"7f0593b10109e734f8e5cde03a98caa0","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+42103:256|{"BoxCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":1.0,"y":1.0,"z":1.0},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|8.500000	0.000000	0.000000	0.000000
+0.000000	2.481365	0.009750	3.552746
+0.000000	-0.304673	0.079404	17.447080
+0.000000	0.000000	0.000000	1.000000
+
+42151:256|{"MeshCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":true,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"e1c91321a4ff73445a4d1a7d5260e699","type":2}}}|0.216632	0.000000	0.527662	-2.120000
+-0.064306	0.684857	0.026401	0.782879
+-0.523729	-0.084090	0.215017	5.243677
+0.000000	0.000000	0.000000	1.000000
+
+42185:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.3400000035762787,"y":0.5099999904632568,"z":0.12999999523162842},"m_Center":{"x":0.0,"y":0.2549999952316284,"z":0.0}}}|0.527690	0.000000	0.753620	1.750000
+-0.091843	0.913142	0.064309	1.049295
+-0.748003	-0.112120	0.523757	8.545822
+0.000000	0.000000	0.000000	1.000000
+
+42202:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.6624000668525696,"y":0.46000000834465027,"z":0.10000000149011612},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|0.918774	0.000000	-0.394783	-1.710681
+0.048112	0.992546	0.111970	1.435949
+0.391841	-0.121869	0.911926	9.692942
+0.000000	0.000000	0.000000	1.000000
+
+42236:256|{"CapsuleCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"2","m_Radius":0.5,"m_Height":2.0,"m_Direction":1,"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|0.138000	0.000000	0.000000	-3.430000
+0.000000	0.173497	0.016818	0.947368
+0.000000	-0.021303	0.136971	6.281365
+0.000000	0.000000	0.000000	1.000000
+
+42248:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"4ac3cbe487f6e7241a807c0ec9405a36","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+42359:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":7.5,"y":1.5,"z":0.25},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|1.000000	0.000000	0.000000	-0.400000
+0.000000	0.992546	0.121869	0.500607
+0.000000	-0.121869	0.992546	0.794917
+0.000000	0.000000	0.000000	1.000000
+
+42401:256|{"BoxCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":1.0,"y":1.0,"z":1.0},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|8.573000	0.000000	0.000000	0.000000
+0.000000	0.218360	2.044968	1.035173
+0.000000	-0.026811	16.654920	9.333414
+0.000000	0.000000	0.000000	1.000000
+
+42406:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.0008000999805517495,"y":0.00021180159819778055,"z":0.000259878346696496},"m_Center":{"x":-0.00029717152938246727,"y":1.550618691226191e-7,"z":0.00013584955013357103}}}|1327.906000	766.666700	0.000129	0.865366
+93.433190	-161.831100	1521.904000	0.387981
+760.952100	-1318.008000	-186.866400	3.083232
+0.000000	0.000000	0.000000	1.000000
+
+42503:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"9f847e606693ee74ba610212bc8d9cc6","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+42524:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":true,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.699999988079071,"y":0.5,"z":0.11999999731779099},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|1.000000	0.000000	0.000000	-3.700000
+0.000000	0.992546	0.121869	2.032832
+0.000000	-0.121869	0.992546	14.258540
+0.000000	0.000000	0.000000	1.000000
+
+42569:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"b654a710528d4c64babe9d5c45b871ed","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+42580:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"b654a710528d4c64babe9d5c45b871ed","type":2}}}|-1.000000	0.000000	0.000000	-0.590000
+0.000000	-0.992546	0.121869	0.411907
+0.000000	0.121869	0.992546	-0.050576
+0.000000	0.000000	0.000000	1.000000
+
+42600:256|{"BoxCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":1.0,"y":1.0,"z":1.0},"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|8.500000	0.000000	0.000000	0.000000
+0.000000	0.079404	2.096153	3.726192
+0.000000	-0.009750	17.071790	9.013073
+0.000000	0.000000	0.000000	1.000000
+
+42685:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"1c05297a30eda4648b2380d70fbb4e36","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+42692:256|{"BoxCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Size":{"x":0.3400000035762787,"y":0.5099999904632568,"z":0.12999999523162842},"m_Center":{"x":0.0,"y":0.2549999952316284,"z":0.0}}}|0.527690	0.000000	-0.753620	-2.550000
+0.091843	0.913142	0.064309	1.049295
+0.748003	-0.112120	0.523757	8.545822
+0.000000	0.000000	0.000000	1.000000
+
+42721:256|{"MeshCollider":{"m_Material":{"fileID":13400000,"guid":"2fbdbf5b92f7a924f9dbb2a3a620a599","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":false,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"2ed8f67e4681fbd45bc5b303b2d041cb","type":2}}}|1.000000	0.000000	0.000000	0.000000
+0.000000	0.992546	0.121869	0.000000
+0.000000	-0.121869	0.992546	0.000000
+0.000000	0.000000	0.000000	1.000000
+
+43738:256|{"SphereCollider":{"m_Material":{"fileID":13400000,"guid":"828b961127c69cb4e9704cd0d682bfc0","type":2},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"3","m_Radius":0.5,"m_Center":{"x":0.0,"y":0.0,"z":0.0}}}|0.414000	0.000000	0.000000	3.850000
+0.000000	0.414000	0.000000	0.502215
+0.000000	0.000000	0.414000	2.104482
+0.000000	0.000000	0.000000	1.000000

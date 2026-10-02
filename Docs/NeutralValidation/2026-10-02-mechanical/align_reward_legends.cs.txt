@@ -1,0 +1,11 @@
+if(Application.isPlaying)throw new Exception("Edit mode required");
+var table=GameObject.Find("PinballTable").transform;var sb=new System.Text.StringBuilder();
+UnityEditor.Undo.IncrementCurrentGroup();int group=UnityEditor.Undo.GetCurrentGroup();const string action="Aligner les six légendes avec leurs plaques";UnityEditor.Undo.SetCurrentGroupName(action);
+foreach(var target in table.GetComponentsInChildren<SubjectTarget>()){
+ var label=target.transform.Find("RewardLabel").GetComponent<TMPro.TextMeshPro>();var plaque=target.transform.Find("Plaque_"+target.name).GetComponent<MeshRenderer>();
+ var old=table.InverseTransformPoint(label.transform.position);UnityEditor.Undo.RecordObject(label.transform,action);
+ label.transform.rotation=table.rotation*Quaternion.Euler(90,0,0);label.ForceMeshUpdate();
+ var desired=plaque.bounds.center+table.up*.012f;var actual=label.GetComponent<Renderer>().bounds.center;label.transform.position+=desired-actual;label.ForceMeshUpdate();
+ sb.AppendLine(target.name+" from="+old.ToString("F3")+" to="+table.InverseTransformPoint(label.transform.position).ToString("F3")+" centreOffset="+(label.GetComponent<Renderer>().bounds.center-desired).magnitude.ToString("F5"));
+}
+UnityEditor.Undo.CollapseUndoOperations(group);System.IO.File.WriteAllText("Tools/unity/out/mechanical-legends.txt",sb.ToString());return sb.ToString();

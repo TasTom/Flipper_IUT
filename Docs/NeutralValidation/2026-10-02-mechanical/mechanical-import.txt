@@ -1,0 +1,22 @@
+ROOT (1666.67, 1666.67, 1666.67)
+SlingGraphic_Left_0 center=(-2.4284, 0.4450, 5.4637) size=(0.1271, 0.0035, 0.0590) tris=32
+SlingGraphic_Left_1 center=(-2.3905, 0.4450, 5.3712) size=(0.1271, 0.0035, 0.0590) tris=32
+SlingGraphic_Left_2 center=(-2.3525, 0.4450, 5.2787) size=(0.1271, 0.0035, 0.0590) tris=32
+SlingGraphic_Right_0 center=(1.6210, 0.4450, 5.2818) size=(0.1271, 0.0035, 0.0590) tris=32
+SlingGraphic_Right_1 center=(1.5830, 0.4450, 5.1893) size=(0.1271, 0.0035, 0.0590) tris=32
+SlingGraphic_Right_2 center=(1.5450, 0.4450, 5.0968) size=(0.1271, 0.0035, 0.0590) tris=32
+SlingPlastic_Left center=(-2.2396, 0.4180, 5.4995) size=(0.7546, 0.0450, 1.4219) tris=518
+SlingPlastic_Right center=(1.4530, 0.4180, 5.3233) size=(0.7546, 0.0450, 1.4219) tris=572
+SlingPrintBorder_Left center=(-2.2496, 0.4440, 5.5006) size=(0.6876, 0.0050, 1.2814) tris=592
+SlingPrintBorder_Right center=(1.4620, 0.4440, 5.3225) size=(0.6876, 0.0050, 1.2814) tris=576
+SlingRubber_Left center=(-2.2586, 0.1630, 5.4373) size=(0.8603, 0.1440, 1.4540) tris=1632
+SlingRubber_Right center=(1.4597, 0.1630, 5.2553) size=(0.8773, 0.1440, 1.4539) tris=1632
+TerminalBezel center=(0.9000, 0.4150, 15.5875) size=(0.9548, 0.3619, 0.2282) tris=96
+TerminalCode_0 center=(0.9550, 0.3582, 15.5453) size=(0.3900, 0.0180, 0.0180) tris=28
+TerminalCode_1 center=(0.9300, 0.4198, 15.5812) size=(0.3400, 0.0180, 0.0180) tris=28
+TerminalCode_2 center=(0.9050, 0.4813, 15.6171) size=(0.2900, 0.0180, 0.0180) tris=28
+TerminalFoot_-0.425 center=(0.4750, 0.0150, 15.6000) size=(0.0560, 0.0533, 0.2060) tris=36
+TerminalFoot_0.425 center=(1.3250, 0.0150, 15.6000) size=(0.0560, 0.0533, 0.2060) tris=36
+TerminalPrompt center=(0.6368, 0.4230, 15.5831) size=(0.0884, 0.1281, 0.0843) tris=44
+TerminalScreen center=(0.9000, 0.4188, 15.5863) size=(0.8600, 0.2770, 0.1616) tris=2
+TerminalShell center=(0.9000, 0.3147, 15.6000) size=(1.0420, 0.5694, 0.2060) tris=156

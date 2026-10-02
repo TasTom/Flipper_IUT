@@ -1,0 +1,53 @@
+if(!Application.isPlaying)throw new Exception("Play required");
+var table=GameObject.Find("PinballTable").transform;
+var ball=table.Find("Gameplay/Ball").GetComponent<Rigidbody>();
+var sphere=ball.GetComponent<SphereCollider>();float radius=sphere.radius*ball.transform.lossyScale.x;
+float step=Time.fixedDeltaTime;
+var oldMode=Physics.simulationMode;
+var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+var sb=new System.Text.StringBuilder();
+var routes=JsonUtility.FromJson<RefineNeutralFlow.Routes>(System.IO.File.ReadAllText("Tools/unity/out/refined-paths.json"));
+var flips=new[]{table.Find("Gameplay/Flipper_Left_Pivot").GetComponent<Flipper>(),table.Find("Gameplay/Flipper_Right_Pivot").GetComponent<Flipper>()};
+var angle=typeof(Flipper).GetField("angle",flags);var apply=typeof(Flipper).GetMethod("Appliquer",flags);
+var clamp=typeof(BallManager).GetMethod("ClampSpeed",flags);
+float[] current={-30f,30f};bool[] pressed={false,false};
+void Tick(){for(int j=0;j<2;j++){float target=(pressed[j]?30:-30)*(j==0?1:-1);current[j]=Mathf.MoveTowards(current[j],target,(pressed[j]?2200:700)*step);angle.SetValue(flips[j],current[j]);apply.Invoke(flips[j],null);}clamp.Invoke(BallManager.Instance,new object[]{ball});Physics.Simulate(step);}
+void Reset(){GameManager.Instance.StartGame();ball.gameObject.SetActive(true);ball.isKinematic=false;ball.useGravity=true;ball.linearVelocity=Vector3.zero;ball.angularVelocity=Vector3.zero;pressed[0]=pressed[1]=false;for(int j=0;j<2;j++){current[j]=j==0?-30f:30f;angle.SetValue(flips[j],current[j]);apply.Invoke(flips[j],null);}Physics.SyncTransforms();}
+try{
+ Physics.simulationMode=SimulationMode.Script;
+ sb.AppendLine("diameter="+(radius*2f).ToString("F4")+" step="+step.ToString("F4"));
+ foreach(var route in routes.routes){
+  var foreign=new System.Collections.Generic.HashSet<string>();
+  for(int i=1;i<route.points.Length-1;i++)foreach(var c in Physics.OverlapSphere(table.TransformPoint(route.points[i]+Vector3.up*(radius+.015f)),radius-.005f,~0,QueryTriggerInteraction.Ignore))if(!c.name.StartsWith(route.name+"_")&&!c.CompareTag("Ball"))foreign.Add(c.name+" @"+i);
+  sb.AppendLine("CLEARANCE "+route.name+" foreign="+string.Join(",",foreign));
+  foreach(float speed in new[]{25f,35f,50f,70f}){
+   Reset();var dir=route.points[2]-route.points[0];dir.y=0;dir.Normalize();ball.position=table.TransformPoint(route.points[0]-dir*.4f+Vector3.up*(radius+.006f));ball.linearVelocity=table.TransformDirection(dir*speed);Physics.SyncTransforms();
+   var gate=table.Find("Gameplay/Ramp_"+route.name+"_Out").GetComponent<RampGate>();int completed=0;Action<RampGate,Collider> onDone=(g,c)=>completed++;gate.Completed+=onDone;
+   float stall=0,maxStall=0,maxY=0;bool escape=false;var last=table.InverseTransformPoint(ball.position);
+   try{for(int n=0;n<(int)(16f/step)&&ball.gameObject.activeSelf;n++){Tick();var p=table.InverseTransformPoint(ball.position);if((p-last).magnitude<.002f&&p.x<3.5f)stall+=step;else stall=0;maxStall=Mathf.Max(maxStall,stall);maxY=Mathf.Max(maxY,p.y);escape|=Mathf.Abs(p.x)>4.6f||p.z>18.1f||p.y>2.85f;last=p;}}
+   finally{gate.Completed-=onDone;}
+   sb.AppendLine("RAMP "+route.name+" speed="+speed+" completed="+completed+" stall="+maxStall.ToString("F2")+" escape="+escape+" maxY="+maxY.ToString("F2")+" end="+last.ToString("F2"));
+  }
+ }
+ foreach(bool left in new[]{true,false})foreach(float triggerZ in new[]{3.5f,3.3f,3.1f}){
+  Reset();ball.position=table.TransformPoint(new Vector3(left?-3.1f:2.34f,.90f,6.9f));ball.linearVelocity=-table.forward*12f;Physics.SyncTransforms();bool fired=false;float peak=0;int after=0;
+  for(int n=0;n<(int)(9f/step)&&ball.gameObject.activeSelf;n++){var p=table.InverseTransformPoint(ball.position);if(!fired&&p.z<triggerZ&&p.z>1.9f&&Mathf.Abs(p.x+.4f)<1.8f){fired=true;pressed[0]=pressed[1]=true;}Tick();if(fired){peak=Mathf.Max(peak,table.InverseTransformPoint(ball.position).z);if(++after>(int)(3f/step))break;}}
+  sb.AppendLine("RETURN "+(left?"L":"R")+" trigger="+triggerZ+" fired="+fired+" peak="+peak.ToString("F2"));
+ }
+ foreach(var target in table.GetComponentsInChildren<SubjectTarget>()){
+  Reset();target.Activer();ball.useGravity=false;ball.position=table.TransformPoint(new Vector3(0,3,8));Physics.SyncTransforms();Physics.Simulate(step);
+  typeof(SubjectTarget).GetField("dernierHit",flags).SetValue(target,float.NegativeInfinity);
+  ball.position=target.transform.TransformPoint(new Vector3(0,.27f,-3.5f));ball.linearVelocity=target.transform.forward*15;Physics.SyncTransforms();for(int n=0;n<(int)(.6f/step);n++)Physics.Simulate(step);
+  sb.AppendLine("TARGET "+target.name+" validated="+target.IsValidated);ball.useGravity=true;
+ }
+ var plunger=table.GetComponentInChildren<Plunger>();var pull=typeof(Plunger).GetField("pullAmount",flags);var launch=typeof(Plunger).GetMethod("Launch",flags);
+ foreach(float power in new[]{.65f,.8f,1f}){
+  Reset();pull.SetValue(plunger,.8f*power);launch.Invoke(plunger,null);float peakZ=0,maxStall=0,stall=0;bool escape=false;int strikes=0;int[] hold={0,0};var last=table.InverseTransformPoint(ball.position);
+  for(int n=0;n<(int)(12f/step)&&ball.gameObject.activeSelf;n++){var p=table.InverseTransformPoint(ball.position);for(int j=0;j<2;j++){bool contact=p.z<3.45f&&p.z>2f&&Mathf.Abs(p.x+.4f)<1.4f&&(j==0?p.x<-.4f:p.x>=-.4f);if(contact&&hold[j]==0){hold[j]=(int)(.125f/step);strikes++;}pressed[j]=hold[j]>0;if(hold[j]>0)hold[j]--;}
+   Tick();p=table.InverseTransformPoint(ball.position);peakZ=Mathf.Max(peakZ,p.z);if((p-last).magnitude<.002f&&p.x<3.5f)stall+=step;else stall=0;maxStall=Mathf.Max(maxStall,stall);escape|=Mathf.Abs(p.x)>4.6f||p.z>18.1f||p.y>2.85f;last=p;}
+  sb.AppendLine("SERVE "+power+" peakZ="+peakZ.ToString("F2")+" strikes="+strikes+" fieldStall="+maxStall.ToString("F2")+" escape="+escape+" end="+last.ToString("F2"));
+ }
+ Reset();MultiballManager.Instance.TriggerMultiball();sb.AppendLine("MULTIBALL count="+BallManager.Instance.LiveBallCount+" diameters="+string.Join(",",UnityEngine.Object.FindObjectsByType<Rigidbody>(FindObjectsSortMode.None).Where(r=>r.CompareTag("Ball")&&r.gameObject.activeInHierarchy&&!r.isKinematic).Select(r=>(r.GetComponent<SphereCollider>().radius*2*r.transform.lossyScale.x).ToString("F4"))));
+}finally{Physics.simulationMode=oldMode;GameManager.Instance.StartGame();}
+string tag=radius<.22f?"after":"before";
+System.IO.File.WriteAllText("Tools/unity/out/scale-"+tag+"-playability.txt",sb.ToString());return sb.ToString();

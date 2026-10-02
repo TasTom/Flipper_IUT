@@ -1,0 +1,10 @@
+SCENE Assets/Scenes/Neutral.unity dirty=False missing_scripts=0
+table_scale=(1.00, 1.00, 1.00) table_tilt=-7 targets=6
+ball_scale=(0.4140, 0.4140, 0.4140) mass=2 collision=ContinuousDynamic
+GameManager ballPrefab=Assets/Prefabs/Ball_Neutral.prefab
+MultiballManager ballPrefab=Assets/Prefabs/Ball_Neutral.prefab
+shared_ball_scale=(0.45, 0.45, 0.45)
+FLIPPER Left anchor=(-1.83, 0.00, 3.20) size_mm=(73.61, 19.49, 23.91)
+FLIPPER Right anchor=(1.03, 0.00, 3.20) size_mm=(73.61, 19.49, 23.91)
+RAMP Vosges inner_width=0,6072 width_to_ball=1,467
+RAMP IUT inner_width=0,6072 width_to_ball=1,467

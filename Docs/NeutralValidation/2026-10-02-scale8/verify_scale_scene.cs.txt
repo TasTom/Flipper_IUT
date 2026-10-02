@@ -1,0 +1,11 @@
+if(Application.isPlaying)throw new Exception("Edit required");
+var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();var t=GameObject.Find("PinballTable").transform;var ball=t.Find("Gameplay/Ball");
+var sb=new System.Text.StringBuilder();int missing=scene.GetRootGameObjects().Sum(root=>root.GetComponentsInChildren<Transform>(true).Sum(tr=>UnityEditor.GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(tr.gameObject)));
+sb.AppendLine("SCENE "+scene.path+" dirty="+scene.isDirty+" missing_scripts="+missing);
+sb.AppendLine("table_scale="+t.localScale+" table_tilt="+Mathf.DeltaAngle(0,t.eulerAngles.x)+" targets="+t.GetComponentsInChildren<SubjectTarget>().Length);
+sb.AppendLine("ball_scale="+ball.localScale.ToString("F4")+" mass="+ball.GetComponent<Rigidbody>().mass+" collision="+ball.GetComponent<Rigidbody>().collisionDetectionMode);
+foreach(var c in new MonoBehaviour[]{UnityEngine.Object.FindFirstObjectByType<GameManager>(),UnityEngine.Object.FindFirstObjectByType<MultiballManager>()}){var so=new UnityEditor.SerializedObject(c);var prefab=so.FindProperty("ballPrefab").objectReferenceValue;sb.AppendLine(c.GetType().Name+" ballPrefab="+UnityEditor.AssetDatabase.GetAssetPath(prefab));}
+sb.AppendLine("shared_ball_scale="+UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Ball.prefab").transform.localScale);
+foreach(var side in new[]{"Left","Right"}){var pivot=t.Find("Gameplay/Flipper_"+side+"_Pivot");var mesh=pivot.Find("Flipper_Bat/Bat_Mesh").GetComponent<MeshFilter>();sb.AppendLine("FLIPPER "+side+" anchor="+pivot.localPosition+" size_mm="+Vector3.Scale(mesh.sharedMesh.bounds.size,mesh.transform.lossyScale)*60f);}
+foreach(var name in new[]{"Vosges","IUT"}){var track=t.Find("ReferencePlayfield/FlowRefinement/CorrectedRoutes/"+name+"_Track").GetComponent<MeshFilter>().sharedMesh.vertices;sb.AppendLine("RAMP "+name+" inner_width="+Vector3.Distance(track[4],track[5]).ToString("F4")+" width_to_ball="+(Vector3.Distance(track[4],track[5])/ball.localScale.x).ToString("F3"));}
+System.IO.File.WriteAllText("Tools/unity/out/scale-scene.txt",sb.ToString());return sb.ToString();

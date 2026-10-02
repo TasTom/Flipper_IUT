@@ -1,0 +1,31 @@
+if(!Application.isPlaying)throw new Exception("Play required");
+var t=GameObject.Find("PinballTable").transform;var ball=t.Find("Gameplay/Ball").GetComponent<Rigidbody>();
+float radius=ball.GetComponent<SphereCollider>().radius*ball.transform.lossyScale.x,step=Time.fixedDeltaTime;
+var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+var mode=Physics.simulationMode;var sb=new System.Text.StringBuilder();
+void Reset(){GameManager.Instance.StartGame();ball.useGravity=true;ball.linearVelocity=Vector3.zero;ball.angularVelocity=Vector3.zero;ball.position=t.TransformPoint(new Vector3(0,3,6));Physics.SyncTransforms();Physics.Simulate(step);}
+try{
+ Physics.simulationMode=SimulationMode.Script;
+ foreach(var bumper in t.GetComponentsInChildren<Bumper>()){
+  Reset();var p=t.InverseTransformPoint(bumper.transform.position);ball.position=t.TransformPoint(new Vector3(p.x,radius+.005f,p.z-1.7f));ball.linearVelocity=t.forward*15;Physics.SyncTransforms();
+  for(int n=0;n<(int)(.25f/step);n++)Physics.Simulate(step);
+  var cap=bumper.GetComponentsInChildren<MeshRenderer>().First(r=>r.name.Contains("_2_")).transform;
+  bool follows=new[]{"BumperMedallion_","BumperCapRim_","BumperIndex_"}.All(prefix=>cap.GetComponentsInChildren<Transform>(true).Any(tr=>tr.name.StartsWith(prefix)));
+  sb.AppendLine("BUMPER "+bumper.name+" hits="+bumper.HitCount+" score="+ScoreManager.Instance.Score+" decorationFollowsCap="+follows+" finite="+(!float.IsNaN(cap.localPosition.y)));
+ }
+ foreach(var sling in t.GetComponentsInChildren<Slingshot>()){
+  Reset();typeof(Slingshot).GetField("lastKickTime",flags).SetValue(sling,float.NegativeInfinity);
+  var col=sling.GetComponent<Collider>();var center=t.InverseTransformPoint(col.bounds.center);bool left=center.x<0;
+  ball.position=t.TransformPoint(new Vector3(-.4f,radius+.005f,center.z));ball.linearVelocity=t.TransformDirection(new Vector3(left?-15f:15f,0,0));Physics.SyncTransforms();
+  for(int n=0;n<(int)(.22f/step);n++)Physics.Simulate(step);
+  sb.AppendLine("SLING "+sling.name+" score="+ScoreManager.Instance.Score+" velocity="+t.InverseTransformDirection(ball.linearVelocity).ToString("F2"));
+ }
+ Reset();var spinner=t.GetComponentInChildren<Spinner>();var body=spinner.GetComponent<Rigidbody>();var rotation=body.rotation;var point=t.InverseTransformPoint(spinner.transform.position);ball.position=t.TransformPoint(new Vector3(point.x,radius+.005f,point.z-1.3f));ball.linearVelocity=t.forward*15;Physics.SyncTransforms();for(int n=0;n<(int)(.3f/step);n++)Physics.Simulate(step);
+ sb.AppendLine("SPINNER score="+ScoreManager.Instance.Score+" rotation="+Quaternion.Angle(rotation,body.rotation).ToString("F1"));
+ foreach(int side in new[]{-1,1})foreach(float speed in new[]{5f,25f,60f}){
+  Reset();var kickback=t.GetComponentInChildren<Kickback>(true);if(kickback!=null)kickback.Desarmer();GameManager.Instance.NotifyBallLaunched();int losses=0;Action<Rigidbody> count=b=>losses++;BallManager.Instance.BallDrained+=count;
+  try{ball.position=t.TransformPoint(new Vector3(side<0?-3.825f:3.125f,radius+.001f,5.9f));ball.linearVelocity=-t.forward*speed;Physics.SyncTransforms();for(int n=0;n<(int)(10f/step)&&ball.gameObject.activeSelf;n++)Physics.Simulate(step);sb.AppendLine("OUTLANE "+side+" speed="+speed+" losses="+losses+" remaining="+GameManager.Instance.BallsRemaining+" pass="+(losses==1&&GameManager.Instance.BallsRemaining==2&&!ball.gameObject.activeSelf));}
+  finally{BallManager.Instance.BallDrained-=count;}
+ }
+}finally{Physics.simulationMode=mode;GameManager.Instance.StartGame();}
+System.IO.File.WriteAllText("Tools/unity/out/scale-contacts.txt",sb.ToString());return sb.ToString();

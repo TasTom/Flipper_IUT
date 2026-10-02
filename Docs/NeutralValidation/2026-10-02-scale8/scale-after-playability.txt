@@ -1,0 +1,27 @@
+diameter=0,4140 step=0,0050
+CLEARANCE Vosges foreign=
+RAMP Vosges speed=25 completed=0 stall=0,02 escape=False maxY=1,16 end=(0.00, 0.00, 0.00)
+RAMP Vosges speed=35 completed=1 stall=0,04 escape=False maxY=1,45 end=(0.00, 0.00, 0.00)
+RAMP Vosges speed=50 completed=1 stall=0,16 escape=False maxY=1,57 end=(0.00, 0.00, 0.00)
+RAMP Vosges speed=70 completed=1 stall=0,00 escape=False maxY=1,51 end=(0.00, 0.00, 0.00)
+CLEARANCE IUT foreign=
+RAMP IUT speed=25 completed=0 stall=0,03 escape=False maxY=1,48 end=(0.00, 0.00, 0.00)
+RAMP IUT speed=35 completed=1 stall=0,03 escape=False maxY=1,98 end=(0.00, 0.00, 0.00)
+RAMP IUT speed=50 completed=1 stall=0,05 escape=False maxY=1,96 end=(0.00, 0.00, 0.00)
+RAMP IUT speed=70 completed=1 stall=0,04 escape=False maxY=1,97 end=(0.00, 0.00, 0.00)
+RETURN L trigger=3,5 fired=True peak=14,72
+RETURN L trigger=3,3 fired=True peak=12,66
+RETURN L trigger=3,1 fired=True peak=12,53
+RETURN R trigger=3,5 fired=True peak=17,40
+RETURN R trigger=3,3 fired=True peak=16,13
+RETURN R trigger=3,1 fired=True peak=7,01
+TARGET Target_Matieres_01 validated=True
+TARGET Target_Matieres_02 validated=True
+TARGET Target_Matieres_03 validated=True
+TARGET Target_Java_01 validated=True
+TARGET Target_Projet_01 validated=True
+TARGET Target_Cafe_01 validated=True
+SERVE 0,65 peakZ=17,39 strikes=1 fieldStall=0,05 escape=False end=(0.00, 0.00, 0.00)
+SERVE 0,8 peakZ=17,39 strikes=1 fieldStall=0,00 escape=False end=(3.76, 0.21, 2.27)
+SERVE 1 peakZ=17,40 strikes=4 fieldStall=0,07 escape=False end=(3.78, 0.21, 7.64)
+MULTIBALL count=3 diameters=0,4140,0,4140,0,4140

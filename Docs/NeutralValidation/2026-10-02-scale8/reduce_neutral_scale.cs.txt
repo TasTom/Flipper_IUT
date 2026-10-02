@@ -1,0 +1,98 @@
+// Explicit one-off user-authorized size adjustment. GDD: ball, flippers and table elements.
+// Never runs automatically, never saves the scene; all scene changes share one Undo group.
+if(Application.isPlaying)throw new Exception("Edit mode required");
+var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+if(scene.path!="Assets/Scenes/Neutral.unity")throw new Exception("Neutral required");
+const float factor=.92f;
+const string folder="Assets/Generated/NeutralScale8";
+const string prefabPath="Assets/Prefabs/Ball_Neutral.prefab";
+const string action="Réduire légèrement les pièces de Neutral (8 %)";
+var table=GameObject.Find("PinballTable").transform;
+var gp=table.Find("Gameplay");var reference=table.Find("ReferencePlayfield");
+var flow=reference.Find("FlowRefinement");var routesRoot=flow.Find("CorrectedRoutes");var art=reference.Find("ProfessionalArt");
+var ball=gp.Find("Ball");
+if(Mathf.Abs(ball.localScale.x-.45f)>.0001f||UnityEditor.AssetDatabase.IsValidFolder(folder)||UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath)!=null)throw new Exception("Pass already applied or baseline changed; inspect before reapplying.");
+var targetNames=new[]{"Target_Matieres_01","Target_Matieres_02","Target_Matieres_03","Target_Java_01","Target_Projet_01","Target_Cafe_01"};
+foreach(var name in targetNames)if(gp.Find(name)==null)throw new Exception("Missing "+name);
+var paths=new System.Collections.Generic.Dictionary<string,Vector3[]>();
+foreach(var name in new[]{"Vosges","IUT"}){
+ var vertices=routesRoot.Find(name+"_Track").GetComponent<MeshFilter>().sharedMesh.vertices;
+ if(vertices.Length%8!=0)throw new Exception("Unexpected ramp topology");
+ var p=new Vector3[vertices.Length/8];for(int i=0;i<p.Length;i++)p[i]=(vertices[i*8+4]+vertices[i*8+5])*.5f;paths.Add(name,p);
+}
+var copies=new System.Collections.Generic.Dictionary<Mesh,Mesh>();
+UnityEditor.Undo.IncrementCurrentGroup();int group=UnityEditor.Undo.GetCurrentGroup();UnityEditor.Undo.SetCurrentGroupName(action);
+void Changed(Transform tr){UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(tr);UnityEditor.EditorUtility.SetDirty(tr);}
+void Resize(Transform tr,bool onSurface=true){UnityEditor.Undo.RecordObject(tr,action);if(onSurface){var p=table.InverseTransformPoint(tr.position);p.y*=factor;tr.position=table.TransformPoint(p);}tr.localScale*=factor;Changed(tr);}
+void Attach(Transform tr,Transform parent){if(tr!=null)UnityEditor.Undo.SetTransformParent(tr,parent,action);}
+Mesh CopyMesh(Mesh original,Func<Vector3[],Vector3[]> edit){
+ if(copies.TryGetValue(original,out var copy))return copy;
+ var path=UnityEditor.AssetDatabase.GetAssetPath(original);
+ if(!path.StartsWith("Assets/Generated/NeutralFlow/"))throw new Exception("Unexpected shared mesh "+path);
+ copy=UnityEngine.Object.Instantiate(original);copy.name=original.name+"_92";copy.vertices=edit(original.vertices);copy.RecalculateNormals();copy.RecalculateBounds();
+ UnityEditor.AssetDatabase.CreateAsset(copy,folder+"/"+copies.Count.ToString("D2")+"_"+copy.name+".asset");copies.Add(original,copy);return copy;
+}
+void Meshes(Transform tr,Func<Vector3[],Vector3[]> edit){
+ var mf=tr.GetComponent<MeshFilter>();UnityEditor.Undo.RecordObject(mf,action);mf.sharedMesh=CopyMesh(mf.sharedMesh,edit);
+ var col=tr.GetComponent<MeshCollider>();if(col!=null){UnityEditor.Undo.RecordObject(col,action);col.sharedMesh=CopyMesh(col.sharedMesh,edit);}
+}
+try{
+ UnityEditor.AssetDatabase.CreateFolder("Assets/Generated","NeutralScale8");
+ var contents=UnityEditor.PrefabUtility.LoadPrefabContents("Assets/Prefabs/Ball.prefab");
+ try{contents.transform.localScale=Vector3.one*.45f*factor;UnityEditor.PrefabUtility.SaveAsPrefabAsset(contents,prefabPath);}finally{UnityEditor.PrefabUtility.UnloadPrefabContents(contents);}
+ var ballPrefab=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+ foreach(var component in new MonoBehaviour[]{UnityEngine.Object.FindFirstObjectByType<GameManager>(),UnityEngine.Object.FindFirstObjectByType<MultiballManager>()}){
+  var so=new UnityEditor.SerializedObject(component);so.FindProperty("ballPrefab").objectReferenceValue=ballPrefab;so.ApplyModifiedProperties();
+ }
+ Resize(ball,false);
+ var spawn=gp.Find("BallSpawnPoint");UnityEditor.Undo.RecordObject(spawn,action);spawn.localPosition-=Vector3.up*(.225f*(1-factor));Changed(spawn);UnityEditor.Undo.RecordObject(ball,action);ball.position=spawn.position;Changed(ball);
+ for(int i=0;i<3;i++){
+  var bumper=gp.Find("Bumper_0"+(i+1));var cap=bumper.GetComponentsInChildren<MeshRenderer>().First(r=>r.name.Contains("_2_")).transform;
+  foreach(var prefix in new[]{"BumperMedallion_","BumperCapRim_","BumperIndex_"})Attach(flow.Find(prefix+i),cap);
+  Resize(bumper);
+ }
+ foreach(var side in new[]{"Left","Right"}){
+  var sling=gp.Find("Slingshot_"+side);Attach(flow.Find("SlingLegend_"+side),sling);Resize(sling);
+  var pivot=gp.Find("Flipper_"+side+"_Pivot");UnityEditor.Undo.RecordObject(pivot,action);var p=pivot.localPosition;p.x=-.4f+(p.x+.4f)*factor;pivot.localPosition=p;Changed(pivot);
+  var bat=pivot.Find("Flipper_Bat");UnityEditor.Undo.RecordObject(bat,action);bat.localPosition*=factor;bat.localScale*=factor;Changed(bat);
+  Resize(flow.Find("OutlanePost_"+side));
+ }
+ for(int i=0;i<targetNames.Length;i++){
+  var target=gp.Find(targetNames[i]);Attach(flow.Find("RewardBezel_"+i),target);Attach(art.Find("Plaque_"+targetNames[i]),target);Resize(target);
+ }
+ Resize(gp.Find("Boss_ProjetFinal"));
+ foreach(var rollover in gp.Find("TopLanes").GetComponentsInChildren<Rollover>())Resize(rollover.transform);
+ Resize(gp.Find("Spinner/Spinner_Blade"),false);Resize(art.Find("SpinnerMount"),false);
+ Resize(art.Find("TitlePlaque"),false);Resize(reference.Find("Title"),false);
+ foreach(Transform tr in routesRoot){
+  if(tr.GetComponent<MeshFilter>()==null)continue;
+  var name=tr.name.StartsWith("Vosges_")?"Vosges":"IUT";var p=paths[name];
+  Func<Vector3[],Vector3[]> edit;
+  if(tr.name.EndsWith("_Track"))edit=v=>{for(int i=0;i<v.Length;i++)v[i]=p[i/8]+(v[i]-p[i/8])*factor;return v;};
+  else if(tr.name.EndsWith("_Cover"))edit=v=>{for(int i=0;i<v.Length;i++)v[i]=p[i/4]+(v[i]-p[i/4])*factor;return v;};
+  else if(tr.name.EndsWith("_UndercutGuard"))edit=v=>{for(int i=0;i<v.Length;i++){var point=p[i/4];v[i].x=point.x+(v[i].x-point.x)*factor;v[i].z=point.z+(v[i].z-point.z)*factor;if(i%4>=2)v[i].y=point.y+(v[i].y-point.y)*factor;}return v;};
+  else if(tr.name.Contains("_Brace_")||tr.name.Contains("_Bow_")){int index=int.Parse(tr.name.Substring(tr.name.LastIndexOf('_')+1));edit=v=>v.Select(x=>p[index]+(x-p[index])*factor).ToArray();}
+  else{int start=tr.name.Contains("_Rim_")?0:name=="Vosges"?88:64;edit=v=>{for(int i=0;i<v.Length;i++)v[i]=p[start+i/10]+(v[i]-p[start+i/10])*factor;return v;};}
+  Meshes(tr,edit);
+ }
+ foreach(var name in new[]{"Vosges","IUT"})foreach(var suffix in new[]{"In","Out"}){
+  var tr=gp.Find("Ramp_"+name+"_"+suffix);var c=tr.GetComponent<BoxCollider>();UnityEditor.Undo.RecordObject(c,action);var size=c.size;size.x*=factor;size.y*=factor;c.size=size;
+  var pos=table.InverseTransformPoint(tr.position);var closest=paths[name].OrderBy(p=>new Vector2(p.x-pos.x,p.z-pos.z).sqrMagnitude).First();pos.y=closest.y+(pos.y-closest.y)*factor;UnityEditor.Undo.RecordObject(tr,action);tr.position=table.TransformPoint(pos);Changed(tr);
+ }
+ // Narrow guide cross sections; only the lower inlane end moves to the adjusted flipper heel.
+ foreach(Transform tr in flow){
+  if(!(tr.name.StartsWith("Inlane")||tr.name.StartsWith("CoveredDrainGuide")||tr.name.StartsWith("OrbitFeedCurve")))continue;
+  bool lower=tr.name.StartsWith("InlaneOuter");float shift=tr.name.EndsWith("Left")?.124f:tr.name.EndsWith("Right")?-.124f:0;
+  Meshes(tr,v=>{for(int i=0;i<v.Length;i+=4){var center=(v[i]+v[i+1])*.5f;for(int j=0;j<4;j++){v[i+j]=center+(v[i+j]-center)*factor;if(lower)v[i+j].x+=shift*(1-Mathf.InverseLerp(3.2f,4.6f,center.z));}}return v;});
+ }
+ // Moving the decorative overlays under their actual assemblies also keeps them aligned during animation.
+ UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);
+ UnityEditor.AssetDatabase.SaveAssets();Physics.SyncTransforms();
+ System.IO.File.WriteAllText("Tools/unity/out/scale-applied.txt","factor=.92; diameter=.414; cloned meshes="+copies.Count+"; six targets; scene not auto-saved");
+}catch{
+ UnityEditor.Undo.RevertAllDownToGroup(group);
+ if(UnityEditor.AssetDatabase.IsValidFolder(folder))UnityEditor.AssetDatabase.DeleteAsset(folder);
+ if(UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath)!=null)UnityEditor.AssetDatabase.DeleteAsset(prefabPath);
+ throw;
+}finally{UnityEditor.Undo.CollapseUndoOperations(group);}
+return "Neutral reduced by 8%; ball=.414; meshes="+copies.Count+"; changes undoable; scene unsaved.";

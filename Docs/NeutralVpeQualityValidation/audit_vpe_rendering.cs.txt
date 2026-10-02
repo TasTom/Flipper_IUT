@@ -1,0 +1,30 @@
+if (Application.isPlaying) throw new Exception("Edit required");
+var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+var table = GameObject.Find("PinballTable").transform;
+var sb = new System.Text.StringBuilder();
+string Path(Transform t) => t.parent != null ? Path(t.parent) + "/" + t.name : t.name;
+var renderers = scene.GetRootGameObjects().SelectMany(r => r.GetComponentsInChildren<Renderer>(true)).Where(r => r.enabled && r.gameObject.activeInHierarchy).ToArray();
+sb.AppendLine("SCENE=" + scene.path + " dirty=" + scene.isDirty + " renderers=" + renderers.Length);
+sb.AppendLine("PIPELINE=" + UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline.name + " Quality=" + QualitySettings.names[QualitySettings.GetQualityLevel()] + " colourSpace=" + QualitySettings.activeColorSpace + " AA=" + QualitySettings.antiAliasing);
+sb.AppendLine("ENVIRONMENT ambientMode=" + RenderSettings.ambientMode + " ambient=" + RenderSettings.ambientLight + " intensity=" + RenderSettings.ambientIntensity + " reflection=" + RenderSettings.defaultReflectionMode + " reflectionIntensity=" + RenderSettings.reflectionIntensity + " skybox=" + (RenderSettings.skybox != null ? RenderSettings.skybox.name : "null"));
+foreach (var camera in UnityEngine.Object.FindObjectsByType<Camera>(FindObjectsInactive.Exclude)) sb.AppendLine("CAMERA " + Path(camera.transform) + " data=" + UnityEditor.EditorJsonUtility.ToJson(camera));
+foreach (var light in UnityEngine.Object.FindObjectsByType<Light>(FindObjectsInactive.Exclude)) sb.AppendLine("LIGHT " + Path(light.transform) + " data=" + UnityEditor.EditorJsonUtility.ToJson(light));
+foreach (var probe in UnityEngine.Object.FindObjectsByType<ReflectionProbe>(FindObjectsInactive.Exclude)) sb.AppendLine("PROBE " + Path(probe.transform) + " data=" + UnityEditor.EditorJsonUtility.ToJson(probe));
+foreach (var volume in UnityEngine.Object.FindObjectsByType<UnityEngine.Rendering.Volume>(FindObjectsInactive.Exclude)) { sb.AppendLine("VOLUME " + Path(volume.transform) + " data=" + UnityEditor.EditorJsonUtility.ToJson(volume)); if (volume.sharedProfile != null) foreach (var component in volume.sharedProfile.components) sb.AppendLine("VOLUMESETTING " + component.GetType().Name + " " + UnityEditor.EditorJsonUtility.ToJson(component)); }
+foreach (var material in renderers.SelectMany(r => r.sharedMaterials).Where(m => m != null).Distinct().OrderBy(m => m.name))
+{
+    sb.AppendLine("MATERIAL " + material.name + " asset=" + UnityEditor.AssetDatabase.GetAssetPath(material) + " shader=" + material.shader.name + " queue=" + material.renderQueue + " keywords=" + string.Join(",",material.shaderKeywords));
+    foreach (string field in new[] {"_BaseColor", "_Metallic", "_Smoothness", "_Surface", "_BumpScale", "_EmissionColor", "_OcclusionStrength"})
+        if (material.HasProperty(field)) sb.AppendLine("  " + field + "=" + (field.EndsWith("Color") ? material.GetColor(field).ToString("F3") : material.GetFloat(field).ToString("F3")));
+    foreach (var property in material.GetTexturePropertyNames()) if (material.GetTexture(property) != null) { var tex = material.GetTexture(property); var path = UnityEditor.AssetDatabase.GetAssetPath(tex); var importer = UnityEditor.AssetImporter.GetAtPath(path) as UnityEditor.TextureImporter; sb.AppendLine("  TEXTURE " + property + "=" + path + " size=" + tex.width + "x" + tex.height + " import=" + (importer != null ? "type=" + importer.textureType + " sRGB=" + importer.sRGBTexture + " max=" + importer.maxTextureSize + " quality=" + importer.textureCompression : "runtime")); }
+}
+foreach (var renderer in renderers.Where(r => r.transform.IsChildOf(table)))
+{
+    var filter = renderer.GetComponent<MeshFilter>();
+    var mesh = filter != null ? filter.sharedMesh : null;
+    sb.AppendLine("RENDERER " + Path(renderer.transform) + " materials=" + string.Join(",",renderer.sharedMaterials.Select(m=>m!=null?m.name:"NULL")) + " mesh=" + (mesh != null ? mesh.name + " v=" + mesh.vertexCount + " tris=" + Enumerable.Range(0,mesh.subMeshCount).Sum(i=>(long)mesh.GetIndexCount(i))/3 + " source=" + UnityEditor.AssetDatabase.GetAssetPath(mesh) : "none") + " reflection=" + renderer.reflectionProbeUsage + " shadow=" + renderer.shadowCastingMode);
+}
+string fingerprint = string.Join("\n", table.GetComponentsInChildren<Collider>(true).Where(c=>c.enabled&&c.gameObject.activeInHierarchy).OrderBy(c=>c.GetEntityId().ToString()).Select(c=>c.GetEntityId()+"|"+UnityEditor.EditorJsonUtility.ToJson(c)+"|"+c.transform.localToWorldMatrix.ToString("F6")));
+System.IO.File.WriteAllText("Tools/unity/out/vpe-colliders-before.txt",fingerprint);
+System.IO.File.WriteAllText("Tools/unity/out/vpe-rendering-before.txt",sb.ToString());
+return "Read-only audit written; characters=" + sb.Length + "; dirty=" + scene.isDirty;

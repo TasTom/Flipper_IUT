@@ -1,0 +1,13 @@
+var pipeline = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline as UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset;
+var camera = Camera.main;
+var data = camera.GetComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>();
+var sb = new System.Text.StringBuilder();
+sb.AppendLine("CAMERADATA=" + UnityEditor.EditorJsonUtility.ToJson(data));
+sb.AppendLine("PIPELINE=" + UnityEditor.EditorJsonUtility.ToJson(pipeline));
+var renderer = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.Rendering.Universal.UniversalRendererData>("Assets/Settings/PC_Renderer.asset");
+foreach (var feature in renderer.rendererFeatures) sb.AppendLine("FEATURE=" + feature.GetType().Name + " active=" + feature.isActive + " data=" + UnityEditor.EditorJsonUtility.ToJson(feature));
+var profile = pipeline.volumeProfile;
+if (profile != null) foreach (var component in profile.components) if (component.active) sb.AppendLine("DEFAULTVOLUME=" + component.GetType().Name + " data=" + UnityEditor.EditorJsonUtility.ToJson(component));
+foreach (var mat in new[] {"Assets/Generated/NeutralReference/Art/ClearRamp.mat", "Assets/Generated/NeutralReference/Art/ClearGuard.mat", "Assets/Generated/NeutralReference/Art/WireformClearLiner.mat"}) sb.AppendLine("TRANSPARENT=" + UnityEditor.EditorJsonUtility.ToJson(UnityEditor.AssetDatabase.LoadAssetAtPath<Material>(mat)));
+System.IO.File.WriteAllText("Tools/unity/out/vpe-pipeline-before.txt",sb.ToString());
+return "Pipeline audit written; characters=" + sb.Length;

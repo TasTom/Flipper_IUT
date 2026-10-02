@@ -1,0 +1,8 @@
+var sb=new System.Text.StringBuilder();var flags=System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance;
+string Path(Transform t)=>t.parent!=null?Path(t.parent)+"/"+t.name:t.name;
+foreach(var b in GameObject.Find("PinballTable").GetComponentsInChildren<Bumper>()){
+ sb.AppendLine("HOST "+Path(b.transform)+" id="+b.GetEntityId());
+ foreach(var r in b.GetComponentsInChildren<Renderer>(true))sb.AppendLine("CHILD "+Path(r.transform)+" id="+r.GetEntityId()+" enabled="+r.enabled+" active="+r.gameObject.activeInHierarchy+" mat="+r.sharedMaterial.name);
+ var refs=(Renderer[])typeof(Bumper).GetField("flashRenderers",flags).GetValue(b);foreach(var r in refs)sb.AppendLine("FLASH "+Path(r.transform)+" id="+r.GetEntityId()+" enabled="+r.enabled+" active="+r.gameObject.activeInHierarchy);
+}
+System.IO.File.WriteAllText("Tools/unity/out/vpe-bumper-probe.txt",sb.ToString());return sb.ToString();

@@ -1,0 +1,14 @@
+int count=0;
+foreach(string name in new[]{"AmberInsert","WarmIvory","ForestPlastic","TerminalScreen","TerminalGlyph"})
+{
+ var m=UnityEditor.AssetDatabase.LoadAssetAtPath<Material>("Assets/Generated/NeutralVpeFinish/"+name+"_PBR.mat");
+ if(m==null)throw new Exception("Missing material "+name);
+ UnityEditor.Undo.RecordObject(m,"Activer les flashes lumineux de Neutral");
+ m.globalIlluminationFlags=MaterialGlobalIlluminationFlags.RealtimeEmissive;
+ if(m.GetColor("_EmissionColor").maxColorComponent<.001f)m.SetColor("_EmissionColor",new Color(.001f,.001f,.001f));
+ UnityEditor.BaseShaderGUI.SetMaterialKeywords(m,UnityEditor.Rendering.Universal.ShaderGUI.LitGUI.SetMaterialKeywords);
+ UnityEditor.EditorUtility.SetDirty(m);
+ if(!m.IsKeywordEnabled("_EMISSION"))throw new Exception("Emission keyword inactive: "+name);
+ count++;
+}
+UnityEditor.AssetDatabase.SaveAssets();return "Emission validated on "+count+" scene-local materials";

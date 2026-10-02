@@ -1,0 +1,33 @@
+if(!Application.isPlaying)throw new Exception("Play required");
+var table=GameObject.Find("PinballTable").transform;var ball=table.Find("Gameplay/Ball").GetComponent<Rigidbody>();var sm=ScoreManager.Instance;
+float radius=ball.GetComponent<SphereCollider>().radius*ball.transform.lossyScale.x,dt=Time.fixedDeltaTime;var previous=Physics.simulationMode;
+var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;var sb=new System.Text.StringBuilder();int failures=0;
+void Assert(bool ok,string message){sb.AppendLine((ok?"PASS ":"FAIL ")+message);if(!ok)failures++;}
+void Place(Vector3 pos,Vector3 velocity){ball.position=table.TransformPoint(pos);ball.linearVelocity=table.TransformDirection(velocity);ball.angularVelocity=Vector3.zero;ball.WakeUp();Physics.SyncTransforms();}
+void Step(float sec){for(int n=0;n<(int)(sec/dt);n++)Physics.Simulate(dt);}
+void Reset(){GameManager.Instance.StartGame();ball.useGravity=true;Place(new Vector3(0,3,6),Vector3.zero);Step(.015f);}
+try{
+ Physics.simulationMode=SimulationMode.Script;
+ foreach(var target in table.GetComponentsInChildren<SubjectTarget>()){
+  Reset();target.Activer();ball.useGravity=false;typeof(SubjectTarget).GetField("dernierHit",flags).SetValue(target,float.NegativeInfinity);
+  int first=-1;Action<int> scored=s=>{if(first<0)first=s;};sm.ScoreChanged+=scored;
+  try{ball.position=target.transform.TransformPoint(new Vector3(0,.27f,-3.5f));ball.linearVelocity=target.transform.forward*15;Physics.SyncTransforms();Step(.6f);}finally{sm.ScoreChanged-=scored;}
+  int expected=target.GroupId=="Matieres"?2500:target.GroupId=="Java"?2000:target.GroupId=="Cafe"?1500:500;
+  Assert(target.IsValidated&&first==expected,target.name+" actual collision, first score="+first+" expected="+expected);
+  if(target.GroupId=="Matieres")Assert(sm.ValidatedCoursesThisBall==1,target.name+" actual validation contributes to course bonus");
+ }
+ var routes=JsonUtility.FromJson<RefineNeutralFlow.Routes>(System.IO.File.ReadAllText("Tools/unity/out/ramp-access-paths.json"));
+ foreach(var route in routes.routes){
+  Reset();var dir=route.points[2]-route.points[0];dir.y=0;dir.Normalize();Place(route.points[0]-dir*.4f+Vector3.up*(radius+.006f),dir*35f);
+  var gate=table.Find("Gameplay/Ramp_"+route.name+"_Out").GetComponent<RampGate>();int done=0,score=-1,counter=-1;
+  Action<RampGate,Collider> onDone=(g,c)=>{done++;score=sm.Score;counter=sm.RampsThisBall;};gate.Completed+=onDone;
+  try{for(int n=0;n<(int)(8f/dt)&&done==0&&ball.gameObject.activeSelf;n++)Physics.Simulate(dt);}finally{gate.Completed-=onDone;}
+  int expected=route.name=="IUT"?10000:7500;Assert(done==1&&score==expected&&counter==1,"full "+route.name+" ramp trajectory: completion="+done+" score="+score+" ramp counter="+counter);
+ }
+ Reset();ball.useGravity=false;var entrance=table.GetComponentsInChildren<LoopGate>().First(x=>x.IsEntry);var exit=entrance.Partner;
+ void Enter(LoopGate gate){Place(new Vector3(0,3,6),Vector3.zero);Step(.015f);ball.position=gate.GetComponent<Collider>().bounds.center;ball.linearVelocity=Vector3.zero;Physics.SyncTransforms();Step(.015f);}
+ Enter(exit);Assert(sm.Score==0,"loop exit alone does not score");
+ Enter(entrance);Enter(exit);Assert(sm.Score==5000&&entrance.Completions==1,"actual paired loop detector passages score 5000");
+ Enter(entrance);Enter(exit);Assert(sm.Score==12500&&sm.ComboLevel==1&&entrance.Completions==2,"second completed loop scores base plus 2500 combo");
+}finally{ball.useGravity=true;GameManager.Instance.StartGame();Physics.simulationMode=previous;}
+sb.AppendLine("FAILURES="+failures);System.IO.File.WriteAllText("Tools/unity/out/vpe-route-contacts.txt",sb.ToString());return sb.ToString();

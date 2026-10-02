@@ -1,0 +1,33 @@
+HOST PinballTable/Gameplay/Bumper_01 id=42075:256
+CHILD PinballTable/Gameplay/Bumper_01/Bumper_01_0_Bumper Base - Williams/Bally id=42433:256 enabled=True active=True mat=PolishedSteel_PBR
+CHILD PinballTable/Gameplay/Bumper_01/Bumper_01_1_Bumper Ring id=40694:256 enabled=True active=True mat=PolishedSteel_PBR
+CHILD PinballTable/Gameplay/Bumper_01/Bumper_01_2_Bumper Cap - Clear 3" id=42447:256 enabled=True active=True mat=WarmIvory_PBR
+CHILD PinballTable/Gameplay/Bumper_01/Bumper_01_2_Bumper Cap - Clear 3"/BumperMedallion_0 id=41421:256 enabled=True active=True mat=ForestEnamel_PBR
+CHILD PinballTable/Gameplay/Bumper_01/Bumper_01_2_Bumper Cap - Clear 3"/BumperCapRim_0 id=41619:256 enabled=True active=True mat=PolishedSteel_PBR
+CHILD PinballTable/Gameplay/Bumper_01/Bumper_01_2_Bumper Cap - Clear 3"/BumperIndex_0 id=41058:256 enabled=True active=True mat=LiberationSans SDF Material
+FLASH PinballTable/Table/Pinball_Table/Bumper_01_0_Bumper Base - Williams/Bally id=40858:256 enabled=False active=True
+FLASH PinballTable/Table/Pinball_Table/Bumper_01_1_Bumper Ring id=42088:256 enabled=False active=True
+FLASH PinballTable/Table/Pinball_Table/Bumper_01_2_Bumper Cap - Clear 3" id=41523:256 enabled=False active=True
+FLASH PinballTable/VosgesPresentation/Bumper_01_Halo id=42533:256 enabled=False active=True
+HOST PinballTable/Gameplay/Bumper_02 id=41168:256
+CHILD PinballTable/Gameplay/Bumper_02/Bumper_02_0_Bumper Base - Williams/Bally id=40794:256 enabled=True active=True mat=PolishedSteel_PBR
+CHILD PinballTable/Gameplay/Bumper_02/Bumper_02_1_Bumper Ring id=41594:256 enabled=True active=True mat=PolishedSteel_PBR
+CHILD PinballTable/Gameplay/Bumper_02/Bumper_02_2_Bumper Cap - Clear 3" id=41427:256 enabled=True active=True mat=WarmIvory_PBR
+CHILD PinballTable/Gameplay/Bumper_02/Bumper_02_2_Bumper Cap - Clear 3"/BumperMedallion_1 id=41152:256 enabled=True active=True mat=ForestEnamel_PBR
+CHILD PinballTable/Gameplay/Bumper_02/Bumper_02_2_Bumper Cap - Clear 3"/BumperCapRim_1 id=41290:256 enabled=True active=True mat=PolishedSteel_PBR
+CHILD PinballTable/Gameplay/Bumper_02/Bumper_02_2_Bumper Cap - Clear 3"/BumperIndex_1 id=41983:256 enabled=True active=True mat=LiberationSans SDF Material
+FLASH PinballTable/Table/Pinball_Table/Bumper_02_0_Bumper Base - Williams/Bally id=42449:256 enabled=False active=True
+FLASH PinballTable/Table/Pinball_Table/Bumper_02_1_Bumper Ring id=41065:256 enabled=False active=True
+FLASH PinballTable/Table/Pinball_Table/Bumper_02_2_Bumper Cap - Clear 3" id=42175:256 enabled=False active=True
+FLASH PinballTable/VosgesPresentation/Bumper_02_Halo id=42591:256 enabled=False active=True
+HOST PinballTable/Gameplay/Bumper_03 id=40931:256
+CHILD PinballTable/Gameplay/Bumper_03/Bumper_03_0_Bumper Base - Williams/Bally id=41331:256 enabled=True active=True mat=PolishedSteel_PBR
+CHILD PinballTable/Gameplay/Bumper_03/Bumper_03_1_Bumper Ring id=41451:256 enabled=True active=True mat=PolishedSteel_PBR
+CHILD PinballTable/Gameplay/Bumper_03/Bumper_03_2_Bumper Cap - Clear 3" id=41476:256 enabled=True active=True mat=WarmIvory_PBR
+CHILD PinballTable/Gameplay/Bumper_03/Bumper_03_2_Bumper Cap - Clear 3"/BumperMedallion_2 id=41974:256 enabled=True active=True mat=ForestEnamel_PBR
+CHILD PinballTable/Gameplay/Bumper_03/Bumper_03_2_Bumper Cap - Clear 3"/BumperCapRim_2 id=41930:256 enabled=True active=True mat=PolishedSteel_PBR
+CHILD PinballTable/Gameplay/Bumper_03/Bumper_03_2_Bumper Cap - Clear 3"/BumperIndex_2 id=40768:256 enabled=True active=True mat=LiberationSans SDF Material
+FLASH PinballTable/Table/Pinball_Table/Bumper_03_0_Bumper Base - Williams/Bally id=41084:256 enabled=False active=True
+FLASH PinballTable/Table/Pinball_Table/Bumper_03_1_Bumper Ring id=42616:256 enabled=False active=True
+FLASH PinballTable/Table/Pinball_Table/Bumper_03_2_Bumper Cap - Clear 3" id=42052:256 enabled=False active=True
+FLASH PinballTable/VosgesPresentation/Bumper_03_Halo id=40903:256 enabled=False active=True

@@ -1,0 +1,81 @@
+PASS All 56 active collider settings, meshes and transforms match the baseline exactly
+PASS Six reward targets retained
+PASS Three bumpers, two slingshots, two flippers retained
+PASS No missing script in Neutral
+PASS FlipperOrange_Mat_PBR shader supported without errors
+PASS FlipperOrange_Mat_PBR metal or dielectric
+PASS BumperRed_Mat_PBR shader supported without errors
+PASS BumperRed_Mat_PBR metal or dielectric
+PASS ForestPlastic_PBR shader supported without errors
+PASS ForestPlastic_PBR metal or dielectric
+PASS IvoryPrint_PBR shader supported without errors
+PASS IvoryPrint_PBR metal or dielectric
+PASS RubberIvory_PBR shader supported without errors
+PASS RubberIvory_PBR metal or dielectric
+PASS BrushedSteel_PBR shader supported without errors
+PASS BrushedSteel_PBR metal or dielectric
+PASS PolishedSteel_PBR shader supported without errors
+PASS PolishedSteel_PBR metal or dielectric
+PASS WarmIvory_PBR shader supported without errors
+PASS WarmIvory_PBR metal or dielectric
+PASS ForestEnamel_PBR shader supported without errors
+PASS ForestEnamel_PBR metal or dielectric
+PASS Metal - Steel with AO dirt_PBR shader supported without errors
+PASS Metal - Steel with AO dirt_PBR metal or dielectric
+PASS Metal - Zinc with AO dirt_PBR shader supported without errors
+PASS Metal - Zinc with AO dirt_PBR metal or dielectric
+PASS AmberInsert_PBR shader supported without errors
+PASS AmberInsert_PBR metal or dielectric
+PASS EnamelMidnight_PBR shader supported without errors
+PASS EnamelMidnight_PBR metal or dielectric
+PASS TerminalGlyph_PBR shader supported without errors
+PASS TerminalGlyph_PBR metal or dielectric
+PASS TerminalScreen_PBR shader supported without errors
+PASS TerminalScreen_PBR metal or dielectric
+PASS EnamelShell_PBR shader supported without errors
+PASS EnamelShell_PBR metal or dielectric
+PASS PlayfieldPrint_PBR shader supported without errors
+PASS PlayfieldPrint_PBR metal or dielectric
+PASS ClearRamp_PBR shader supported without errors
+PASS ClearRamp_PBR metal or dielectric
+PASS WireformClearLiner_PBR shader supported without errors
+PASS WireformClearLiner_PBR metal or dielectric
+PASS ClearGuard_PBR shader supported without errors
+PASS ClearGuard_PBR metal or dielectric
+PASS AmberInsert flash emission survives URP material validation
+PASS WarmIvory flash emission survives URP material validation
+PASS ForestPlastic flash emission survives URP material validation
+PASS TerminalScreen flash emission survives URP material validation
+PASS TerminalGlyph flash emission survives URP material validation
+PASS ClearRamp transparent reflection enabled, no solid shadow
+PASS ClearGuard transparent reflection enabled, no solid shadow
+PASS WireformClearLiner transparent reflection enabled, no solid shadow
+PASS SurfaceMicroNormal linear, mipmapped, 256px technical map
+PASS SteelBrushNormal linear, mipmapped, 256px technical map
+PASS DielectricSmoothness linear, mipmapped, 256px technical map
+PASS SteelSmoothness linear, mipmapped, 256px technical map
+PASS Left printed children follow the plastic
+PASS SlingGraphic_Left_0 planar printed ink without false volume/shadow
+PASS SlingGraphic_Left_1 planar printed ink without false volume/shadow
+PASS SlingGraphic_Left_2 planar printed ink without false volume/shadow
+PASS SlingPrintBorder_Left planar printed ink without false volume/shadow
+PASS Right printed children follow the plastic
+PASS SlingGraphic_Right_0 planar printed ink without false volume/shadow
+PASS SlingGraphic_Right_1 planar printed ink without false volume/shadow
+PASS SlingGraphic_Right_2 planar printed ink without false volume/shadow
+PASS SlingPrintBorder_Right planar printed ink without false volume/shadow
+PASS (1920, 1080) score panel inside viewport and clip planes
+PASS (1920, 1080) full-screen cabinet orientation retained
+PASS (1920, 1080) all table geometry inside depth range
+CAMERA (1920, 1080) near=0,5 far=47,07383
+PASS (1920, 1200) score panel inside viewport and clip planes
+PASS (1920, 1200) full-screen cabinet orientation retained
+PASS (1920, 1200) all table geometry inside depth range
+CAMERA (1920, 1200) near=0,5 far=47,58862
+PASS (1080, 1920) score panel inside viewport and clip planes
+PASS (1080, 1920) full-screen cabinet orientation retained
+PASS (1080, 1920) all table geometry inside depth range
+CAMERA (1080, 1920) near=0,5 far=48,47242
+PASS Probe captures table with local projection, refresh only at start
+PASS Repeated installation preserves authored objects and material settings
+CHECKS=77 FAILURES=0

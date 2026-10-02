@@ -1,0 +1,6 @@
+var sb=new System.Text.StringBuilder();var flags=System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance;var table=GameObject.Find("PinballTable");
+foreach(var component in table.GetComponentsInChildren<MonoBehaviour>().Where(c=>c is Bumper||c is Slingshot||c is SubjectTarget)){
+ string field=component is SubjectTarget?"visuels":"flashRenderers";var renderers=(Renderer[])component.GetType().GetField(field,flags).GetValue(component);
+ sb.AppendLine(component.name+" "+field+"="+string.Join(",",renderers.Select(r=>r!=null?r.name+" ["+string.Join(",",r.sharedMaterials.Select(m=>m.name))+ "]":"NULL")));
+}
+System.IO.File.WriteAllText("Tools/unity/out/vpe-light-refs.txt",sb.ToString());return sb.ToString();

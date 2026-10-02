@@ -1,0 +1,5 @@
+var method=typeof(InstallNeutralVpeFinish).GetMethod("BindBumperFlashes",System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.NonPublic);
+if(method==null)throw new Exception("Compile finish installer first");
+method.Invoke(null,new object[]{GameObject.Find("PinballTable").transform});
+UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+return "Visible bumper caps wired to their existing animation and flash outputs";

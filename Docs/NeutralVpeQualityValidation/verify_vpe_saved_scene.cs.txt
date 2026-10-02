@@ -1,0 +1,17 @@
+if(Application.isPlaying)throw new Exception("Edit required");
+var active=UnityEngine.SceneManagement.SceneManager.GetActiveScene();if(active.isDirty)throw new Exception("Save authored scene first");
+var preview=UnityEditor.SceneManagement.EditorSceneManager.OpenPreviewScene("Assets/Scenes/Neutral.unity");var sb=new System.Text.StringBuilder();int checks=0;
+void Check(bool ok,string label){if(!ok)throw new Exception(label);checks++;sb.AppendLine("PASS "+label);}
+try{
+ var roots=preview.GetRootGameObjects();var table=roots.Single(r=>r.name=="PinballTable");
+ Check(table.GetComponentsInChildren<SubjectTarget>().Length==6,"Saved scene reloads six targets");
+ Check(table.GetComponentsInChildren<Collider>(true).Count(c=>c.enabled&&c.gameObject.activeInHierarchy)==56,"Saved scene reloads 56 active colliders");
+ Check(roots.SelectMany(r=>r.GetComponentsInChildren<Transform>(true)).Sum(t=>UnityEditor.GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(t.gameObject))==0,"Saved scene reloads without missing scripts");
+ var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+ foreach(var b in table.GetComponentsInChildren<Bumper>()){var rs=(Renderer[])typeof(Bumper).GetField("flashRenderers",flags).GetValue(b);var cap=(Transform)typeof(Bumper).GetField("cap",flags).GetValue(b);Check(rs.Length==1&&rs[0]!=null&&rs[0].enabled&&rs[0].transform==cap&&cap.IsChildOf(b.transform),b.name+" saved flash and cap references resolve to visible local geometry");}
+ var volume=table.transform.Find("ReferencePlayfield/ProfessionalArt/PbrFinish").GetComponent<UnityEngine.Rendering.Volume>();Check(volume.sharedProfile!=null&&volume.sharedProfile.components.Count==4,"Saved finishing volume resolves all four settings");
+ var printed=table.GetComponentsInChildren<MeshFilter>().Where(f=>f.sharedMesh!=null&&f.sharedMesh.name.EndsWith("_Printed")).ToArray();Check(printed.Length==8,"Saved scene resolves all eight printed mesh assets");
+ var mats=table.GetComponentsInChildren<Renderer>().Where(r=>r.enabled).SelectMany(r=>r.sharedMaterials).ToArray();Check(mats.All(m=>m!=null&&m.shader!=null&&m.shader.isSupported),"Saved scene material and shader references resolve");
+ Check(mats.Where(m=>m.name=="WarmIvory_PBR"||m.name=="ForestPlastic_PBR"||m.name=="AmberInsert_PBR").All(m=>m.IsKeywordEnabled("_EMISSION")),"Saved hit-light materials retain their emission keyword");
+}finally{UnityEditor.SceneManagement.EditorSceneManager.ClosePreviewScene(preview);}
+Check(!active.isDirty,"Authored scene left intact; Undo history kept");sb.AppendLine("CHECKS="+checks+" FAILURES=0");System.IO.File.WriteAllText("Tools/unity/out/vpe-saved-scene.txt",sb.ToString());return sb.ToString();

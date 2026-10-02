@@ -13,10 +13,12 @@ public sealed class CabinetViewport : MonoBehaviour
     private Camera view;
     private float previousAspect = -1;
     private Matrix4x4 previousTable;
+    private Bounds tableClipBounds;
+    private bool hasClipBounds;
 
-    private void OnEnable(){view=GetComponent<Camera>();Fit();}
-    private void OnValidate(){view=GetComponent<Camera>();Fit();}
-    private void LateUpdate(){if(table!=null && (view.aspect!=previousAspect || table.localToWorldMatrix!=previousTable))Fit();}
+    private void OnEnable(){view=GetComponent<Camera>();CacheClipBounds();Fit();}
+    private void OnValidate(){view=GetComponent<Camera>();CacheClipBounds();Fit();}
+    private void LateUpdate(){if(table!=null && view!=null && (view.aspect!=previousAspect || table.localToWorldMatrix!=previousTable))Fit();}
 
     public void Fit()
     {
@@ -30,7 +32,13 @@ public sealed class CabinetViewport : MonoBehaviour
         transform.position=table.TransformPoint(centre+new Vector3(0,cosine*35,-sine*35));
         transform.rotation=Quaternion.LookRotation(table.TransformDirection(new Vector3(0,-cosine,sine)),table.forward)*Quaternion.Euler(0,0,90);
         view.orthographic=true;view.orthographicSize=Mathf.Max(width*.5f,length*cosine/(2*view.aspect));
-        view.nearClipPlane=.1f;view.farClipPlane=100;view.rect=new Rect(0,0,1,1);
+        // The score panel is two units from the camera. Keep it visible while
+        // tightening the depth range around the table to reduce surface flicker.
+        float farDepth=35;
+        if(hasClipBounds)
+            for(int i=0;i<8;i++)
+                farDepth=Mathf.Max(farDepth,Vector3.Dot(table.TransformPoint(Corner(tableClipBounds,i))-transform.position,transform.forward));
+        view.nearClipPlane=.5f;view.farClipPlane=farDepth+2;view.rect=new Rect(0,0,1,1);
         if(scorePanel!=null && scorePanel.rect.width>0 && scorePanel.rect.height>0)
         {
             // The cabinet roll is also applied to the display. A camera-facing plane
@@ -41,5 +49,26 @@ public sealed class CabinetViewport : MonoBehaviour
                 2*view.orthographicSize*view.aspect*scoreScreenFraction/scorePanel.rect.height,1);
         }
         previousAspect=view.aspect;previousTable=table.localToWorldMatrix;
+    }
+
+    private void CacheClipBounds()
+    {
+        hasClipBounds=false;
+        if(table==null)return;
+        foreach(var renderer in table.GetComponentsInChildren<Renderer>())
+        {
+            if(!renderer.enabled || renderer.GetComponentInParent<Canvas>()!=null)continue;
+            for(int i=0;i<8;i++)
+            {
+                var point=table.InverseTransformPoint(Corner(renderer.bounds,i));
+                if(!hasClipBounds){tableClipBounds=new Bounds(point,Vector3.zero);hasClipBounds=true;}
+                else tableClipBounds.Encapsulate(point);
+            }
+        }
+    }
+
+    private static Vector3 Corner(Bounds bounds,int index)
+    {
+        return bounds.center+Vector3.Scale(bounds.extents,new Vector3((index&1)==0?-1:1,(index&2)==0?-1:1,(index&4)==0?-1:1));
     }
 }

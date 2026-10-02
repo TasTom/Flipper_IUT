@@ -1,0 +1,484 @@
+SCENE=Assets/Scenes/Neutral.unity dirty=True renderers=201
+PIPELINE=PC_RPAsset Quality=PC colourSpace=Linear AA=0
+ENVIRONMENT ambientMode=Skybox ambient=RGBA(0.212, 0.227, 0.259, 1.000) intensity=1 reflection=Skybox reflectionIntensity=1 skybox=Default-Skybox
+CAMERA Main Camera data={"Camera":{"m_Enabled":true,"serializedVersion":"2","m_ClearFlags":2,"m_BackGroundColor":{"r":0.012000000104308128,"g":0.020999999716877937,"b":0.02800000086426735,"a":1.0},"m_projectionMatrixMode":1,"m_GateFitMode":2,"m_FOVAxisMode":0,"m_Iso":200,"m_ShutterSpeed":0.004999999888241291,"m_Aperture":16.0,"m_FocusDistance":10.0,"m_FocalLength":46.40055847167969,"m_BladeCount":5,"m_Curvature":{"x":2.0,"y":11.0},"m_BarrelClipping":0.25,"m_Anamorphism":0.0,"m_SensorSize":{"x":36.0,"y":24.0},"m_LensShift":{"x":0.0,"y":0.0},"m_NormalizedViewPortRect":{"serializedVersion":"2","x":0.0,"y":0.0,"width":1.0,"height":1.0},"near clip plane":0.5,"far clip plane":47.07383346557617,"field of view":29.0,"orthographic":true,"orthographic size":4.5,"m_Depth":-1.0,"m_CullingMask":{"serializedVersion":"2","m_Bits":4294967295},"m_RenderingPath":-1,"m_TargetTexture":{"instanceID":0},"m_TargetDisplay":0,"m_TargetEye":3,"m_HDR":true,"m_AllowMSAA":true,"m_AllowDynamicResolution":false,"m_ForceIntoRT":false,"m_OcclusionCulling":true,"m_StereoConvergence":10.0,"m_StereoSeparation":0.02199999988079071}}
+LIGHT PinballTable/ReferencePlayfield/ProfessionalArt/TableFill_0 data={"Light":{"m_Enabled":true,"serializedVersion":"13","m_Type":2,"m_Color":{"r":1.0,"g":0.7400000095367432,"b":0.41999998688697815,"a":1.0},"m_Intensity":2.799999952316284,"m_Range":6.0,"m_SpotAngle":30.0,"m_InnerSpotAngle":21.802080154418945,"m_CookieSize2D":{"x":0.5,"y":0.5},"m_Shadows":{"m_Type":0,"m_Resolution":-1,"m_CustomResolution":-1,"m_Strength":1.0,"m_Bias":0.05000000074505806,"m_NormalBias":0.4000000059604645,"m_NearPlane":0.20000000298023224,"m_CullingMatrixOverride":{"e00":1.0,"e01":0.0,"e02":0.0,"e03":0.0,"e10":0.0,"e11":1.0,"e12":0.0,"e13":0.0,"e20":0.0,"e21":0.0,"e22":1.0,"e23":0.0,"e30":0.0,"e31":0.0,"e32":0.0,"e33":1.0},"m_UseCullingMatrixOverride":false},"m_Cookie":{"instanceID":0},"m_DrawHalo":false,"m_Flare":{"instanceID":0},"m_RenderMode":0,"m_CullingMask":{"serializedVersion":"2","m_Bits":4294967295},"m_RenderingLayerMask":1,"m_Lightmapping":4,"m_LightShadowCasterMode":0,"m_AreaSize":{"x":1.0,"y":1.0},"m_BounceIntensity":1.0,"m_ColorTemperature":6570.0,"m_UseColorTemperature":false,"m_BoundingSphereOverride":{"x":0.0,"y":0.0,"z":0.0,"w":0.0},"m_UseBoundingSphereOverride":false,"m_UseViewFrustumForShadowCasterCull":true,"m_ForceVisible":false,"m_ShapeRadius":0.02500000037252903,"m_ShadowAngle":0.0,"m_LightUnit":1,"m_LuxAtDistance":1.0,"m_EnableSpotReflector":true}}
+LIGHT PinballTable/ReferencePlayfield/ProfessionalArt/TableFill_1 data={"Light":{"m_Enabled":true,"serializedVersion":"13","m_Type":2,"m_Color":{"r":0.4000000059604645,"g":0.75,"b":1.0,"a":1.0},"m_Intensity":2.799999952316284,"m_Range":6.0,"m_SpotAngle":30.0,"m_InnerSpotAngle":21.802080154418945,"m_CookieSize2D":{"x":0.5,"y":0.5},"m_Shadows":{"m_Type":0,"m_Resolution":-1,"m_CustomResolution":-1,"m_Strength":1.0,"m_Bias":0.05000000074505806,"m_NormalBias":0.4000000059604645,"m_NearPlane":0.20000000298023224,"m_CullingMatrixOverride":{"e00":1.0,"e01":0.0,"e02":0.0,"e03":0.0,"e10":0.0,"e11":1.0,"e12":0.0,"e13":0.0,"e20":0.0,"e21":0.0,"e22":1.0,"e23":0.0,"e30":0.0,"e31":0.0,"e32":0.0,"e33":1.0},"m_UseCullingMatrixOverride":false},"m_Cookie":{"instanceID":0},"m_DrawHalo":false,"m_Flare":{"instanceID":0},"m_RenderMode":0,"m_CullingMask":{"serializedVersion":"2","m_Bits":4294967295},"m_RenderingLayerMask":1,"m_Lightmapping":4,"m_LightShadowCasterMode":0,"m_AreaSize":{"x":1.0,"y":1.0},"m_BounceIntensity":1.0,"m_ColorTemperature":6570.0,"m_UseColorTemperature":false,"m_BoundingSphereOverride":{"x":0.0,"y":0.0,"z":0.0,"w":0.0},"m_UseBoundingSphereOverride":false,"m_UseViewFrustumForShadowCasterCull":true,"m_ForceVisible":false,"m_ShapeRadius":0.02500000037252903,"m_ShadowAngle":0.0,"m_LightUnit":1,"m_LuxAtDistance":1.0,"m_EnableSpotReflector":true}}
+LIGHT PinballTable/ReferencePlayfield/ProfessionalArt/TableFill_2 data={"Light":{"m_Enabled":true,"serializedVersion":"13","m_Type":2,"m_Color":{"r":1.0,"g":0.7400000095367432,"b":0.41999998688697815,"a":1.0},"m_Intensity":2.799999952316284,"m_Range":6.0,"m_SpotAngle":30.0,"m_InnerSpotAngle":21.802080154418945,"m_CookieSize2D":{"x":0.5,"y":0.5},"m_Shadows":{"m_Type":0,"m_Resolution":-1,"m_CustomResolution":-1,"m_Strength":1.0,"m_Bias":0.05000000074505806,"m_NormalBias":0.4000000059604645,"m_NearPlane":0.20000000298023224,"m_CullingMatrixOverride":{"e00":1.0,"e01":0.0,"e02":0.0,"e03":0.0,"e10":0.0,"e11":1.0,"e12":0.0,"e13":0.0,"e20":0.0,"e21":0.0,"e22":1.0,"e23":0.0,"e30":0.0,"e31":0.0,"e32":0.0,"e33":1.0},"m_UseCullingMatrixOverride":false},"m_Cookie":{"instanceID":0},"m_DrawHalo":false,"m_Flare":{"instanceID":0},"m_RenderMode":0,"m_CullingMask":{"serializedVersion":"2","m_Bits":4294967295},"m_RenderingLayerMask":1,"m_Lightmapping":4,"m_LightShadowCasterMode":0,"m_AreaSize":{"x":1.0,"y":1.0},"m_BounceIntensity":1.0,"m_ColorTemperature":6570.0,"m_UseColorTemperature":false,"m_BoundingSphereOverride":{"x":0.0,"y":0.0,"z":0.0,"w":0.0},"m_UseBoundingSphereOverride":false,"m_UseViewFrustumForShadowCasterCull":true,"m_ForceVisible":false,"m_ShapeRadius":0.02500000037252903,"m_ShadowAngle":0.0,"m_LightUnit":1,"m_LuxAtDistance":1.0,"m_EnableSpotReflector":true}}
+LIGHT Directional Light data={"Light":{"m_Enabled":true,"serializedVersion":"13","m_Type":1,"m_Color":{"r":1.0,"g":0.9700000286102295,"b":0.9300000071525574,"a":1.0},"m_Intensity":1.149999976158142,"m_Range":10.0,"m_SpotAngle":30.0,"m_InnerSpotAngle":21.802080154418945,"m_CookieSize2D":{"x":0.5,"y":0.5},"m_Shadows":{"m_Type":2,"m_Resolution":-1,"m_CustomResolution":-1,"m_Strength":0.6499999761581421,"m_Bias":0.029999999329447746,"m_NormalBias":0.07999999821186066,"m_NearPlane":0.20000000298023224,"m_CullingMatrixOverride":{"e00":1.0,"e01":0.0,"e02":0.0,"e03":0.0,"e10":0.0,"e11":1.0,"e12":0.0,"e13":0.0,"e20":0.0,"e21":0.0,"e22":1.0,"e23":0.0,"e30":0.0,"e31":0.0,"e32":0.0,"e33":1.0},"m_UseCullingMatrixOverride":false},"m_Cookie":{"instanceID":0},"m_DrawHalo":false,"m_Flare":{"instanceID":0},"m_RenderMode":0,"m_CullingMask":{"serializedVersion":"2","m_Bits":4294967295},"m_RenderingLayerMask":1,"m_Lightmapping":4,"m_LightShadowCasterMode":0,"m_AreaSize":{"x":1.0,"y":1.0},"m_BounceIntensity":1.0,"m_ColorTemperature":6570.0,"m_UseColorTemperature":false,"m_BoundingSphereOverride":{"x":0.0,"y":0.0,"z":0.0,"w":0.0},"m_UseBoundingSphereOverride":false,"m_UseViewFrustumForShadowCasterCull":true,"m_ForceVisible":false,"m_ShapeRadius":0.02500000037252903,"m_ShadowAngle":0.0,"m_LightUnit":1,"m_LuxAtDistance":1.0,"m_EnableSpotReflector":true}}
+PROBE PinballTable/ReferencePlayfield/ProfessionalArt/CabinetReflection data={"ReflectionProbe":{"m_Enabled":true,"serializedVersion":"2","m_Type":0,"m_Mode":1,"m_RefreshMode":0,"m_TimeSlicingMode":0,"m_Resolution":512,"m_UpdateFrequency":0,"m_BoxSize":{"x":14.0,"y":9.0,"z":27.0},"m_BoxOffset":{"x":0.0,"y":0.0,"z":0.0},"m_NearClip":0.05000000074505806,"m_FarClip":40.0,"m_ShadowDistance":30.0,"m_ClearFlags":1,"m_BackGroundColor":{"r":0.1921568661928177,"g":0.3019607961177826,"b":0.4745098054409027,"a":0.0},"m_CullingMask":{"serializedVersion":"2","m_Bits":4294967295},"m_IntensityMultiplier":0.699999988079071,"m_BlendDistance":1.0,"m_HDR":true,"m_BoxProjection":true,"m_RenderDynamicObjects":true,"m_UseOcclusionCulling":true,"m_Importance":1,"m_CustomBakedTexture":{"instanceID":0}}}
+VOLUME PinballTable/ReferencePlayfield/ProfessionalArt/PbrFinish data={"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume","m_IsGlobal":true,"priority":20.0,"blendDistance":0.0,"weight":1.0,"sharedProfile":{"fileID":11400000,"guid":"82701d224d2247f4891765975292a4cd","type":2}}}
+VOLUMESETTING Tonemapping {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"Tonemapping","m_EditorClassIdentifier":"Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.Tonemapping","active":true,"mode":{"m_OverrideState":true,"m_Value":2},"neutralHDRRangeReductionMode":{"m_OverrideState":true,"m_Value":2},"acesPreset":{"m_OverrideState":true,"m_Value":3},"hueShiftAmount":{"m_OverrideState":true,"m_Value":0.0},"detectPaperWhite":{"m_OverrideState":true,"m_Value":false},"paperWhite":{"m_OverrideState":true,"m_Value":300.0},"detectBrightnessLimits":{"m_OverrideState":true,"m_Value":true},"minNits":{"m_OverrideState":true,"m_Value":0.004999999888241291},"maxNits":{"m_OverrideState":true,"m_Value":1000.0}}}
+VOLUMESETTING Bloom {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"Bloom","m_EditorClassIdentifier":"Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.Bloom","active":true,"skipIterations":{"m_OverrideState":true,"m_Value":1},"threshold":{"m_OverrideState":true,"m_Value":1.2000000476837158},"intensity":{"m_OverrideState":true,"m_Value":0.11999999731779099},"scatter":{"m_OverrideState":true,"m_Value":0.3499999940395355},"clamp":{"m_OverrideState":true,"m_Value":5.0},"tint":{"m_OverrideState":true,"m_Value":{"r":1.0,"g":1.0,"b":1.0,"a":1.0}},"highQualityFiltering":{"m_OverrideState":true,"m_Value":true},"filter":{"m_OverrideState":true,"m_Value":0},"downscale":{"m_OverrideState":true,"m_Value":0},"maxIterations":{"m_OverrideState":true,"m_Value":6},"dirtTexture":{"m_OverrideState":true,"m_Value":{"instanceID":0},"dimension":1},"dirtIntensity":{"m_OverrideState":true,"m_Value":0.0}}}
+VOLUMESETTING Vignette {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"Vignette","m_EditorClassIdentifier":"Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.Vignette","active":true,"color":{"m_OverrideState":true,"m_Value":{"r":0.0,"g":0.0,"b":0.0,"a":1.0}},"center":{"m_OverrideState":true,"m_Value":{"x":0.5,"y":0.5}},"intensity":{"m_OverrideState":true,"m_Value":0.0},"smoothness":{"m_OverrideState":true,"m_Value":0.20000000298023224},"rounded":{"m_OverrideState":true,"m_Value":false}}}
+VOLUMESETTING ColorAdjustments {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"ColorAdjustments","m_EditorClassIdentifier":"Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.ColorAdjustments","active":true,"postExposure":{"m_OverrideState":true,"m_Value":0.0},"contrast":{"m_OverrideState":true,"m_Value":4.0},"colorFilter":{"m_OverrideState":true,"m_Value":{"r":1.0,"g":1.0,"b":1.0,"a":1.0}},"hueShift":{"m_OverrideState":true,"m_Value":0.0},"saturation":{"m_OverrideState":true,"m_Value":-3.0}}}
+MATERIAL AmberInsert_PBR asset=Assets/Generated/NeutralVpeFinish/AmberInsert_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_EMISSION,_METALLICSPECGLOSSMAP
+  _BaseColor=RGBA(1.000, 0.380, 0.055, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,680
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(1.800, 0.396, 0.045, 1.800)
+  _OcclusionStrength=1,000
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL BallChrome_Mat asset=Assets/Materials/BallChrome_Mat.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=
+  _BaseColor=RGBA(0.850, 0.870, 0.900, 1.000)
+  _Metallic=1,000
+  _Smoothness=0,950
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+MATERIAL BrushedSteel_PBR asset=Assets/Generated/NeutralVpeFinish/BrushedSteel_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_METALLICSPECGLOSSMAP,_NORMALMAP
+  _BaseColor=RGBA(0.620, 0.690, 0.700, 1.000)
+  _Metallic=1,000
+  _Smoothness=0,680
+  _Surface=0,000
+  _BumpScale=0,200
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _BumpMap=Assets/Generated/NeutralVpeFinish/SteelBrushNormal.png size=256x256 import=type=NormalMap sRGB=False max=256 quality=CompressedHQ
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/SteelSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL BumperRed_Mat_PBR asset=Assets/Generated/NeutralVpeFinish/BumperRed_Mat_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_METALLICSPECGLOSSMAP,_NORMALMAP
+  _BaseColor=RGBA(0.750, 0.080, 0.080, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,280
+  _Surface=0,000
+  _BumpScale=0,120
+  _EmissionColor=RGBA(0.900, 0.050, 0.050, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _BumpMap=Assets/Generated/NeutralVpeFinish/SurfaceMicroNormal.png size=256x256 import=type=NormalMap sRGB=False max=256 quality=CompressedHQ
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL ClearGuard_PBR asset=Assets/Generated/NeutralVpeFinish/ClearGuard_PBR.mat shader=Universal Render Pipeline/Lit queue=3000 keywords=_ALPHAPREMULTIPLY_ON,_SURFACE_TYPE_TRANSPARENT
+  _BaseColor=RGBA(0.650, 0.850, 0.880, 0.012)
+  _Metallic=0,000
+  _Smoothness=0,820
+  _Surface=1,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+MATERIAL ClearRamp_PBR asset=Assets/Generated/NeutralVpeFinish/ClearRamp_PBR.mat shader=Universal Render Pipeline/Lit queue=3000 keywords=_ALPHAPREMULTIPLY_ON,_SURFACE_TYPE_TRANSPARENT
+  _BaseColor=RGBA(0.360, 0.720, 0.680, 0.100)
+  _Metallic=0,000
+  _Smoothness=0,820
+  _Surface=1,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+MATERIAL EnamelMidnight_PBR asset=Assets/Generated/NeutralVpeFinish/EnamelMidnight_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_METALLICSPECGLOSSMAP
+  _BaseColor=RGBA(0.008, 0.024, 0.032, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,680
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL EnamelShell_PBR asset=Assets/Generated/NeutralVpeFinish/EnamelShell_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_METALLICSPECGLOSSMAP
+  _BaseColor=RGBA(0.014, 0.028, 0.035, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,680
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL FlipperOrange_Mat_PBR asset=Assets/Generated/NeutralVpeFinish/FlipperOrange_Mat_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_METALLICSPECGLOSSMAP
+  _BaseColor=RGBA(1.000, 0.450, 0.050, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,680
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.900, 0.300, 0.020, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL ForestEnamel_PBR asset=Assets/Generated/NeutralVpeFinish/ForestEnamel_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_METALLICSPECGLOSSMAP
+  _BaseColor=RGBA(0.018, 0.220, 0.190, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,680
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL ForestPlastic_PBR asset=Assets/Generated/NeutralVpeFinish/ForestPlastic_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_EMISSION,_METALLICSPECGLOSSMAP,_NORMALMAP
+  _BaseColor=RGBA(0.025, 0.150, 0.125, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,680
+  _Surface=0,000
+  _BumpScale=0,120
+  _EmissionColor=RGBA(0.001, 0.001, 0.001, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _BumpMap=Assets/Generated/NeutralVpeFinish/SurfaceMicroNormal.png size=256x256 import=type=NormalMap sRGB=False max=256 quality=CompressedHQ
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL Insert - Green asset=Assets/Models/Parts/Inserts/Insert_-_Circle_-_Clear_-_1.fbx shader=Universal Render Pipeline/Lit queue=2000 keywords=
+  _BaseColor=RGBA(0.133, 1.000, 0.117, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,600
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+MATERIAL Insert - Light Dispersion asset=Assets/Models/Parts/Inserts/Insert_-_Circle_-_Clear_-_1.fbx shader=Universal Render Pipeline/Lit queue=3000 keywords=_ALPHAPREMULTIPLY_ON,_SURFACE_TYPE_TRANSPARENT
+  _BaseColor=RGBA(1.202, 1.202, 1.202, 0.500)
+  _Metallic=0,000
+  _Smoothness=0,000
+  _Surface=1,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+MATERIAL Insert - Light Stopper asset=Assets/Models/Parts/Inserts/Insert_-_Circle_-_Clear_-_1.fbx shader=Universal Render Pipeline/Lit queue=2000 keywords=
+  _BaseColor=RGBA(0.906, 0.906, 0.906, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,600
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+MATERIAL Insert - Wood asset=Assets/Models/Parts/Inserts/Insert_-_Circle_-_Clear_-_1.fbx shader=Universal Render Pipeline/Lit queue=2000 keywords=
+  _BaseColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,700
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+MATERIAL IvoryPrint_PBR asset=Assets/Generated/NeutralVpeFinish/IvoryPrint_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_METALLICSPECGLOSSMAP
+  _BaseColor=RGBA(0.940, 0.750, 0.420, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,420
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL LiberationSans SDF Material asset=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset shader=TextMeshPro/Mobile/Distance Field queue=3000 keywords=
+  TEXTURE _MainTex=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset size=1024x1024 import=runtime
+MATERIAL Metal - Steel with AO dirt_PBR asset=Assets/Generated/NeutralVpeFinish/Metal - Steel with AO dirt_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_METALLICSPECGLOSSMAP,_NORMALMAP
+  _BaseColor=RGBA(0.771, 0.847, 0.906, 1.000)
+  _Metallic=1,000
+  _Smoothness=0,860
+  _Surface=0,000
+  _BumpScale=0,200
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _BumpMap=Assets/Generated/NeutralVpeFinish/SteelBrushNormal.png size=256x256 import=type=NormalMap sRGB=False max=256 quality=CompressedHQ
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/SteelSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL Metal - Zinc with AO dirt_PBR asset=Assets/Generated/NeutralVpeFinish/Metal - Zinc with AO dirt_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_METALLICSPECGLOSSMAP,_NORMALMAP
+  _BaseColor=RGBA(0.771, 0.847, 0.906, 1.000)
+  _Metallic=1,000
+  _Smoothness=0,860
+  _Surface=0,000
+  _BumpScale=0,200
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _BumpMap=Assets/Generated/NeutralVpeFinish/SteelBrushNormal.png size=256x256 import=type=NormalMap sRGB=False max=256 quality=CompressedHQ
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/SteelSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL Plastic - Black Glossy asset=Assets/Models/Parts/Switches/Spinner_Stern_-_Bracket_with_switch.fbx shader=Universal Render Pipeline/Lit queue=2000 keywords=
+  _BaseColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,864
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+MATERIAL Plastic - White Glossy asset=Assets/Models/Parts/Switches/Spinner_Stern_-_Bracket_with_switch.fbx shader=Universal Render Pipeline/Lit queue=2000 keywords=
+  _BaseColor=RGBA(0.690, 0.690, 0.690, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,864
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+MATERIAL Playfield asset=Assets/Generated/NeutralReference/Playfield.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=
+  _BaseColor=RGBA(0.019, 0.055, 0.080, 1.000)
+  _Metallic=0,050
+  _Smoothness=0,380
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+MATERIAL PlayfieldPrint_PBR asset=Assets/Generated/NeutralVpeFinish/PlayfieldPrint_PBR.mat shader=Universal Render Pipeline/Complex Lit queue=2000 keywords=_CLEARCOAT,_DETAIL_MULX2,_METALLICSPECGLOSSMAP
+  _BaseColor=RGBA(1.000, 1.000, 1.000, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,740
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _MainTex=Assets/Generated/NeutralReference/VosgesPlayfield.png size=1024x2048 import=type=Default sRGB=True max=2048 quality=Uncompressed
+  TEXTURE _DetailNormalMap=Assets/Generated/NeutralVpeFinish/SurfaceMicroNormal.png size=256x256 import=type=NormalMap sRGB=False max=256 quality=CompressedHQ
+  TEXTURE _BaseMap=Assets/Generated/NeutralReference/VosgesPlayfield.png size=1024x2048 import=type=Default sRGB=True max=2048 quality=Uncompressed
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL Plunger asset=Assets/Models/Parts/Miscellaneous/Plunger.fbx shader=Universal Render Pipeline/Lit queue=2000 keywords=
+  _BaseColor=RGBA(0.409, 0.205, 0.208, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,832
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+MATERIAL PolishedSteel_PBR asset=Assets/Generated/NeutralVpeFinish/PolishedSteel_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_METALLICSPECGLOSSMAP,_NORMALMAP
+  _BaseColor=RGBA(0.730, 0.790, 0.820, 1.000)
+  _Metallic=1,000
+  _Smoothness=0,860
+  _Surface=0,000
+  _BumpScale=0,200
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _BumpMap=Assets/Generated/NeutralVpeFinish/SteelBrushNormal.png size=256x256 import=type=NormalMap sRGB=False max=256 quality=CompressedHQ
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/SteelSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL RubberIvory_PBR asset=Assets/Generated/NeutralVpeFinish/RubberIvory_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_METALLICSPECGLOSSMAP,_NORMALMAP
+  _BaseColor=RGBA(0.870, 0.830, 0.670, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,280
+  _Surface=0,000
+  _BumpScale=0,120
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _BumpMap=Assets/Generated/NeutralVpeFinish/SurfaceMicroNormal.png size=256x256 import=type=NormalMap sRGB=False max=256 quality=CompressedHQ
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL Target - Plastic White asset=Assets/Models/Parts/Switches/Spinner_Stern_-_Flap.fbx shader=Universal Render Pipeline/Lit queue=2000 keywords=
+  _BaseColor=RGBA(0.906, 0.906, 0.906, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,900
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+MATERIAL TerminalGlyph_PBR asset=Assets/Generated/NeutralVpeFinish/TerminalGlyph_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_EMISSION,_METALLICSPECGLOSSMAP
+  _BaseColor=RGBA(0.980, 0.840, 0.550, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,680
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.360, 0.220, 0.060, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL TerminalScreen_PBR asset=Assets/Generated/NeutralVpeFinish/TerminalScreen_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_EMISSION,_METALLICSPECGLOSSMAP
+  _BaseColor=RGBA(0.090, 0.130, 0.160, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,680
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.070, 0.100, 0.120, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL WarmIvory_PBR asset=Assets/Generated/NeutralVpeFinish/WarmIvory_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_EMISSION,_METALLICSPECGLOSSMAP
+  _BaseColor=RGBA(0.820, 0.780, 0.610, 1.000)
+  _Metallic=0,000
+  _Smoothness=0,680
+  _Surface=0,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.001, 0.001, 0.001, 1.000)
+  _OcclusionStrength=1,000
+  TEXTURE _MetallicGlossMap=Assets/Generated/NeutralVpeFinish/DielectricSmoothness.png size=256x256 import=type=Default sRGB=False max=256 quality=CompressedHQ
+MATERIAL WireformClearLiner_PBR asset=Assets/Generated/NeutralVpeFinish/WireformClearLiner_PBR.mat shader=Universal Render Pipeline/Lit queue=3000 keywords=_ALPHAPREMULTIPLY_ON,_SURFACE_TYPE_TRANSPARENT
+  _BaseColor=RGBA(0.550, 0.720, 0.700, 0.012)
+  _Metallic=0,000
+  _Smoothness=0,820
+  _Surface=1,000
+  _BumpScale=1,000
+  _EmissionColor=RGBA(0.000, 0.000, 0.000, 1.000)
+  _OcclusionStrength=1,000
+RENDERER PinballTable/Gameplay/Flipper_Left_Pivot/Flipper_Bat/Bat_Mesh materials=FlipperOrange_Mat_PBR,BumperRed_Mat_PBR mesh=Flipper Williams 3" v=1838 tris=3037 source=Assets/Models/Parts/Flipper/Flipper_Williams_3.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Flipper_Right_Pivot/Flipper_Bat/Bat_Mesh materials=FlipperOrange_Mat_PBR,BumperRed_Mat_PBR mesh=Flipper Williams 3" v=1838 tris=3037 source=Assets/Models/Parts/Flipper/Flipper_Williams_3.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Left/SlingLegend_Left materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=28 tris=14 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingPlastic_Left materials=ForestPlastic_PBR mesh=SlingPlastic_Left v=896 tris=518 source=Assets/Models/NeutralMechanical/NeutralMechanical.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingPlastic_Left/SlingGraphic_Left_0 materials=IvoryPrint_PBR mesh=SlingGraphic_Left_0_Printed v=18 tris=12 source=Assets/Generated/NeutralVpeFinish/SlingGraphic_Left_0_Printed.asset reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingPlastic_Left/SlingGraphic_Left_1 materials=IvoryPrint_PBR mesh=SlingGraphic_Left_1_Printed v=18 tris=12 source=Assets/Generated/NeutralVpeFinish/SlingGraphic_Left_1_Printed.asset reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingPlastic_Left/SlingGraphic_Left_2 materials=IvoryPrint_PBR mesh=SlingGraphic_Left_2_Printed v=18 tris=12 source=Assets/Generated/NeutralVpeFinish/SlingGraphic_Left_2_Printed.asset reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingPlastic_Left/SlingPrintBorder_Left materials=IvoryPrint_PBR mesh=SlingPrintBorder_Left_Printed v=296 tris=294 source=Assets/Generated/NeutralVpeFinish/SlingPrintBorder_Left_Printed.asset reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingRubber_Left materials=RubberIvory_PBR mesh=SlingRubber_Left_Deformable v=4656 tris=9312 source=Assets/Generated/NeutralRubberAnimation/SlingRubber_Left_Deformable.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingPost_1 materials=BrushedSteel_PBR mesh=Post - Metal - 1"1/4 - Round v=434 tris=508 source=Assets/Models/Parts/Posts/Post_-_Metal_-_114_-_Round.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingFastener_1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingPost_2 materials=BrushedSteel_PBR mesh=Post - Metal - 1"1/4 - Round v=434 tris=508 source=Assets/Models/Parts/Posts/Post_-_Metal_-_114_-_Round.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingFastener_2 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingPost_3 materials=BrushedSteel_PBR mesh=Post - Metal - 1"1/4 - Round v=434 tris=508 source=Assets/Models/Parts/Posts/Post_-_Metal_-_114_-_Round.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingFastener_3 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Right/SlingLegend_Right materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=16 tris=8 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingPlastic_Right materials=ForestPlastic_PBR mesh=SlingPlastic_Right v=938 tris=572 source=Assets/Models/NeutralMechanical/NeutralMechanical.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingPlastic_Right/SlingGraphic_Right_0 materials=IvoryPrint_PBR mesh=SlingGraphic_Right_0_Printed v=18 tris=12 source=Assets/Generated/NeutralVpeFinish/SlingGraphic_Right_0_Printed.asset reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingPlastic_Right/SlingGraphic_Right_1 materials=IvoryPrint_PBR mesh=SlingGraphic_Right_1_Printed v=18 tris=12 source=Assets/Generated/NeutralVpeFinish/SlingGraphic_Right_1_Printed.asset reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingPlastic_Right/SlingGraphic_Right_2 materials=IvoryPrint_PBR mesh=SlingGraphic_Right_2_Printed v=18 tris=12 source=Assets/Generated/NeutralVpeFinish/SlingGraphic_Right_2_Printed.asset reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingPlastic_Right/SlingPrintBorder_Right materials=IvoryPrint_PBR mesh=SlingPrintBorder_Right_Printed v=288 tris=288 source=Assets/Generated/NeutralVpeFinish/SlingPrintBorder_Right_Printed.asset reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingRubber_Right materials=RubberIvory_PBR mesh=SlingRubber_Right_Deformable v=4656 tris=9312 source=Assets/Generated/NeutralRubberAnimation/SlingRubber_Right_Deformable.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingPost_1 materials=BrushedSteel_PBR mesh=Post - Metal - 1"1/4 - Round v=434 tris=508 source=Assets/Models/Parts/Posts/Post_-_Metal_-_114_-_Round.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingFastener_1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingPost_2 materials=BrushedSteel_PBR mesh=Post - Metal - 1"1/4 - Round v=434 tris=508 source=Assets/Models/Parts/Posts/Post_-_Metal_-_114_-_Round.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingFastener_2 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingPost_3 materials=BrushedSteel_PBR mesh=Post - Metal - 1"1/4 - Round v=434 tris=508 source=Assets/Models/Parts/Posts/Post_-_Metal_-_114_-_Round.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingFastener_3 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_01/Bumper_01_0_Bumper Base - Williams/Bally materials=PolishedSteel_PBR mesh=Bumper_1_0 v=410 tris=708 source=Assets/Generated/NeutralReference/Bumper_1_0.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_01/Bumper_01_1_Bumper Ring materials=PolishedSteel_PBR mesh=Bumper_1_1 v=128 tris=190 source=Assets/Generated/NeutralReference/Bumper_1_1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_01/Bumper_01_2_Bumper Cap - Clear 3" materials=WarmIvory_PBR mesh=Bumper_1_2 v=506 tris=956 source=Assets/Generated/NeutralReference/Bumper_1_2.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_01/Bumper_01_2_Bumper Cap - Clear 3"/BumperMedallion_0 materials=ForestEnamel_PBR mesh=Cylinder v=88 tris=80 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_01/Bumper_01_2_Bumper Cap - Clear 3"/BumperCapRim_0 materials=PolishedSteel_PBR mesh=53_BumperCapRim_0 v=490 tris=960 source=Assets/Generated/NeutralFlow/53_BumperCapRim_0.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_01/Bumper_01_2_Bumper Cap - Clear 3"/BumperIndex_0 materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=12 tris=6 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Bumper_02/Bumper_02_0_Bumper Base - Williams/Bally materials=PolishedSteel_PBR mesh=Bumper_2_0 v=410 tris=708 source=Assets/Generated/NeutralReference/Bumper_2_0.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_02/Bumper_02_1_Bumper Ring materials=PolishedSteel_PBR mesh=Bumper_2_1 v=128 tris=190 source=Assets/Generated/NeutralReference/Bumper_2_1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_02/Bumper_02_2_Bumper Cap - Clear 3" materials=WarmIvory_PBR mesh=Bumper_2_2 v=506 tris=956 source=Assets/Generated/NeutralReference/Bumper_2_2.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_02/Bumper_02_2_Bumper Cap - Clear 3"/BumperMedallion_1 materials=ForestEnamel_PBR mesh=Cylinder v=88 tris=80 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_02/Bumper_02_2_Bumper Cap - Clear 3"/BumperCapRim_1 materials=PolishedSteel_PBR mesh=54_BumperCapRim_1 v=490 tris=960 source=Assets/Generated/NeutralFlow/54_BumperCapRim_1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_02/Bumper_02_2_Bumper Cap - Clear 3"/BumperIndex_1 materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=12 tris=6 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Bumper_03/Bumper_03_0_Bumper Base - Williams/Bally materials=PolishedSteel_PBR mesh=Bumper_3_0 v=410 tris=708 source=Assets/Generated/NeutralReference/Bumper_3_0.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_03/Bumper_03_1_Bumper Ring materials=PolishedSteel_PBR mesh=Bumper_3_1 v=128 tris=190 source=Assets/Generated/NeutralReference/Bumper_3_1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_03/Bumper_03_2_Bumper Cap - Clear 3" materials=WarmIvory_PBR mesh=Bumper_3_2 v=506 tris=956 source=Assets/Generated/NeutralReference/Bumper_3_2.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_03/Bumper_03_2_Bumper Cap - Clear 3"/BumperMedallion_2 materials=ForestEnamel_PBR mesh=Cylinder v=88 tris=80 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_03/Bumper_03_2_Bumper Cap - Clear 3"/BumperCapRim_2 materials=PolishedSteel_PBR mesh=55_BumperCapRim_2 v=490 tris=960 source=Assets/Generated/NeutralFlow/55_BumperCapRim_2.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Bumper_03/Bumper_03_2_Bumper Cap - Clear 3"/BumperIndex_2 materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=12 tris=6 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Plunger/Plunger_Rod/Rod materials=Plunger,Metal - Steel with AO dirt_PBR mesh=Rod v=1294 tris=1728 source=Assets/Models/Parts/Miscellaneous/Plunger.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Plunger/Plunger_Rod/Rod/Spring materials=Metal - Zinc with AO dirt_PBR mesh=Spring v=4631 tris=7088 source=Assets/Models/Parts/Miscellaneous/Plunger.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Ball materials=BallChrome_Mat mesh=Sphere v=515 tris=768 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Matieres_01/Target_Pro materials=WarmIvory_PBR,PolishedSteel_PBR,BumperRed_Mat_PBR mesh=Target Rect Thin v=539 tris=664 source=Assets/Models/Parts/Switches/Target_Rect_Thin.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Matieres_01/RewardInsert materials=AmberInsert_PBR mesh=Cylinder v=88 tris=80 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Matieres_01/RewardLabel materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=20 tris=10 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Target_Matieres_01/RewardBezel_0 materials=PolishedSteel_PBR mesh=56_RewardBezel_0 v=490 tris=960 source=Assets/Generated/NeutralFlow/56_RewardBezel_0.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Matieres_01/Plaque_Target_Matieres_01 materials=EnamelMidnight_PBR mesh=Cube v=24 tris=12 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Matieres_02/Target_Pro materials=WarmIvory_PBR,PolishedSteel_PBR,BumperRed_Mat_PBR mesh=Target Rect Thin v=539 tris=664 source=Assets/Models/Parts/Switches/Target_Rect_Thin.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Matieres_02/RewardInsert materials=AmberInsert_PBR mesh=Cylinder v=88 tris=80 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Matieres_02/RewardLabel materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=16 tris=8 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Target_Matieres_02/RewardBezel_1 materials=PolishedSteel_PBR mesh=57_RewardBezel_1 v=490 tris=960 source=Assets/Generated/NeutralFlow/57_RewardBezel_1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Matieres_02/Plaque_Target_Matieres_02 materials=EnamelMidnight_PBR mesh=Cube v=24 tris=12 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Matieres_03/Target_Pro materials=WarmIvory_PBR,PolishedSteel_PBR,BumperRed_Mat_PBR mesh=Target Rect Thin v=539 tris=664 source=Assets/Models/Parts/Switches/Target_Rect_Thin.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Matieres_03/RewardInsert materials=AmberInsert_PBR mesh=Cylinder v=88 tris=80 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Matieres_03/RewardLabel materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=16 tris=8 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Target_Matieres_03/RewardBezel_2 materials=PolishedSteel_PBR mesh=58_RewardBezel_2 v=490 tris=960 source=Assets/Generated/NeutralFlow/58_RewardBezel_2.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Matieres_03/Plaque_Target_Matieres_03 materials=EnamelMidnight_PBR mesh=Cube v=24 tris=12 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Java_01/Target_Pro materials=WarmIvory_PBR,PolishedSteel_PBR,BumperRed_Mat_PBR mesh=Target Rect Thin v=539 tris=664 source=Assets/Models/Parts/Switches/Target_Rect_Thin.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Java_01/RewardInsert materials=AmberInsert_PBR mesh=Cylinder v=88 tris=80 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Java_01/RewardLabel materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=20 tris=10 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Target_Java_01/RewardBezel_3 materials=PolishedSteel_PBR mesh=59_RewardBezel_3 v=490 tris=960 source=Assets/Generated/NeutralFlow/59_RewardBezel_3.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Java_01/Plaque_Target_Java_01 materials=EnamelMidnight_PBR mesh=Cube v=24 tris=12 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Projet_01/Target_Pro materials=WarmIvory_PBR,PolishedSteel_PBR,BumperRed_Mat_PBR mesh=Target Rect Thin v=539 tris=664 source=Assets/Models/Parts/Switches/Target_Rect_Thin.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Projet_01/RewardInsert materials=AmberInsert_PBR mesh=Cylinder v=88 tris=80 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Projet_01/RewardLabel materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=28 tris=14 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Target_Projet_01/RewardBezel_4 materials=PolishedSteel_PBR mesh=60_RewardBezel_4 v=490 tris=960 source=Assets/Generated/NeutralFlow/60_RewardBezel_4.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Projet_01/Plaque_Target_Projet_01 materials=EnamelMidnight_PBR mesh=Cube v=24 tris=12 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Cafe_01/Target_Pro materials=WarmIvory_PBR,PolishedSteel_PBR,BumperRed_Mat_PBR mesh=Target Rect Thin v=539 tris=664 source=Assets/Models/Parts/Switches/Target_Rect_Thin.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Cafe_01/RewardInsert materials=AmberInsert_PBR mesh=Cylinder v=88 tris=80 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Cafe_01/RewardLabel materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=20 tris=10 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Target_Cafe_01/RewardBezel_5 materials=PolishedSteel_PBR mesh=61_RewardBezel_5 v=490 tris=960 source=Assets/Generated/NeutralFlow/61_RewardBezel_5.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Target_Cafe_01/Plaque_Target_Cafe_01 materials=EnamelMidnight_PBR mesh=Cube v=24 tris=12 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/TopLanes/Rollover_01/LaneInsert materials=Insert - Green,Insert - Wood,Insert - Light Stopper,Insert - Light Dispersion mesh=Insert - Circle - Clear - 1" v=744 tris=648 source=Assets/Models/Parts/Inserts/Insert_-_Circle_-_Clear_-_1.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/TopLanes/Rollover_01/LaneLetter materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=8 tris=4 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/TopLanes/Rollover_02/LaneInsert materials=Insert - Green,Insert - Wood,Insert - Light Stopper,Insert - Light Dispersion mesh=Insert - Circle - Clear - 1" v=744 tris=648 source=Assets/Models/Parts/Inserts/Insert_-_Circle_-_Clear_-_1.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/TopLanes/Rollover_02/LaneLetter materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=8 tris=4 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/TopLanes/Rollover_03/LaneInsert materials=Insert - Green,Insert - Wood,Insert - Light Stopper,Insert - Light Dispersion mesh=Insert - Circle - Clear - 1" v=744 tris=648 source=Assets/Models/Parts/Inserts/Insert_-_Circle_-_Clear_-_1.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/TopLanes/Rollover_03/LaneLetter materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=8 tris=4 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/Gameplay/Boss_ProjetFinal/TerminalAssembly/TerminalBezel materials=BrushedSteel_PBR mesh=TerminalBezel v=48 tris=96 source=Assets/Models/NeutralMechanical/NeutralMechanical.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Boss_ProjetFinal/TerminalAssembly/TerminalCode_0 materials=TerminalGlyph_PBR mesh=TerminalCode_0 v=16 tris=28 source=Assets/Models/NeutralMechanical/NeutralMechanical.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Boss_ProjetFinal/TerminalAssembly/TerminalCode_1 materials=TerminalGlyph_PBR mesh=TerminalCode_1 v=16 tris=28 source=Assets/Models/NeutralMechanical/NeutralMechanical.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Boss_ProjetFinal/TerminalAssembly/TerminalCode_2 materials=TerminalGlyph_PBR mesh=TerminalCode_2 v=16 tris=28 source=Assets/Models/NeutralMechanical/NeutralMechanical.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Boss_ProjetFinal/TerminalAssembly/TerminalFoot_-0.425 materials=BrushedSteel_PBR mesh=TerminalFoot_-0.425 v=20 tris=36 source=Assets/Models/NeutralMechanical/NeutralMechanical.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Boss_ProjetFinal/TerminalAssembly/TerminalFoot_0.425 materials=BrushedSteel_PBR mesh=TerminalFoot_0.425 v=20 tris=36 source=Assets/Models/NeutralMechanical/NeutralMechanical.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Boss_ProjetFinal/TerminalAssembly/TerminalPrompt materials=TerminalGlyph_PBR mesh=TerminalPrompt v=24 tris=44 source=Assets/Models/NeutralMechanical/NeutralMechanical.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Boss_ProjetFinal/TerminalAssembly/TerminalScreen materials=TerminalScreen_PBR mesh=TerminalScreen v=4 tris=2 source=Assets/Models/NeutralMechanical/NeutralMechanical.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Boss_ProjetFinal/TerminalAssembly/TerminalShell materials=EnamelShell_PBR mesh=TerminalShell v=318 tris=156 source=Assets/Models/NeutralMechanical/NeutralMechanical.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/Gameplay/Spinner/Spinner_Blade/SternFlap materials=ForestEnamel_PBR,Target - Plastic White mesh=Spinner Stern - Flap v=1525 tris=3039 source=Assets/Models/Parts/Switches/Spinner_Stern_-_Flap.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/Playfield materials=Playfield mesh=Cube v=24 tris=12 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/LeftCabinet materials=EnamelMidnight_PBR mesh=Cube v=24 tris=12 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/RightCabinet materials=EnamelMidnight_PBR mesh=Cube v=24 tris=12 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/BackCabinet materials=EnamelMidnight_PBR mesh=Cube v=24 tris=12 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/LeftBoundary materials=PolishedSteel_PBR mesh=LeftBoundary v=8 tris=12 source=Assets/Generated/NeutralReference/LeftBoundary.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/ShooterOuter materials=PolishedSteel_PBR mesh=ShooterOuter v=8 tris=12 source=Assets/Generated/NeutralReference/ShooterOuter.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/ShooterDivider materials=PolishedSteel_PBR mesh=ShooterDivider v=8 tris=12 source=Assets/Generated/NeutralReference/ShooterDivider.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/RearOrbitSteel materials=PolishedSteel_PBR mesh=RearOrbitSteel v=324 tris=644 source=Assets/Generated/NeutralReference/RearOrbitSteel.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/ShooterExit materials=PolishedSteel_PBR mesh=ShooterExit v=196 tris=388 source=Assets/Generated/NeutralReference/ShooterExit.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/Return_Left materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=28 tris=14 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/ReferencePlayfield/Out_Left materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=28 tris=14 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/ReferencePlayfield/Return_Right materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=28 tris=14 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/ReferencePlayfield/Out_Right materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=28 tris=14 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/ReferencePlayfield/Shot_Vosges materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=28 tris=14 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/ReferencePlayfield/Shot_IUT materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=16 tris=8 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/ReferencePlayfield/Title materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=48 tris=24 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/ReferencePlayfield/CabinetBackdrop materials=EnamelMidnight_PBR mesh=Cube v=24 tris=12 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/ProfessionalArt/PrintedPlayfield materials=PlayfieldPrint_PBR mesh=0_PrintedPlayfield v=4 tris=2 source=Assets/Generated/NeutralReference/Art/0_PrintedPlayfield.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/ProfessionalArt/SpinnerMount materials=PolishedSteel_PBR,Plastic - Black Glossy,Plastic - White Glossy mesh=Spinner Stern - Bracket with switch v=4540 tris=4397 source=Assets/Models/Parts/Switches/Spinner_Stern_-_Bracket_with_switch.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/ProfessionalArt/TitlePlaque materials=EnamelMidnight_PBR mesh=Cube v=24 tris=12 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/InlaneOuter_Left materials=PolishedSteel_PBR mesh=49_0_InlaneOuter_Left_92 v=260 tris=516 source=Assets/Generated/NeutralScale8/49_0_InlaneOuter_Left_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/InlaneInner_Left materials=PolishedSteel_PBR mesh=50_1_InlaneInner_Left_92 v=132 tris=260 source=Assets/Generated/NeutralScale8/50_1_InlaneInner_Left_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/OutlanePost_Left materials=PolishedSteel_PBR mesh=Cylinder v=88 tris=80 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CoveredDrainGuide_Left materials=PolishedSteel_PBR mesh=51_2_CoveredDrainGuide_Left_92 v=132 tris=260 source=Assets/Generated/NeutralScale8/51_2_CoveredDrainGuide_Left_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/InlaneOuter_Right materials=PolishedSteel_PBR mesh=52_3_InlaneOuter_Right_92 v=260 tris=516 source=Assets/Generated/NeutralScale8/52_3_InlaneOuter_Right_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/InlaneInner_Right materials=PolishedSteel_PBR mesh=53_4_InlaneInner_Right_92 v=132 tris=260 source=Assets/Generated/NeutralScale8/53_4_InlaneInner_Right_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/OutlanePost_Right materials=PolishedSteel_PBR mesh=Cylinder v=88 tris=80 source=Library/unity default resources reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CoveredDrainGuide_Right materials=PolishedSteel_PBR mesh=54_5_CoveredDrainGuide_Right_92 v=132 tris=260 source=Assets/Generated/NeutralScale8/54_5_CoveredDrainGuide_Right_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/ApronCover materials=EnamelMidnight_PBR mesh=62_ApronCover v=130 tris=128 source=Assets/Generated/NeutralFlow/62_ApronCover.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/ApronChromeEdge materials=PolishedSteel_PBR mesh=63_ApronChromeEdge v=650 tris=1280 source=Assets/Generated/NeutralFlow/63_ApronChromeEdge.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/ApronBrand materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=52 tris=26 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/ApronRules materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=88 tris=44 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/ApronControls materials=LiberationSans SDF Material mesh=TextMeshPro Mesh v=76 tris=38 source= reflection=BlendProbes shadow=Off
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Track materials=ClearRamp_PBR,WireformClearLiner_PBR mesh=00_00_Vosges_Visual_92_Access v=1288 tris=2572 source=Assets/Generated/NeutralRampAccess/00_00_Vosges_Visual_92_Access.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Cover materials=ClearGuard_PBR mesh=02_02_1_Vosges_Cover_92_Access v=644 tris=1284 source=Assets/Generated/NeutralRampAccess/02_02_1_Vosges_Cover_92_Access.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_UndercutGuard materials=ForestEnamel_PBR mesh=03_03_2_Vosges_UndercutGuard_92_Access v=644 tris=560 source=Assets/Generated/NeutralRampAccess/03_03_2_Vosges_UndercutGuard_92_Access.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Rim_-1 materials=PolishedSteel_PBR mesh=04_04_3_Vosges_Rim_-1_92_Access v=1610 tris=3200 source=Assets/Generated/NeutralRampAccess/04_04_3_Vosges_Rim_-1_92_Access.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Runner_-1 materials=PolishedSteel_PBR mesh=05_4_Vosges_Runner_-1_92 v=730 tris=1440 source=Assets/Generated/NeutralScale8/05_4_Vosges_Runner_-1_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_MidRail_-1 materials=PolishedSteel_PBR mesh=06_5_Vosges_MidRail_-1_92 v=730 tris=1440 source=Assets/Generated/NeutralScale8/06_5_Vosges_MidRail_-1_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Rim_1 materials=PolishedSteel_PBR mesh=05_07_6_Vosges_Rim_1_92_Access v=1610 tris=3200 source=Assets/Generated/NeutralRampAccess/05_07_6_Vosges_Rim_1_92_Access.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Runner_1 materials=PolishedSteel_PBR mesh=08_7_Vosges_Runner_1_92 v=730 tris=1440 source=Assets/Generated/NeutralScale8/08_7_Vosges_Runner_1_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_MidRail_1 materials=PolishedSteel_PBR mesh=09_8_Vosges_MidRail_1_92 v=730 tris=1440 source=Assets/Generated/NeutralScale8/09_8_Vosges_MidRail_1_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Brace_88 materials=PolishedSteel_PBR mesh=10_9_Vosges_Brace_88_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/10_9_Vosges_Brace_88_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Brace_97 materials=PolishedSteel_PBR mesh=11_10_Vosges_Brace_97_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/11_10_Vosges_Brace_97_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Brace_106 materials=PolishedSteel_PBR mesh=12_11_Vosges_Brace_106_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/12_11_Vosges_Brace_106_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Brace_115 materials=PolishedSteel_PBR mesh=13_12_Vosges_Brace_115_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/13_12_Vosges_Brace_115_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Brace_124 materials=PolishedSteel_PBR mesh=14_13_Vosges_Brace_124_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/14_13_Vosges_Brace_124_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Brace_133 materials=PolishedSteel_PBR mesh=15_14_Vosges_Brace_133_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/15_14_Vosges_Brace_133_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Brace_142 materials=PolishedSteel_PBR mesh=16_15_Vosges_Brace_142_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/16_15_Vosges_Brace_142_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Brace_151 materials=PolishedSteel_PBR mesh=17_16_Vosges_Brace_151_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/17_16_Vosges_Brace_151_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Bow_88 materials=PolishedSteel_PBR mesh=18_17_Vosges_Bow_88_92 v=130 tris=240 source=Assets/Generated/NeutralScale8/18_17_Vosges_Bow_88_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Bow_106 materials=PolishedSteel_PBR mesh=19_18_Vosges_Bow_106_92 v=130 tris=240 source=Assets/Generated/NeutralScale8/19_18_Vosges_Bow_106_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Bow_124 materials=PolishedSteel_PBR mesh=20_19_Vosges_Bow_124_92 v=130 tris=240 source=Assets/Generated/NeutralScale8/20_19_Vosges_Bow_124_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/Vosges_Bow_142 materials=PolishedSteel_PBR mesh=21_20_Vosges_Bow_142_92 v=130 tris=240 source=Assets/Generated/NeutralScale8/21_20_Vosges_Bow_142_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Track materials=ClearRamp_PBR,WireformClearLiner_PBR mesh=06_22_IUT_Visual_92_Access v=1288 tris=2572 source=Assets/Generated/NeutralRampAccess/06_22_IUT_Visual_92_Access.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Cover materials=ClearGuard_PBR mesh=08_24_22_IUT_Cover_92_Access v=644 tris=1284 source=Assets/Generated/NeutralRampAccess/08_24_22_IUT_Cover_92_Access.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_UndercutGuard materials=ForestEnamel_PBR mesh=09_25_23_IUT_UndercutGuard_92_Access v=644 tris=440 source=Assets/Generated/NeutralRampAccess/09_25_23_IUT_UndercutGuard_92_Access.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Rim_-1 materials=PolishedSteel_PBR mesh=10_26_24_IUT_Rim_-1_92_Access v=1610 tris=3200 source=Assets/Generated/NeutralRampAccess/10_26_24_IUT_Rim_-1_92_Access.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Runner_-1 materials=PolishedSteel_PBR mesh=27_25_IUT_Runner_-1_92 v=970 tris=1920 source=Assets/Generated/NeutralScale8/27_25_IUT_Runner_-1_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_MidRail_-1 materials=PolishedSteel_PBR mesh=28_26_IUT_MidRail_-1_92 v=970 tris=1920 source=Assets/Generated/NeutralScale8/28_26_IUT_MidRail_-1_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Rim_1 materials=PolishedSteel_PBR mesh=11_29_27_IUT_Rim_1_92_Access v=1610 tris=3200 source=Assets/Generated/NeutralRampAccess/11_29_27_IUT_Rim_1_92_Access.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Runner_1 materials=PolishedSteel_PBR mesh=30_28_IUT_Runner_1_92 v=970 tris=1920 source=Assets/Generated/NeutralScale8/30_28_IUT_Runner_1_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_MidRail_1 materials=PolishedSteel_PBR mesh=31_29_IUT_MidRail_1_92 v=970 tris=1920 source=Assets/Generated/NeutralScale8/31_29_IUT_MidRail_1_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Brace_64 materials=PolishedSteel_PBR mesh=32_30_IUT_Brace_64_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/32_30_IUT_Brace_64_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Brace_73 materials=PolishedSteel_PBR mesh=33_31_IUT_Brace_73_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/33_31_IUT_Brace_73_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Brace_82 materials=PolishedSteel_PBR mesh=34_32_IUT_Brace_82_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/34_32_IUT_Brace_82_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Brace_91 materials=PolishedSteel_PBR mesh=35_33_IUT_Brace_91_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/35_33_IUT_Brace_91_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Brace_100 materials=PolishedSteel_PBR mesh=36_34_IUT_Brace_100_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/36_34_IUT_Brace_100_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Brace_109 materials=PolishedSteel_PBR mesh=37_35_IUT_Brace_109_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/37_35_IUT_Brace_109_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Brace_118 materials=PolishedSteel_PBR mesh=38_36_IUT_Brace_118_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/38_36_IUT_Brace_118_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Brace_127 materials=PolishedSteel_PBR mesh=39_37_IUT_Brace_127_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/39_37_IUT_Brace_127_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Brace_136 materials=PolishedSteel_PBR mesh=40_38_IUT_Brace_136_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/40_38_IUT_Brace_136_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Brace_145 materials=PolishedSteel_PBR mesh=41_39_IUT_Brace_145_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/41_39_IUT_Brace_145_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Brace_154 materials=PolishedSteel_PBR mesh=42_40_IUT_Brace_154_92 v=40 tris=60 source=Assets/Generated/NeutralScale8/42_40_IUT_Brace_154_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Bow_64 materials=PolishedSteel_PBR mesh=43_41_IUT_Bow_64_92 v=130 tris=240 source=Assets/Generated/NeutralScale8/43_41_IUT_Bow_64_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Bow_82 materials=PolishedSteel_PBR mesh=44_42_IUT_Bow_82_92 v=130 tris=240 source=Assets/Generated/NeutralScale8/44_42_IUT_Bow_82_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Bow_100 materials=PolishedSteel_PBR mesh=45_43_IUT_Bow_100_92 v=130 tris=240 source=Assets/Generated/NeutralScale8/45_43_IUT_Bow_100_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Bow_118 materials=PolishedSteel_PBR mesh=46_44_IUT_Bow_118_92 v=130 tris=240 source=Assets/Generated/NeutralScale8/46_44_IUT_Bow_118_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Bow_136 materials=PolishedSteel_PBR mesh=47_45_IUT_Bow_136_92 v=130 tris=240 source=Assets/Generated/NeutralScale8/47_45_IUT_Bow_136_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/CorrectedRoutes/IUT_Bow_154 materials=PolishedSteel_PBR mesh=48_46_IUT_Bow_154_92 v=130 tris=240 source=Assets/Generated/NeutralScale8/48_46_IUT_Bow_154_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/OrbitFeedCurve materials=PolishedSteel_PBR mesh=55_900_OrbitFeedCurve_92 v=132 tris=260 source=Assets/Generated/NeutralScale8/55_900_OrbitFeedCurve_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/FlowRefinement/OrbitFeedCurve_right materials=PolishedSteel_PBR mesh=55_900_OrbitFeedCurve_92 v=132 tris=260 source=Assets/Generated/NeutralScale8/55_900_OrbitFeedCurve_92.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/Vosges_RetainingClamp_98_-1 materials=BrushedSteel_PBR mesh=0_Vosges_RetainingClamp_98_-1 v=30 tris=40 source=Assets/Models/NeutralMechanical/0_Vosges_RetainingClamp_98_-1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/Vosges_FrameBolt_98_-1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/Vosges_RetainingClamp_98_1 materials=BrushedSteel_PBR mesh=1_Vosges_RetainingClamp_98_1 v=30 tris=40 source=Assets/Models/NeutralMechanical/1_Vosges_RetainingClamp_98_1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/Vosges_FrameBolt_98_1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/Vosges_RetainingClamp_116_-1 materials=BrushedSteel_PBR mesh=2_Vosges_RetainingClamp_116_-1 v=30 tris=40 source=Assets/Models/NeutralMechanical/2_Vosges_RetainingClamp_116_-1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/Vosges_FrameBolt_116_-1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/Vosges_RetainingClamp_116_1 materials=BrushedSteel_PBR mesh=3_Vosges_RetainingClamp_116_1 v=30 tris=40 source=Assets/Models/NeutralMechanical/3_Vosges_RetainingClamp_116_1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/Vosges_FrameBolt_116_1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/Vosges_RetainingClamp_132_-1 materials=BrushedSteel_PBR mesh=4_Vosges_RetainingClamp_132_-1 v=30 tris=40 source=Assets/Models/NeutralMechanical/4_Vosges_RetainingClamp_132_-1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/Vosges_FrameBolt_132_-1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/Vosges_RetainingClamp_132_1 materials=BrushedSteel_PBR mesh=5_Vosges_RetainingClamp_132_1 v=30 tris=40 source=Assets/Models/NeutralMechanical/5_Vosges_RetainingClamp_132_1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/Vosges_FrameBolt_132_1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/IUT_RetainingClamp_98_-1 materials=BrushedSteel_PBR mesh=6_IUT_RetainingClamp_98_-1 v=30 tris=40 source=Assets/Models/NeutralMechanical/6_IUT_RetainingClamp_98_-1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/IUT_FrameBolt_98_-1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/IUT_RetainingClamp_98_1 materials=BrushedSteel_PBR mesh=7_IUT_RetainingClamp_98_1 v=30 tris=40 source=Assets/Models/NeutralMechanical/7_IUT_RetainingClamp_98_1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/IUT_FrameBolt_98_1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/IUT_RetainingClamp_116_-1 materials=BrushedSteel_PBR mesh=8_IUT_RetainingClamp_116_-1 v=30 tris=40 source=Assets/Models/NeutralMechanical/8_IUT_RetainingClamp_116_-1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/IUT_FrameBolt_116_-1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/IUT_RetainingClamp_116_1 materials=BrushedSteel_PBR mesh=9_IUT_RetainingClamp_116_1 v=30 tris=40 source=Assets/Models/NeutralMechanical/9_IUT_RetainingClamp_116_1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/IUT_FrameBolt_116_1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/IUT_RetainingClamp_132_-1 materials=BrushedSteel_PBR mesh=10_IUT_RetainingClamp_132_-1 v=30 tris=40 source=Assets/Models/NeutralMechanical/10_IUT_RetainingClamp_132_-1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/IUT_FrameBolt_132_-1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/IUT_RetainingClamp_132_1 materials=BrushedSteel_PBR mesh=11_IUT_RetainingClamp_132_1 v=30 tris=40 source=Assets/Models/NeutralMechanical/11_IUT_RetainingClamp_132_1.asset reflection=BlendProbes shadow=On
+RENDERER PinballTable/ReferencePlayfield/MechanicalFinish/RampMountings/IUT_FrameBolt_132_1 materials=BrushedSteel_PBR mesh=Bolt #6-32 - Slotted & Flanged v=370 tris=200 source=Assets/Models/Parts/Screws/Bolt_6-32_-_Slotted_Flanged.fbx reflection=BlendProbes shadow=On

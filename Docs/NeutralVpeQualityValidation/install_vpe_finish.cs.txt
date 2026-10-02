@@ -1,0 +1,2 @@
+InstallNeutralVpeFinish.Install();
+return "Scene-local PBR finish installed with Undo; scene left unsaved for validation.";

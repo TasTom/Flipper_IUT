@@ -1,0 +1,7 @@
+PASS Bumper_01 persisted visible cap and flash binding
+PASS Bumper_02 persisted visible cap and flash binding
+PASS Bumper_03 persisted visible cap and flash binding
+CONSOLE errors=0 warnings=0 logs=3
+PASS all collider settings and transforms preserved after Play
+GEOMETRY activeMeshRenderers=201 triangles=116082 (inventory, not a frame-time benchmark)
+SCENE saved=Assets/Scenes/Neutral.unity dirty=False play=False

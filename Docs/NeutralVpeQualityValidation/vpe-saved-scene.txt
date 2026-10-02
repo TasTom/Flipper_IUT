@@ -1,0 +1,12 @@
+PASS Saved scene reloads six targets
+PASS Saved scene reloads 56 active colliders
+PASS Saved scene reloads without missing scripts
+PASS Bumper_01 saved flash and cap references resolve to visible local geometry
+PASS Bumper_02 saved flash and cap references resolve to visible local geometry
+PASS Bumper_03 saved flash and cap references resolve to visible local geometry
+PASS Saved finishing volume resolves all four settings
+PASS Saved scene resolves all eight printed mesh assets
+PASS Saved scene material and shader references resolve
+PASS Saved hit-light materials retain their emission keyword
+PASS Authored scene left intact; Undo history kept
+CHECKS=11 FAILURES=0

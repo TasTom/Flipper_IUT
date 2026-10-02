@@ -1,0 +1,31 @@
+if(!Application.isPlaying)throw new Exception("Play required");
+var table=GameObject.Find("PinballTable").transform;var ball=table.Find("Gameplay/Ball").GetComponent<Rigidbody>();var sm=ScoreManager.Instance;
+var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;var previous=Physics.simulationMode;float dt=Time.fixedDeltaTime,radius=ball.GetComponent<SphereCollider>().radius*ball.transform.lossyScale.x;var sb=new System.Text.StringBuilder();int failures=0,checks=0;
+void Check(bool ok,string label){checks++;sb.AppendLine((ok?"PASS ":"FAIL ")+label);if(!ok)failures++;}
+void Place(Vector3 p,Vector3 v){ball.position=table.TransformPoint(p);ball.linearVelocity=table.TransformDirection(v);ball.angularVelocity=Vector3.zero;ball.WakeUp();Physics.SyncTransforms();}
+void Step(float sec){for(int n=0;n<(int)(sec/dt);n++)Physics.Simulate(dt);}
+void Reset(){GameManager.Instance.StartGame();ball.useGravity=true;Place(new Vector3(0,3,6),Vector3.zero);Step(.02f);}
+bool Lit(Renderer r){var block=new MaterialPropertyBlock();r.GetPropertyBlock(block);return r.enabled&&r.gameObject.activeInHierarchy&&r.sharedMaterial.IsKeywordEnabled("_EMISSION")&&block.GetColor("_EmissionColor").maxColorComponent>.5f;}
+try{Physics.simulationMode=SimulationMode.Script;
+ foreach(var bumper in table.GetComponentsInChildren<Bumper>()){
+  Reset();typeof(Bumper).GetField("lastBounceTime",flags).SetValue(bumper,float.NegativeInfinity);
+  var point=table.InverseTransformPoint(bumper.transform.position);point.y=radius+.006f;Place(point+Vector3.back*1.3f,Vector3.forward*15);
+  for(int n=0;n<200&&bumper.HitCount==0;n++)Physics.Simulate(dt);
+  Check(bumper.HitCount==1&&sm.Score==1000,bumper.name+" physical impact scores exactly 1000");
+  var renderers=(Renderer[])typeof(Bumper).GetField("flashRenderers",flags).GetValue(bumper);
+  Check(renderers.Length==1&&Lit(renderers[0])&&bumper.Cap==renderers[0].transform,bumper.name+" visible cap emits the hit flash and owns the animation");
+  Check(bumper.Cap.GetComponentsInChildren<Renderer>().Count(r=>r.enabled)==4,bumper.name+" medallion, rim and number follow the animated cap");
+ }
+ foreach(var sling in table.GetComponentsInChildren<Slingshot>()){
+  Reset();typeof(Slingshot).GetField("lastKickTime",flags).SetValue(sling,float.NegativeInfinity);int kicks=0;Action<Vector3,float> onKick=(p,s)=>kicks++;sling.Kicked+=onKick;
+  try{var point=table.InverseTransformPoint(sling.GetComponent<Collider>().bounds.center);Place(new Vector3(-.4f,radius+.005f,point.z),new Vector3(sling.name.EndsWith("Left")?-15:15,0,0));Step(.22f);}finally{sling.Kicked-=onKick;}
+  Check(kicks==1&&sm.Score==100,sling.name+" physical impact scores exactly 100");
+  var renderers=(Renderer[])typeof(Slingshot).GetField("flashRenderers",flags).GetValue(sling);Check(renderers.Length==1&&Lit(renderers[0]),sling.name+" visible plastic emits the hit flash");
+ }
+ foreach(var target in table.GetComponentsInChildren<SubjectTarget>()){
+  Reset();target.Activer();ball.useGravity=false;typeof(SubjectTarget).GetField("dernierHit",flags).SetValue(target,float.NegativeInfinity);
+  ball.position=target.transform.TransformPoint(new Vector3(0,.27f,-3.5f));ball.linearVelocity=target.transform.forward*15;Physics.SyncTransforms();for(int n=0;n<150&&!target.IsValidated;n++)Physics.Simulate(dt);
+  Check(target.IsValidated,target.name+" actual collision validates target");var renderers=(Renderer[])typeof(SubjectTarget).GetField("visuels",flags).GetValue(target);Check(renderers.Length==1&&Lit(renderers[0]),target.name+" visible reward insert emits its new state");
+ }
+}finally{ball.useGravity=true;GameManager.Instance.StartGame();Physics.simulationMode=previous;}
+sb.AppendLine("CHECKS="+checks+" FAILURES="+failures);System.IO.File.WriteAllText("Tools/unity/out/vpe-flash-runtime.txt",sb.ToString());return sb.ToString();

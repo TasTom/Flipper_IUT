@@ -1,0 +1,26 @@
+PASS Bumper_01 physical impact scores exactly 1000
+PASS Bumper_01 visible cap emits the hit flash and owns the animation
+PASS Bumper_01 medallion, rim and number follow the animated cap
+PASS Bumper_02 physical impact scores exactly 1000
+PASS Bumper_02 visible cap emits the hit flash and owns the animation
+PASS Bumper_02 medallion, rim and number follow the animated cap
+PASS Bumper_03 physical impact scores exactly 1000
+PASS Bumper_03 visible cap emits the hit flash and owns the animation
+PASS Bumper_03 medallion, rim and number follow the animated cap
+PASS Slingshot_Left physical impact scores exactly 100
+PASS Slingshot_Left visible plastic emits the hit flash
+PASS Slingshot_Right physical impact scores exactly 100
+PASS Slingshot_Right visible plastic emits the hit flash
+PASS Target_Matieres_01 actual collision validates target
+PASS Target_Matieres_01 visible reward insert emits its new state
+PASS Target_Matieres_02 actual collision validates target
+PASS Target_Matieres_02 visible reward insert emits its new state
+PASS Target_Matieres_03 actual collision validates target
+PASS Target_Matieres_03 visible reward insert emits its new state
+PASS Target_Java_01 actual collision validates target
+PASS Target_Java_01 visible reward insert emits its new state
+PASS Target_Projet_01 actual collision validates target
+PASS Target_Projet_01 visible reward insert emits its new state
+PASS Target_Cafe_01 actual collision validates target
+PASS Target_Cafe_01 visible reward insert emits its new state
+CHECKS=25 FAILURES=0

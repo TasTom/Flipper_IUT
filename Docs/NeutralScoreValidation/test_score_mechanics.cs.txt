@@ -1,4 +1,4 @@
-﻿if(!Application.isPlaying)throw new Exception("Play required");
+if(!Application.isPlaying)throw new Exception("Play required");
 var table=GameObject.Find("PinballTable").transform;var ball=table.Find("Gameplay/Ball").GetComponent<Rigidbody>();var boss=table.GetComponentInChildren<BossTarget>();
 var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
 float radius=ball.GetComponent<SphereCollider>().radius*ball.transform.lossyScale.x;float dt=Time.fixedDeltaTime;var previous=Physics.simulationMode;
@@ -32,4 +32,3 @@ try{
  Assert(table.GetComponentsInChildren<SubjectTarget>().Length==6,"six reward targets preserved");
 }finally{Physics.simulationMode=previous;GameManager.Instance.StartGame();}
 sb.AppendLine("FAILURES="+failures);System.IO.File.WriteAllText("Tools/unity/out/score-mechanical-runtime.txt",sb.ToString());return sb.ToString();
-

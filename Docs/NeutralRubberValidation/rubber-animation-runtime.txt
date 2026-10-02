@@ -1,0 +1,29 @@
+PASS Slingshot_Left actual collision triggers one visual event, score=100, inward rebound
+CONTACT Slingshot_Left point=(-1.9974, 0.2070, 5.3195) relativeSpeed=14,734
+PASS Slingshot_Left runtime mesh isolated from asset
+PASS Slingshot_Left compression visible: 0,02529
+PASS Slingshot_Left elastic push bounded: 0,08429
+PASS Slingshot_Left anchor arcs fixed: vertices=900 drift=0
+PASS Slingshot_Left opposite rubber remains at rest
+PASS Slingshot_Left shared asset unchanged
+PASS Slingshot_Left zero delta time preserves pose (pause)
+PASS Slingshot_Left new physical impact does not snap mesh to rest
+PASS Slingshot_Left retrigger remains continuous: first-step drift=0,000813
+PASS Slingshot_Left deformed normals finite
+PASS Slingshot_Left exact rest pose restored
+PASS Slingshot_Left disable restores rest
+PASS Slingshot_Right actual collision triggers one visual event, score=100, inward rebound
+CONTACT Slingshot_Right point=(1.1974, 0.2070, 5.1426) relativeSpeed=14,734
+PASS Slingshot_Right runtime mesh isolated from asset
+PASS Slingshot_Right compression visible: 0,02544
+PASS Slingshot_Right elastic push bounded: 0,08480
+PASS Slingshot_Right anchor arcs fixed: vertices=899 drift=0
+PASS Slingshot_Right opposite rubber remains at rest
+PASS Slingshot_Right shared asset unchanged
+PASS Slingshot_Right zero delta time preserves pose (pause)
+PASS Slingshot_Right new physical impact does not snap mesh to rest
+PASS Slingshot_Right retrigger remains continuous: first-step drift=0,000818
+PASS Slingshot_Right deformed normals finite
+PASS Slingshot_Right exact rest pose restored
+PASS Slingshot_Right disable restores rest
+FAILURES=0

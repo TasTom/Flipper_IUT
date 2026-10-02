@@ -1,0 +1,1 @@
+InstallSlingshotRubberAnimation.Install();return "Two rubbers wired; original colliders untouched; Undo available; scene NOT saved.";

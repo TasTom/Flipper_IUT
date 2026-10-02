@@ -1,0 +1,75 @@
+Slingshot_Left host=0.217	0.000	0.528	-2.120
+-0.064	0.685	0.026	0.783
+-0.524	-0.084	0.215	5.244
+0.000	0.000	0.000	1.000
+ collider={"MeshCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":true,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"e1c91321a4ff73445a4d1a7d5260e699","type":2}}}
+RUBBER SlingRubber_Left vertices=816 readable=False bounds=Center: (0.00, 0.00, 0.00), Extents: (0.00, 0.00, 0.00) matrix=1666.6670	-0.0005	-0.0001	0.0000
+-0.0001	-203.1161	1654.2430	0.0000
+-0.0002	-1654.2440	-203.1158	0.0000
+0.0000	0.0000	0.0000	1.0000
+
+PIN SlingPost_1 pivot local=(-0.0014, -0.0036, 0.0000) mesh-center local=(-0.0014, -0.0036, 0.0001) table=(-2.3727, 0.1984, 5.9593)
+PIN SlingPost_2 pivot local=(-0.0012, -0.0030, 0.0000) mesh-center local=(-0.0012, -0.0030, 0.0001) table=(-1.9665, 0.1984, 4.9699)
+PIN SlingPost_3 pivot local=(-0.0015, -0.0032, 0.0000) mesh-center local=(-0.0015, -0.0032, 0.0001) table=(-2.4848, 0.1984, 5.3022)
+VERT 0 (-0.0015, -0.0036, 0.0001)
+VERT 1 (-0.0015, -0.0036, 0.0001)
+VERT 2 (-0.0015, -0.0036, 0.0001)
+VERT 3 (-0.0015, -0.0036, 0.0001)
+VERT 4 (-0.0015, -0.0036, 0.0001)
+VERT 5 (-0.0015, -0.0036, 0.0001)
+VERT 6 (-0.0015, -0.0036, 0.0001)
+VERT 7 (-0.0015, -0.0036, 0.0001)
+VERT 8 (-0.0015, -0.0036, 0.0001)
+VERT 9 (-0.0015, -0.0036, 0.0001)
+VERT 10 (-0.0016, -0.0032, 0.0001)
+VERT 11 (-0.0016, -0.0032, 0.0001)
+VERT 12 (-0.0015, -0.0036, 0.0001)
+VERT 13 (-0.0015, -0.0036, 0.0001)
+VERT 14 (-0.0015, -0.0036, 0.0001)
+VERT 15 (-0.0015, -0.0036, 0.0001)
+VERT 16 (-0.0015, -0.0036, 0.0001)
+VERT 17 (-0.0016, -0.0032, 0.0001)
+VERT 18 (-0.0015, -0.0036, 0.0001)
+VERT 19 (-0.0016, -0.0032, 0.0001)
+VERT 20 (-0.0015, -0.0036, 0.0001)
+VERT 21 (-0.0016, -0.0032, 0.0001)
+VERT 22 (-0.0016, -0.0032, 0.0001)
+VERT 23 (-0.0016, -0.0032, 0.0001)
+Slingshot_Right host=0.217	0.000	-0.528	1.320
+0.064	0.685	0.026	0.783
+0.524	-0.084	0.215	5.244
+0.000	0.000	0.000	1.000
+ collider={"MeshCollider":{"m_Material":{"instanceID":0},"m_IncludeLayers":{"serializedVersion":"2","m_Bits":0},"m_ExcludeLayers":{"serializedVersion":"2","m_Bits":0},"m_LayerOverridePriority":0,"m_IsTrigger":false,"m_ProvidesContacts":false,"m_Enabled":true,"serializedVersion":"5","m_Convex":true,"m_CookingOptions":30,"m_Mesh":{"fileID":4300000,"guid":"23df422b9d0e9a045a94f88b67891ace","type":2}}}
+RUBBER SlingRubber_Right vertices=816 readable=False bounds=Center: (0.00, 0.00, 0.00), Extents: (0.00, 0.00, 0.00) matrix=1666.6670	0.0005	0.0001	0.0000
+0.0001	-203.1161	1654.2430	0.0000
+0.0002	-1654.2440	-203.1158	0.0000
+0.0000	0.0000	0.0000	1.0000
+
+PIN SlingPost_1 pivot local=(0.0009, -0.0035, 0.0000) mesh-center local=(0.0009, -0.0035, 0.0001) table=(1.5653, 0.1984, 5.7774)
+PIN SlingPost_2 pivot local=(0.0007, -0.0029, 0.0000) mesh-center local=(0.0007, -0.0029, 0.0001) table=(1.1590, 0.1984, 4.7880)
+PIN SlingPost_3 pivot local=(0.0010, -0.0031, 0.0000) mesh-center local=(0.0010, -0.0031, 0.0001) table=(1.6934, 0.1984, 5.1222)
+VERT 0 (0.0009, -0.0035, 0.0001)
+VERT 1 (0.0009, -0.0035, 0.0001)
+VERT 2 (0.0009, -0.0035, 0.0001)
+VERT 3 (0.0009, -0.0035, 0.0001)
+VERT 4 (0.0009, -0.0035, 0.0001)
+VERT 5 (0.0009, -0.0035, 0.0001)
+VERT 6 (0.0009, -0.0035, 0.0001)
+VERT 7 (0.0009, -0.0035, 0.0001)
+VERT 8 (0.0009, -0.0035, 0.0001)
+VERT 9 (0.0009, -0.0035, 0.0001)
+VERT 10 (0.0006, -0.0029, 0.0001)
+VERT 11 (0.0006, -0.0029, 0.0001)
+VERT 12 (0.0009, -0.0035, 0.0001)
+VERT 13 (0.0009, -0.0035, 0.0001)
+VERT 14 (0.0009, -0.0035, 0.0001)
+VERT 15 (0.0009, -0.0035, 0.0001)
+VERT 16 (0.0009, -0.0035, 0.0001)
+VERT 17 (0.0006, -0.0029, 0.0001)
+VERT 18 (0.0009, -0.0035, 0.0001)
+VERT 19 (0.0006, -0.0029, 0.0001)
+VERT 20 (0.0009, -0.0035, 0.0001)
+VERT 21 (0.0006, -0.0029, 0.0001)
+VERT 22 (0.0006, -0.0029, 0.0001)
+VERT 23 (0.0006, -0.0029, 0.0001)
+SCENE=Assets/Scenes/Neutral.unity dirty=False errors=0 warnings=0

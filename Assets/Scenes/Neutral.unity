@@ -65641,7 +65641,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.5873223, y: -0.39376715, z: -0.3937672, w: 0.58732224}
   m_LocalPosition: {x: 10.007084, y: -0.20000003, z: -0.09069059}
-  m_LocalScale: {x: 2921.9253, y: 2921.9253, z: 2415.4583}
+  m_LocalScale: {x: 1.7531546, y: 1.7531546, z: 1.4492744}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1250184764}
@@ -65700,7 +65700,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.5873223, y: 0.39376715, z: 0.3937672, w: 0.58732224}
   m_LocalPosition: {x: -9.474421, y: -0.20000006, z: -1.3881277}
-  m_LocalScale: {x: 2921.9253, y: 2921.9253, z: 2415.4583}
+  m_LocalScale: {x: 1.7531546, y: 1.7531546, z: 1.4492744}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 173556554}
@@ -66031,6 +66031,7 @@ GameObject:
   - component: {fileID: 4413224088713961274}
   - component: {fileID: 5722228062558796553}
   - component: {fileID: 646453643474196884}
+  - component: {fileID: 5722228062558796554}
   m_Layer: 0
   m_Name: SlingRubber_Right
   m_TagString: Untagged
@@ -66304,7 +66305,26 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5118730729040959577}
-  m_Mesh: {fileID: 5433639599277829063, guid: 4b4493cd9e8a84044b18e533841ce03d, type: 3}
+  m_Mesh: {fileID: 4300000, guid: bdc0377b0a2fe9949b0e3a7fcde4acc0, type: 2}
+--- !u!114 &5722228062558796554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5118730729040959577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cf8e0cea656636409bcaa0f334b8003, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SlingshotRubberAnimation
+  source: {fileID: 1256252167}
+  config: {fileID: 11400000, guid: 360e1a7ae712dc0458a64feb4fb5470c, type: 2}
+  rubber: {fileID: 5722228062558796553}
+  playfield: {fileID: 1372378149}
+  startPost: {fileID: 489362987}
+  endPost: {fileID: 793493439}
+  backPost: {fileID: 204020653}
 --- !u!23 &5728611549571946994
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -66507,6 +66527,7 @@ GameObject:
   - component: {fileID: 4165643693183488072}
   - component: {fileID: 8050083904556006273}
   - component: {fileID: 4899242172019365085}
+  - component: {fileID: 8050083904556006274}
   m_Layer: 0
   m_Name: SlingRubber_Left
   m_TagString: Untagged
@@ -66855,7 +66876,26 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6748432796806037014}
-  m_Mesh: {fileID: 661570108555904534, guid: 4b4493cd9e8a84044b18e533841ce03d, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 6e1ba56feef5db6428e5e24116b8c9c4, type: 2}
+--- !u!114 &8050083904556006274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6748432796806037014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cf8e0cea656636409bcaa0f334b8003, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SlingshotRubberAnimation
+  source: {fileID: 1507132614}
+  config: {fileID: 11400000, guid: 360e1a7ae712dc0458a64feb4fb5470c, type: 2}
+  rubber: {fileID: 8050083904556006273}
+  playfield: {fileID: 1372378149}
+  startPost: {fileID: 637445486}
+  endPost: {fileID: 1893891235}
+  backPost: {fileID: 808837060}
 --- !u!1 &8770843164044533810
 GameObject:
   m_ObjectHideFlags: 0

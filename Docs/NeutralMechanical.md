@@ -2,6 +2,7 @@
 
 Passe du **2 octobre 2026**, après la [réduction de 8 %](NeutralScale.md).
 Scène enregistrée : `Assets/Scenes/Neutral.unity`.
+Suite de cette passe : [déformation animée des caoutchoucs](NeutralRubberAnimation.md).
 [Vue de borne](NeutralValidation/2026-10-02-mechanical/NeutralMechanical.png) ·
 [Assemblages inférieurs](NeutralValidation/2026-10-02-mechanical/LowerAssemblies.png) ·
 [Terminal](NeutralValidation/2026-10-02-mechanical/Terminal.png).

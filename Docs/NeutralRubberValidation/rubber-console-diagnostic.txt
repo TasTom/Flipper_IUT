@@ -1,0 +1,24 @@
+Failed to handle /api/exec request: Main thread operation timed out after 5000ms
+UnityEngine.Debug:LogError (object)
+Unity.Pipeline.BasePipelineServer/<HandleExecRequest>d__115:MoveNext () (at ./Library/PackageCache/com.unity.pipeline@ab05e9cd7f74/Runtime/Common/BasePipelineServer.cs:2071)
+System.Runtime.CompilerServices.AsyncTaskMethodBuilder:SetException (System.Exception)
+Unity.Pipeline.BasePipelineServer/<ExecuteGated>d__105:MoveNext () (at ./Library/PackageCache/com.unity.pipeline@ab05e9cd7f74/Runtime/Common/BasePipelineServer.cs:1403)
+System.Runtime.CompilerServices.AsyncTaskMethodBuilder:SetException (System.Exception)
+Unity.Pipeline.BasePipelineServer/<>c__DisplayClass115_0/<<HandleExecRequest>b__0>d:MoveNext () (at ./Library/PackageCache/com.unity.pipeline@ab05e9cd7f74/Runtime/Common/BasePipelineServer.cs:2032)
+System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<object>:SetException (System.Exception)
+Unity.Pipeline.BasePipelineServer/<ExecuteCommandByName>d__133:MoveNext () (at ./Library/PackageCache/com.unity.pipeline@ab05e9cd7f74/Runtime/Common/BasePipelineServer.cs:2478)
+System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<object>:SetException (System.Exception)
+Unity.Pipeline.BasePipelineServer/<ExecuteCommand>d__134:MoveNext () (at ./Library/PackageCache/com.unity.pipeline@ab05e9cd7f74/Runtime/Common/BasePipelineServer.cs:2517)
+System.Threading._ThreadPoolWaitCallback:PerformWaitCallback ()
+
+[Flipper] Flipper_Left_Pivot : côté=Left, borne='LeftFlipper' (<HID::xin-mo.com Xinmotek Controller>/button5), clavier=InputRouter
+UnityEngine.Debug:Log (object,UnityEngine.Object)
+Flipper:Awake () (at Assets/Scripts/Flipper.cs:201)
+
+[Flipper] Flipper_Right_Pivot : côté=Right, borne='RightFlipper' (<HID::xin-mo.com Xinmotek Controller>/button6), clavier=InputRouter
+UnityEngine.Debug:Log (object,UnityEngine.Object)
+Flipper:Awake () (at Assets/Scripts/Flipper.cs:201)
+
+[Plunger] Plunger : borne='LaunchBall' (<HID::xin-mo.com Xinmotek Controller>/button10), clavier=InputRouter, bouchon='Rod'
+UnityEngine.Debug:Log (object,UnityEngine.Object)
+Plunger:Awake () (at Assets/Scripts/Plunger.cs:154)

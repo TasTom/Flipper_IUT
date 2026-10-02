@@ -46,6 +46,9 @@ public class Slingshot : MonoBehaviour
     private float lastKickTime = float.NegativeInfinity;
     private float flashEndTime;
 
+    /// <summary>Impact accepted by the physical slingshot: world point and relative speed.</summary>
+    public event System.Action<Vector3, float> Kicked;
+
     private void Awake()
     {
         if (flashRenderers == null || flashRenderers.Length == 0)
@@ -103,6 +106,8 @@ public class Slingshot : MonoBehaviour
         }
 
         Flash();
+        Kicked?.Invoke(collision.contactCount > 0 ? collision.GetContact(0).point : ball.position,
+            collision.relativeVelocity.magnitude);
     }
 
     private void CacheColors()

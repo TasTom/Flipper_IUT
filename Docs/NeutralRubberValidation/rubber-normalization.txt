@@ -1,0 +1,2 @@
+SlingRubber_Left conversion=1666,667 max world drift=1,518457E-06 new lossyScale=(1.00, 1.00, 1.00)
+SlingRubber_Right conversion=1666,667 max world drift=1,493688E-06 new lossyScale=(1.00, 1.00, 1.00)

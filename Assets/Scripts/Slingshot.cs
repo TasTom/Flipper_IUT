@@ -99,7 +99,7 @@ public class Slingshot : MonoBehaviour
 
         if (ScoreManager.Instance != null)
         {
-            ScoreManager.Instance.Add(scoreValue);
+            ScoreManager.Instance.RecordHit(ScoreElement.Slingshot, this, scoreValue);
         }
 
         Flash();

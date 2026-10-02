@@ -505,9 +505,9 @@ public class MissionManager : MonoBehaviour
         // ⚠ Le multiplicateur est posé APRÈS le score de la mission. Dans l'autre ordre, la
         // récompense s'appliquerait à elle-même et la mission 2 verserait 50 000 au lieu de
         // 25 000 — le barème du GDD dit 25 000.
-        if (m.multiplicateur > 1 && ScoreManager.Instance != null)
+        if (ScoreManager.Instance != null)
         {
-            ScoreManager.Instance.SetMultiplier(m.multiplicateur);
+            ScoreManager.Instance.RecordMissionCompleted(m.but == MissionGoal.Groupe, activeIndex + 1, m.multiplicateur);
         }
 
         // GDD §Boss : c'est la validation des cibles Projet qui débloque le boss.

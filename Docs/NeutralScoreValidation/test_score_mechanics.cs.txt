@@ -1,0 +1,35 @@
+﻿if(!Application.isPlaying)throw new Exception("Play required");
+var table=GameObject.Find("PinballTable").transform;var ball=table.Find("Gameplay/Ball").GetComponent<Rigidbody>();var boss=table.GetComponentInChildren<BossTarget>();
+var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+float radius=ball.GetComponent<SphereCollider>().radius*ball.transform.lossyScale.x;float dt=Time.fixedDeltaTime;var previous=Physics.simulationMode;
+var sb=new System.Text.StringBuilder();var block=new MaterialPropertyBlock();int failures=0;
+void Assert(bool condition,string message){sb.AppendLine((condition?"PASS ":"FAIL ")+message);if(!condition)failures++;}
+void Place(Vector3 pos,Vector3 velocity){ball.position=table.TransformPoint(pos);ball.linearVelocity=table.TransformDirection(velocity);ball.angularVelocity=Vector3.zero;ball.WakeUp();Physics.SyncTransforms();}
+void Step(float seconds){for(int i=0;i<(int)(seconds/dt);i++)Physics.Simulate(dt);}
+void Separate(){Place(new Vector3(0,3,6),Vector3.zero);Step(.015f);}
+Color ScreenColor(){var r=(Renderer)typeof(BossTarget).GetField("ecran",flags).GetValue(boss);r.GetPropertyBlock(block);return block.GetColor("_BaseColor");}
+try{
+ Physics.simulationMode=SimulationMode.Script;GameManager.Instance.StartGame();
+ Assert(Mathf.Abs(dt-.005f)<.00001f,"runtime physical step="+dt);
+ foreach(var sling in table.GetComponentsInChildren<Slingshot>()){
+  GameManager.Instance.StartGame();Separate();typeof(Slingshot).GetField("lastKickTime",flags).SetValue(sling,float.NegativeInfinity);
+  var center=table.InverseTransformPoint(sling.GetComponent<Collider>().bounds.center);bool left=center.x<0;
+  Place(new Vector3(-.4f,radius+.005f,center.z),new Vector3(left?-15f:15f,0,0));Step(.22f);
+  var velocity=table.InverseTransformDirection(ball.linearVelocity);var r=sling.transform.Find("MechanicalAssembly/SlingPlastic_"+(left?"Left":"Right")).GetComponent<Renderer>();r.GetPropertyBlock(block);var color=block.GetColor("_BaseColor");
+  var flash=(Color)typeof(Slingshot).GetField("flashColor",flags).GetValue(sling);var assembly=sling.transform.Find("MechanicalAssembly");
+  Assert(ScoreManager.Instance.Score==100&&(left?velocity.x>0:velocity.x<0),sling.name+" contact score="+ScoreManager.Instance.Score+" rebound="+velocity.ToString("F2"));
+  Assert(Vector4.Distance(color,flash)<.0001f,sling.name+" new plastic flashes: "+color);
+  Assert(assembly.GetComponentsInChildren<Collider>(true).Length==0,sling.name+" decorative hardware has no collider");
+ }
+ GameManager.Instance.StartGame();boss.ResetBoss();var dark=ScreenColor();boss.Activer();var red=ScreenColor();
+ Assert(boss.State==BossState.Initialise&&red.r>red.g&&red.r>dark.r,"boss unlocked screen turns red");
+ for(int hit=1;hit<=3;hit++){Separate();Place(new Vector3(.9f,radius+.006f,14.95f),new Vector3(0,0,10));Step(.10f);sb.AppendLine("BOSS_REAL_HIT "+hit+" state="+boss.State+" touches="+typeof(BossTarget).GetField("touches",flags).GetValue(boss));}
+ var amber=ScreenColor();Assert(boss.State==BossState.Correction&&amber.g>red.g,"three actual impacts -> correction screen amber");
+ boss.NotifyCorrection();var blue=ScreenColor();Assert(boss.State==BossState.Compilation&&blue.b>blue.r,"correction notification -> compilation screen blue");
+ Separate();Place(new Vector3(.9f,radius+.006f,14.95f),new Vector3(0,0,10));Step(.10f);var green=ScreenColor();
+ Assert(boss.State==BossState.Vaincu&&green.g>green.r,"final actual impact -> defeated screen green");
+ Assert(ScoreManager.Instance.Score==210000,"boss existing score total="+ScoreManager.Instance.Score);
+ Assert(table.GetComponentsInChildren<SubjectTarget>().Length==6,"six reward targets preserved");
+}finally{Physics.simulationMode=previous;GameManager.Instance.StartGame();}
+sb.AppendLine("FAILURES="+failures);System.IO.File.WriteAllText("Tools/unity/out/score-mechanical-runtime.txt",sb.ToString());return sb.ToString();
+

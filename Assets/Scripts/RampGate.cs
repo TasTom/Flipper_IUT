@@ -153,7 +153,11 @@ public class RampGate : MonoBehaviour
 
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.AddScore(points);
+            var entry = IsEntry ? this : partner;
+            if (ScoreManager.Instance != null)
+                ScoreManager.Instance.RecordHit(entry != null && entry.name == "Ramp_IUT_In"
+                    ? ScoreElement.IutRamp : ScoreElement.VosgesRamp, entry != null ? entry : this,
+                    points, allowRepeat: true);
 
             if (!string.IsNullOrEmpty(displayName))
             {

@@ -1,0 +1,48 @@
+PASS Neutral uses ScoreConfig and starts at zero / x1
+PASS first action starts chain
+PASS same bumper does not advance
+PASS same bumper did not refresh deadline
+PASS 4-second boundary is inclusive
+PASS Super Combo is rewarded once per chain
+PASS repeated completed loop is eligible
+PASS chain reset
+PASS bumper GDD base 1000
+PASS two actions: 500 + combo 2500
+PASS three actions: Vosges 7500 + combo 5000
+PASS four actions: IUT 10000 + combo 10000 then x2
+PASS five actions: loop 5000 and Super 25000 multiplied by x2
+PASS Super Combo amount reaches cabinet display
+PASS sixth action pays base only
+PASS multiplier event reaches cabinet display
+PASS pause rejects score actions and stops scaled combo clock
+PASS unique validated course, two ramps and max combo level 3 tracked
+PASS bonus is 5000 + 2*2000 + 3*1000, without multiplier
+PASS loss decays x3 to x2
+PASS ball bonus replaces combo feedback
+PASS duplicate finish cannot award bonus again
+PASS first target series x2
+PASS two completed missions x3
+PASS boss activation x4
+PASS mission reward cannot lower existing multiplier
+PASS multiball activation adds flat 75000 and unlocks x5
+PASS multiplier cap x5
+PASS loss x5 to x4
+PASS x2 survives loss
+PASS three successful ramps raise multiplier
+PASS real multiball release creates three tracked balls and x5
+PASS intermediate multiball drain has no bonus or reserve-ball loss
+PASS second multiball drain also preserves logical ball
+PASS last multiball drain closes logical ball once, bonus 8000: remaining=2 events=1 bonus=8000 live=0 state=BallDrained
+PASS duplicate drain signal neither costs nor rewards again: remaining=2 events=1 bonus=8000 state=BallDrained
+PASS four nudges trigger tilt
+PASS tilt rejects points and immediate bonuses
+PASS tilt clears live balls, forfeits bonus and decays x4 to x3
+PASS restart clears tilt callback, combo, counters and multiplier
+PASS one 75000 bonus crosses two extra-ball thresholds immediately
+PASS extra-ball maximum of three respected
+PASS end-ball bonus crossing threshold saves last reserve ball before game over
+PASS last-ball high score includes 7500 ramp + 2000 bonus
+PASS final bonus remains visible at game over
+PASS new game clears feedback and restores x1 display
+PASS six reward targets retained
+FAILURES=0

@@ -1,0 +1,12 @@
+if(Application.isPlaying)throw new Exception("Stop Play first.");
+var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();var table=GameObject.Find("PinballTable").transform;var panel=table.Find("Backglass");var sm=UnityEngine.Object.FindAnyObjectByType<ScoreManager>();var sb=new System.Text.StringBuilder();
+string fingerprint=string.Join("\n",table.GetComponentsInChildren<Collider>(true).Where(c=>c.enabled&&c.gameObject.activeInHierarchy).OrderBy(c=>c.GetEntityId().ToString()).Select(c=>c.GetEntityId()+"|"+UnityEditor.EditorJsonUtility.ToJson(c)+"|"+c.transform.localToWorldMatrix.ToString("F6")));
+bool same=fingerprint==System.IO.File.ReadAllText("Tools/unity/out/score-colliders-before.txt");sb.AppendLine("ACTIVE_COLLIDERS_IDENTICAL="+same);if(!same)System.IO.File.WriteAllText("Tools/unity/out/score-colliders-after.txt",fingerprint);
+sb.AppendLine("SCENE="+scene.path+" dirty="+scene.isDirty);sb.AppendLine("REWARD_TARGETS="+table.GetComponentsInChildren<SubjectTarget>().Length);
+sb.AppendLine("SCORE_CONFIG="+UnityEditor.AssetDatabase.GetAssetPath(new UnityEditor.SerializedObject(sm).FindProperty("config").objectReferenceValue));
+var ds=new UnityEditor.SerializedObject(panel.GetComponent<BackglassDisplay>());foreach(string n in new[]{"multiplierText","scoreFeedbackText"})sb.AppendLine("UI_REFERENCE "+n+"="+ds.FindProperty(n).objectReferenceValue.name);
+sb.AppendLine("NEW_UI_COLLIDERS="+panel.Find("MultiplierValue").GetComponentsInChildren<Collider>(true).Length+","+panel.Find("ScoreFeedbackValue").GetComponentsInChildren<Collider>(true).Length);
+sb.AppendLine("MISSING_SCRIPTS="+scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Transform>(true)).Sum(t=>UnityEditor.GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(t.gameObject)));
+sb.AppendLine("COMPILATION_FAILED="+UnityEditor.EditorUtility.scriptCompilationFailed);
+var entries=typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.LogEntries");object[] counts={0,0,0};entries.GetMethod("GetCountsByType",System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.Public).Invoke(null,counts);sb.AppendLine("CONSOLE_ERRORS="+counts[0]+" warnings="+counts[1]+" logs="+counts[2]);
+System.IO.File.WriteAllText("Tools/unity/out/score-scene-verification.txt",sb.ToString());return sb.ToString();

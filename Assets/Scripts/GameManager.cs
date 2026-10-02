@@ -215,6 +215,12 @@ public class GameManager : MonoBehaviour
         ScoreManager.Instance.Add(points);
     }
 
+    public void AddBonus(int points)
+    {
+        if (State != GameState.GameOver && ScoreManager.Instance != null)
+            ScoreManager.Instance.AddBonus(points);
+    }
+
     /// <summary>
     /// Ajoute une bille supplémentaire (GDD §Modes avancés). Le compteur monte immédiatement :
     /// la bille en jeu n'est pas affectée, c'est la <i>prochaine</i> perte qui ne coûtera rien.
@@ -279,16 +285,21 @@ public class GameManager : MonoBehaviour
 
     private void HandleBallLoss()
     {
-        if (State == GameState.GameOver || State == GameState.Attract)
+        if (State == GameState.GameOver || State == GameState.Attract || State == GameState.BallDrained)
         {
             return;
         }
 
         // En multiball, la bille n'est réellement perdue que lorsque la dernière est tombée.
+        bool tilted = TiltController.Instance != null && TiltController.Instance.IsTilted;
         if (BallManager.Instance != null && BallManager.Instance.LiveBallCount > 0)
         {
-            return;
+            if (!tilted) return;
+            // Le tilt appelle LoseBall sans passer par le drain : terminer aussi un multiball.
+            BallManager.Instance.ClearAll();
         }
+
+        if (ScoreManager.Instance != null) ScoreManager.Instance.FinishBall(tilted);
 
         BallsRemaining--;
         BallsChanged?.Invoke(BallsRemaining);
@@ -371,6 +382,7 @@ public class GameManager : MonoBehaviour
         }
 
         SetState(GameState.ReadyToLaunch);
+        if (ScoreManager.Instance != null) ScoreManager.Instance.BeginBall();
     }
 
     /// <summary>Suspend ou reprend la partie (Échap, GDD §Contrôles).</summary>

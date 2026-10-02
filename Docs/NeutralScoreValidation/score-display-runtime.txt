@@ -1,0 +1,14 @@
+PASS neutral-score-combo ScoreValue full text in viewport; text=2 147 483 647
+PASS neutral-score-combo MultiplierValue full text in viewport; text=MULTIPLICATEUR ×5
+PASS neutral-score-combo ScoreFeedbackValue full text in viewport; text=SUPER COMBO  +125 000
+PASS neutral-score-combo MessageValue full text in viewport; text=BUG CRITIQUE DÉTECTÉ  +50 000
+PASS neutral-score-combo-16x10 ScoreValue full text in viewport; text=2 147 483 647
+PASS neutral-score-combo-16x10 MultiplierValue full text in viewport; text=MULTIPLICATEUR ×5
+PASS neutral-score-combo-16x10 ScoreFeedbackValue full text in viewport; text=SUPER COMBO  +125 000
+PASS neutral-score-combo-16x10 MessageValue full text in viewport; text=BUG CRITIQUE DÉTECTÉ  +50 000
+PASS neutral-score-bonus ScoreValue full text in viewport; text=2 147 483 647
+PASS neutral-score-bonus MultiplierValue full text in viewport; text=MULTIPLICATEUR ×4
+PASS neutral-score-bonus ScoreFeedbackValue full text in viewport; text=BONUS BILLE  +13 000
+PASS neutral-score-bonus MessageValue full text in viewport; text=BILLE PERDUE
+PASS very large score safely saturates without integer overflow
+FAILURES=0

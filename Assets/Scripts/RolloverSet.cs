@@ -192,6 +192,7 @@ public class RolloverSet : MonoBehaviour
         // La récompense de table : le kickback s'arme. C'est ce qui donne une raison d'aller
         // chercher les voies du haut autrement que pour les points.
         if (recompense != null) { recompense.Armer(); }
+        if (ScoreManager.Instance != null) ScoreManager.Instance.RecordTargetSeries();
 
         // On réarme : sur une vraie table, une rangée complétée se rallume et peut l'être à
         // nouveau. Sans cela, les voies seraient mortes pour le reste de la partie.

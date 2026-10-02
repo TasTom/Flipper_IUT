@@ -1,0 +1,10 @@
+ACTIVE_COLLIDERS_IDENTICAL=True
+SCENE=Assets/Scenes/Neutral.unity dirty=False
+REWARD_TARGETS=6
+SCORE_CONFIG=Assets/Config/NeutralScore.asset
+UI_REFERENCE multiplierText=MultiplierValue
+UI_REFERENCE scoreFeedbackText=ScoreFeedbackValue
+NEW_UI_COLLIDERS=0,0
+MISSING_SCRIPTS=0
+COMPILATION_FAILED=False
+CONSOLE_ERRORS=0 warnings=0 logs=3

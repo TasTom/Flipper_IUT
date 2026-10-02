@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9dc14d3ed411a7479931eac564dba68, type: 3}
+  m_Name: NeutralScore
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreConfig
+  slingshot: 100
+  bumper: 1000
+  simpleTarget: 500
+  matieres: 2500
+  java: 2000
+  cafe: 1500
+  loop: 5000
+  vosgesRamp: 7500
+  iutRamp: 10000
+  comboWindow: 4
+  comboOne: 2500
+  comboTwo: 5000
+  comboThree: 10000
+  superCombo: 25000
+  comboSound: {fileID: 8300000, guid: 5706db45e58b15d42964f3fe1dc4c20e, type: 3}
+  comboVolume: 0.85
+  comboPitch: 1
+  comboPitchStep: 0.08
+  maximumMultiplier: 5
+  seriesMultiplier: 2
+  missionsForMultiplier: 2
+  missionMultiplier: 3
+  bossMultiplier: 4
+  multiballMultiplier: 5
+  multiballActivationBonus: 75000
+  rampsForIncrease: 3
+  comboActionsForIncrease: 4
+  decayFromMultiplier: 3
+  validatedCourseBonus: 5000
+  successfulRampBonus: 2000
+  maximumComboBonus: 1000
+  forfeitBonusOnTilt: 1

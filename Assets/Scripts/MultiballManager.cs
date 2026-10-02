@@ -84,6 +84,8 @@ public class MultiballManager : MonoBehaviour
             return;
         }
 
+        bool alreadyMultiball = BallManager.Instance != null && BallManager.Instance.LiveBallCount > 1;
+        int released = 0;
         for (int i = 0; i < extraBalls; i++)
         {
             Physics.SyncTransforms();
@@ -101,8 +103,11 @@ public class MultiballManager : MonoBehaviour
             if (ballRigidbody != null)
             {
                 ballRigidbody.AddForce(release.forward * spawnImpulse, ForceMode.Impulse);
+                released++;
             }
         }
+        if (released > 0 && !alreadyMultiball && ScoreManager.Instance != null)
+            ScoreManager.Instance.RecordMultiballStarted();
     }
 
     private Transform FindFreeRelease()

@@ -149,18 +149,23 @@ public class SubjectTarget : MonoBehaviour
 
         dernierHit = Time.time;
 
-        // Les points sont versés dans tous les cas : une cible éteinte reste une cible.
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.AddScore(points);
-        }
-
         bool aValide = false;
 
         if (state == TargetState.Active)
         {
             state = TargetState.Validee;
             aValide = true;
+        }
+
+        // Enregistrer la validation avant que la mission suivante n'éteigne le groupe.
+        if (ScoreManager.Instance != null)
+        {
+            ScoreElement element = groupId switch
+            {
+                "Matieres" => ScoreElement.Matieres, "Java" => ScoreElement.Java,
+                "Cafe" => ScoreElement.Cafe, _ => ScoreElement.SimpleTarget
+            };
+            ScoreManager.Instance.RecordHit(element, this, points, courseValidated: aValide && groupId == "Matieres");
         }
 
         Eclair();

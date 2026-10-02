@@ -19,6 +19,8 @@ public class HudController : MonoBehaviour
     [SerializeField] private TMP_Text highScoreText;
     [SerializeField] private TMP_Text ballsText;
     [SerializeField] private TMP_Text messageText;
+    [SerializeField] private TMP_Text multiplierText;
+    [SerializeField] private TMP_Text scoreFeedbackText;
 
     [Header("Découverte automatique")]
     [Tooltip("Remplit les champs vides en cherchant les enfants nommés ScoreText, " +
@@ -51,10 +53,19 @@ public class HudController : MonoBehaviour
 
     private void OnEnable()
     {
+        Subscribe();
+    }
+
+    private void Subscribe()
+    {
+        Unsubscribe();
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.ScoreChanged += OnScoreChanged;
             ScoreManager.Instance.HighScoreChanged += OnHighScoreChanged;
+            ScoreManager.Instance.MultiplierChanged += OnMultiplierChanged;
+            ScoreManager.Instance.ComboChanged += OnComboChanged;
+            ScoreManager.Instance.BallBonusAwarded += OnBallBonus;
         }
 
         if (GameManager.Instance != null)
@@ -66,10 +77,18 @@ public class HudController : MonoBehaviour
 
     private void OnDisable()
     {
+        Unsubscribe();
+    }
+
+    private void Unsubscribe()
+    {
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.ScoreChanged -= OnScoreChanged;
             ScoreManager.Instance.HighScoreChanged -= OnHighScoreChanged;
+            ScoreManager.Instance.MultiplierChanged -= OnMultiplierChanged;
+            ScoreManager.Instance.ComboChanged -= OnComboChanged;
+            ScoreManager.Instance.BallBonusAwarded -= OnBallBonus;
         }
 
         if (GameManager.Instance != null)
@@ -89,12 +108,16 @@ public class HudController : MonoBehaviour
 
     private void Start()
     {
+        // Reprendre les abonnements si le HUD s'est éveillé avant les gestionnaires.
+        Subscribe();
         // Les gestionnaires ont fini leur Awake : on récupère l'état initial plutôt que
         // d'attendre le premier événement, qui n'arrivera qu'au premier point marqué.
         if (ScoreManager.Instance != null)
         {
             OnScoreChanged(ScoreManager.Instance.Score);
             OnHighScoreChanged(ScoreManager.Instance.HighScore);
+            OnMultiplierChanged(ScoreManager.Instance.Multiplier);
+            OnComboChanged(ScoreManager.Instance.ComboLevel, 0);
         }
 
         if (GameManager.Instance != null)
@@ -167,6 +190,29 @@ public class HudController : MonoBehaviour
         }
     }
 
+    private void OnMultiplierChanged(int multiplier)
+    {
+        if (multiplierText != null) multiplierText.text = $"MULTIPLICATEUR : ×{multiplier}";
+    }
+
+    private void OnComboChanged(int level, int awarded)
+    {
+        if (scoreFeedbackText == null) return;
+        if (level > 0)
+            scoreFeedbackText.text = (level >= 4 ? "SUPER COMBO" : $"COMBO ×{level}")
+                                   + (awarded > 0 ? $"  +{awarded:N0}" : string.Empty);
+        else if (ScoreManager.Instance != null && (ScoreManager.Instance.LastBallBonus.Points > 0
+                 || ScoreManager.Instance.LastBallBonus.Forfeited))
+            OnBallBonus(ScoreManager.Instance.LastBallBonus);
+        else scoreFeedbackText.text = string.Empty;
+    }
+
+    private void OnBallBonus(ScoreManager.BallBonus bonus)
+    {
+        if (scoreFeedbackText != null)
+            scoreFeedbackText.text = bonus.Forfeited ? "BONUS ANNULÉ — TILT" : $"BONUS BILLE  +{bonus.Points:N0}";
+    }
+
     /// <summary>
     /// Cherche les textes par nom d'objet. Évite <c>GameObject.Find</c>, qui parcourt toute la
     /// scène, et permet au script de build de générer le HUD avec les noms attendus.
@@ -195,6 +241,8 @@ public class HudController : MonoBehaviour
             {
                 messageText = candidate;
             }
+            else if (multiplierText == null && n == "MultiplierText") multiplierText = candidate;
+            else if (scoreFeedbackText == null && n == "ScoreFeedbackText") scoreFeedbackText = candidate;
         }
     }
 

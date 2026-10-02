@@ -1,0 +1,77 @@
+if(!Application.isPlaying)throw new Exception("Play required");
+var gm=GameManager.Instance;var sm=ScoreManager.Instance;var bm=BallManager.Instance;var table=GameObject.Find("PinballTable").transform;
+var sb=new System.Text.StringBuilder();int failures=0;var oldPhysics=Physics.simulationMode;
+var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+var highField=typeof(ScoreManager).GetField("<HighScore>k__BackingField",flags);int oldHigh=sm.HighScore;
+var extra=UnityEngine.Object.FindAnyObjectByType<ExtraBallAward>();
+int oldFirst=(int)typeof(ExtraBallAward).GetField("firstThreshold",flags).GetValue(extra),oldStep=(int)typeof(ExtraBallAward).GetField("thresholdStep",flags).GetValue(extra),oldMax=(int)typeof(ExtraBallAward).GetField("maxExtraBalls",flags).GetValue(extra);
+const string key="VosgesTilt_HighScore";bool hadRecord=PlayerPrefs.HasKey(key);int record=PlayerPrefs.GetInt(key);
+var source=table.GetComponentsInChildren<SubjectTarget>().Cast<UnityEngine.Object>().ToArray();
+var panel=table.Find("Backglass");var mult=panel.Find("MultiplierValue").GetComponent<TMPro.TMP_Text>();var feedback=panel.Find("ScoreFeedbackValue").GetComponent<TMPro.TMP_Text>();
+void Assert(bool value,string message){sb.AppendLine((value?"PASS ":"FAIL ")+message);if(!value)failures++;}
+void Hit(ScoreElement e,int i,bool repeat=false,bool course=false){sm.RecordHit(e,source[i],999,repeat,course);}
+void Drain(Rigidbody ball){bm.NotifyDrained(ball.GetComponent<Collider>());}
+try{
+ Physics.simulationMode=SimulationMode.Script;extra.ConfigurerPaliers(int.MaxValue,0,3);gm.StartGame();
+ Assert(sm.HasAdvancedRules&&sm.Multiplier==1&&sm.Score==0,"Neutral uses ScoreConfig and starts at zero / x1");
+ var chain=new ComboTracker();var a=new object();var b=new object();var c=new object();var d=new object();var e=new object();
+ Assert(chain.Register(a,false,0,4)&&chain.Actions==1,"first action starts chain");
+ Assert(!chain.Register(a,false,3,4)&&chain.Actions==1,"same bumper does not advance");
+ Assert(chain.Expire(4.01f,4)&&chain.Actions==0,"same bumper did not refresh deadline");
+ chain.Register(a,false,10,4);Assert(chain.Register(b,false,14,4)&&chain.Actions==2,"4-second boundary is inclusive");
+ chain.Register(c,false,15,4);chain.Register(d,false,16,4);chain.Register(e,false,17,4);
+ Assert(chain.Actions==5&&!chain.Register(a,false,18,4)&&chain.Actions==5,"Super Combo is rewarded once per chain");
+ chain.Clear();chain.Register(a,true,20,4);Assert(chain.Register(a,true,21,4)&&chain.Actions==2,"repeated completed loop is eligible");
+ chain.Clear();Assert(chain.Actions==0,"chain reset");
+ Hit(ScoreElement.Bumper,0);Assert(sm.Score==1000&&sm.ComboLevel==0,"bumper GDD base 1000");
+ Hit(ScoreElement.SimpleTarget,1);Assert(sm.Score==4000&&sm.ComboLevel==1,"two actions: 500 + combo 2500");
+ Hit(ScoreElement.VosgesRamp,2,true);Assert(sm.Score==16500&&sm.ComboLevel==2,"three actions: Vosges 7500 + combo 5000");
+ Hit(ScoreElement.IutRamp,3,true);Assert(sm.Score==36500&&sm.ComboLevel==3&&sm.Multiplier==2,"four actions: IUT 10000 + combo 10000 then x2");
+ Hit(ScoreElement.Loop,4,true);Assert(sm.Score==96500&&sm.ComboLevel==4,"five actions: loop 5000 and Super 25000 multiplied by x2");
+ Assert(feedback.text.Contains("SUPER COMBO")&&feedback.text.Contains("50"),"Super Combo amount reaches cabinet display");
+ int before=sm.Score;Hit(ScoreElement.SimpleTarget,5);Assert(sm.Score-before==1000,"sixth action pays base only");
+ Assert(mult.text.EndsWith("×2"),"multiplier event reaches cabinet display");
+ gm.TogglePause();before=sm.Score;Hit(ScoreElement.Bumper,1);Assert(sm.Score==before&&Time.timeScale==0,"pause rejects score actions and stops scaled combo clock");gm.TogglePause();
+ gm.StartGame();sm.SetMultiplier(2);
+ Hit(ScoreElement.Matieres,0,false,true);Hit(ScoreElement.Matieres,0,false,true);Hit(ScoreElement.VosgesRamp,1,true);Hit(ScoreElement.IutRamp,2,true);Hit(ScoreElement.Loop,3,true);
+ Assert(sm.ValidatedCoursesThisBall==1&&sm.RampsThisBall==2&&sm.MaximumComboThisBall==3,"unique validated course, two ramps and max combo level 3 tracked");
+ before=sm.Score;sm.FinishBall(false);
+ Assert(sm.Score-before==12000&&sm.LastBallBonus.Points==12000,"bonus is 5000 + 2*2000 + 3*1000, without multiplier");
+ Assert(sm.Multiplier==2,"loss decays x3 to x2");
+ Assert(feedback.text.Contains("BONUS BILLE")&&feedback.text.Contains("12"),"ball bonus replaces combo feedback");
+ before=sm.Score;sm.FinishBall(false);Assert(sm.Score==before,"duplicate finish cannot award bonus again");
+ gm.StartGame();sm.RecordTargetSeries();Assert(sm.Multiplier==2,"first target series x2");
+ sm.RecordMissionCompleted(false,2,1);Assert(sm.Multiplier==3,"two completed missions x3");
+ sm.RecordBossActivated();Assert(sm.Multiplier==4,"boss activation x4");
+ sm.RecordMissionCompleted(true,3,2);Assert(sm.Multiplier==4,"mission reward cannot lower existing multiplier");
+ before=sm.Score;sm.RecordMultiballStarted();Assert(sm.Multiplier==5&&sm.Score-before==75000,"multiball activation adds flat 75000 and unlocks x5");
+ sm.SetMultiplier(99);Assert(sm.Multiplier==5,"multiplier cap x5");sm.FinishBall(false);Assert(sm.Multiplier==4,"loss x5 to x4");
+ gm.StartGame();sm.SetMultiplier(2);sm.FinishBall(false);Assert(sm.Multiplier==2,"x2 survives loss");
+ gm.StartGame();Hit(ScoreElement.VosgesRamp,0,true);Hit(ScoreElement.VosgesRamp,0,true);Hit(ScoreElement.VosgesRamp,0,true);Assert(sm.RampsThisBall==3&&sm.Multiplier==2,"three successful ramps raise multiplier");
+ gm.StartGame();Hit(ScoreElement.Matieres,0,false,true);Hit(ScoreElement.VosgesRamp,1,true);
+ MultiballManager.Instance.TriggerMultiball();Assert(bm.LiveBallCount==3&&sm.Multiplier==5,"real multiball release creates three tracked balls and x5");
+ before=sm.Score;int remaining=gm.BallsRemaining;int bonusEvents=0;System.Action<ScoreManager.BallBonus> onBonus=x=>bonusEvents++;sm.BallBonusAwarded+=onBonus;
+ var balls=UnityEngine.Object.FindObjectsByType<Rigidbody>(FindObjectsSortMode.None).Where(x=>x.CompareTag("Ball")&&x.gameObject.activeInHierarchy).ToArray();
+ Drain(balls[0]);Assert(gm.BallsRemaining==remaining&&sm.Score==before&&bonusEvents==0,"intermediate multiball drain has no bonus or reserve-ball loss");
+ Drain(balls[1]);Assert(gm.BallsRemaining==remaining&&bonusEvents==0,"second multiball drain also preserves logical ball");
+ Drain(balls[2]);Assert(gm.BallsRemaining==remaining-1&&bonusEvents==1&&sm.LastBallBonus.Points==8000,"last multiball drain closes logical ball once, bonus 8000: remaining="+gm.BallsRemaining+" events="+bonusEvents+" bonus="+sm.LastBallBonus.Points+" live="+bm.LiveBallCount+" state="+gm.State);
+ before=sm.Score;gm.LoseBall();Assert(gm.BallsRemaining==remaining-1&&sm.Score==before&&bonusEvents==1,"duplicate drain signal neither costs nor rewards again: remaining="+gm.BallsRemaining+" events="+bonusEvents+" bonus="+sm.LastBallBonus.Points+" state="+gm.State);sm.BallBonusAwarded-=onBonus;
+ gm.StartGame();Hit(ScoreElement.VosgesRamp,0,true);sm.SetMultiplier(4);
+ var tilt=TiltController.Instance;tilt.ConfigurerSecousses(2,4);for(int i=0;i<4;i++)tilt.Secouer(1);
+ Assert(tilt.IsTilted,"four nudges trigger tilt");before=sm.Score;Hit(ScoreElement.Bumper,1);sm.AddBonus(5000);Assert(sm.Score==before,"tilt rejects points and immediate bonuses");
+ gm.LoseBall();Assert(bm.LiveBallCount==0&&gm.BallsRemaining==2&&sm.LastBallBonus.Forfeited&&sm.Score==before&&sm.Multiplier==3,"tilt clears live balls, forfeits bonus and decays x4 to x3");
+ gm.StartGame();Assert(!tilt.IsTilted&&!tilt.IsInvoking("PerdreLaBille")&&sm.Multiplier==1&&sm.ComboLevel==0&&sm.RampsThisBall==0&&sm.ValidatedCoursesThisBall==0,"restart clears tilt callback, combo, counters and multiplier");
+ extra.ConfigurerPaliers(30000,30000,3);gm.StartGame();sm.AddBonus(75000);Assert(gm.BallsRemaining==5,"one 75000 bonus crosses two extra-ball thresholds immediately");sm.AddBonus(75000);Assert(gm.BallsRemaining==6,"extra-ball maximum of three respected");
+ extra.ConfigurerPaliers(9000,0,1);gm.StartGame();Hit(ScoreElement.VosgesRamp,0,true);typeof(GameManager).GetField("<BallsRemaining>k__BackingField",flags).SetValue(gm,1);
+ var rescued=UnityEngine.Object.FindObjectsByType<Rigidbody>(FindObjectsSortMode.None).First(x=>x.CompareTag("Ball")&&x.gameObject.activeInHierarchy);Drain(rescued);Assert(gm.BallsRemaining==1&&gm.State==GameManager.GameState.BallDrained&&sm.Score==9500,"end-ball bonus crossing threshold saves last reserve ball before game over");
+ extra.ConfigurerPaliers(int.MaxValue,0,3);gm.StartGame();Hit(ScoreElement.VosgesRamp,0,true);highField.SetValue(sm,0);typeof(GameManager).GetField("<BallsRemaining>k__BackingField",flags).SetValue(gm,1);
+ var finalBall=UnityEngine.Object.FindObjectsByType<Rigidbody>(FindObjectsSortMode.None).First(x=>x.CompareTag("Ball")&&x.gameObject.activeInHierarchy);Drain(finalBall);
+ Assert(gm.State==GameManager.GameState.GameOver&&sm.Score==9500&&sm.HighScore==9500&&PlayerPrefs.GetInt(key)==9500,"last-ball high score includes 7500 ramp + 2000 bonus");
+ Assert(feedback.text.Contains("BONUS BILLE"),"final bonus remains visible at game over");
+ gm.StartGame();Assert(sm.Score==0&&feedback.text==string.Empty&&mult.text.EndsWith("×1"),"new game clears feedback and restores x1 display");
+ Assert(table.GetComponentsInChildren<SubjectTarget>().Length==6,"six reward targets retained");
+}finally{
+ if(hadRecord)PlayerPrefs.SetInt(key,record);else PlayerPrefs.DeleteKey(key);PlayerPrefs.Save();highField.SetValue(sm,oldHigh);
+ extra.ConfigurerPaliers(oldFirst,oldStep,oldMax);gm.StartGame();Physics.simulationMode=oldPhysics;
+}
+sb.AppendLine("FAILURES="+failures);System.IO.File.WriteAllText("Tools/unity/out/score-rules-runtime.txt",sb.ToString());return sb.ToString();

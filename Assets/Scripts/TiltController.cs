@@ -216,6 +216,7 @@ public class TiltController : MonoBehaviour
     /// <summary>Remet le tilt à zéro pour une nouvelle bille.</summary>
     public void ResetTilt()
     {
+        CancelInvoke(nameof(PerdreLaBille));
         IsTilted = false;
         secousses = 0;
         avertissementDonne = false;

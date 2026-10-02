@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -19,8 +20,33 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private int startingScore;
 
     [Header("Multiplicateur")]
-    [Tooltip("Le multiplicateur reste à 1 tant que le GDD §Score n'est pas implémenté.")]
+    [Tooltip("État courant. Une nouvelle partie repart à ×1.")]
     [SerializeField] private int multiplier = 1;
+
+    [Tooltip("Règles de score avancées. Sans configuration, le barème historique des composants est conservé.")]
+    [SerializeField] private ScoreConfig config;
+
+    private readonly ComboTracker combo = new ComboTracker();
+    private readonly HashSet<UnityEngine.Object> validatedCourses = new HashSet<UnityEngine.Object>();
+    private bool ballActive;
+    private int rampsThisBall;
+    private int maximumComboThisBall;
+
+    public struct BallBonus
+    {
+        public int Courses, Ramps, MaximumCombo, Points;
+        public bool Forfeited;
+    }
+
+    public bool HasAdvancedRules => config != null;
+    public int ComboLevel => Mathf.Max(0, combo.Actions - 1);
+    public int MaximumComboThisBall => maximumComboThisBall;
+    public int RampsThisBall => rampsThisBall;
+    public int ValidatedCoursesThisBall => validatedCourses.Count;
+    public BallBonus LastBallBonus { get; private set; }
+    public event Action<int> MultiplierChanged;
+    public event Action<int, int> ComboChanged;
+    public event Action<BallBonus> BallBonusAwarded;
 
     /// <summary>Score courant de la partie.</summary>
     public int Score { get; private set; }
@@ -49,6 +75,8 @@ public class ScoreManager : MonoBehaviour
         Instance = this;
         Score = startingScore;
         HighScore = PlayerPrefs.GetInt(HighScoreKey, 0);
+        if (config == null)
+            Debug.Log("[ScoreManager] ScoreConfig absent : score simple actif, combos et bonus de bille désactivés.", this);
     }
 
     private void OnDestroy()
@@ -64,19 +92,19 @@ public class ScoreManager : MonoBehaviour
         // Après les Awake : le HUD a eu le temps de s'abonner.
         ScoreChanged?.Invoke(Score);
         HighScoreChanged?.Invoke(HighScore);
+        MultiplierChanged?.Invoke(multiplier);
     }
 
     /// <summary>Ajoute des points, pondérés par le multiplicateur courant.</summary>
     /// <param name="points">Points de base, avant multiplicateur.</param>
     public void Add(int points)
     {
-        if (points == 0)
+        if (points == 0 || !CanAward())
         {
             return;
         }
 
-        Score = Mathf.Max(0, Score + points * multiplier);
-        ScoreChanged?.Invoke(Score);
+        AddTotal((long)points * multiplier);
     }
 
     /// <summary>Remet le score à zéro pour une nouvelle partie. Le record est conservé.</summary>
@@ -84,13 +112,153 @@ public class ScoreManager : MonoBehaviour
     {
         Score = startingScore;
         multiplier = 1;
+        ballActive = false;
+        LastBallBonus = default;
+        validatedCourses.Clear();
+        rampsThisBall = maximumComboThisBall = 0;
+        ClearCombo();
         ScoreChanged?.Invoke(Score);
+        MultiplierChanged?.Invoke(multiplier);
     }
 
     /// <summary>Fixe le multiplicateur (GDD §Score, étape 2).</summary>
     public void SetMultiplier(int value)
     {
-        multiplier = Mathf.Max(1, value);
+        int next = config != null ? Mathf.Clamp(value, 1, Mathf.Max(1, config.maximumMultiplier))
+                                  : Mathf.Max(1, value);
+        if (next == multiplier) return;
+        multiplier = next;
+        MultiplierChanged?.Invoke(multiplier);
+    }
+
+    public void RaiseMultiplierTo(int minimum) => SetMultiplier(Mathf.Max(multiplier, minimum));
+
+    private bool CanAward()
+    {
+        if (TiltController.Instance != null && TiltController.Instance.IsTilted) return false;
+        if (config != null && !ballActive) return false;
+        if (GameManager.Instance == null) return true;
+        var state = GameManager.Instance.State;
+        return state == GameManager.GameState.Playing || state == GameManager.GameState.ReadyToLaunch;
+    }
+
+    private void AddTotal(long points)
+    {
+        Score = (int)Math.Max(0L, Math.Min(int.MaxValue, Score + points));
+        ScoreChanged?.Invoke(Score);
+    }
+
+    /// <summary>Gros bonus lisible, sans multiplication supplémentaire.</summary>
+    public void AddBonus(int points)
+    {
+        if (points > 0 && CanAward()) AddTotal(points);
+    }
+
+    /// <summary>Un élément a réellement marqué : source physique, barème et chaîne de combo.</summary>
+    public void RecordHit(ScoreElement element, UnityEngine.Object source, int legacyPoints,
+                          bool allowRepeat = false, bool courseValidated = false)
+    {
+        if (!CanAward()) return;
+        Add(config != null ? config.Points(element) : legacyPoints);
+        if (config == null) return;
+        if (courseValidated && source != null) validatedCourses.Add(source);
+        RegisterCombo(source, allowRepeat);
+        if (element == ScoreElement.VosgesRamp || element == ScoreElement.IutRamp)
+        {
+            rampsThisBall++;
+            if (rampsThisBall % Mathf.Max(1, config.rampsForIncrease) == 0)
+                RaiseMultiplierTo(multiplier + 1);
+        }
+    }
+
+    private void RegisterCombo(UnityEngine.Object source, bool repeat)
+    {
+        int previous = combo.Actions;
+        bool advanced = combo.Register(source, repeat, Time.time, Mathf.Max(.1f, config.comboWindow));
+        if (!advanced)
+        {
+            if (previous > 0 && combo.Actions == 0) ComboChanged?.Invoke(0, 0);
+            return;
+        }
+        int level = ComboLevel;
+        maximumComboThisBall = Mathf.Max(maximumComboThisBall, level);
+        int bonus = config.ComboBonus(level);
+        int awarded = (int)Math.Min(int.MaxValue, (long)bonus * multiplier);
+        if (bonus > 0) Add(bonus);
+        ComboChanged?.Invoke(level, awarded);
+        if (bonus > 0 && AudioManager.Instance != null)
+            AudioManager.Instance.Play(config.comboSound, config.comboVolume,
+                                       config.comboPitch + (level - 1) * config.comboPitchStep);
+        if (combo.Actions == config.comboActionsForIncrease) RaiseMultiplierTo(multiplier + 1);
+    }
+
+    private void Update()
+    {
+        if (config != null && combo.Expire(Time.time, Mathf.Max(.1f, config.comboWindow)))
+            ComboChanged?.Invoke(0, 0);
+    }
+
+    private void ClearCombo()
+    {
+        combo.Clear();
+        ComboChanged?.Invoke(0, 0);
+    }
+
+    public void BeginBall()
+    {
+        ballActive = true;
+        rampsThisBall = maximumComboThisBall = 0;
+        validatedCourses.Clear();
+        LastBallBonus = default;
+        ClearCombo();
+    }
+
+    /// <summary>Une seule clôture par bille logique ; les pertes intermédiaires de multiball ne clôturent pas.</summary>
+    public void FinishBall(bool tilted)
+    {
+        if (!ballActive) return;
+        ballActive = false;
+        ClearCombo();
+        if (config == null) return;
+        long total = (long)validatedCourses.Count * Mathf.Max(0, config.validatedCourseBonus)
+                   + (long)rampsThisBall * Mathf.Max(0, config.successfulRampBonus)
+                   + (long)maximumComboThisBall * Mathf.Max(0, config.maximumComboBonus);
+        bool forfeited = tilted && config.forfeitBonusOnTilt;
+        LastBallBonus = new BallBonus
+        {
+            Courses = validatedCourses.Count, Ramps = rampsThisBall, MaximumCombo = maximumComboThisBall,
+            Points = forfeited ? 0 : (int)Math.Min(int.MaxValue, total), Forfeited = forfeited
+        };
+        // Le versement précède GameOver et le record, et ne repasse pas par Add/multiplicateur.
+        if (LastBallBonus.Points > 0) AddTotal(LastBallBonus.Points);
+        if (multiplier >= Mathf.Max(2, config.decayFromMultiplier)) SetMultiplier(multiplier - 1);
+        BallBonusAwarded?.Invoke(LastBallBonus);
+    }
+
+    public void RecordTargetSeries()
+    {
+        if (config != null && CanAward()) RaiseMultiplierTo(config.seriesMultiplier);
+    }
+
+    public void RecordMissionCompleted(bool targetSeries, int completed, int legacyMultiplier)
+    {
+        if (config == null) { if (legacyMultiplier > 1) SetMultiplier(legacyMultiplier); return; }
+        if (!CanAward()) return;
+        RaiseMultiplierTo(legacyMultiplier);
+        if (targetSeries) RaiseMultiplierTo(config.seriesMultiplier);
+        if (completed >= Mathf.Max(1, config.missionsForMultiplier)) RaiseMultiplierTo(config.missionMultiplier);
+    }
+
+    public void RecordBossActivated()
+    {
+        if (config != null && CanAward()) RaiseMultiplierTo(config.bossMultiplier);
+    }
+
+    public void RecordMultiballStarted()
+    {
+        if (config == null || !CanAward()) return;
+        AddBonus(config.multiballActivationBonus);
+        RaiseMultiplierTo(config.multiballMultiplier);
     }
 
     /// <summary>

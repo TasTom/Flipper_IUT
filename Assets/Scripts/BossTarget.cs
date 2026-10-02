@@ -132,10 +132,12 @@ public class BossTarget : MonoBehaviour
 
         if (GameManager.Instance != null)
         {
-            if (bonusActivation > 0) { GameManager.Instance.AddScore(bonusActivation); }
+            if (bonusActivation > 0) { GameManager.Instance.AddBonus(bonusActivation); }
 
             GameManager.Instance.ShowMessage($"BUG CRITIQUE DÉTECTÉ  +{bonusActivation:N0}", dureeMessage);
         }
+
+        if (ScoreManager.Instance != null) ScoreManager.Instance.RecordBossActivated();
     }
 
     /// <summary>
@@ -230,7 +232,7 @@ public class BossTarget : MonoBehaviour
 
                 if (GameManager.Instance != null)
                 {
-                    if (bonusCompilation > 0) { GameManager.Instance.AddScore(bonusCompilation); }
+                    if (bonusCompilation > 0) { GameManager.Instance.AddBonus(bonusCompilation); }
 
                     GameManager.Instance.ShowMessage($"PROJET FINAL COMPILÉ  +{bonusCompilation:N0}", 3f);
                 }

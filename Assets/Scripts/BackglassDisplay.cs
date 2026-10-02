@@ -44,6 +44,9 @@ public class BackglassDisplay : MonoBehaviour
     [Tooltip("Message temporaire — Nuit de l'Info, perte de bille…")]
     [SerializeField] private TMP_Text messageText;
 
+    [SerializeField] private TMP_Text multiplierText;
+    [SerializeField] private TMP_Text scoreFeedbackText;
+
     [Header("Découverte automatique")]
     [Tooltip("Remplit les champs vides en cherchant les enfants portant ces noms exacts.")]
     [SerializeField] private bool autoFindTexts = true;
@@ -63,6 +66,8 @@ public class BackglassDisplay : MonoBehaviour
             Resolve("MissionsValue", ref missionsText);
             Resolve("MissionsLabel", ref missionsLabelText);
             Resolve("MessageValue", ref messageText);
+            Resolve("MultiplierValue", ref multiplierText);
+            Resolve("ScoreFeedbackValue", ref scoreFeedbackText);
         }
 
         if (scoreText == null && highScoreText == null && ballsText == null
@@ -103,6 +108,9 @@ public class BackglassDisplay : MonoBehaviour
         {
             ScoreManager.Instance.ScoreChanged += OnScoreChanged;
             ScoreManager.Instance.HighScoreChanged += OnHighScoreChanged;
+            ScoreManager.Instance.MultiplierChanged += OnMultiplierChanged;
+            ScoreManager.Instance.ComboChanged += OnComboChanged;
+            ScoreManager.Instance.BallBonusAwarded += OnBallBonus;
         }
 
         if (GameManager.Instance != null)
@@ -125,6 +133,9 @@ public class BackglassDisplay : MonoBehaviour
         {
             ScoreManager.Instance.ScoreChanged -= OnScoreChanged;
             ScoreManager.Instance.HighScoreChanged -= OnHighScoreChanged;
+            ScoreManager.Instance.MultiplierChanged -= OnMultiplierChanged;
+            ScoreManager.Instance.ComboChanged -= OnComboChanged;
+            ScoreManager.Instance.BallBonusAwarded -= OnBallBonus;
         }
 
         if (GameManager.Instance != null)
@@ -162,6 +173,8 @@ public class BackglassDisplay : MonoBehaviour
         {
             OnScoreChanged(ScoreManager.Instance.Score);
             OnHighScoreChanged(ScoreManager.Instance.HighScore);
+            OnMultiplierChanged(ScoreManager.Instance.Multiplier);
+            OnComboChanged(ScoreManager.Instance.ComboLevel, 0);
         }
 
         if (GameManager.Instance != null)
@@ -200,6 +213,31 @@ public class BackglassDisplay : MonoBehaviour
         for (int i = 0; i < balls; i++) { texte.Append('●'); }
 
         ballsText.text = balls > 0 ? texte.ToString() : "—";
+    }
+
+    private void OnMultiplierChanged(int value)
+    {
+        if (multiplierText != null) multiplierText.text = $"MULTIPLICATEUR ×{value}";
+    }
+
+    private void OnComboChanged(int level, int awarded)
+    {
+        if (scoreFeedbackText == null) return;
+        if (level > 0)
+        {
+            string title = level >= 4 ? "SUPER COMBO" : $"COMBO ×{level}";
+            scoreFeedbackText.text = awarded > 0 ? $"{title}  +{awarded:N0}" : title;
+        }
+        else if (ScoreManager.Instance != null && (ScoreManager.Instance.LastBallBonus.Points > 0
+                 || ScoreManager.Instance.LastBallBonus.Forfeited))
+            OnBallBonus(ScoreManager.Instance.LastBallBonus);
+        else scoreFeedbackText.text = string.Empty;
+    }
+
+    private void OnBallBonus(ScoreManager.BallBonus bonus)
+    {
+        if (scoreFeedbackText != null)
+            scoreFeedbackText.text = bonus.Forfeited ? "BONUS ANNULÉ — TILT" : $"BONUS BILLE  +{bonus.Points:N0}";
     }
 
     private void OnProgressChanged(int completed, int total)

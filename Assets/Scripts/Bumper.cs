@@ -297,7 +297,7 @@ public class Bumper : MonoBehaviour
 
         if (ScoreManager.Instance != null)
         {
-            ScoreManager.Instance.Add(scoreValue);
+            ScoreManager.Instance.RecordHit(ScoreElement.Bumper, this, scoreValue);
         }
 
         StartBounce(collision.relativeVelocity.magnitude);

@@ -177,7 +177,8 @@ public class LoopGate : MonoBehaviour
 
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.AddScore(points);
+            if (ScoreManager.Instance != null)
+                ScoreManager.Instance.RecordHit(ScoreElement.Loop, partner, points, allowRepeat: true);
 
             if (!string.IsNullOrEmpty(displayName))
             {

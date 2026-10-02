@@ -1,0 +1,4 @@
+PASS scene without ScoreConfig preserves legacy component points, no combo
+PASS legacy mission multiplier still works
+PASS unconfigured scene does not add advanced bonus
+FAILURES=0

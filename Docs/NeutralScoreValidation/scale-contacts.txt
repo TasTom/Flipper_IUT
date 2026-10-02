@@ -1,0 +1,12 @@
+BUMPER Bumper_01 hits=1 score=1000 decorationFollowsCap=True finite=True
+BUMPER Bumper_02 hits=1 score=1000 decorationFollowsCap=True finite=True
+BUMPER Bumper_03 hits=1 score=1000 decorationFollowsCap=True finite=True
+SLING Slingshot_Left score=100 velocity=(12.61, 0.00, 5.78)
+SLING Slingshot_Right score=100 velocity=(-12.61, 0.00, 5.78)
+SPINNER score=500 rotation=71,2
+OUTLANE -1 speed=5 losses=1 remaining=2 pass=True
+OUTLANE -1 speed=25 losses=1 remaining=2 pass=True
+OUTLANE -1 speed=60 losses=1 remaining=2 pass=True
+OUTLANE 1 speed=5 losses=1 remaining=2 pass=True
+OUTLANE 1 speed=25 losses=1 remaining=2 pass=True
+OUTLANE 1 speed=60 losses=1 remaining=2 pass=True

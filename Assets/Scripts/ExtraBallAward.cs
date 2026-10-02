@@ -87,22 +87,20 @@ public class ExtraBallAward : MonoBehaviour
             return;
         }
 
-        if (maxExtraBalls > 0 && awarded >= maxExtraBalls)
+        bool awardedAny = false;
+        // Un gros bonus peut franchir plusieurs paliers en une seule fois.
+        while (nextThreshold > 0 && score >= nextThreshold
+               && (maxExtraBalls <= 0 || awarded < maxExtraBalls))
         {
-            return;
+            awarded++;
+            long next = (long)nextThreshold + thresholdStep;
+            nextThreshold = thresholdStep > 0 && next <= int.MaxValue ? (int)next : 0;
+            if (GameManager.Instance != null) GameManager.Instance.AwardExtraBall();
+            awardedAny = true;
         }
 
-        if (score < nextThreshold)
+        if (awardedAny && GameManager.Instance != null)
         {
-            return;
-        }
-
-        awarded++;
-        nextThreshold += thresholdStep > 0 ? thresholdStep : int.MaxValue;
-
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.AwardExtraBall();
             GameManager.Instance.ShowMessage("BILLE SUPPLÉMENTAIRE", messageDuration);
         }
     }

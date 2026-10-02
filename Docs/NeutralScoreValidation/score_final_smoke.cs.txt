@@ -1,0 +1,4 @@
+if(!Application.isPlaying)throw new Exception("Play required");var gm=GameManager.Instance;var sm=ScoreManager.Instance;gm.StartGame();
+var targets=GameObject.Find("PinballTable").GetComponentsInChildren<SubjectTarget>();sm.RecordHit(ScoreElement.Bumper,targets[0],150);sm.RecordHit(ScoreElement.SimpleTarget,targets[1],500);
+if(sm.Score!=4000||sm.ComboLevel!=1)throw new Exception("Final smoke score mismatch.");
+gm.StartGame();return "Final fresh Play: score/combos functional; restored to ready-to-launch.";

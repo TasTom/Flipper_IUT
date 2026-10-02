@@ -2,10 +2,13 @@
 
 Date : 2 octobre 2026. Révision examinée : `8df1903`.
 
-Évolutions après cet audit : [réduction de 8 %](NeutralScale.md), puis
-[finition mécanique et alignement des légendes](NeutralMechanical.md).
-Les mesures et réserves ci-dessous décrivent la révision examinée ; les écarts
-de règles de score et de parcours utilisateur restent ouverts.
+Évolutions après cet audit : [réduction de 8 %](NeutralScale.md),
+[finition mécanique et alignement des légendes](NeutralMechanical.md), puis
+[combos, multiplicateur et bonus de bille](NeutralScoreRules.md).
+Les mesures et réserves ci-dessous décrivent la révision examinée. Les principaux
+écarts de score (combos, progression jusqu'à ×5, affichage et bonus de bille) sont
+désormais traités et validés. Les jackpots, récompenses spécifiques de missions
+et le parcours utilisateur restent ouverts ; voir les comptes rendus de ces passes.
 
 Source de conception : [GameDesignDocument.docx](../GameDesignDocument.docx). Les décisions explicites de l'utilisateur prévalent : **six cibles de récompense**, caméra tournée pour la borne, plateau et scores occupant l'écran.
 

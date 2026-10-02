@@ -1,0 +1,24 @@
+if(Application.isPlaying) throw new Exception("Stop Play Mode before installing score UI.");
+if(UnityEngine.SceneManagement.SceneManager.GetActiveScene().path!="Assets/Scenes/Neutral.unity") throw new Exception("Neutral must be active.");
+var manager=UnityEngine.Object.FindAnyObjectByType<ScoreManager>();
+var panel=GameObject.Find("PinballTable/Backglass");
+if(manager==null||panel==null) throw new Exception("Score manager or cabinet panel missing.");
+var display=panel.GetComponent<BackglassDisplay>();
+var template=panel.transform.Find("MessageValue").GetComponent<TMPro.TMP_Text>();
+string path="Assets/Config/NeutralScore.asset";
+var config=UnityEditor.AssetDatabase.LoadAssetAtPath<ScoreConfig>(path);
+UnityEditor.Undo.IncrementCurrentGroup();int group=UnityEditor.Undo.GetCurrentGroup();UnityEditor.Undo.SetCurrentGroupName("Neutral: GDD score and cabinet display");
+if(config==null){config=ScriptableObject.CreateInstance<ScoreConfig>();config.comboSound=UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Generated/NeutralPresentation/Audio/target.wav");UnityEditor.AssetDatabase.CreateAsset(config,path);UnityEditor.Undo.RegisterCreatedObjectUndo(config,"Create Neutral score config");}
+var ms=new UnityEditor.SerializedObject(manager);if(ms.FindProperty("config").objectReferenceValue==null){UnityEditor.Undo.RecordObject(manager,"Assign Neutral score config");ms.FindProperty("config").objectReferenceValue=config;ms.ApplyModifiedProperties();}
+TMPro.TMP_Text CreateText(string name,Vector2 pos,Vector2 size,float font,Color color,string value){
+ var existing=panel.transform.Find(name);if(existing!=null)return existing.GetComponent<TMPro.TMP_Text>();
+ var go=UnityEngine.Object.Instantiate(template.gameObject,panel.transform,false);go.name=name;UnityEditor.Undo.RegisterCreatedObjectUndo(go,"Create "+name);
+ var text=go.GetComponent<TMPro.TMP_Text>();text.rectTransform.anchoredPosition=pos;text.rectTransform.sizeDelta=size;text.fontSize=font;text.enableAutoSizing=false;text.alignment=TMPro.TextAlignmentOptions.Center;text.fontStyle=TMPro.FontStyles.Normal;text.color=color;text.text=value;text.overflowMode=TMPro.TextOverflowModes.Truncate;text.ForceMeshUpdate();return text;
+}
+bool installed=panel.transform.Find("MultiplierValue")!=null;
+var mult=CreateText("MultiplierValue",new Vector2(0,-5),new Vector2(1450,45),30,new Color(.72f,.90f,.87f,1),"MULTIPLICATEUR ×1");
+var feedback=CreateText("ScoreFeedbackValue",new Vector2(0,-58),new Vector2(1450,48),34,new Color(1,.78f,.35f,1),"");
+if(!installed)foreach(string n in new[]{"ScoreValue","ScoreGhost"}){var t=panel.transform.Find(n).GetComponent<TMPro.TMP_Text>();UnityEditor.Undo.RecordObjects(new UnityEngine.Object[]{t,t.rectTransform},"Make room for score feedback");t.rectTransform.anchoredPosition=new Vector2(0,75);t.rectTransform.sizeDelta=new Vector2(1450,160);t.fontSize=140;t.ForceMeshUpdate();}
+var ds=new UnityEditor.SerializedObject(display);UnityEditor.Undo.RecordObject(display,"Wire score display");if(ds.FindProperty("multiplierText").objectReferenceValue==null)ds.FindProperty("multiplierText").objectReferenceValue=mult;if(ds.FindProperty("scoreFeedbackText").objectReferenceValue==null)ds.FindProperty("scoreFeedbackText").objectReferenceValue=feedback;ds.ApplyModifiedProperties();
+UnityEditor.EditorUtility.SetDirty(config);UnityEditor.AssetDatabase.SaveAssets();UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());UnityEditor.Undo.CollapseUndoOperations(group);
+return "Installed "+path+"; score/combos/bonus wired; scene NOT saved. Existing colliders untouched.";

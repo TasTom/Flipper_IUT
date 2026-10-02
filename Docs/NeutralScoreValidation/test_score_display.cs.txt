@@ -1,0 +1,32 @@
+if(!Application.isPlaying)throw new Exception("Play required");
+var gm=GameManager.Instance;var sm=ScoreManager.Instance;var table=GameObject.Find("PinballTable").transform;var panel=table.Find("Backglass");
+var c=Camera.main;var vp=c.GetComponent<CabinetViewport>();var oldPhysics=Physics.simulationMode;
+var camPos=c.transform.localPosition;var camRot=c.transform.localRotation;var camScale=c.transform.localScale;
+var panelPos=panel.localPosition;var panelRot=panel.localRotation;var panelScale=panel.localScale;
+var old=c.targetTexture;var active=RenderTexture.active;var rect=c.rect;var ortho=c.orthographic;float orthoSize=c.orthographicSize,near=c.nearClipPlane,far=c.farClipPlane;
+var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;var prevAspect=typeof(CabinetViewport).GetField("previousAspect",flags);var prevTable=typeof(CabinetViewport).GetField("previousTable",flags);var savedAspect=prevAspect.GetValue(vp);var savedTable=prevTable.GetValue(vp);
+var sb=new System.Text.StringBuilder();int failures=0;
+void Assert(bool ok,string message){sb.AppendLine((ok?"PASS ":"FAIL ")+message);if(!ok)failures++;}
+void Capture(string name,int width,int height){
+ var rt=new RenderTexture(width,height,24);var tex=new Texture2D(width,height,TextureFormat.RGB24,false);
+ try{
+  c.targetTexture=rt;vp.Fit();foreach(var text in panel.GetComponentsInChildren<TMPro.TMP_Text>())text.ForceMeshUpdate();c.Render();RenderTexture.active=rt;tex.ReadPixels(new Rect(0,0,width,height),0,0);tex.Apply();System.IO.File.WriteAllBytes("Tools/unity/out/"+name+".png",tex.EncodeToPNG());
+  foreach(string n in new[]{"ScoreValue","MultiplierValue","ScoreFeedbackValue","MessageValue"}){
+   var t=panel.Find(n).GetComponent<TMPro.TMP_Text>();var bounds=t.textBounds;
+   bool inside=true;for(int i=0;i<8;i++){var p=c.WorldToViewportPoint(t.transform.TransformPoint(bounds.center+Vector3.Scale(bounds.extents,new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1))));inside&=p.x>=0&&p.x<=1&&p.y>=0&&p.y<=1;}
+   Assert(!t.isTextTruncated&&inside,name+" "+n+" full text in viewport; text="+t.text);
+  }
+ }finally{c.targetTexture=old;RenderTexture.active=active;UnityEngine.Object.DestroyImmediate(rt);UnityEngine.Object.DestroyImmediate(tex);}
+}
+try{
+ Physics.simulationMode=SimulationMode.Script;gm.StartGame();sm.SetMultiplier(5);sm.AddBonus(int.MaxValue);
+ var targets=table.GetComponentsInChildren<SubjectTarget>();
+ for(int i=0;i<5;i++)sm.RecordHit(i==1?ScoreElement.VosgesRamp:i==2?ScoreElement.IutRamp:ScoreElement.Matieres,targets[i],0,true,i==0);
+ gm.ShowMessage("BUG CRITIQUE DÉTECTÉ  +50 000",0f);
+ Capture("neutral-score-combo",1920,1080);Capture("neutral-score-combo-16x10",1920,1200);
+ sm.FinishBall(false);gm.ShowMessage("BILLE PERDUE",0f);Capture("neutral-score-bonus",1920,1080);
+ Assert(sm.Score==int.MaxValue,"very large score safely saturates without integer overflow");
+}finally{
+ c.targetTexture=old;c.transform.localPosition=camPos;c.transform.localRotation=camRot;c.transform.localScale=camScale;c.rect=rect;c.orthographic=ortho;c.orthographicSize=orthoSize;c.nearClipPlane=near;c.farClipPlane=far;panel.localPosition=panelPos;panel.localRotation=panelRot;panel.localScale=panelScale;prevAspect.SetValue(vp,savedAspect);prevTable.SetValue(vp,savedTable);RenderTexture.active=active;gm.StartGame();Physics.simulationMode=oldPhysics;
+}
+sb.AppendLine("FAILURES="+failures);System.IO.File.WriteAllText("Tools/unity/out/score-display-runtime.txt",sb.ToString());return sb.ToString();

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Déforme seulement le maillage visible entre les deux poteaux de la face active.
+/// Un poussoir fixe au centre de la grande face tend le caoutchouc entre ses poteaux.
 /// Le collider et l'impulsion restent sous la responsabilité de Slingshot (GDD §Slingshots).
 /// </summary>
 [DisallowMultipleComponent]
@@ -38,7 +38,9 @@ public class SlingshotRubberAnimation : MonoBehaviour
     private Vector3 edge;
     private float edgeSquared;
     private float edgeLength;
-    private float spreadSquared;
+    private float kickerHalfWidth;
+    private float freeHalfSpan;
+    private float pinnedRadius;
     private float pinFade;
     private float faceWidth;
     private float elapsed;
@@ -76,7 +78,23 @@ public class SlingshotRubberAnimation : MonoBehaviour
 
         start = playfield.InverseTransformPoint(startPost.position);
         end = playfield.InverseTransformPoint(endPost.position);
-        start.y = end.y = 0f;
+        Vector3 back = playfield.InverseTransformPoint(backPost.position);
+        start.y = end.y = back.y = 0f;
+        // The active face is the longest side, regardless of post numbering.
+        float frontLength = (end - start).sqrMagnitude;
+        if ((back - start).sqrMagnitude > frontLength &&
+            (back - start).sqrMagnitude >= (back - end).sqrMagnitude)
+        {
+            Vector3 previousEnd = end;
+            end = back;
+            back = previousEnd;
+        }
+        else if ((back - end).sqrMagnitude > frontLength)
+        {
+            Vector3 previousStart = start;
+            start = back;
+            back = previousStart;
+        }
         edge = end - start;
         edgeSquared = edge.sqrMagnitude;
         edgeLength = edge.magnitude;
@@ -87,8 +105,6 @@ public class SlingshotRubberAnimation : MonoBehaviour
             return;
         }
         outward = new Vector3(edge.z, 0f, -edge.x).normalized;
-        Vector3 back = playfield.InverseTransformPoint(backPost.position);
-        back.y = 0f;
         if (Vector3.Dot(outward, (start + end) * 0.5f - back) < 0f) outward = -outward;
 
         originalMesh = rubber.sharedMesh;
@@ -146,11 +162,10 @@ public class SlingshotRubberAnimation : MonoBehaviour
     private void OnKicked(Vector3 worldPoint, float impactSpeed)
     {
         if (!ready || !isActiveAndEnabled || config == null) return;
-        Vector3 point = playfield.InverseTransformPoint(worldPoint);
-        point.y = 0f;
-        float hitPosition = Mathf.Clamp01(Vector3.Dot(point - start, edge) / edgeSquared);
-        float spread = Mathf.Max(0.001f, config.impactSpread);
-        spreadSquared = spread * spread;
+        // Contact closes a switch; the coil's fixed stroke does not follow the ball.
+        pinnedRadius = Mathf.Max(0f, config.pinnedRadius);
+        freeHalfSpan = Mathf.Max(0.001f, edgeLength * 0.5f - pinnedRadius);
+        kickerHalfWidth = Mathf.Clamp(config.kickerHalfWidth, 0.001f, freeHalfSpan * 0.5f);
         pinFade = Mathf.Max(0.001f, config.pinFadeDistance);
         faceWidth = Mathf.Max(0.001f, config.faceHalfWidth);
         const float derivativeStep = 0.001f;
@@ -161,16 +176,14 @@ public class SlingshotRubberAnimation : MonoBehaviour
             residualNormals[i] = animatedNormals[i] - restNormals[i];
             Vector3 v = frameVertices[i];
             v.y = 0f;
-            weights[i] = Weight(v, hitPosition);
+            weights[i] = Weight(v);
             gradients[i] = new Vector3(
-                Weight(v + Vector3.right * derivativeStep, hitPosition) - Weight(v - Vector3.right * derivativeStep, hitPosition),
+                Weight(v + Vector3.right * derivativeStep) - Weight(v - Vector3.right * derivativeStep),
                 0f,
-                Weight(v + Vector3.forward * derivativeStep, hitPosition) - Weight(v - Vector3.forward * derivativeStep, hitPosition)) / (2f * derivativeStep);
+                Weight(v + Vector3.forward * derivativeStep) - Weight(v - Vector3.forward * derivativeStep)) / (2f * derivativeStep);
         }
 
-        float strength = Mathf.Lerp(config.minimumStrength, 1f,
-            Mathf.Clamp01(impactSpeed / Mathf.Max(0.01f, config.fullStrengthSpeed)));
-        frameDisplacement = outward * config.peakDeflection * strength;
+        frameDisplacement = outward * config.peakDeflection;
         localDisplacement = frameToMesh.MultiplyVector(frameDisplacement);
         elapsed = 0f;
         animating = true;
@@ -178,17 +191,20 @@ public class SlingshotRubberAnimation : MonoBehaviour
 
     private void LateUpdate() => Advance(Time.deltaTime);
 
-    private float Weight(Vector3 point, float hitPosition)
+    private float Weight(Vector3 point)
     {
         float t = Vector3.Dot(point - start, edge) / edgeSquared;
         float pinDistance = Mathf.Min(Vector3.Distance(point, start), Vector3.Distance(point, end));
-        float pinned = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01((pinDistance - config.pinnedRadius) / pinFade));
+        float pinned = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01((pinDistance - pinnedRadius) / pinFade));
         float faceDistance = Mathf.Abs(Vector3.Dot(point - start, outward));
         float face = 1f - Mathf.SmoothStep(0f, 1f, Mathf.Clamp01((faceDistance - faceWidth * 0.75f) / (faceWidth * 0.25f)));
-        float distance = (t - hitPosition) * edgeLength;
-        float impact = Mathf.Exp(-0.5f * distance * distance / spreadSquared);
-        float envelope = t > 0f && t < 1f ? Mathf.Sin(t * Mathf.PI) : 0f;
-        return pinned * face * impact * envelope;
+        float distance = Mathf.Abs(t - 0.5f) * edgeLength;
+        // Two taut spans meet at the central shoe; round the tip to avoid a crease.
+        float roundedDistance = distance < kickerHalfWidth
+            ? distance * distance / (2f * kickerHalfWidth)
+            : distance - kickerHalfWidth * 0.5f;
+        float tension = Mathf.Clamp01(1f - roundedDistance / (freeHalfSpan - kickerHalfWidth * 0.5f));
+        return pinned * face * tension;
     }
 
     private void Advance(float deltaTime)

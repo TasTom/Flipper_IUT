@@ -1,0 +1,15 @@
+if (Application.isPlaying) throw new Exception("Edit required");
+var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+if (scene.path != "Assets/Scenes/Neutral.unity") throw new Exception("Neutral required");
+var config = UnityEditor.AssetDatabase.LoadAssetAtPath<SlingshotRubberConfig>("Assets/Generated/NeutralRubberAnimation/NeutralSlingshotRubberConfig.asset");
+if (config == null) throw new Exception("Rubber config missing");
+UnityEditor.Undo.RecordObject(config, "Corriger la poussée centrale du slingshot");
+config.kickerHalfWidth = 0.055f;
+config.motion = new AnimationCurve(
+    new Keyframe(0f, 0f), new Keyframe(0.06f, 0.30f),
+    new Keyframe(0.22f, 1f), new Keyframe(0.50f, 0.12f),
+    new Keyframe(0.67f, -0.09f), new Keyframe(0.84f, 0.025f),
+    new Keyframe(1f, 0f));
+UnityEditor.EditorUtility.SetDirty(config);
+UnityEditor.AssetDatabase.SaveAssets();
+return "Central kicker config saved; no scene changes. Scene dirty=" + scene.isDirty;

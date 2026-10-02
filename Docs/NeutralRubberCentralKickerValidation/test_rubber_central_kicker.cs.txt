@@ -1,0 +1,73 @@
+if (!Application.isPlaying) throw new Exception("Play required");
+var table = GameObject.Find("PinballTable").transform;
+var ball = table.Find("Gameplay/Ball").GetComponent<Rigidbody>();
+var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+var advance = typeof(SlingshotRubberAnimation).GetMethod("Advance", flags);
+var previous = Physics.simulationMode;
+var report = new System.Text.StringBuilder();
+int failures = 0;
+void Assert(bool ok, string label) { report.AppendLine((ok ? "PASS " : "FAIL ") + label); if (!ok) failures++; }
+void Step(float duration) { for (int i = 0; i < (int)(duration / Time.fixedDeltaTime); i++) Physics.Simulate(Time.fixedDeltaTime); }
+void Place(Vector3 point, Vector3 velocity) { ball.position = table.TransformPoint(point); ball.linearVelocity = table.TransformDirection(velocity); ball.angularVelocity = Vector3.zero; ball.WakeUp(); Physics.SyncTransforms(); }
+try
+{
+    Physics.simulationMode = SimulationMode.Script;
+    foreach (var sling in table.GetComponentsInChildren<Slingshot>())
+    {
+        var animation = sling.GetComponentInChildren<SlingshotRubberAnimation>();
+        var filter = animation.GetComponent<MeshFilter>();
+        advance.Invoke(animation, new object[] { 1f });
+        var rest = filter.sharedMesh.vertices;
+        Vector3 start = (Vector3)typeof(SlingshotRubberAnimation).GetField("start", flags).GetValue(animation);
+        Vector3 end = (Vector3)typeof(SlingshotRubberAnimation).GetField("end", flags).GetValue(animation);
+        Vector3 outward = (Vector3)typeof(SlingshotRubberAnimation).GetField("outward", flags).GetValue(animation);
+        Vector3 edge = end - start;
+        var posts = new[] { "SlingPost_1", "SlingPost_2", "SlingPost_3" }.Select(n => table.InverseTransformPoint(sling.transform.Find("MechanicalAssembly/" + n).position)).Select(p => new Vector3(p.x, 0, p.z)).ToArray();
+        float longest = Mathf.Max((posts[1] - posts[0]).magnitude, Mathf.Max((posts[2] - posts[0]).magnitude, (posts[2] - posts[1]).magnitude));
+        Assert(Mathf.Abs(edge.magnitude - longest) < .00001f, sling.name + " selects the longest face: " + longest.ToString("F5"));
+        Vector3[] reference = null;
+        var hitPositions = new System.Collections.Generic.List<float>();
+        foreach (var shot in new[] { new { t = .25f, speed = 12f }, new { t = .50f, speed = 20f }, new { t = .75f, speed = 30f } })
+        {
+            GameManager.Instance.StartGame();
+            advance.Invoke(animation, new object[] { 1f });
+            Place(new Vector3(0, 3, 6), Vector3.zero); Step(.02f);
+            typeof(Slingshot).GetField("lastKickTime", flags).SetValue(sling, float.NegativeInfinity);
+            int kicks = 0; Vector3 contact = Vector3.zero;
+            Action<Vector3, float> observer = (p, speed) => { kicks++; contact = table.InverseTransformPoint(p); };
+            sling.Kicked += observer;
+            try { Place(Vector3.Lerp(start, end, shot.t) + outward * .65f + Vector3.up * .212f, -outward * shot.speed); Step(.16f); }
+            finally { sling.Kicked -= observer; }
+            float contactT = Vector3.Dot(contact - start, edge) / edge.sqrMagnitude;
+            hitPositions.Add(contactT);
+            Assert(kicks == 1 && ScoreManager.Instance.Score == 100, sling.name + " real off-centre collision t=" + contactT.ToString("F3") + " speed=" + shot.speed + ": one event, 100 points");
+            Assert(Mathf.Abs(contactT - shot.t) < .08f, sling.name + " contact follows the requested trajectory");
+            advance.Invoke(animation, new object[] { .0108f });
+            var early = filter.sharedMesh.vertices;
+            float earlyOutward = 0;
+            for (int i = 0; i < early.Length; i++) earlyOutward = Mathf.Max(earlyOutward, Vector3.Dot(table.InverseTransformVector(filter.transform.TransformVector(early[i] - rest[i])), outward));
+            Assert(earlyOutward > .02f, sling.name + " central mechanism starts by pushing outwards");
+            advance.Invoke(animation, new object[] { .0288f });
+            var peak = filter.sharedMesh.vertices;
+            float max = 0, peakT = 0, pinDrift = 0; int pinned = 0;
+            for (int i = 0; i < peak.Length; i++)
+            {
+                Vector3 point = table.InverseTransformPoint(filter.transform.TransformPoint(rest[i])); point.y = 0;
+                Vector3 displacement = table.InverseTransformVector(filter.transform.TransformVector(peak[i] - rest[i]));
+                if (displacement.magnitude > max) { max = displacement.magnitude; peakT = Vector3.Dot(point - start, edge) / edge.sqrMagnitude; }
+                if (posts.Any(p => Vector3.Distance(p, point) <= .1249f)) { pinned++; pinDrift = Mathf.Max(pinDrift, displacement.magnitude); }
+            }
+            Assert(Mathf.Abs(peakT - .5f) < .025f && max > .095f && max <= .1001f, sling.name + " push remains at face centre t=" + peakT.ToString("F4") + " stroke=" + max.ToString("F5"));
+            Assert(pinned > 0 && pinDrift < .000001f, sling.name + " all three post arcs fixed: " + pinned + " vertices");
+            if (reference == null) reference = peak;
+            else Assert(peak.SequenceEqual(reference), sling.name + " identical coil stroke for different contact locations and speeds");
+            advance.Invoke(animation, new object[] { .3f });
+            Assert(filter.sharedMesh.vertices.SequenceEqual(rest), sling.name + " exact rest restored");
+        }
+        Assert(hitPositions.Max() - hitPositions.Min() > .40f, sling.name + " distinct contacts span both ends of the face");
+    }
+}
+finally { Physics.simulationMode = previous; GameManager.Instance.StartGame(); }
+report.AppendLine("FAILURES=" + failures);
+System.IO.File.WriteAllText("Tools/unity/out/rubber-central-kicker.txt", report.ToString());
+return report.ToString();

@@ -1,0 +1,45 @@
+PASS Slingshot_Left selects the longest face: 1,06960
+PASS Slingshot_Left real off-centre collision t=0,259 speed=12: one event, 100 points
+PASS Slingshot_Left contact follows the requested trajectory
+PASS Slingshot_Left central mechanism starts by pushing outwards
+PASS Slingshot_Left push remains at face centre t=0,4995 stroke=0,10000
+PASS Slingshot_Left all three post arcs fixed: 1412 vertices
+PASS Slingshot_Left exact rest restored
+PASS Slingshot_Left real off-centre collision t=0,504 speed=20: one event, 100 points
+PASS Slingshot_Left contact follows the requested trajectory
+PASS Slingshot_Left central mechanism starts by pushing outwards
+PASS Slingshot_Left push remains at face centre t=0,4995 stroke=0,10000
+PASS Slingshot_Left all three post arcs fixed: 1412 vertices
+PASS Slingshot_Left identical coil stroke for different contact locations and speeds
+PASS Slingshot_Left exact rest restored
+PASS Slingshot_Left real off-centre collision t=0,753 speed=30: one event, 100 points
+PASS Slingshot_Left contact follows the requested trajectory
+PASS Slingshot_Left central mechanism starts by pushing outwards
+PASS Slingshot_Left push remains at face centre t=0,4995 stroke=0,10000
+PASS Slingshot_Left all three post arcs fixed: 1412 vertices
+PASS Slingshot_Left identical coil stroke for different contact locations and speeds
+PASS Slingshot_Left exact rest restored
+PASS Slingshot_Left distinct contacts span both ends of the face
+PASS Slingshot_Right selects the longest face: 1,06960
+PASS Slingshot_Right real off-centre collision t=0,259 speed=12: one event, 100 points
+PASS Slingshot_Right contact follows the requested trajectory
+PASS Slingshot_Right central mechanism starts by pushing outwards
+PASS Slingshot_Right push remains at face centre t=0,4995 stroke=0,10000
+PASS Slingshot_Right all three post arcs fixed: 1409 vertices
+PASS Slingshot_Right exact rest restored
+PASS Slingshot_Right real off-centre collision t=0,504 speed=20: one event, 100 points
+PASS Slingshot_Right contact follows the requested trajectory
+PASS Slingshot_Right central mechanism starts by pushing outwards
+PASS Slingshot_Right push remains at face centre t=0,4995 stroke=0,10000
+PASS Slingshot_Right all three post arcs fixed: 1409 vertices
+PASS Slingshot_Right identical coil stroke for different contact locations and speeds
+PASS Slingshot_Right exact rest restored
+PASS Slingshot_Right real off-centre collision t=0,753 speed=30: one event, 100 points
+PASS Slingshot_Right contact follows the requested trajectory
+PASS Slingshot_Right central mechanism starts by pushing outwards
+PASS Slingshot_Right push remains at face centre t=0,4995 stroke=0,10000
+PASS Slingshot_Right all three post arcs fixed: 1409 vertices
+PASS Slingshot_Right identical coil stroke for different contact locations and speeds
+PASS Slingshot_Right exact rest restored
+PASS Slingshot_Right distinct contacts span both ends of the face
+FAILURES=0

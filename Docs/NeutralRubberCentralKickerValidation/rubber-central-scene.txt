@@ -1,0 +1,30 @@
+PASS all active colliders and poses unchanged
+PASS Slingshot_Left rubber animation wired
+PASS Slingshot_Left reference config
+PASS Slingshot_Left reference source
+PASS Slingshot_Left reference rubber
+PASS Slingshot_Left reference playfield
+PASS Slingshot_Left reference startPost
+PASS Slingshot_Left reference endPost
+PASS Slingshot_Left reference backPost
+PASS Slingshot_Left readable dedicated mesh
+PASS Slingshot_Left rubber visual has no collider
+MESH Slingshot_Left vertices=4656 triangles=9312
+PASS Slingshot_Right rubber animation wired
+PASS Slingshot_Right reference config
+PASS Slingshot_Right reference source
+PASS Slingshot_Right reference rubber
+PASS Slingshot_Right reference playfield
+PASS Slingshot_Right reference startPost
+PASS Slingshot_Right reference endPost
+PASS Slingshot_Right reference backPost
+PASS Slingshot_Right readable dedicated mesh
+PASS Slingshot_Right rubber visual has no collider
+MESH Slingshot_Right vertices=4656 triangles=9312
+PASS six reward targets preserved
+PASS no missing scripts
+PASS compilation healthy
+PASS runtime meshes cleaned up after Play
+PASS Console errors=0
+PASS Console warnings=0
+SCENE=Assets/Scenes/Neutral.unity dirty=False FAILURES=0

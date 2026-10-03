@@ -1,0 +1,9 @@
+FactoryFacade mesh=WorkshopFacade size=(2.400, 0.750, 0.595) triangles=4492
+EnergyBoiler mesh=Boiler size=(0.626, 0.788, 0.468) triangles=4724
+TextileWorkshop mesh=TextileLoom size=(0.663, 0.487, 0.570) triangles=4404
+EnergyPlate mesh=TextMeshPro Mesh size=(0.792, 0.000, 0.162) triangles=16
+TextilePlate mesh=TextMeshPro Mesh size=(0.725, 0.000, 0.129) triangles=16
+MusicCredit mesh=TextMeshPro Mesh size=(0.000, 0.000, 0.000) triangles=0
+TimberWorkshop mesh=TimberStack size=(0.730, 0.299, 0.460) triangles=3256
+TimberPlate mesh=TextMeshPro Mesh size=(0.413, 0.000, 0.133) triangles=10
+PASS matériaux et meshes persistants ; aucun collider décor ; cadrage de borne conservé.

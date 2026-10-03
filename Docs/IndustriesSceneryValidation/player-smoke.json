@@ -1,0 +1,7 @@
+{
+    "duration":  "startup smoke only",
+    "mode":  "Windows development player, batchmode, nographics, Neutral",
+    "fatalOrReferenceErrors":  [
+
+                               ]
+}

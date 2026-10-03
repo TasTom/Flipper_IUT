@@ -1,0 +1,16 @@
+{
+  "source": "https://www.scottbuckley.com.au/wp-content/audio/sb_machineryofthestars.mp3",
+  "author": "Scott Buckley",
+  "title": "Machinery of the Stars",
+  "license": "CC BY 4.0",
+  "excerptSeconds": [
+    35,
+    222
+  ],
+  "crossfadeSeconds": 6,
+  "durationSeconds": 181.0,
+  "sampleRate": 44100,
+  "channels": 2,
+  "peakDb": -1,
+  "boundaryStep": 0.009949080646038055
+}

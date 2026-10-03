@@ -1,0 +1,27 @@
+"""Create a circular game loop from the credited CC BY 4.0 recording.
+End joins the same frame of the source as the beginning: no silent MP3 outro.
+"""
+import sys, subprocess, json
+from pathlib import Path
+import numpy as np
+from scipy.io import wavfile
+sys.path.insert(0, 'Tools/python-audio')
+import imageio_ffmpeg
+src=Path('Tools/audio-sources/MachineryOfTheStars.mp3')
+if not src.exists():
+    import urllib.request
+    src.parent.mkdir(parents=True,exist_ok=True)
+    urllib.request.urlretrieve('https://www.scottbuckley.com.au/wp-content/audio/sb_machineryofthestars.mp3',src)
+pcm=subprocess.check_output([imageio_ffmpeg.get_ffmpeg_exe(),'-v','error','-i',str(src),'-f','f32le','-acodec','pcm_f32le','-ac','2','-ar','44100','-'])
+samples=np.frombuffer(pcm,dtype='<f4').reshape(-1,2)
+rate=44100; start,end,fade=35,222,6
+segment=samples[start*rate:end*rate];n=fade*rate
+t=np.linspace(0,1,n,endpoint=False,dtype=np.float32)[:,None]
+blend=segment[-n:]*(1-t)+segment[:n]*t
+loop=np.concatenate((segment[n:-n],blend))
+loop*=10**(-1/20)/max(1e-6,np.abs(loop).max())
+dest=Path('Assets/Audio/Industries/IndustriesOrchestralLoop.wav')
+wavfile.write(dest,rate,(loop*32767).round().astype('<i2'))
+report={'source':'https://www.scottbuckley.com.au/wp-content/audio/sb_machineryofthestars.mp3','author':'Scott Buckley','title':'Machinery of the Stars','license':'CC BY 4.0','excerptSeconds':[start,end],'crossfadeSeconds':fade,'durationSeconds':len(loop)/rate,'sampleRate':rate,'channels':2,'peakDb':-1,'boundaryStep':float(np.abs(loop[0]-loop[-1]).max())}
+Path('Tools/unity/out/scenery/music-loop.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+print(json.dumps(report))

@@ -1,0 +1,154 @@
+"""Original pinball toys, in Unity table units. No gameplay geometry or colliders.
+GDD: Conception de la table, zone haute / Vosges & campus; Industries extension.
+Run Blender --background --factory-startup --python this_file.
+"""
+import bpy, bmesh, math, json
+from pathlib import Path
+from mathutils import Vector
+
+OUT = Path(bpy.path.abspath('//'))
+OUT = Path('D:/Flipper_IUT/Assets/Models/MiniatureScenery')
+OUT.mkdir(parents=True, exist_ok=True)
+bpy.ops.object.select_all(action='SELECT'); bpy.ops.object.delete(use_global=False)
+COLORS = {
+    'EnamelPetrol': ((.035,.20,.23,1),0,.33), 'Brass': ((.55,.30,.08,1),1,.31),
+    'Steel': ((.38,.45,.49,1),1,.26), 'Ivory': ((.82,.78,.63,1),0,.4),
+    'Brick': ((.28,.10,.065,1),0,.67), 'Slate': ((.055,.09,.12,1),0,.49),
+    'GlassBlue': ((.06,.21,.29,1),0,.19), 'Wood': ((.38,.20,.075,1),0,.55),
+    'Forest': ((.024,.15,.10,1),0,.59), 'Snow': ((.86,.9,.91,1),0,.63),
+    'Thread': ((.32,.54,.48,1),0,.65), 'GlowAmber': ((1,.48,.07,1),0,.4)
+}
+MAT={}
+for name,(color,metal,rough) in COLORS.items():
+    m=bpy.data.materials.new(name);m.use_nodes=True;p=m.node_tree.nodes.get('Principled BSDF')
+    p.inputs['Base Color'].default_value=color;p.inputs['Metallic'].default_value=metal;p.inputs['Roughness'].default_value=rough;MAT[name]=m
+
+parts=[]
+def finish(o, name, material, bevel=0):
+    o.name=name;o.data.materials.append(MAT[material])
+    bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
+    if bevel:
+        mod=o.modifiers.new('Machined edges','BEVEL');mod.width=bevel;mod.segments=2
+        bpy.context.view_layer.objects.active=o;bpy.ops.object.modifier_apply(modifier=mod.name)
+        mod=o.modifiers.new('Weighted normals','WEIGHTED_NORMAL');mod.keep_sharp=True
+        bpy.ops.object.modifier_apply(modifier=mod.name)
+    parts.append(o);return o
+def box(name,p,size,mat,bev=.012):
+    bpy.ops.mesh.primitive_cube_add(size=1,location=p);o=bpy.context.object;o.scale=size;return finish(o,name,mat,bev)
+def cylinder(name,p,r,depth,mat,axis='Z',vertices=24):
+    bpy.ops.mesh.primitive_cylinder_add(vertices=vertices,radius=r,depth=depth,location=p)
+    o=bpy.context.object
+    if axis=='X':o.rotation_euler.y=math.pi/2
+    if axis=='Y':o.rotation_euler.x=math.pi/2
+    return finish(o,name,mat,.006)
+def torus(name,p,major,minor,mat,axis='Z'):
+    bpy.ops.mesh.primitive_torus_add(major_segments=24,minor_segments=6,location=p,major_radius=major,minor_radius=minor)
+    o=bpy.context.object
+    if axis=='Y':o.rotation_euler.x=math.pi/2
+    return finish(o,name,mat)
+def beam(name,a,b,width,mat):
+    a,b=Vector(a),Vector(b);o=box(name,(a+b)/2,(width,width,(b-a).length),mat,.003)
+    o.rotation_euler=(b-a).to_track_quat('Z','Y').to_euler();return o
+def export(name):
+    # Blender z-up -> Unity y-up; mirror compensates FBX import. Bake before export.
+    bpy.ops.object.select_all(action='DESELECT')
+    for o in parts:o.select_set(True)
+    bpy.context.view_layer.objects.active=parts[0];bpy.ops.object.join();o=bpy.context.object;o.name=name
+    bpy.ops.object.transform_apply(location=True,rotation=True,scale=True)
+    for v in o.data.vertices:v.co.x=-v.co.x;v.co.y=-v.co.y
+    bm=bmesh.new();bm.from_mesh(o.data);bmesh.ops.recalc_face_normals(bm,faces=bm.faces);bm.to_mesh(o.data);bm.free()
+    # UVs for potential material maps; per-toy generated shapes don't bake lighting.
+    bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT');bpy.ops.uv.smart_project(island_margin=.02);bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.ops.export_scene.fbx(filepath=str(OUT/(name+'.fbx')),use_selection=True,axis_forward='-Z',axis_up='Y',global_scale=1,apply_unit_scale=True,bake_anim=False,add_leaf_bones=False)
+    tris=sum(len(p.vertices)-2 for p in o.data.polygons)
+    print(name, 'triangles=',tris,'blender_bounds=',list(o.dimensions))
+    bpy.data.objects.remove(o,do_unlink=True);parts.clear()
+
+# Enamel boiler: pressure vessel, collar, valve wheel, gauge and bolted inspection door.
+box('Plinth',(0,0,.04),(.70,.60,.08),'Slate')
+cylinder('Pressure vessel',(0,0,.39),.245,.62,'EnamelPetrol')
+for z in [.12,.65]:torus('Riveted hoop',(0,0,z),.247,.014,'Brass')
+cylinder('Top lid',(0,0,.71),.25,.035,'Steel')
+cylinder('Exhaust',(0,.06,.86),.065,.26,'Steel')
+torus('Exhaust rim',(0,.06,1),.067,.012,'Brass')
+cylinder('Inspection door',(0,-.242,.36),.145,.035,'Brass','Y')
+cylinder('Inspection face',(0,-.265,.36),.119,.018,'Slate','Y')
+for angle in range(0,360,60):
+    a=math.radians(angle);cylinder('Door bolt',(.133*math.cos(a),-.28,.36+.133*math.sin(a)),.014,.02,'Steel','Y',6)
+cylinder('Gauge',(.17,-.21,.63),.065,.03,'Steel','Y')
+cylinder('Gauge dial',(.17,-.235,.63),.053,.012,'Ivory','Y')
+beam('Gauge needle',(.17,-.245,.63),(.14,-.245,.664),.008,'Slate')
+beam('Steam pipe',(-.22,.08,.65),(-.35,.08,.65),.046,'Brass')
+torus('Valve wheel',(-.35,.08,.68),.09,.012,'Brass')
+for a in range(0,360,120):
+    r=math.radians(a);beam('Valve spoke',(-.35,.08,.68),(-.35+.08*math.cos(r),.08+.08*math.sin(r),.68),.013,'Brass')
+export('Boiler')
+
+# Textile loom: frame, stretched fabric, heddle rack and separate brass roll ends.
+box('Loom base',(0,0,.04),(.78,.67,.08),'Slate')
+for x in [-.30,.30]:
+    for y in [-.25,.25]:box('Timber leg',(x,y,.25),(.065,.07,.43),'Wood')
+    beam('Loom side brace',(x,-.25,.43),(x,.25,.35),.055,'Wood')
+for y in [-.23,.23]:
+    cylinder('Fabric roller',(0,y,.37),.058,.67,'Thread','X')
+    for x in [-.35,.35]:cylinder('Axle cap',(x,y,.37),.072,.035,'Brass','X')
+box('Woven fabric',(0,0,.387),(.52,.42,.013),'Thread',.002)
+for x in [-.2,-.1,0,.1,.2]:box('Fabric stripe',(x,0,.396),(.014,.42,.003),'Ivory',.0005)
+beam('Heddle bar',(-.3,.06,.55),(.3,.06,.55),.045,'Wood')
+for x in [-.25,-.20,-.15,-.1,-.05,0,.05,.1,.15,.20,.25]:beam('Heddle',(x,.06,.39),(x,.06,.55),.008,'Steel')
+export('TextileLoom')
+
+# Timber station: dimensional stock, pale cut ends and two retaining straps.
+box('Timber cradle',(0,0,.025),(.73,.46,.05),'Slate')
+for level in range(2):
+    for row in range(3-level):
+        y=(row-(2-level)/2)*.135;z=.105+level*.12
+        cylinder('Timber',(0,y,z),.063,.64,'Wood','X',16)
+        for x in [-.325,.325]:
+            cylinder('Cut end',(x,y,z),.061,.008,'Ivory','X',16)
+for x in [-.22,.22]:
+    box('Strap top',(x,0,.29),(.022,.38,.018),'Brass',.003)
+    for y in [-.185,.185]:box('Strap side',(x,y,.155),(.022,.018,.27),'Brass',.003)
+export('TimberStack')
+
+# Workshop facade, saw-tooth glass roof, brick pilasters, glazing and pipes.
+box('Workshop',(0,0,.29),(2.3,.47,.58),'Brick')
+box('Concrete footing',(0,0,.035),(2.4,.55,.07),'Slate')
+for x in [-.91,-.455,0,.455,.91]:
+    box('Window',(x,-.242,.34),(.34,.018,.32),'GlassBlue',.003)
+    box('Window lintel',(x,-.262,.51),(.39,.022,.027),'Ivory',.003)
+    for dx in [-.18,0,.18]:box('Mullion',(x+dx,-.26,.34),(.018,.028,.34),'Steel',.002)
+for x in [-1.13,-.68,-.225,.225,.68,1.13]:box('Pilaster',(x,-.25,.29),(.07,.055,.57),'Brick',.006)
+for x in [-.72,0,.72]:
+    a=box('Roof',(x,-.045,.635),(.69,.52,.045),'Slate');a.rotation_euler.x=math.radians(-16)
+    box('Roof skylight',(x,.19,.69),(.64,.022,.12),'GlassBlue',.003)
+for x in [-1.13,1.13]:cylinder('Downpipe',(x,-.3,.28),.02,.5,'Brass',vertices=12)
+export('WorkshopFacade')
+
+# Campus miniature: clean brick/stone school rather than a generic block.
+box('Campus body',(0,0,.30),(1.50,.48,.6),'Ivory')
+box('Campus foundation',(0,0,.04),(1.60,.58,.08),'Slate')
+box('Flat roof',(0,0,.62),(1.6,.57,.07),'Slate')
+for z in [.25,.46]:
+    for x in [-.55,-.275,0,.275,.55]:
+        box('Blue window',(x,-.25,z),(.19,.016,.15),'GlassBlue',.003)
+        box('Window sill',(x,-.27,z-.085),(.21,.034,.018),'Steel',.002)
+box('Door',(0,-.263,.13),(.23,.023,.24),'GlassBlue',.003)
+box('Entrance canopy',(0,-.40,.30),(.45,.30,.035),'EnamelPetrol',.006)
+export('Campus')
+
+# Snow-dusted fir. Four irregular tiers + trunk, no intersecting playfield geometry.
+cylinder('Tree trunk',(0,0,.18),.038,.36,'Wood',vertices=12)
+for z,r,d in [(.27,.22,.31),(.43,.185,.30),(.59,.14,.29),(.73,.095,.27)]:
+    bpy.ops.mesh.primitive_cone_add(vertices=12,radius1=r,radius2=.004,depth=d,location=(0,0,z));finish(bpy.context.object,'Fir tier','Forest')
+    bpy.ops.mesh.primitive_cone_add(vertices=12,radius1=r*.56,radius2=.002,depth=d*.62,location=(0,0,z+d*.15));finish(bpy.context.object,'Snow crest','Snow')
+export('AlpineFir')
+
+# Two-column exhibition plinth: clear space beneath it for ball/rails.
+box('Exhibition deck',(0,0,.025),(2.6,.62,.05),'EnamelPetrol')
+for x in [-1.2,1.2]:
+    box('Mounting foot',(x,0,-.13),(.06,.08,.28),'Steel',.003)
+    cylinder('Deck fastener',(x,0,.061),.018,.015,'Brass',vertices=6)
+export('ExhibitionDeck')
+
+(OUT/'NOTICE.md').write_text('Original miniature meshes generated for Vosges Mania. No external model textures or scans. Source: Tools/blender/build_miniature_scenery.py. Units: Unity table units (about 60 mm/unit). Decorative only; never attach colliders. Beveled edges, explicit UVs, separate PBR material slots.\n',encoding='utf-8')

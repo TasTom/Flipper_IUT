@@ -1,0 +1,10 @@
+if(UnityEngine.Application.isPlaying || UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().isDirty)throw new System.Exception("Scène enregistrée hors Play requise");
+UnityEditor.EditorApplication.delayCall+=()=>{
+ var output="D:/Flipper_IUT/Docs/IndustriesSceneryValidation/windows-build.txt";
+ try{
+ var opts=new UnityEditor.BuildPlayerOptions{scenes=new[]{"Assets/Scenes/Neutral.unity","Assets/Scenes/Industries.unity"},locationPathName="D:/Flipper_IUT/Tools/build/IndustriesScenery/VosgesMania.exe",target=UnityEditor.BuildTarget.StandaloneWindows64,options=UnityEditor.BuildOptions.Development};
+ var r=UnityEditor.BuildPipeline.BuildPlayer(opts);var sb=new System.Text.StringBuilder();sb.AppendLine("Result="+r.summary.result+" errors="+r.summary.totalErrors+" warnings="+r.summary.totalWarnings+" duration="+r.summary.totalTime+" size="+r.summary.totalSize);
+ foreach(var step in r.steps)foreach(var m in step.messages)if(m.type==UnityEngine.LogType.Error || m.type==UnityEngine.LogType.Warning || m.type==UnityEngine.LogType.Exception)sb.AppendLine(m.type+": "+m.content);
+ System.IO.File.WriteAllText(output,sb.ToString());
+ }catch(System.Exception e){System.IO.File.WriteAllText(output,e.ToString());}
+};return "Build Windows des deux scènes planifié";

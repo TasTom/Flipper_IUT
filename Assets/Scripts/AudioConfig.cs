@@ -13,6 +13,7 @@ public enum PinballSound
 public class AudioConfig : ScriptableObject
 {
     [Range(0f, 1f)] public float musicVolume = .45f;
+    [Min(0f)] public float musicFadeInSeconds;
     [Range(0f, 1f)] public float effectsVolume = .8f;
     [Range(1, 32)] public int voices = 12;
     public AudioMixerGroup musicGroup;

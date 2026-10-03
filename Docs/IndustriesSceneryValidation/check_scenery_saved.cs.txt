@@ -1,0 +1,12 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new System.Exception("Edit attendu");
+var sc=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();var sb=new System.Text.StringBuilder();
+var root=sc.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Transform>()).Single(t=>t.name=="MiniatureScenery");
+foreach(var r in root.GetComponentsInChildren<MeshRenderer>()){
+var mesh=r.GetComponent<MeshFilter>();if(mesh!=null && mesh.sharedMesh==null)throw new System.Exception("Mesh manquant "+r.name);
+if(r.sharedMaterials.Any(m=>m==null))throw new System.Exception("Matériau manquant "+r.name);
+if(mesh!=null)sb.AppendLine(r.name+" mesh="+mesh.sharedMesh.name+" size="+r.bounds.size.ToString("F3")+" triangles="+(mesh.sharedMesh.triangles.Length/3));
+}
+if(root.GetComponentsInChildren<UnityEngine.Collider>(true).Length>0)throw new System.Exception("Collider décor inattendu");
+var cam=Camera.main;if(Vector3.Distance(cam.transform.position,new Vector3(0,23.84255f,-16.60174f))>.001f || Mathf.Abs(Mathf.DeltaAngle(cam.transform.eulerAngles.z,90))>.001f)throw new System.Exception("Cadrage changé");
+sb.AppendLine("PASS matériaux et meshes persistants ; aucun collider décor ; cadrage de borne conservé.");
+System.IO.File.WriteAllText("Docs/IndustriesSceneryValidation/"+sc.name+"-assets.txt",sb.ToString());return sb.ToString();

@@ -1,0 +1,14 @@
+PASS transition cleaned up the Neutral music manager
+PASS one playing stereo orchestral loop
+PASS 181 second streaming loop / authored mix group / mechanical headroom
+PASS exactly one enabled listener
+PASS attribution stays out of gameplay
+PASS native impacts use the shared Mechanical voice pool
+PASS pause suspends music without restarting the track
+PASS pause suspends pooled effects
+PASS attribution visible during pause
+PASS resume continues the same track and hides credit
+PASS mute preserves running playback
+PASS decor has no PhysX or VPE collider component
+PASS six native reward targets preserved
+PASS bumper passages wider than 1.3 ball diameters (local gap=0,05411625)

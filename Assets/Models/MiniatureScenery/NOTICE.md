@@ -1,0 +1,1 @@
+Original miniature meshes generated for Vosges Mania. No external model textures or scans. Source: Tools/blender/build_miniature_scenery.py. Units: Unity table units (about 60 mm/unit). Decorative only; never attach colliders. Beveled edges, explicit UVs, separate PBR material slots.

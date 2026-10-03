@@ -40,6 +40,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private int sfxVoices = 8;
 
     private AudioSource musicSource;
+    private Coroutine musicFade;
     private readonly List<AudioSource> sfxSources = new List<AudioSource>();
     private readonly Dictionary<string, AudioClip> registry = new Dictionary<string, AudioClip>();
     private int nextVoice;
@@ -136,11 +137,31 @@ public class AudioManager : MonoBehaviour
 
         musicSource.clip = musicClip;
         musicSource.Play();
+        if (config != null && config.musicFadeInSeconds > 0f)
+        {
+            if (musicFade != null) StopCoroutine(musicFade);
+            musicFade = StartCoroutine(FadeMusicIn(config.musicFadeInSeconds));
+        }
+    }
+
+    private System.Collections.IEnumerator FadeMusicIn(float seconds)
+    {
+        float elapsed = 0f;
+        musicSource.volume = 0f;
+        while (elapsed < seconds)
+        {
+            if (!paused) elapsed += Time.unscaledDeltaTime;
+            musicSource.volume = Mathf.Clamp01(MusicGain) * Mathf.SmoothStep(0f, 1f, elapsed / seconds);
+            yield return null;
+        }
+        musicSource.volume = Mathf.Clamp01(MusicGain);
+        musicFade = null;
     }
 
     /// <summary>Arrête la musique de fond.</summary>
     public void StopMusic()
     {
+        if (musicFade != null) { StopCoroutine(musicFade); musicFade = null; }
         if (musicSource != null)
         {
             musicSource.Stop();

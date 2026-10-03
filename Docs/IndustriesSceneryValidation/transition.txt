@@ -1,0 +1,8 @@
+PASS 99999 : Neutral reste active
+PASS 100000 : transition unique, partie et temps suspendus
+PASS voile conservé pendant le chargement Single
+PASS arrivée : score, billes et multiplicateur conservés
+SESSION score=100000 billes=7 attendues=7 multiplicateur=2
+PASS arrivée : temps repris, moteur VPE prêt, une bille distribuée
+PASS transfert consommé une seule fois
+PASS pas de rebouclage depuis Industries

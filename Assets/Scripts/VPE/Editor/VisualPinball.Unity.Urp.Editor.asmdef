@@ -1,0 +1,20 @@
+{
+    "name": "VisualPinball.Unity.Urp.Editor",
+    "rootNamespace": "VisualPinball.Engine.Unity.Urp.Editor",
+    "references": [
+        "VisualPinball.Unity.Urp",
+        "VisualPinball.Unity",
+        "VisualPinball.Engine"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

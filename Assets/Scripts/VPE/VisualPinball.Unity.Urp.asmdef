@@ -1,0 +1,19 @@
+{
+    "name": "VisualPinball.Unity.Urp",
+    "rootNamespace": "VisualPinball.Engine.Unity.Urp",
+    "references": [
+        "VisualPinball.Unity",
+        "VisualPinball.Engine",
+        "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.RenderPipelines.Core.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -26,8 +26,10 @@ namespace VisualPinball.Engine.Unity.Urp
     /// </summary>
     public class UrpMaterialConverter : IMaterialConverter
     {
-        private const string DotMatrixResourcePath = "VpeUrp/DotMatrixDisplay";
-        private const string SegmentResourcePath = "VpeUrp/SegmentDisplay";
+        // Le core fournit les matériaux d'affichage en variante « SRP » : ils sont faits pour un
+        // pipeline scriptable, donc pour URP, et évitent d'en inventer un.
+        private const string DotMatrixResourcePath = "Materials/Dot Matrix Display (SRP)";
+        private const string SegmentResourcePath = "Materials/Segment Display (SRP)";
 
         private Material _dotMatrix;
         private Material _segment;

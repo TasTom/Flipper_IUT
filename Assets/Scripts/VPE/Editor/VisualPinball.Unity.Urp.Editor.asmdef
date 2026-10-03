@@ -4,6 +4,7 @@
     "references": [
         "VisualPinball.Unity.Urp",
         "VisualPinball.Unity",
+        "VisualPinball.Unity.Editor",
         "VisualPinball.Engine"
     ],
     "includePlatforms": [

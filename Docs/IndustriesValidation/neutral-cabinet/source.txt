@@ -1,0 +1,92 @@
+SCENE Neutral
+PinballTable/Table/Pinball_Cabinet active=True localPos=(0.00, 0.00, 0.00) worldPos=(0.00, 0.00, 0.00) localRot=(270.02, 0.00, 0.00) worldRot=(277.00, 180.00, 180.00) scale=(2500.00, 1666.67, 1666.67) lossy=(2500.00, 1666.67, 1666.67) source=Assets/Models/Table/Pinball_Cabinet.fbx
+  Pinball_Cabinet components=Transform localPos=(0.00, 0.00, 0.00) localRot=(270.02, 0.00, 0.00) scale=(2500.00, 1666.67, 1666.67)
+  Cabinet components=Transform localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  Back components=Transform,MeshFilter,MeshRenderer,BoxCollider localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (-0.10, 2.34, 22.13), Extents: (8.08, 0.89, 0.27) materials=Lit
+  Backbox components=Transform,MeshFilter,MeshRenderer localPos=(0.00, -0.01, 0.01) localRot=(90.00, 0.02, 0.00) scale=(1.00, 0.90, 0.71) renderer=False bounds=Center: (-0.09, 2.67, 25.06), Extents: (8.08, 1.24, 2.88) materials=Lit
+  DrainTrough components=Transform,MeshFilter,MeshRenderer localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (0.00, -0.66, 0.08), Extents: (6.43, 0.14, 0.34) materials=Lit
+  Floor components=Transform,MeshFilter,MeshRenderer localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (-0.10, -0.07, 8.88), Extents: (8.08, 1.25, 9.41) materials=Lit
+  Front components=Transform,MeshFilter,MeshRenderer,BoxCollider localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (0.00, -0.38, 0.01), Extents: (8.08, 0.89, 0.27) materials=Lit
+  Ledge components=Transform,MeshFilter,MeshRenderer,BoxCollider localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (0.00, 3.39, 19.43), Extents: (8.08, 0.17, 0.22) materials=Lit
+  Marquee components=Transform,MeshFilter,MeshRenderer localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (-0.07, 3.97, 28.31), Extents: (7.83, 0.47, 0.17) materials=Lit
+  Screen components=Transform,MeshFilter,MeshRenderer localPos=(0.00, -0.01, 0.01) localRot=(90.00, 0.30, 0.00) scale=(1.10, 1.00, 1.00) renderer=False bounds=Center: (-0.07, 3.97, 24.94), Extents: (8.06, 0.40, 2.74) materials=FrontonEcran_Mat
+  Side_L components=Transform,MeshFilter,MeshRenderer,BoxCollider localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.22, 1.00) renderer=False bounds=Center: (-7.93, 0.94, 10.71), Extents: (0.25, 2.28, 11.58) materials=Lit
+  Side_R components=Transform,MeshFilter,MeshRenderer,BoxCollider localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.22, 1.00) renderer=False bounds=Center: (7.73, 0.94, 10.71), Extents: (0.25, 2.28, 11.58) materials=Lit
+  Fronton_Pivot components=Transform localPos=(0.00, -0.02, 0.00) localRot=(0.00, 0.00, 0.00) scale=(0.00, 0.00, 0.00)
+  Emblem components=Transform localPos=(0.00, -0.01, 0.01) localRot=(90.00, 1.89, 0.00) scale=(1.00, 1.00, 1.00)
+  Loop_At_Emblem components=Transform,MeshFilter,MeshRenderer localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (-0.05, 3.30, 19.54), Extents: (1.40, 0.19, 0.94) materials=Lit
+PinballTable/Table/Pinball_Cabinet/Cabinet active=True localPos=(0.00, 0.00, 0.00) worldPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) worldRot=(277.00, 180.00, 180.00) scale=(1.00, 1.00, 1.00) lossy=(2500.00, 1666.67, 1666.67) source=Assets/Models/Table/Pinball_Cabinet.fbx
+  Cabinet components=Transform localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  Back components=Transform,MeshFilter,MeshRenderer,BoxCollider localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (-0.10, 2.34, 22.13), Extents: (8.08, 0.89, 0.27) materials=Lit
+  Backbox components=Transform,MeshFilter,MeshRenderer localPos=(0.00, -0.01, 0.01) localRot=(90.00, 0.02, 0.00) scale=(1.00, 0.90, 0.71) renderer=False bounds=Center: (-0.09, 2.67, 25.06), Extents: (8.08, 1.24, 2.88) materials=Lit
+  DrainTrough components=Transform,MeshFilter,MeshRenderer localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (0.00, -0.66, 0.08), Extents: (6.43, 0.14, 0.34) materials=Lit
+  Floor components=Transform,MeshFilter,MeshRenderer localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (-0.10, -0.07, 8.88), Extents: (8.08, 1.25, 9.41) materials=Lit
+  Front components=Transform,MeshFilter,MeshRenderer,BoxCollider localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (0.00, -0.38, 0.01), Extents: (8.08, 0.89, 0.27) materials=Lit
+  Ledge components=Transform,MeshFilter,MeshRenderer,BoxCollider localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (0.00, 3.39, 19.43), Extents: (8.08, 0.17, 0.22) materials=Lit
+  Marquee components=Transform,MeshFilter,MeshRenderer localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=False bounds=Center: (-0.07, 3.97, 28.31), Extents: (7.83, 0.47, 0.17) materials=Lit
+  Screen components=Transform,MeshFilter,MeshRenderer localPos=(0.00, -0.01, 0.01) localRot=(90.00, 0.30, 0.00) scale=(1.10, 1.00, 1.00) renderer=False bounds=Center: (-0.07, 3.97, 24.94), Extents: (8.06, 0.40, 2.74) materials=FrontonEcran_Mat
+  Side_L components=Transform,MeshFilter,MeshRenderer,BoxCollider localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.22, 1.00) renderer=False bounds=Center: (-7.93, 0.94, 10.71), Extents: (0.25, 2.28, 11.58) materials=Lit
+  Side_R components=Transform,MeshFilter,MeshRenderer,BoxCollider localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.22, 1.00) renderer=False bounds=Center: (7.73, 0.94, 10.71), Extents: (0.25, 2.28, 11.58) materials=Lit
+  Fronton_Pivot components=Transform localPos=(0.00, -0.02, 0.00) localRot=(0.00, 0.00, 0.00) scale=(0.00, 0.00, 0.00)
+PinballTable/Table/Pinball_Cabinet/Cabinet/Screen active=True localPos=(0.00, -0.01, 0.01) worldPos=(0.08, 21.54, 18.33) localRot=(90.00, 0.30, 0.00) worldRot=(353.00, 0.00, 359.70) scale=(1.10, 1.00, 1.00) lossy=(2749.98, 1666.69, 1666.67) source=Assets/Models/Table/Pinball_Cabinet.fbx
+  Screen components=Transform,MeshFilter,MeshRenderer localPos=(0.00, -0.01, 0.01) localRot=(90.00, 0.30, 0.00) scale=(1.10, 1.00, 1.00) renderer=False bounds=Center: (-0.07, 3.97, 24.94), Extents: (8.06, 0.40, 2.74) materials=FrontonEcran_Mat
+PinballTable/Table/Pinball_Cabinet/Cabinet/Fronton_Pivot active=True localPos=(0.00, -0.02, 0.00) worldPos=(-0.07, 4.04, 24.93) localRot=(0.00, 0.00, 0.00) worldRot=(277.00, 180.00, 180.00) scale=(0.00, 0.00, 0.00) lossy=(1.00, 1.00, 1.00) source=
+  Fronton_Pivot components=Transform localPos=(0.00, -0.02, 0.00) localRot=(0.00, 0.00, 0.00) scale=(0.00, 0.00, 0.00)
+PinballTable/ReferencePlayfield/LeftCabinet active=True localPos=(-4.40, -0.65, 8.90) worldPos=(-4.40, 0.44, 8.91) localRot=(0.00, 0.00, 0.00) worldRot=(353.00, 0.00, 0.00) scale=(0.22, 1.60, 18.00) lossy=(0.22, 1.60, 18.00) source=
+  LeftCabinet components=Transform,MeshFilter,MeshRenderer localPos=(-4.40, -0.65, 8.90) localRot=(0.00, 0.00, 0.00) scale=(0.22, 1.60, 18.00) renderer=True bounds=Center: (-4.40, 0.44, 8.91), Extents: (0.11, 1.89, 9.03) materials=EnamelMidnight_PBR
+PinballTable/ReferencePlayfield/RightCabinet active=True localPos=(4.40, -0.65, 8.90) worldPos=(4.40, 0.44, 8.91) localRot=(0.00, 0.00, 0.00) worldRot=(353.00, 0.00, 0.00) scale=(0.22, 1.60, 18.00) lossy=(0.22, 1.60, 18.00) source=
+  RightCabinet components=Transform,MeshFilter,MeshRenderer localPos=(4.40, -0.65, 8.90) localRot=(0.00, 0.00, 0.00) scale=(0.22, 1.60, 18.00) renderer=True bounds=Center: (4.40, 0.44, 8.91), Extents: (0.11, 1.89, 9.03) materials=EnamelMidnight_PBR
+PinballTable/ReferencePlayfield/BackCabinet active=True localPos=(0.00, -0.65, 17.89) worldPos=(0.00, 1.54, 17.84) localRot=(0.00, 0.00, 0.00) worldRot=(353.00, 0.00, 0.00) scale=(8.80, 1.60, 0.22) lossy=(8.80, 1.60, 0.22) source=
+  BackCabinet components=Transform,MeshFilter,MeshRenderer localPos=(0.00, -0.65, 17.89) localRot=(0.00, 0.00, 0.00) scale=(8.80, 1.60, 0.22) renderer=True bounds=Center: (0.00, 1.54, 17.84), Extents: (4.40, 0.81, 0.21) materials=EnamelMidnight_PBR
+PinballTable/ReferencePlayfield/CabinetBackdrop active=True localPos=(0.00, -0.32, 10.20) worldPos=(0.00, 0.93, 10.16) localRot=(0.00, 0.00, 0.00) worldRot=(353.00, 0.00, 0.00) scale=(9.00, 0.10, 21.80) lossy=(9.00, 0.10, 21.80) source=
+  CabinetBackdrop components=Transform,MeshFilter,MeshRenderer localPos=(0.00, -0.32, 10.20) localRot=(0.00, 0.00, 0.00) scale=(9.00, 0.10, 21.80) renderer=True bounds=Center: (0.00, 0.93, 10.16), Extents: (4.50, 1.38, 10.82) materials=EnamelMidnight_PBR
+PinballTable/ReferencePlayfield/ProfessionalArt/CabinetReflection active=True localPos=(0.00, 2.00, 9.00) worldPos=(0.00, 3.08, 8.69) localRot=(0.00, 0.00, 0.00) worldRot=(353.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) lossy=(1.00, 1.00, 1.00) source=
+  CabinetReflection components=Transform,ReflectionProbe localPos=(0.00, 2.00, 9.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+PinballTable/Backglass active=True localPos=(0.00, 28.84, -7.22) worldPos=(0.00, 27.74, -10.68) localRot=(47.22, 0.00, 0.00) worldRot=(40.22, 0.00, 0.00) scale=(0.01, 0.00, 1.00) lossy=(0.01, 0.00, 1.00) source=
+  Backglass components=RectTransform,Canvas,BackglassDisplay localPos=(0.00, 28.84, -7.22) localRot=(47.22, 0.00, 0.00) scale=(0.01, 0.00, 1.00)
+  Fond components=RectTransform,CanvasRenderer,Image localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  ScoreGhost components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, 75.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  HighScoreLabel components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(-380.00, 200.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  HighScoreValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(320.00, 200.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  ScoreValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, 75.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  MessageValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, -130.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  BallsLabel components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(-585.00, -225.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  BallsValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(-270.00, -225.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  MissionsLabel components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(225.00, -225.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  MissionsValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(615.00, -225.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  MultiplierValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, -5.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  ScoreFeedbackValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, -58.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+SCENE Industries
+ExampleTable/Playfield/Cabinet active=True localPos=(0.26, -0.10, -0.58) worldPos=(0.26, -0.10, -0.58) localRot=(0.00, 0.00, 0.00) worldRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) lossy=(1.00, 1.00, 1.00) source=
+  Cabinet components=Transform,MeshFilter,MeshRenderer localPos=(0.26, -0.10, -0.58) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) renderer=True bounds=Center: (0.26, -0.10, -0.58), Extents: (0.28, 0.10, 0.61) materials=PaintedSteel
+ExampleTable/Backglass active=True localPos=(0.00, 0.00, 0.00) worldPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) worldRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) lossy=(1.00, 1.00, 1.00) source=
+  Backglass components=Transform localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+ExampleTable/Cabinet active=True localPos=(0.00, 0.00, 0.00) worldPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) worldRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00) lossy=(1.00, 1.00, 1.00) source=
+  Cabinet components=Transform localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+IndustriesPresentation/IndustriesHUD/CabinetContent active=True localPos=(0.00, 0.00, 0.00) worldPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 270.00) worldRot=(0.00, 0.00, 270.00) scale=(1.00, 1.00, 1.00) lossy=(0.00, 0.00, 0.00) source=
+  CabinetContent components=RectTransform localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 270.00) scale=(1.00, 1.00, 1.00)
+  ScorePanel components=RectTransform,CanvasRenderer,Image localPos=(0.00, 960.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  IndustriesTitle components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, 905.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  ScoreText components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(-170.00, 835.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  BallsText components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(365.00, 845.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  HighScoreText components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(-200.00, 775.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  MultiplierText components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(363.00, 782.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  ProductionText components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, 725.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  MessageText components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, -875.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  ScoreFeedbackText components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, -790.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+IndustriesPresentation/Backglass active=True localPos=(0.26, 1.79, -1.84) worldPos=(0.26, 1.79, -1.84) localRot=(40.22, 0.00, 0.00) worldRot=(40.22, 0.00, 0.00) scale=(0.00, 0.00, 1.00) lossy=(0.00, 0.00, 1.00) source=
+  Backglass components=RectTransform,Canvas,BackglassDisplay localPos=(0.26, 1.79, -1.84) localRot=(40.22, 0.00, 0.00) scale=(0.00, 0.00, 1.00)
+  Fond components=RectTransform,CanvasRenderer,Image localPos=(0.00, 0.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  ScoreGhost components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, 75.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  HighScoreLabel components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(-380.00, 200.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  HighScoreValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(320.00, 200.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  ScoreValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, 75.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  MessageValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, -130.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  BallsLabel components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(-585.00, -225.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  BallsValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(-270.00, -225.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  MissionsLabel components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(225.00, -225.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  MissionsValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(615.00, -225.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  MultiplierValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, -5.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+  ScoreFeedbackValue components=RectTransform,CanvasRenderer,TextMeshProUGUI localPos=(0.00, -58.00, 0.00) localRot=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+IndustriesPresentation/CabinetFraming active=True localPos=(0.26, 0.00, -1.15) worldPos=(0.26, 0.00, -1.15) localRot=(353.00, 0.00, 0.00) worldRot=(353.00, 0.00, 0.00) scale=(0.06, 0.06, 0.06) lossy=(0.06, 0.06, 0.06) source=
+  CabinetFraming components=Transform localPos=(0.26, 0.00, -1.15) localRot=(353.00, 0.00, 0.00) scale=(0.06, 0.06, 0.06)

@@ -1,0 +1,9 @@
+Added blocks: Counter({'4': 15, '1': 15, '23': 11, '33': 11})
+Removed blocks: Counter()
+Changed blocks: Counter({'224': 2, '114': 1, '20': 1})
+Embedded mesh bodies identical after file ID regeneration: True
+Existing collider blocks unchanged: True
+1541566069 type=224 before: ['  m_LocalPosition: {x: 0, y: 0, z: -1.8365116}'] after: ['  m_LocalPosition: {x: 0, y: 0, z: -1.8365115}', '  - {fileID: 1640294792}']
+1594834120 type=224 before: ['  m_SizeDelta: {x: 0, y: 0}'] after: ['  m_SizeDelta: {x: -64, y: -36}']
+1824461830 type=20 before: ['  far clip plane: 2.979547'] after: ['  far clip plane: 2.9800167']
+1829183568 type=114 before: ['  _instanceID: 185405'] after: ['  _instanceID: 184852']

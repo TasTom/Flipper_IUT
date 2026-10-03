@@ -1,0 +1,1 @@
+scene=Assets/Scenes/Industries.unity dirty=False cabinet=True colliders=0 cameraCount=1 targetCount=6

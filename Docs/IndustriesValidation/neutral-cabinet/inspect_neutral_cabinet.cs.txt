@@ -1,0 +1,21 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+var current=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+if(current.isDirty)throw new Exception("Scène active non enregistrée");
+var source=UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Neutral.unity",UnityEditor.SceneManagement.OpenSceneMode.Additive);
+var report=new System.Text.StringBuilder();
+try {
+ foreach(var scene in new[]{source,current}) {
+  report.AppendLine("SCENE "+scene.name);
+  foreach(var tr in scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<Transform>(true))) {
+   if(!(tr.name.ToLowerInvariant().Contains("cabinet") || tr.name.ToLowerInvariant().Contains("backglass") || tr.name.ToLowerInvariant().Contains("fronton") || tr.name=="Screen"))continue;
+   string path=tr.name;for(var parent=tr.parent;parent!=null;parent=parent.parent)path=parent.name+"/"+path;
+   report.AppendLine(path+" active="+tr.gameObject.activeSelf+" localPos="+tr.localPosition+" worldPos="+tr.position+" localRot="+tr.localEulerAngles+" worldRot="+tr.eulerAngles+" scale="+tr.localScale+" lossy="+tr.lossyScale+" source="+UnityEditor.PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(tr.gameObject));
+   foreach(var child in tr.GetComponentsInChildren<Transform>(true)) {
+    var renderer=child.GetComponent<Renderer>();
+    report.AppendLine("  "+child.name+" components="+string.Join(",",child.GetComponents<Component>().Select(c=>c==null?"MISSING":c.GetType().Name))+" localPos="+child.localPosition+" localRot="+child.localEulerAngles+" scale="+child.localScale+(renderer!=null?" renderer="+renderer.enabled+" bounds="+renderer.bounds+" materials="+string.Join(",",renderer.sharedMaterials.Select(m=>m!=null?m.name:"null")):""));
+   }
+  }
+ }
+ System.IO.File.WriteAllText("Tools/unity/out/neutral-cabinet-source.txt",report.ToString());
+ return report.ToString();
+} finally {UnityEditor.SceneManagement.EditorSceneManager.CloseScene(source,true);}

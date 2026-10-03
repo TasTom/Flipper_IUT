@@ -1,0 +1,8 @@
+scene=Industries paused=False timeScale=1 VPE=True
+score=0 affichage=0 billes=3
+cabinetColliders=0 visible=Backbox,Marquee,Screen
+camera=(0.26, 1.54, -2.22) rotation=(40.22, 0.00, 90.00) ortho=0,29
+scorePanelX=0,8499998..0,9999999 scorePanelY=0..1
+Backbox mesh=Assets/Models/Table/Pinball_Cabinet.fbx materials=Packages/com.unity.render-pipelines.universal/Runtime/Materials/Lit.mat
+Marquee mesh=Assets/Models/Table/Pinball_Cabinet.fbx materials=Packages/com.unity.render-pipelines.universal/Runtime/Materials/Lit.mat
+Screen mesh=Assets/Models/Table/Pinball_Cabinet.fbx materials=Assets/Materials/FrontonEcran_Mat.mat

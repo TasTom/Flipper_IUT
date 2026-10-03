@@ -1,0 +1,11 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+UnityEditor.PlayerSettings.runInBackground=false;
+var entries=typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.LogEntries");
+entries.GetMethod("SetConsoleFlag",System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.NonPublic).Invoke(null,new object[]{4,true});
+var scene=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+var panel=UnityEngine.Object.FindAnyObjectByType<BackglassDisplay>().transform;
+var cabinet=panel.Find("Pinball_Cabinet");
+var report=$"scene={scene.path} dirty={scene.isDirty} cabinet={cabinet!=null} colliders={cabinet.GetComponentsInChildren<Collider>(true).Length} cameraCount={UnityEngine.Object.FindObjectsByType<Camera>().Length} targetCount={UnityEngine.Object.FindAnyObjectByType<VisualPinball.Unity.TableComponent>().GetComponentsInChildren<VisualPinball.Unity.TargetComponent>().Length}\n";
+if(scene.isDirty || cabinet==null || cabinet.GetComponentsInChildren<Collider>(true).Length!=0)throw new Exception(report);
+System.IO.File.WriteAllText("Docs/IndustriesValidation/neutral-cabinet/saved-scene.txt",report);
+return report;

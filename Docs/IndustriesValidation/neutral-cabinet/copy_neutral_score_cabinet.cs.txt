@@ -1,0 +1,41 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+var destination=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+if(destination.name!="Industries" || destination.isDirty)throw new Exception("Industries enregistrée attendue");
+var source=UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Neutral.unity",UnityEditor.SceneManagement.OpenSceneMode.Additive);
+int group=-1;
+try {
+ var sourceTable=source.GetRootGameObjects().Single(g=>g.name=="PinballTable").transform;
+ var original=sourceTable.Find("Table/Pinball_Cabinet");
+ if(original==null)throw new Exception("Cabinet de Neutral absent");
+ var panel=(RectTransform)destination.GetRootGameObjects().Single(g=>g.name=="IndustriesPresentation").transform.Find("Backglass");
+ if(panel.Find("Pinball_Cabinet")!=null)throw new Exception("Cabinet déjà présent : réglages conservés");
+ UnityEditor.Undo.IncrementCurrentGroup();group=UnityEditor.Undo.GetCurrentGroup();UnityEditor.Undo.SetCurrentGroupName("Reprendre le cabinet de Neutral pour les scores");
+ var copy=UnityEngine.Object.Instantiate(original.gameObject);copy.name="Pinball_Cabinet";
+ UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(copy,destination);UnityEditor.Undo.RegisterCreatedObjectUndo(copy,"Cabinet de Neutral");
+ copy.transform.SetParent(panel,false);copy.transform.localPosition=Vector3.zero;copy.transform.localRotation=Quaternion.identity;copy.transform.localScale=Vector3.one;
+ // La copie est décorative : aucun collider du caisson n'entre dans la table VPE.
+ foreach(var collider in copy.GetComponentsInChildren<Collider>(true))UnityEditor.Undo.DestroyObjectImmediate(collider);
+ var pieces=copy.transform.Find("Cabinet");
+ pieces.localPosition=Vector3.zero;pieces.localRotation=Quaternion.identity;pieces.localScale=Vector3.one;
+ float width=panel.rect.width,height=panel.rect.height;
+ FitPiece("Backbox",width,height,.03f,0,.018f);
+ FitPiece("Screen",width-64,height-36,.001f,0,.0025f);
+ FitPiece("Marquee",width-12,8,.002f,height*.5f-4,.0015f);
+ var background=panel.Find("Fond").GetComponent<RectTransform>();UnityEditor.Undo.RecordObject(background,"Écran dans le fronton");
+ background.offsetMin=new Vector2(32,18);background.offsetMax=new Vector2(-32,-18);
+ UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(destination);
+ UnityEditor.Undo.CollapseUndoOperations(group);
+ return "Cabinet de Neutral copié ; Backbox, Screen et Marquee réutilisés avec leurs maillages et matériaux d'origine. Aucun collider ajouté. Scène non enregistrée.";
+
+ void FitPiece(string name,float w,float h,float depth,float y,float z) {
+  var tr=pieces.Find(name);if(tr==null)throw new Exception("Pièce absente : "+name);
+  var mesh=tr.GetComponent<MeshFilter>().sharedMesh;var b=mesh.bounds;
+  // Les faces du FBX sont dans XZ. Le plan de l'écran devient XY du Canvas.
+  tr.localRotation=Quaternion.Euler(-90,0,0);
+  tr.localScale=new Vector3(w/b.size.x,depth/b.size.y,h/b.size.z);
+  tr.localPosition=new Vector3(0,y,z)-tr.localRotation*Vector3.Scale(tr.localScale,b.center);
+  var renderer=tr.GetComponent<MeshRenderer>();renderer.enabled=true;
+  renderer.shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;renderer.receiveShadows=false;
+ }
+} catch {if(group>=0)UnityEditor.Undo.RevertAllDownToGroup(group);throw;}
+finally {UnityEditor.SceneManagement.EditorSceneManager.CloseScene(source,true);}

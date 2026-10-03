@@ -1,0 +1,109 @@
+Left speed=5 dx=0,23 lateral=-2 loss=False lossAt=none flipper=Right end=(0.083, 0.207, 3.091) contacts=InlaneInner_Left
+Left speed=5 dx=0,23 lateral=0 loss=True lossAt=(-3.943, 0.207, 3.053) flipper=none end=(0.000, 0.000, 0.000) contacts=OutlanePost_Left
+Left speed=5 dx=0,23 lateral=2 loss=True lossAt=(-3.943, 0.207, 3.021) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=5 dx=0,29 lateral=-2 loss=False lossAt=none flipper=none end=(-2.826, 0.207, 6.544) contacts=InlaneInner_Left
+Left speed=5 dx=0,29 lateral=0 loss=True lossAt=(-3.720, 0.207, 3.000) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=5 dx=0,29 lateral=2 loss=True lossAt=(-3.943, 0.207, 3.026) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=5 dx=0,35 lateral=-2 loss=False lossAt=none flipper=none end=(-2.829, 0.207, 6.544) contacts=InlaneInner_Left
+Left speed=5 dx=0,35 lateral=0 loss=True lossAt=(-3.780, 0.207, 3.000) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=5 dx=0,35 lateral=2 loss=True lossAt=(-3.943, 0.207, 3.029) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=5 dx=0,41 lateral=-2 loss=False lossAt=none flipper=none end=(-2.823, 0.207, 6.544) contacts=InlaneInner_Left
+Left speed=5 dx=0,41 lateral=0 loss=True lossAt=(-3.840, 0.207, 3.000) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=5 dx=0,41 lateral=2 loss=True lossAt=(-3.943, 0.207, 3.033) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=5 dx=0,47 lateral=-2 loss=True lossAt=(-0.222, 0.207, 1.154) flipper=none end=(0.000, 0.000, 0.000) contacts=OutlanePost_Left
+Left speed=5 dx=0,47 lateral=0 loss=True lossAt=(-3.900, 0.207, 3.000) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=5 dx=0,47 lateral=2 loss=True lossAt=(-3.943, 0.207, 3.039) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=5 dx=0,53 lateral=-2 loss=False lossAt=none flipper=Right end=(-0.279, 0.207, 2.847) contacts=OutlanePost_Left,InlaneInner_Left
+Left speed=5 dx=0,53 lateral=0 loss=True lossAt=(-3.918, 0.207, 3.002) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=5 dx=0,53 lateral=2 loss=True lossAt=(-3.937, 0.207, 3.042) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,23 lateral=-2 loss=False lossAt=none flipper=none end=(-2.823, 0.207, 6.544) contacts=OutlanePost_Left,InlaneInner_Left
+Left speed=12 dx=0,23 lateral=0 loss=True lossAt=(-3.943, 0.207, 3.044) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,23 lateral=2 loss=True lossAt=(-3.943, 0.207, 3.051) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,29 lateral=-2 loss=False lossAt=none flipper=Right end=(0.614, 0.207, 3.392) contacts=OutlanePost_Left,InlaneInner_Left
+Left speed=12 dx=0,29 lateral=0 loss=True lossAt=(-3.720, 0.207, 3.037) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,29 lateral=2 loss=True lossAt=(-3.943, 0.207, 3.053) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,35 lateral=-2 loss=True lossAt=(-3.943, 0.207, 3.002) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,35 lateral=0 loss=True lossAt=(-3.780, 0.207, 3.037) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,35 lateral=2 loss=True lossAt=(-3.943, 0.207, 3.056) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,41 lateral=-2 loss=True lossAt=(-3.943, 0.207, 2.999) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,41 lateral=0 loss=True lossAt=(-3.840, 0.207, 3.037) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,41 lateral=2 loss=True lossAt=(-3.943, 0.207, 2.965) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,47 lateral=-2 loss=True lossAt=(-3.943, 0.207, 3.036) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,47 lateral=0 loss=True lossAt=(-3.900, 0.207, 3.037) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,47 lateral=2 loss=True lossAt=(-3.942, 0.207, 2.967) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,53 lateral=-2 loss=True lossAt=(-3.943, 0.207, 2.996) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,53 lateral=0 loss=True lossAt=(-3.931, 0.207, 3.038) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=12 dx=0,53 lateral=2 loss=True lossAt=(-3.939, 0.207, 2.969) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,23 lateral=-2 loss=True lossAt=(-3.943, 0.207, 3.020) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,23 lateral=0 loss=True lossAt=(-3.943, 0.207, 2.981) flipper=none end=(0.000, 0.000, 0.000) contacts=OutlanePost_Left,InlaneOuter_Left
+Left speed=25 dx=0,23 lateral=2 loss=True lossAt=(-3.943, 0.207, 2.939) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,29 lateral=-2 loss=True lossAt=(-3.943, 0.207, 3.024) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,29 lateral=0 loss=True lossAt=(-3.720, 0.207, 2.933) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,29 lateral=2 loss=True lossAt=(-3.943, 0.207, 2.940) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,35 lateral=-2 loss=True lossAt=(-3.943, 0.207, 3.010) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,35 lateral=0 loss=True lossAt=(-3.780, 0.207, 2.933) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,35 lateral=2 loss=True lossAt=(-3.943, 0.207, 2.942) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,41 lateral=-2 loss=True lossAt=(-3.943, 0.207, 3.016) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,41 lateral=0 loss=True lossAt=(-3.840, 0.207, 2.933) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,41 lateral=2 loss=True lossAt=(-3.943, 0.207, 2.944) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,47 lateral=-2 loss=True lossAt=(-3.943, 0.207, 3.007) flipper=none end=(0.000, 0.000, 0.000) contacts=OutlanePost_Left
+Left speed=25 dx=0,47 lateral=0 loss=True lossAt=(-3.900, 0.207, 2.933) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,47 lateral=2 loss=True lossAt=(-3.943, 0.207, 2.946) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,53 lateral=-2 loss=True lossAt=(-3.636, 0.207, 2.938) flipper=none end=(0.000, 0.000, 0.000) contacts=InlaneOuter_Left
+Left speed=25 dx=0,53 lateral=0 loss=True lossAt=(-3.936, 0.207, 2.934) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Left speed=25 dx=0,53 lateral=2 loss=True lossAt=(-3.941, 0.207, 2.947) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=5 dx=0,23 lateral=-2 loss=False lossAt=none flipper=Right end=(0.032, 0.207, 3.057) contacts=InlaneInner_Right
+Right speed=5 dx=0,23 lateral=0 loss=True lossAt=(3.243, 0.207, 3.018) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=5 dx=0,23 lateral=2 loss=True lossAt=(3.243, 0.207, 3.016) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=5 dx=0,29 lateral=-2 loss=False lossAt=none flipper=none end=(2.024, 0.207, 6.544) contacts=InlaneInner_Right
+Right speed=5 dx=0,29 lateral=0 loss=True lossAt=(2.920, 0.207, 3.000) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=5 dx=0,29 lateral=2 loss=True lossAt=(3.243, 0.207, 3.020) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=5 dx=0,35 lateral=-2 loss=False lossAt=none flipper=none end=(2.028, 0.207, 6.544) contacts=InlaneInner_Right
+Right speed=5 dx=0,35 lateral=0 loss=True lossAt=(2.980, 0.207, 3.000) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=5 dx=0,35 lateral=2 loss=True lossAt=(3.243, 0.207, 3.022) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=5 dx=0,41 lateral=-2 loss=False lossAt=none flipper=none end=(2.023, 0.207, 6.544) contacts=InlaneInner_Right
+Right speed=5 dx=0,41 lateral=0 loss=True lossAt=(3.040, 0.207, 3.000) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=5 dx=0,41 lateral=2 loss=True lossAt=(3.243, 0.207, 3.027) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=5 dx=0,47 lateral=-2 loss=False lossAt=none flipper=none end=(2.025, 0.207, 6.544) contacts=OutlanePost_Right,InlaneInner_Right
+Right speed=5 dx=0,47 lateral=0 loss=True lossAt=(3.100, 0.207, 3.000) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=5 dx=0,47 lateral=2 loss=True lossAt=(3.243, 0.207, 3.030) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=5 dx=0,53 lateral=-2 loss=False lossAt=none flipper=Left end=(-0.489, 0.207, 2.796) contacts=OutlanePost_Right,InlaneInner_Right
+Right speed=5 dx=0,53 lateral=0 loss=True lossAt=(3.160, 0.207, 3.000) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=5 dx=0,53 lateral=2 loss=True lossAt=(3.243, 0.207, 3.035) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,23 lateral=-2 loss=False lossAt=none flipper=Right end=(0.434, 0.207, 3.293) contacts=OutlanePost_Right,InlaneInner_Right
+Right speed=12 dx=0,23 lateral=0 loss=True lossAt=(3.243, 0.207, 3.030) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,23 lateral=2 loss=True lossAt=(3.243, 0.207, 3.048) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,29 lateral=-2 loss=False lossAt=none flipper=Left end=(-1.403, 0.207, 3.391) contacts=OutlanePost_Right,InlaneInner_Right
+Right speed=12 dx=0,29 lateral=0 loss=True lossAt=(2.920, 0.207, 3.037) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,29 lateral=2 loss=True lossAt=(3.243, 0.207, 3.050) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,35 lateral=-2 loss=True lossAt=(3.243, 0.207, 3.050) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,35 lateral=0 loss=True lossAt=(2.980, 0.207, 3.037) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,35 lateral=2 loss=True lossAt=(3.243, 0.207, 3.052) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,41 lateral=-2 loss=True lossAt=(3.243, 0.207, 3.002) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,41 lateral=0 loss=True lossAt=(3.040, 0.207, 3.037) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,41 lateral=2 loss=True lossAt=(3.243, 0.207, 3.054) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,47 lateral=-2 loss=True lossAt=(3.243, 0.207, 3.047) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,47 lateral=0 loss=True lossAt=(3.100, 0.207, 3.037) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,47 lateral=2 loss=True lossAt=(3.243, 0.207, 3.056) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,53 lateral=-2 loss=True lossAt=(3.243, 0.207, 3.050) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,53 lateral=0 loss=True lossAt=(3.160, 0.207, 3.037) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=12 dx=0,53 lateral=2 loss=True lossAt=(3.243, 0.207, 2.965) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,23 lateral=-2 loss=False lossAt=none flipper=none end=(2.434, 0.207, 6.544) contacts=OutlanePost_Right
+Right speed=25 dx=0,23 lateral=0 loss=True lossAt=(3.243, 0.207, 3.003) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,23 lateral=2 loss=True lossAt=(3.243, 0.207, 2.936) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,29 lateral=-2 loss=True lossAt=(3.235, 0.207, 3.018) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,29 lateral=0 loss=True lossAt=(2.920, 0.207, 2.933) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,29 lateral=2 loss=True lossAt=(3.243, 0.207, 2.937) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,35 lateral=-2 loss=True lossAt=(3.243, 0.207, 2.986) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,35 lateral=0 loss=True lossAt=(2.980, 0.207, 2.933) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,35 lateral=2 loss=True lossAt=(3.243, 0.207, 2.939) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,41 lateral=-2 loss=True lossAt=(3.243, 0.207, 3.020) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,41 lateral=0 loss=True lossAt=(3.040, 0.207, 2.933) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,41 lateral=2 loss=True lossAt=(3.243, 0.207, 2.941) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,47 lateral=-2 loss=True lossAt=(3.243, 0.207, 3.047) flipper=none end=(0.000, 0.000, 0.000) contacts=OutlanePost_Right
+Right speed=25 dx=0,47 lateral=0 loss=True lossAt=(3.100, 0.207, 2.933) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,47 lateral=2 loss=True lossAt=(3.243, 0.207, 2.943) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,53 lateral=-2 loss=True lossAt=(3.033, 0.207, 2.953) flipper=none end=(0.000, 0.000, 0.000) contacts=InlaneOuter_Right
+Right speed=25 dx=0,53 lateral=0 loss=True lossAt=(3.160, 0.207, 2.933) flipper=none end=(0.000, 0.000, 0.000) contacts=
+Right speed=25 dx=0,53 lateral=2 loss=True lossAt=(3.243, 0.207, 2.944) flipper=none end=(0.000, 0.000, 0.000) contacts=
+SUMMARY cases=108 losses=92 sideLosses=91 returned=7 captured=0 unresolved=9

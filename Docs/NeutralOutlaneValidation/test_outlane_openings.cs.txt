@@ -1,0 +1,23 @@
+if(!Application.isPlaying)throw new Exception("Play required");
+var table=GameObject.Find("PinballTable").transform;var ball=table.Find("Gameplay/Ball").GetComponent<Rigidbody>();var gm=GameManager.Instance;var bm=BallManager.Instance;
+var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;var clamp=typeof(BallManager).GetMethod("ClampSpeed",flags);var mode=Physics.simulationMode;
+var sb=new System.Text.StringBuilder();int total=0,losses=0,returned=0,blocked=0,sideLosses=0,captured=0;var overlap=new Collider[32];
+try{Physics.simulationMode=SimulationMode.Script;
+foreach(int side in new[]{-1,1})foreach(float speed in new[]{5f,12f,25f})foreach(float distance in new[]{.23f,.29f,.35f,.41f,.47f,.53f})foreach(float lateral in new[]{-2f,0f,2f}){
+ gm.StartGame();gm.NotifyBallLaunched();float x=side<0?-3.43f-distance:2.63f+distance;
+ ball.position=table.TransformPoint(new Vector3(x,.208f,9.4f));ball.linearVelocity=table.TransformDirection(new Vector3(side*lateral,0,-speed));ball.angularVelocity=Vector3.zero;Physics.SyncTransforms();
+ bool drained=false,hitFlip=false;Vector3 p=table.InverseTransformPoint(ball.position),beforeDrain=p;string route="none";var touched=new System.Collections.Generic.HashSet<string>();
+ Action<Rigidbody> drain=b=>{if(b==ball)drained=true;};bm.BallDrained+=drain;
+ try{for(int n=0;n<1000&&ball.gameObject.activeSelf&&!hitFlip;n++){
+ beforeDrain=p;clamp.Invoke(bm,new object[]{ball});Physics.Simulate(.005f);p=table.InverseTransformPoint(ball.position);
+ int count=Physics.OverlapSphereNonAlloc(ball.position,.215f,overlap,~0,QueryTriggerInteraction.Ignore);
+ for(int j=0;j<count;j++){var c=overlap[j];if(c.attachedRigidbody==ball)continue;if(c.name.Contains("lane")||c.name.Contains("Lane")||c.name.Contains("Post"))touched.Add(c.name);var f=c.transform.GetComponentInParent<Flipper>();if(f!=null){hitFlip=true;route=f.Side.ToString();}}
+ if(drained||ball.isKinematic)break;
+ }}finally{bm.BallDrained-=drain;}
+ total++;if(drained){losses++;if(beforeDrain.z>1.6f&&Mathf.Abs(beforeDrain.x+.4f)>1.8f)sideLosses++;}if(hitFlip)returned++;if(!drained&&!hitFlip){if(ball.isKinematic)captured++;else blocked++;}
+ sb.AppendLine((side<0?"Left":"Right")+" speed="+speed+" dx="+distance+" lateral="+lateral+" loss="+drained+" lossAt="+(drained?beforeDrain.ToString("F3"):"none")+" flipper="+route+" end="+p.ToString("F3")+" contacts="+string.Join(",",touched));
+}
+gm.StartGame();}finally{Physics.simulationMode=mode;}
+sb.AppendLine("SUMMARY cases="+total+" losses="+losses+" sideLosses="+sideLosses+" returned="+returned+" captured="+captured+" unresolved="+blocked);
+string label=System.IO.File.Exists("Tools/unity/out/outlane-test-label.txt")?System.IO.File.ReadAllText("Tools/unity/out/outlane-test-label.txt").Trim():"before";
+System.IO.File.WriteAllText("Tools/unity/out/outlane-openings-"+label+".txt",sb.ToString());return sb.ToString().Split('\n').Last(s=>!string.IsNullOrWhiteSpace(s));

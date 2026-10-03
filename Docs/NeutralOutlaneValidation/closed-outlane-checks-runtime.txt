@@ -1,0 +1,38 @@
+PASS ClosedOutlanes under Rails
+PASS Only six intentional protective objects
+PASS Original physical InlaneOuter_Left unchanged
+PASS Original visible InlaneOuter_Left unchanged
+PASS Left outlane trigger retired
+PASS Original physical InlaneOuter_Right unchanged
+PASS Original visible InlaneOuter_Right unchanged
+PASS Right outlane trigger retired
+PASS OutlaneClosure_Left finite mesh
+PASS OutlaneClosure_Left UV and tangents
+PASS OutlaneClosure_Left static physical guide
+PASS OutlaneClosure_Left URP material
+PASS ReturnUndersideDeflector_IUT finite mesh
+PASS ReturnUndersideDeflector_IUT UV and tangents
+PASS ReturnUndersideDeflector_IUT static physical guide
+PASS ReturnUndersideDeflector_IUT URP material
+PASS OutlaneClosure_Right finite mesh
+PASS OutlaneClosure_Right UV and tangents
+PASS OutlaneClosure_Right static physical guide
+PASS OutlaneClosure_Right URP material
+PASS ReturnUndersideDeflector_Vosges finite mesh
+PASS ReturnUndersideDeflector_Vosges UV and tangents
+PASS ReturnUndersideDeflector_Vosges static physical guide
+PASS ReturnUndersideDeflector_Vosges URP material
+PASS OutlaneBackstop_Left finite mesh
+PASS OutlaneBackstop_Left UV and tangents
+PASS OutlaneBackstop_Left static physical guide
+PASS OutlaneBackstop_Left URP material
+PASS OutlaneBackstop_Right finite mesh
+PASS OutlaneBackstop_Right UV and tangents
+PASS OutlaneBackstop_Right static physical guide
+PASS OutlaneBackstop_Right URP material
+PASS Central drain stays active
+PASS Six reward targets retained
+PASS Three existing real-time lights retained
+PASS Central drain removes ball exactly once
+PASS Central loss changes three balls to two
+SUMMARY checks=37 failures=0

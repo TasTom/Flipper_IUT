@@ -1,0 +1,27 @@
+if(!Application.isPlaying)throw new Exception("Play required");
+var table=GameObject.Find("PinballTable").transform;var ball=table.Find("Gameplay/Ball").GetComponent<Rigidbody>();
+var gm=GameManager.Instance;var bm=BallManager.Instance;var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;var clamp=typeof(BallManager).GetMethod("ClampSpeed",flags);
+var mode=Physics.simulationMode;var sb=new System.Text.StringBuilder();var trace=new System.Text.StringBuilder();
+int saved=0,losses=0,over=0,stuck=0,total=0,sideLosses=0;float radius=.207f;
+var overlap=new Collider[32];
+try{Physics.simulationMode=SimulationMode.Script;
+foreach(string family in new[]{"Rolling","Ramp","Side"})foreach(int side in new[]{-1,1})foreach(float speed in new[]{5f,12f,20f,30f})foreach(float offset in new[]{-.08f,0f,.08f}){
+ gm.StartGame();gm.NotifyBallLaunched();foreach(var sling in table.GetComponentsInChildren<Slingshot>())typeof(Slingshot).GetField("lastKickTime",flags).SetValue(sling,float.NegativeInfinity);
+ float x=side<0?-3.1f:2.34f;float z=family=="Ramp"?6.9f:5.45f;float y=family=="Ramp"?.867f:radius+.001f;
+ ball.position=table.TransformPoint(new Vector3(x+offset,y,z));ball.linearVelocity=table.TransformDirection(family=="Side"?new Vector3(side*speed,0,-5f):new Vector3(0,family=="Ramp"?-speed*.18f:0,-speed));ball.angularVelocity=Vector3.zero;Physics.SyncTransforms();
+ bool hitFlip=false,hitOuter=false,escaped=false,drained=false;string hitSide="none";float maxY=y;Vector3 p=table.InverseTransformPoint(ball.position),atFlip=Vector3.zero,beforeDrain=p;var touched=new System.Collections.Generic.HashSet<string>();
+ Action<Rigidbody> drain=b=>{if(b==ball)drained=true;};bm.BallDrained+=drain;
+ try{for(int n=0;n<1200&&ball.gameObject.activeSelf&&!hitFlip;n++){
+ beforeDrain=p;clamp.Invoke(bm,new object[]{ball});Physics.Simulate(.005f);p=table.InverseTransformPoint(ball.position);maxY=Mathf.Max(maxY,p.y);
+ int count=Physics.OverlapSphereNonAlloc(ball.position,radius+.008f,overlap,~0,QueryTriggerInteraction.Ignore);
+ for(int j=0;j<count;j++){var c=overlap[j];if(c.attachedRigidbody==ball)continue;touched.Add(c.name);if(c.name.StartsWith("InlaneOuter"))hitOuter=true;var f=c.transform.GetComponentInParent<Flipper>();if(f!=null){hitFlip=true;atFlip=p;hitSide=f.Side.ToString();}}
+ if(family!="Side"&&((side<0&&p.x<-3.60f)||(side>0&&p.x>2.80f))&&p.z<6.35f)escaped=true;
+ if(family=="Ramp"&&speed==20&&offset==0&&n%2==0)trace.AppendLine(side+"\t"+n+"\t"+p.ToString("F4")+"\t"+table.InverseTransformDirection(ball.linearVelocity).ToString("F3"));
+ if(drained||p.z<.5f)break;
+ }}finally{bm.BallDrained-=drain;}
+ total++;if(hitFlip)saved++;if(drained){losses++;if(beforeDrain.z>1.6f&&Mathf.Abs(beforeDrain.x+.4f)>1.8f)sideLosses++;}if(escaped)over++;if(!hitFlip&&!drained&&p.z>=.5f)stuck++;
+ sb.AppendLine(family+" "+(side<0?"Left":"Right")+" v="+speed+" offset="+offset+" flip="+hitFlip+" hitSide="+hitSide+" loss="+drained+" lossAt="+(drained?beforeDrain.ToString("F3"):"none")+" escaped="+escaped+" outer="+hitOuter+" maxY="+maxY.ToString("F3")+" final="+p.ToString("F3")+" contacts="+string.Join(",",touched));
+}
+gm.StartGame();}finally{Physics.simulationMode=mode;}
+sb.AppendLine("SUMMARY total="+total+" flipper="+saved+" losses="+losses+" sideLosses="+sideLosses+" escapedReturns="+over+" unresolved="+stuck);
+string variant=System.IO.File.Exists("Tools/unity/out/inlane-test-label.txt")?System.IO.File.ReadAllText("Tools/unity/out/inlane-test-label.txt").Trim():"before";System.IO.File.WriteAllText("Tools/unity/out/inlane-returns-"+variant+".txt",sb.ToString());System.IO.File.WriteAllText("Tools/unity/out/inlane-trajectory-"+variant+".txt",trace.ToString());return sb.ToString();

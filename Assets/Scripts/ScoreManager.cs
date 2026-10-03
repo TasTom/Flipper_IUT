@@ -121,6 +121,15 @@ public class ScoreManager : MonoBehaviour
         MultiplierChanged?.Invoke(multiplier);
     }
 
+    /// <summary>Reprend une partie sur une autre table sans attribuer de nouveaux points.</summary>
+    public void RestoreSession(int score, int restoredMultiplier)
+    {
+        ResetScore();
+        Score = Mathf.Max(0, score);
+        SetMultiplier(restoredMultiplier);
+        ScoreChanged?.Invoke(Score);
+    }
+
     /// <summary>Fixe le multiplicateur (GDD §Score, étape 2).</summary>
     public void SetMultiplier(int value)
     {

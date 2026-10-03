@@ -42,6 +42,10 @@ public class GameManager : MonoBehaviour
     [Tooltip("Lance une partie automatiquement au démarrage de la scène.")]
     [SerializeField] private bool autoStartOnPlay = true;
 
+    [Tooltip("Le moteur de table (VPE) fournit et retire les billes à la place de PhysX.")]
+    [SerializeField] private bool externalBallLifecycle;
+    public event Action ExternalBallRequested;
+
     [Tooltip("Délai avant la bille suivante, en secondes.")]
     [SerializeField] private float respawnDelay = 1.2f;
 
@@ -121,6 +125,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        if (externalBallLifecycle) return; // Le Player VPE démarre après l'initialisation de ses API.
         // BallManager a un DefaultExecutionOrder plus bas : son Awake/OnEnable a déjà eu lieu,
         // mais on se réabonne ici par sécurité si l'ordre change.
         if (BallManager.Instance != null)
@@ -142,6 +147,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (SceneTransition.IsPlaying) return;
         if (ValidatePressed() && (State == GameState.GameOver || State == GameState.Attract))
         {
             StartGame();
@@ -200,6 +206,23 @@ public class GameManager : MonoBehaviour
 
         SpawnBall();
         Broadcast("BONNE PARTIE !", 2f);
+    }
+
+    public void ResumeExternalSession(int score, int balls, int restoredMultiplier)
+    {
+        if (!externalBallLifecycle) return;
+        BallsRemaining = Mathf.Max(0, balls);
+        ScoreManager.Instance?.RestoreSession(score, restoredMultiplier);
+        BallsChanged?.Invoke(BallsRemaining);
+        if (BallsRemaining > 0) SpawnBall();
+        else EndGame();
+    }
+
+    public void StartExternalGame(int balls)
+    {
+        if (!externalBallLifecycle) return;
+        startingBalls = Mathf.Max(1, balls);
+        StartGame();
     }
 
     /// <summary>
@@ -287,7 +310,7 @@ public class GameManager : MonoBehaviour
 
     private void HandleBallLoss()
     {
-        if (State == GameState.GameOver || State == GameState.Attract || State == GameState.BallDrained)
+        if (SceneTransition.IsPlaying || State == GameState.Paused || State == GameState.GameOver || State == GameState.Attract || State == GameState.BallDrained)
         {
             return;
         }
@@ -348,6 +371,13 @@ public class GameManager : MonoBehaviour
 
     private void SpawnBall()
     {
+        if (externalBallLifecycle)
+        {
+            SetState(GameState.ReadyToLaunch);
+            ScoreManager.Instance?.BeginBall();
+            ExternalBallRequested?.Invoke();
+            return;
+        }
         // Une nouvelle bille absout le tilt de la précédente. C'est ICI et pas sur
         // `BallsChanged` : mesuré, ce compteur ne monte jamais en cours de partie (3 → 2 à la
         // perte d'une bille, puis il reste à 2), donc il ne peut pas servir de signal. Sans cette
@@ -390,6 +420,7 @@ public class GameManager : MonoBehaviour
     /// <summary>Suspend ou reprend la partie (Échap, GDD §Contrôles).</summary>
     public void TogglePause()
     {
+        if (SceneTransition.IsPlaying) return;
         if (State == GameState.Paused)
         {
             Time.timeScale = timeScaleBeforePause;

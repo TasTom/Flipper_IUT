@@ -12,7 +12,12 @@ public class ProgressionConfig : ScriptableObject
 {
     [Header("Déclenchement")]
     [Tooltip("Score à atteindre pour basculer sur la seconde table.")]
-    [Min(1)] public int scoreThreshold = 150000;
+    [Min(1)] public int scoreThreshold = 100000;
+
+    public string sourceSceneName = "Neutral";
+    [Min(0.01f)] public float fadeInDuration = .8f;
+    [Min(0.01f)] public float fadeOutDuration = .6f;
+    public float cabinetRotation = -90f;
 
     [Tooltip("Nom exact de la scène cible, tel qu'il figure dans les Build Settings.")]
     public string targetSceneName = "Industries";

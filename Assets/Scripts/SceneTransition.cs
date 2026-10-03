@@ -47,6 +47,9 @@ public class SceneTransition : MonoBehaviour
     /// <summary>Vrai tant qu'une transition est en cours.</summary>
     public static bool IsPlaying { get; private set; }
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics() { _instance = null; IsPlaying = false; NextHoldDuration = -1f; }
+
     /// <summary>
     /// Tenue du carton pour la prochaine transition. Négatif : on garde la valeur réglée dans
     /// l'Inspector.
@@ -103,7 +106,7 @@ public class SceneTransition : MonoBehaviour
     /// une exception au milieu de l'animation, laissant le joueur sur un écran de chargement
     /// éternel. Mieux vaut ne rien faire et le dire.</para>
     /// </summary>
-    public static bool Play(string sceneName, string title = null, string subtitle = null)
+    public static bool Play(string sceneName, string title = null, string subtitle = null, ProgressionConfig config = null)
     {
         if (IsPlaying)
         {
@@ -126,6 +129,13 @@ public class SceneTransition : MonoBehaviour
             return false;
         }
 
+        if (config != null)
+        {
+            Instance.fadeInDuration = Mathf.Max(.01f, config.fadeInDuration);
+            Instance.fadeOutDuration = Mathf.Max(.01f, config.fadeOutDuration);
+            Instance.holdDuration = Mathf.Max(0f, config.holdDuration);
+            Instance.cabinetRotation = config.cabinetRotation;
+        }
         Instance.StartCoroutine(Instance.Run(sceneName, title, subtitle));
         return true;
     }
@@ -139,6 +149,9 @@ public class SceneTransition : MonoBehaviour
     /// répond <c>false</c> pour <b>toutes</b> les scènes, y compris celles présentes au build
     /// depuis toujours. S'y fier ferait refuser chaque transition, en silence et sans recours.</para>
     /// </summary>
+    public static bool CanLoad(string sceneName) => !string.IsNullOrWhiteSpace(sceneName) && IsSceneInBuild(sceneName);
+
+    private float cabinetRotation = -90f;
     private static bool IsSceneInBuild(string sceneName)
     {
         int count = SceneManager.sceneCountInBuildSettings;
@@ -161,6 +174,10 @@ public class SceneTransition : MonoBehaviour
 
         var overlay = BuildOverlay(title, subtitle, out var veil, out var bar, out var stationA,
                                    out var stationB, out var stationC);
+        overlay.transform.SetParent(transform, false); // Le Canvas doit survivre au chargement Single.
+        var group = overlay.gameObject.AddComponent<CanvasGroup>();
+        group.alpha = 0f;
+        Time.timeScale = 0f;
 
         // Largeur du canevas, relevée une fois : le bandeau doit traverser tout l'écran, et un
         // canevas en ScreenSpaceOverlay n'a pas encore de dimensions au premier passage.
@@ -180,6 +197,7 @@ public class SceneTransition : MonoBehaviour
             elapsed += Time.unscaledDeltaTime;
             float t = Mathf.Clamp01(elapsed / fadeInDuration);
             float eased = t * t * (3f - 2f * t);
+            group.alpha = eased;
 
             SetAlpha(veil, eased);
             SetAlpha(bar, eased);
@@ -197,6 +215,8 @@ public class SceneTransition : MonoBehaviour
             yield return null;
         }
 
+        group.alpha = 1f;
+        SetAlpha(veil, 1f);
         // 2. Tenue du carton.
         float hold = NextHoldDuration >= 0f ? NextHoldDuration : holdDuration;
         NextHoldDuration = -1f;
@@ -219,9 +239,7 @@ public class SceneTransition : MonoBehaviour
             yield return null;
         }
 
-        // La nouvelle scène démarre en temps réel : ni la pause de l'ancienne, ni un reste de
-        // temps mis à l'échelle ne doivent la suivre.
-        Time.timeScale = 1f;
+        yield return null; // Laisser les Start/API VPE se lier avant la révélation.
 
         // 4. Le voile descend sur la scène d'arrivée.
         elapsed = 0f;
@@ -230,6 +248,7 @@ public class SceneTransition : MonoBehaviour
             elapsed += Time.unscaledDeltaTime;
             float t = Mathf.Clamp01(elapsed / fadeOutDuration);
             float remaining = 1f - t;
+            group.alpha = remaining;
             SetAlpha(veil, remaining);
             SetAlpha(bar, remaining);
             SetAlpha(stationA, remaining);
@@ -239,6 +258,7 @@ public class SceneTransition : MonoBehaviour
         }
 
         Destroy(overlay.gameObject);
+        Time.timeScale = 1f;
         IsPlaying = false;
     }
 
@@ -266,6 +286,14 @@ public class SceneTransition : MonoBehaviour
 
         veil = NewImage("Veil", rect, backgroundColor);
         Stretch(veil.rectTransform);
+
+        var contentGo = new GameObject("CabinetContent", typeof(RectTransform));
+        var content = contentGo.GetComponent<RectTransform>();
+        content.SetParent(rect, false);
+        content.anchorMin = content.anchorMax = new Vector2(.5f,.5f);
+        content.sizeDelta = new Vector2(1080f,1920f);
+        content.localRotation = Quaternion.Euler(0f,0f,cabinetRotation);
+        rect = content;
 
         bar = NewImage("MeltBar", rect, accentColor);
         var barRect = bar.rectTransform;

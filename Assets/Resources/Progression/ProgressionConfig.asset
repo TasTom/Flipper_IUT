@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49ab1c45939c8854882f864d574339b2, type: 3}
   m_Name: ProgressionConfig
   m_EditorClassIdentifier: Assembly-CSharp::ProgressionConfig
-  scoreThreshold: 150000
+  scoreThreshold: 100000
+  sourceSceneName: Neutral
+  fadeInDuration: 0.8
+  fadeOutDuration: 0.6
+  cabinetRotation: -90
   targetSceneName: Industries
   pauseBeforeTransition: 1
   title: ATELIER DES VOSGES

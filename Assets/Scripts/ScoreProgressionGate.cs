@@ -23,7 +23,7 @@ public class ScoreProgressionGate : MonoBehaviour
     [SerializeField] private ProgressionConfig config;
 
     [Header("Repli sans config")]
-    [SerializeField] private int scoreThreshold = 150000;
+    [SerializeField] private int scoreThreshold = 100000;
     [SerializeField] private string targetSceneName = "Industries";
     [SerializeField] private string title = "ATELIER DES VOSGES";
     [SerializeField] private string subtitle = "Ligne 2 — industries, montagne et IUT";
@@ -33,6 +33,7 @@ public class ScoreProgressionGate : MonoBehaviour
     private bool _fired;
     private ScoreManager _score;
     private bool _subscribed;
+    private bool _thresholdPending;
 
     private void Awake()
     {
@@ -78,7 +79,7 @@ public class ScoreProgressionGate : MonoBehaviour
 
         _score.ScoreChanged += OnScoreChanged;
         _subscribed = true;
-        Check(_score.Score);
+        OnScoreChanged(_score.Score);
     }
 
     private void Update()
@@ -89,26 +90,32 @@ public class ScoreProgressionGate : MonoBehaviour
         }
     }
 
-    private void OnScoreChanged(int score) => Check(score);
+    private void OnScoreChanged(int score) => _thresholdPending = score >= Threshold;
+
+    private void LateUpdate()
+    {
+        if (!_thresholdPending || _score == null) return;
+        _thresholdPending = false;
+        // Attendre la fin du contact/drain : les bonus, multiplicateurs et billes doivent
+        // finir leur transaction avant la photographie de la partie.
+        Check(_score.Score);
+    }
 
     private void Check(int score)
     {
-        if (_fired || score < Threshold)
+        if (_fired || score < Threshold || gameObject.scene.name != (config != null ? config.sourceSceneName : "Neutral"))
         {
             return;
         }
 
+        if (!SceneTransition.CanLoad(TargetScene)) return;
         _fired = true;
+        SyncHoldDuration();
+        TableSessionTransfer.Capture(TargetScene);
 
-        if (pauseBeforeTransition && !PauseGame())
-        {
-            // La pause a échoué : le jeu est peut-être déjà fini. La transition reste valable,
-            // mais la bille continuera de rouler pendant le carton.
-            Debug.LogWarning("[ScoreProgressionGate] La partie n'a pas pu être mise en pause " +
-                             "avant la transition.", this);
-        }
+        if (PauseBefore) PauseGame(); // Le voile fige également le temps, y compris après GameOver.
 
-        if (SceneTransition.Play(TargetScene, Title, Subtitle))
+        if (SceneTransition.Play(TargetScene, Title, Subtitle, config))
         {
             Debug.Log($"[ScoreProgressionGate] Seuil de {Threshold} points atteint ({score}) : " +
                       $"passage à '{TargetScene}'.", this);
@@ -118,6 +125,9 @@ public class ScoreProgressionGate : MonoBehaviour
         // La transition a été refusée : ne pas condamner la suite de la partie, le joueur
         // pourra retenter après avoir corrigé les Build Settings.
         _fired = false;
+        TableSessionTransfer.Clear();
+        if (GameManager.Instance != null && GameManager.Instance.State == GameManager.GameState.Paused)
+            GameManager.Instance.TogglePause();
     }
 
     private bool PauseGame()
@@ -192,7 +202,7 @@ public class ScoreProgressionGate : MonoBehaviour
         }
 
         var activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        if (!string.IsNullOrEmpty(config.targetSceneName) && activeScene == config.targetSceneName)
+        if (activeScene != config.sourceSceneName)
         {
             return;
         }

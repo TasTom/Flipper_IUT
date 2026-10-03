@@ -21,6 +21,7 @@ public class HudController : MonoBehaviour
     [SerializeField] private TMP_Text messageText;
     [SerializeField] private TMP_Text multiplierText;
     [SerializeField] private TMP_Text scoreFeedbackText;
+    [SerializeField] private bool compactMultiplierLabel;
 
     [Header("Découverte automatique")]
     [Tooltip("Remplit les champs vides en cherchant les enfants nommés ScoreText, " +
@@ -192,7 +193,7 @@ public class HudController : MonoBehaviour
 
     private void OnMultiplierChanged(int multiplier)
     {
-        if (multiplierText != null) multiplierText.text = $"MULTIPLICATEUR : ×{multiplier}";
+        if (multiplierText != null) multiplierText.text = compactMultiplierLabel ? $"×{multiplier}" : $"MULTIPLICATEUR : ×{multiplier}";
     }
 
     private void OnComboChanged(int level, int awarded)

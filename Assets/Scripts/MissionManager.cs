@@ -173,7 +173,7 @@ public class MissionManager : MonoBehaviour
         }
 
         Instance = this;
-        bosses = FindObjectsByType<BossTarget>(FindObjectsSortMode.None);
+        bosses = FindObjectsByType<BossTarget>();
 
         if (missions == null || missions.Length == 0)
         {

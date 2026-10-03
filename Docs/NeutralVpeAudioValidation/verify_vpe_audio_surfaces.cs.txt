@@ -1,0 +1,22 @@
+if(Application.isPlaying)throw new Exception("Edit required");
+var table=GameObject.Find("PinballTable").transform;var sb=new System.Text.StringBuilder();int fails=0,checks=0;
+void Check(bool ok,string text){checks++;sb.AppendLine((ok?"PASS ":"FAIL ")+text);if(!ok)fails++;}
+int mapped=0;
+foreach(var r in table.GetComponentsInChildren<MeshRenderer>().Where(x=>x.enabled&&x.gameObject.activeInHierarchy)){
+ bool normals=r.sharedMaterials.Any(m=>m!=null&&(m.HasProperty("_BumpMap")&&m.GetTexture("_BumpMap")!=null||m.HasProperty("_DetailNormalMap")&&m.GetTexture("_DetailNormalMap")!=null));if(!normals)continue;
+ var f=r.GetComponent<MeshFilter>();if(f==null||f.sharedMesh==null)continue;var m=f.sharedMesh;
+ Check(m.uv.Length==m.vertexCount&&m.tangents.Length==m.vertexCount,r.name+" normals have UVs and tangents");
+ Check(m.tangents.All(t=>!float.IsNaN(t.x)&&!float.IsNaN(t.y)&&!float.IsNaN(t.z)&&new Vector3(t.x,t.y,t.z).sqrMagnitude>.9f),r.name+" valid tangent basis");
+ if(UnityEditor.AssetDatabase.GetAssetPath(m).StartsWith("Assets/Generated/NeutralSurfaceCoordinates"))mapped++;
+}
+var manager=UnityEngine.Object.FindAnyObjectByType<AudioManager>();var cfg=new UnityEditor.SerializedObject(manager).FindProperty("config").objectReferenceValue as AudioConfig;
+Check(cfg!=null&&cfg.cues.Length==10,"AudioConfig contains ten distinct event cues");
+if(cfg!=null){Check(cfg.musicGroup!=null&&cfg.mechanicalGroup!=null&&cfg.rewardGroup!=null,"three mixer routes");foreach(var cue in cfg.cues)Check(cue.clips.Length>0&&cue.clips.All(c=>c!=null&&c.channels==1),cue.sound+" mono samples present");}
+Check(UnityEngine.Object.FindObjectsByType<PinballMechanismAudio>().Length==12,"two flippers + plunger + six targets + two exits + loop");
+var music=GameObject.Find("BackgroundMusic").GetComponent<AudioSource>();var importer=UnityEditor.AssetImporter.GetAtPath(UnityEditor.AssetDatabase.GetAssetPath(music.clip))as UnityEditor.AudioImporter;
+Check(importer.defaultSampleSettings.loadType==AudioClipLoadType.Streaming&&importer.loadInBackground,"long music streams in background");
+Check(Mathf.Approximately(music.volume,.45f),"authored music gain 45 percent");
+string fingerprint=string.Join("\n",table.GetComponentsInChildren<Collider>(true).Where(c=>c.enabled&&c.gameObject.activeInHierarchy).OrderBy(c=>c.GetEntityId().ToString()).Select(c=>c.GetEntityId()+"|"+UnityEditor.EditorJsonUtility.ToJson(c)+"|"+c.transform.localToWorldMatrix.ToString("F6")));
+string Canonical(string value){var matches=System.Text.RegularExpressions.Regex.Matches(value,@"^([^|\r\n]+)\|(\{.*?\})\|(.+?)(?=\r?\n[^|\r\n]+\|\{|\z)",System.Text.RegularExpressions.RegexOptions.Multiline|System.Text.RegularExpressions.RegexOptions.Singleline);return string.Join("\n",matches.Cast<System.Text.RegularExpressions.Match>().Select(m=>System.Text.RegularExpressions.Regex.Replace(m.Groups[2].Value,@"""m_GameObject""\s*:\s*\{[^}]*\}\s*,","")+"|"+m.Groups[3].Value.Trim()).OrderBy(x=>x,StringComparer.Ordinal));}
+Check(Canonical(fingerprint)==Canonical(System.IO.File.ReadAllText("Tools/unity/out/vpe-colliders-before.txt")),"56 collider settings, source GUIDs and world matrices preserved after build restoration");
+sb.AppendLine("Mapped renderers="+mapped+" checks="+checks+" failures="+fails);System.IO.File.WriteAllText("Tools/unity/out/vpe-audio-surfaces-edit.txt",sb.ToString());return "Checks="+checks+" failures="+fails+" mapped="+mapped;

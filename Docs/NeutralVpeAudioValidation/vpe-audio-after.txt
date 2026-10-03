@@ -1,0 +1,36 @@
+Config=NeutralAudioConfig (AudioConfig) bindings=12
+Mixer=Music/Mechanical/Rewards
+FlipperUp clips=3
+FlipperDown clips=3
+Launch clips=2
+TargetValidated clips=1
+RampCompleted clips=1
+LoopCompleted clips=1
+MultiplierRaised clips=1
+ExtraBall clips=1
+GameOver clips=1
+HighScore clips=1
+Assets/Audio/1986 - Lost in Lights – Vaporwave & Retrowave Night Drive with 80s Synth Dreams.mp3 Streaming Vorbis preload=False bg=True
+Assets/Generated/NeutralPresentation/Audio/bumper.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralPresentation/Audio/bumper_hard.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralPresentation/Audio/bumper_mid.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralPresentation/Audio/bumper_soft.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralPresentation/Audio/drain.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralPresentation/Audio/slingshot.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralPresentation/Audio/spinner.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralPresentation/Audio/target.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/extra_ball.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/flipper_down_0.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/flipper_down_1.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/flipper_down_2.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/flipper_up_0.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/flipper_up_1.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/flipper_up_2.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/game_over.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/high_score.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/launch_0.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/launch_1.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/loop_completed.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/multiplier_raised.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/ramp_completed.wav DecompressOnLoad PCM preload=True bg=False
+Assets/Generated/NeutralVpeAudio/target_validated.wav DecompressOnLoad PCM preload=True bg=False

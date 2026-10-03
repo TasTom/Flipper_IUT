@@ -185,7 +185,7 @@ public static class StyleNeutralProfessional
 
     static void Lighting()
     {
-        var sun=UnityEngine.Object.FindObjectsByType<Light>(FindObjectsSortMode.None).FirstOrDefault(l=>l.type==LightType.Directional);
+        var sun=UnityEngine.Object.FindObjectsByType<Light>().FirstOrDefault(l=>l.type==LightType.Directional);
         if(sun!=null){Undo.RecordObject(sun,Action);sun.intensity=1.4f;sun.shadows=LightShadows.Soft;sun.shadowStrength=.65f;}
         for(int i=0;i<3;i++)
         {

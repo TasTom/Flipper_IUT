@@ -20,6 +20,8 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
 
+    [SerializeField] private AudioConfig config;
+
     [Header("Musique")]
     [Tooltip("Piste de fond, jouée en boucle au démarrage.")]
     [SerializeField] private AudioClip musicClip;
@@ -41,6 +43,18 @@ public class AudioManager : MonoBehaviour
     private readonly List<AudioSource> sfxSources = new List<AudioSource>();
     private readonly Dictionary<string, AudioClip> registry = new Dictionary<string, AudioClip>();
     private int nextVoice;
+    private bool paused;
+    private long[] voiceOrder;
+    private long playbackOrder;
+    private readonly Dictionary<PinballSound, CueState> cues = new Dictionary<PinballSound, CueState>();
+    private sealed class CueState
+    {
+        public AudioConfig.Cue cue;
+        public int next;
+        public float lastTime = float.NegativeInfinity;
+    }
+    private float MusicGain => config != null ? config.musicVolume : musicVolume;
+    private float EffectsGain => config != null ? config.effectsVolume : sfxVolume;
 
     /// <summary>Nom d'un clip présent au registre, ou null si absent ou muet.</summary>
     public bool HasClip(string clipName)
@@ -71,17 +85,27 @@ public class AudioManager : MonoBehaviour
             musicSource = gameObject.AddComponent<AudioSource>();
             musicSource.playOnAwake = false;
             musicSource.loop = true;
-            musicSource.volume = musicVolume;
         }
 
-        for (int i = 0; i < Mathf.Max(1, sfxVoices); i++)
+        // Authored sources and newly created sources follow the same configured gain.
+        musicSource.volume = Mathf.Clamp01(MusicGain);
+        if (config != null && config.musicGroup != null)
+            musicSource.outputAudioMixerGroup = config.musicGroup;
+
+        for (int i = 0; i < Mathf.Clamp(config != null ? config.voices : sfxVoices, 1, 32); i++)
         {
             var src = gameObject.AddComponent<AudioSource>();
             src.playOnAwake = false;
             src.loop = false;
-            src.volume = sfxVolume;
+            src.volume = EffectsGain;
+            if (config != null) src.outputAudioMixerGroup = config.mechanicalGroup;
             sfxSources.Add(src);
         }
+        voiceOrder = new long[sfxSources.Count];
+        if (config != null)
+            foreach (var cue in config.cues ?? System.Array.Empty<AudioConfig.Cue>())
+                if (cue != null && !cues.ContainsKey(cue.sound))
+                    cues.Add(cue.sound, new CueState { cue = cue });
 
         foreach (var clip in sfxClips ?? System.Array.Empty<AudioClip>())
         {
@@ -105,7 +129,7 @@ public class AudioManager : MonoBehaviour
     /// <summary>Lance la musique de fond en boucle. Sans effet si déjà en cours.</summary>
     public void PlayMusic()
     {
-        if (musicClip == null || musicSource == null || musicSource.isPlaying)
+        if (paused || musicClip == null || musicSource == null || musicSource.isPlaying)
         {
             return;
         }
@@ -166,16 +190,64 @@ public class AudioManager : MonoBehaviour
     /// <summary>Joue un effet sonore déjà chargé, en dosant volume et hauteur.</summary>
     public void Play(AudioClip clip, float volumeScale, float pitch)
     {
-        if (clip == null || sfxSources.Count == 0)
+        PlayVoice(clip, volumeScale, pitch, config != null ? config.mechanicalGroup : null);
+    }
+
+    /// <summary>Round-robin variants and cooldown belong to the cue, independently of gameplay.</summary>
+    public void Play(PinballSound sound)
+    {
+        if (paused || !cues.TryGetValue(sound, out var state)) return;
+        var cue = state.cue;
+        if (Time.unscaledTime - state.lastTime < cue.cooldown || cue.clips == null) return;
+        AudioClip clip = null;
+        for (int i = 0; i < cue.clips.Length; i++)
+        {
+            clip = cue.clips[state.next];
+            state.next = (state.next + 1) % cue.clips.Length;
+            if (clip != null) break;
+        }
+        if (clip == null) return;
+        state.lastTime = Time.unscaledTime;
+        float pitch = Mathf.Pow(2f, Random.Range(-cue.pitchSemitones, cue.pitchSemitones) / 12f);
+        PlayVoice(clip, cue.volume, pitch,
+            config != null ? (cue.mechanical ? config.mechanicalGroup : config.rewardGroup) : null);
+    }
+
+    /// <summary>Pause the existing voices without restarting music or losing source positions.</summary>
+    public void SetPaused(bool value)
+    {
+        if (paused == value) return;
+        paused = value;
+        if (musicSource != null) { if (value) musicSource.Pause(); else musicSource.UnPause(); }
+        foreach (var source in sfxSources)
+            if (source != null) { if (value) source.Pause(); else source.UnPause(); }
+    }
+
+    private void PlayVoice(AudioClip clip, float volumeScale, float pitch,
+        UnityEngine.Audio.AudioMixerGroup group)
+    {
+        if (paused || clip == null || sfxSources.Count == 0 || volumeScale <= 0f)
         {
             return;
         }
 
-        var src = sfxSources[nextVoice];
-        nextVoice = (nextVoice + 1) % sfxSources.Count;
+        int voice = nextVoice;
+        bool found = false;
+        for (int i = 0; i < sfxSources.Count; i++)
+        {
+            int candidate = (nextVoice + i) % sfxSources.Count;
+            if (!sfxSources[candidate].isPlaying) { voice = candidate; found = true; break; }
+        }
+        if (!found)
+            for (int i = 0; i < voiceOrder.Length; i++)
+                if (voiceOrder[i] < voiceOrder[voice]) voice = i;
+        var src = sfxSources[voice];
+        nextVoice = (voice + 1) % sfxSources.Count;
+        voiceOrder[voice] = ++playbackOrder;
 
         src.clip = clip;
-        src.volume = Mathf.Clamp01(sfxVolume * volumeScale);
+        src.outputAudioMixerGroup = group;
+        src.volume = Mathf.Clamp01(EffectsGain * volumeScale);
         src.pitch = Mathf.Clamp(pitch, 0.25f, 3f);
         src.Play();
     }

@@ -90,6 +90,7 @@ public class Plunger : MonoBehaviour
 
     /// <summary>Charge courante, de 0 à 1.</summary>
     public float Charge => maxPull > 0f ? pullAmount / maxPull : 0f;
+    public event System.Action Released;
 
     /// <summary>
     /// Vitesse de la course de retour, bornée pour que le bouchon n'avance jamais de plus de
@@ -244,6 +245,7 @@ public class Plunger : MonoBehaviour
 
         if (power > 0.05f)
         {
+            Released?.Invoke();
             PushBalls(power);
             NotifyLaunched();
         }

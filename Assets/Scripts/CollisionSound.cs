@@ -62,9 +62,11 @@ public class CollisionSound : MonoBehaviour
             return;
         }
 
-        // relativeVelocity est mesurée le long de la normale de contact, à l'instant du
-        // contact : c'est l'énergie du choc, pas la vitesse de la bille.
-        Fire(collision.gameObject, collision.relativeVelocity.magnitude);
+        // Only the normal component is an impact; sliding along a surface is not a strike.
+        float speed = collision.contactCount > 0
+            ? Mathf.Abs(Vector3.Dot(collision.relativeVelocity, collision.GetContact(0).normal))
+            : collision.relativeVelocity.magnitude;
+        Fire(collision.gameObject, speed);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -95,6 +97,7 @@ public class CollisionSound : MonoBehaviour
         {
             return;
         }
+        if (!onTrigger && impactSpeed <= silentBelowSpeed) return;
 
         string clip = soundName;
         float volume = 1f;
@@ -116,7 +119,7 @@ public class CollisionSound : MonoBehaviour
 
         lastPlayedAt = Time.time;
 
-        float jitter = 1f + (Random.value * 2f - 1f) * pitchJitter;
+        float jitter = Mathf.Pow(2f, Random.Range(-pitchJitter, pitchJitter) / 12f);
         audio.Play(clip, volume, jitter);
     }
 

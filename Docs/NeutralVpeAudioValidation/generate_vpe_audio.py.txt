@@ -1,0 +1,84 @@
+"""Original PCM cues for Neutral. No sampled or third-party audio. Existing files preserved."""
+from pathlib import Path
+import math
+import random
+import struct
+import wave
+import json
+
+ROOT = Path(__file__).resolve().parents[1]
+OUT = ROOT / "Assets/Generated/NeutralVpeAudio"
+RATE = 44100
+
+def save(name, values, peak=.6):
+    path = OUT / (name + ".wav")
+    if path.exists():
+        return
+    # Remove DC, normalize without clipping, and taper both ends.
+    dc = sum(values) / len(values)
+    values = [v - dc for v in values]
+    scale = peak / max(abs(v) for v in values)
+    samples = [int(v * scale * min(1., i / 25., (len(values)-1-i) / 400.) * 32767)
+               for i, v in enumerate(values)]
+    with wave.open(str(path), "wb") as out:
+        out.setnchannels(1)
+        out.setsampwidth(2)
+        out.setframerate(RATE)
+        out.writeframes(struct.pack("<" + "h" * len(samples), *samples))
+
+def coil(name, seed, pitch, return_stroke=False):
+    rng = random.Random(seed)
+    duration = .14 if return_stroke else .20
+    low = 0.
+    values = []
+    for i in range(round(RATE * duration)):
+        t = i / RATE
+        white = rng.uniform(-1., 1.)
+        low += .09 * (white - low)
+        attack = 1 - math.exp(-t / .00035)
+        body = sum(g * math.sin(math.tau * pitch * ratio * t) * math.exp(-t / decay)
+                   for ratio, g, decay in [(1., .23, .016), (2.73, .13, .009), (4.13, .08, .006)])
+        thunk = low * 4 * math.exp(-t / .011)
+        click = (white - low) * .3 * math.exp(-t / .004)
+        after = 0. if t < .018 else low * 1.3 * math.exp(-(t-.018) / .008)
+        values.append(attack * (body + thunk + click + after))
+    save(name, values, .5 if return_stroke else .65)
+
+def chime(name, notes, spacing=.085):
+    duration = len(notes) * spacing + .25
+    values = []
+    for i in range(round(RATE * duration)):
+        t = i / RATE
+        value = 0.
+        for n, midi in enumerate(notes):
+            age = t - n * spacing
+            if age < 0:
+                continue
+            freq = 440 * 2 ** ((midi - 69) / 12)
+            env = (1 - math.exp(-age / .003)) * math.exp(-age / .09)
+            value += env * (math.sin(math.tau * freq * age) + .18 * math.sin(math.tau * freq * 2 * age))
+        values.append(value)
+    save(name, values, .45)
+
+OUT.mkdir(parents=True, exist_ok=True)
+for variant in range(3):
+    coil(f"flipper_up_{variant}", 910 + variant, 180 + variant * 7)
+    coil(f"flipper_down_{variant}", 940 + variant, 130 + variant * 5, True)
+for variant in range(2):
+    coil(f"launch_{variant}", 970 + variant, 110 + variant * 9)
+for name, notes in {
+    "target_validated": [76, 81], "ramp_completed": [69, 73, 76, 81],
+    "loop_completed": [76, 79, 83], "multiplier_raised": [72, 76, 79, 84],
+    "extra_ball": [72, 79, 84, 88], "game_over": [76, 72, 69],
+    "high_score": [72, 76, 79, 84, 88, 91]
+}.items():
+    chime(name, notes)
+report = []
+for path in sorted(OUT.glob("*.wav")):
+    with wave.open(str(path), "rb") as w:
+        data = struct.unpack("<" + "h" * w.getnframes(), w.readframes(w.getnframes()))
+        report.append(dict(name=path.name, frames=len(data), rate=w.getframerate(),
+                           channels=w.getnchannels(), peak=max(abs(x) for x in data)/32767,
+                           rms=math.sqrt(sum(x*x for x in data)/len(data))/32767))
+(ROOT / "Tools/unity/out/vpe-new-audio-waveforms.json").write_text(json.dumps(report, indent=2))
+print(f"Generated {len(report)} mono PCM cues, {sum(p.stat().st_size for p in OUT.glob('*.wav'))} bytes")

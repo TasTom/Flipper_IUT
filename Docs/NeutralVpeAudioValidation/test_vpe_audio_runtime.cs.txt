@@ -1,0 +1,32 @@
+if(!Application.isPlaying)throw new Exception("Play required");
+var audio=AudioManager.Instance;var game=GameManager.Instance;var table=GameObject.Find("PinballTable").transform;var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+var voices=(System.Collections.Generic.List<AudioSource>)typeof(AudioManager).GetField("sfxSources",flags).GetValue(audio);var music=(AudioSource)typeof(AudioManager).GetField("musicSource",flags).GetValue(audio);
+var sb=new System.Text.StringBuilder();int checks=0,fails=0;
+void Check(bool ok,string text){checks++;sb.AppendLine((ok?"PASS ":"FAIL ")+text);if(!ok)fails++;}
+void StopVoices(){foreach(var s in voices)s.Stop();}
+bool Has(string name)=>voices.Any(s=>s.clip!=null&&s.clip.name==name&&s.isPlaying);
+Check(voices.Count==12,"bounded twelve-voice pool");
+Check(music==GameObject.Find("BackgroundMusic").GetComponent<AudioSource>()&&Mathf.Approximately(music.volume,.45f),"single authored music source reused at configured gain");
+Check(music.outputAudioMixerGroup!=null&&music.outputAudioMixerGroup.name=="Music","music routed through mixer");
+StopVoices();for(int i=0;i<3;i++){audio.Play(PinballSound.FlipperUp);Check(Has("flipper_up_"+i),"round-robin flipper sample "+i);}
+Check(voices.Where(s=>s.isPlaying).All(s=>s.outputAudioMixerGroup!=null&&s.outputAudioMixerGroup.name=="Mechanical"),"mechanical routing");
+StopVoices();audio.Play(PinballSound.RampCompleted);Check(Has("ramp_completed"),"reward cue plays");Check(voices.First(s=>s.isPlaying).outputAudioMixerGroup.name=="Rewards","reward routing");
+audio.Play(PinballSound.RampCompleted);Check(voices.Count(s=>s.isPlaying)==1,"reward cue prevents immediate duplicate");
+StopVoices();var cs=table.GetComponentsInChildren<CollisionSound>().First(x=>x.name=="Bumper_01");var ball=table.Find("Gameplay/Ball").gameObject;var fire=typeof(CollisionSound).GetMethod("Fire",flags);
+typeof(CollisionSound).GetField("lastPlayedAt",flags).SetValue(cs,float.NegativeInfinity);fire.Invoke(cs,new object[]{ball,1f});Check(voices.All(s=>!s.isPlaying),"slow grazing contact stays silent");
+fire.Invoke(cs,new object[]{ball,30f});Check(Has("bumper_mid"),"normal impact selects middle bumper sample");
+int count=voices.Count(s=>s.isPlaying);fire.Invoke(cs,new object[]{ball,55f});Check(voices.Count(s=>s.isPlaying)==count,"collision cooldown suppresses rebound duplicates");
+StopVoices();foreach(var f in table.GetComponentsInChildren<Flipper>()){
+ var p=typeof(InputRouter).GetProperty(f.Side==FlipperSide.Right?"RightFlipperHeld":"LeftFlipperHeld");
+ var fixedUpdate=typeof(Flipper).GetMethod("FixedUpdate",flags);p.SetValue(InputRouter.Instance,false);fixedUpdate.Invoke(f,null);StopVoices();
+ p.SetValue(InputRouter.Instance,true);fixedUpdate.Invoke(f,null);Check(voices.Any(s=>s.isPlaying&&s.clip.name.StartsWith("flipper_up_")),f.name+" press event plays coil sample");
+ StopVoices();p.SetValue(InputRouter.Instance,false);fixedUpdate.Invoke(f,null);Check(voices.Any(s=>s.isPlaying&&s.clip.name.StartsWith("flipper_down_")),f.name+" release event plays return sample");
+}
+StopVoices();var plunger=UnityEngine.Object.FindAnyObjectByType<Plunger>();typeof(Plunger).GetField("pullAmount",flags).SetValue(plunger,.7f);typeof(Plunger).GetMethod("Launch",flags).Invoke(plunger,null);Check(voices.Any(s=>s.isPlaying&&s.clip.name.StartsWith("launch_")),"actual launcher release emits launch sample");
+StopVoices();game.TogglePause();Check((bool)typeof(AudioManager).GetField("paused",flags).GetValue(audio),"game pause pauses audio");audio.Play(PinballSound.Launch);Check(voices.All(s=>!s.isPlaying),"paused audio ignores mechanism requests");game.TogglePause();Check(!(bool)typeof(AudioManager).GetField("paused",flags).GetValue(audio),"resume restores audio playback");
+StopVoices();game.NotifyBallLaunched();game.AwardExtraBall();Check(Has("extra_ball"),"extra ball event has a dedicated reward");
+StopVoices();ScoreManager.Instance.SetMultiplier(2);Check(Has("multiplier_raised"),"multiplier increase has dedicated reward");
+StopVoices();int sources=audio.GetComponents<AudioSource>().Length;for(int i=0;i<50;i++)audio.Play(PinballSound.FlipperDown);Check(audio.GetComponents<AudioSource>().Length==sources&&voices.Count==12,"repeated cues allocate no extra AudioSources");
+audio.Play((AudioClip)null);audio.Play("missing_clip");Check(true,"missing clips safely ignored");
+game.StartGame();audio.enabled=false;audio.enabled=true;
+sb.AppendLine("Checks="+checks+" failures="+fails);System.IO.File.WriteAllText("Tools/unity/out/vpe-audio-runtime.txt",sb.ToString());return sb.ToString();

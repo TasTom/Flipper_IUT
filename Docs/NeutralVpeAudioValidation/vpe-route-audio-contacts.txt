@@ -1,0 +1,24 @@
+PASS Target_Matieres_01 actual collision, first score=2500 expected=2500
+PASS Target_Matieres_01 actual event emits target_validated
+PASS Target_Matieres_01 actual validation contributes to course bonus
+PASS Target_Matieres_02 actual collision, first score=2500 expected=2500
+PASS Target_Matieres_02 actual event emits target_validated
+PASS Target_Matieres_02 actual validation contributes to course bonus
+PASS Target_Matieres_03 actual collision, first score=2500 expected=2500
+PASS Target_Matieres_03 actual event emits target_validated
+PASS Target_Matieres_03 actual validation contributes to course bonus
+PASS Target_Java_01 actual collision, first score=2000 expected=2000
+PASS Target_Java_01 actual event emits target_validated
+PASS Target_Projet_01 actual collision, first score=500 expected=500
+PASS Target_Projet_01 actual event emits target_validated
+PASS Target_Cafe_01 actual collision, first score=1500 expected=1500
+PASS Target_Cafe_01 actual event emits target_validated
+PASS Vosges actual event emits ramp_completed
+PASS full Vosges ramp trajectory: completion=1 score=7500 ramp counter=1
+PASS IUT actual event emits ramp_completed
+PASS full IUT ramp trajectory: completion=1 score=10000 ramp counter=1
+PASS loop exit alone does not score
+PASS paired loop actual event emits loop_completed
+PASS actual paired loop detector passages score 5000
+PASS second completed loop scores base plus 2500 combo
+FAILURES=0

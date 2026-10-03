@@ -1,0 +1,24 @@
+from pathlib import Path
+import json,re
+from collections import Counter
+a=Path('Tools/unity/out/vpe-colliders-before.txt').read_text(encoding='utf-8')
+b=Path('Tools/unity/out/vpe-colliders-after-build.txt').read_text(encoding='utf-8')
+def entries(text):
+    pattern=re.compile(r'^(.*?)\|(\{.*?\})\|(.+?)(?=\n[^\n|]+\|\{|\Z)',re.M|re.S)
+    found=[]
+    for entity,body,matrix in pattern.findall(text):
+        data=json.loads(body)
+        # Live EntityIds are reallocated when Unity restores the scene after a player build.
+        # Persisted fields, mesh/material GUIDs and world matrices remain part of the comparison.
+        component=next(iter(data.values()))
+        component.pop('m_GameObject',None)
+        found.append((json.dumps(data,sort_keys=True),matrix.strip()))
+    return Counter(found)
+left,right=entries(a),entries(b)
+print('Parsed before/after:',sum(left.values()),sum(right.values()))
+print('Canonical settings and matrices equal:',left==right)
+if left!=right:
+    print('Removed/changed:',list((left-right).items())[:3])
+    print('Added/changed:',list((right-left).items())[:3])
+    raise SystemExit(1)
+Path('Tools/unity/out/vpe-collider-build-comparison.txt').write_text(f'PASS {sum(left.values())} collider settings, source GUIDs and world matrices unchanged. Runtime EntityIds / host references were reallocated by build scene restoration. Persisted scene physics separately compared byte-for-byte.\n',encoding='utf-8')

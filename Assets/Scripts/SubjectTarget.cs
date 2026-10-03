@@ -91,6 +91,7 @@ public class SubjectTarget : MonoBehaviour
 
     /// <summary>La cible a-t-elle été validée pendant la mission en cours ?</summary>
     public bool IsValidated => state == TargetState.Validee;
+    public event System.Action Validated;
 
     /// <summary>La cible attend-elle d'être touchée ?</summary>
     public bool IsActive => state == TargetState.Active;
@@ -155,6 +156,7 @@ public class SubjectTarget : MonoBehaviour
         {
             state = TargetState.Validee;
             aValide = true;
+            Validated?.Invoke();
         }
 
         // Enregistrer la validation avant que la mission suivante n'éteigne le groupe.

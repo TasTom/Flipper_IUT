@@ -1,0 +1,122 @@
+[
+  {
+    "name": "extra_ball.wav",
+    "frames": 26019,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.4499954222235786,
+    "rms": 0.13276023967036796
+  },
+  {
+    "name": "flipper_down_0.wav",
+    "frames": 6174,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.499984740745262,
+    "rms": 0.05350192587626052
+  },
+  {
+    "name": "flipper_down_1.wav",
+    "frames": 6174,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.499984740745262,
+    "rms": 0.051542874243412404
+  },
+  {
+    "name": "flipper_down_2.wav",
+    "frames": 6174,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.499984740745262,
+    "rms": 0.05355810591420903
+  },
+  {
+    "name": "flipper_up_0.wav",
+    "frames": 8820,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.6499832148197882,
+    "rms": 0.06488115388286562
+  },
+  {
+    "name": "flipper_up_1.wav",
+    "frames": 8820,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.6499832148197882,
+    "rms": 0.05744081548320611
+  },
+  {
+    "name": "flipper_up_2.wav",
+    "frames": 8820,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.6499832148197882,
+    "rms": 0.06459556218746255
+  },
+  {
+    "name": "game_over.wav",
+    "frames": 22270,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.4499954222235786,
+    "rms": 0.12063963609270431
+  },
+  {
+    "name": "high_score.wav",
+    "frames": 33516,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.4499954222235786,
+    "rms": 0.1301380933466841
+  },
+  {
+    "name": "launch_0.wav",
+    "frames": 8820,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.6499832148197882,
+    "rms": 0.05166925166800233
+  },
+  {
+    "name": "launch_1.wav",
+    "frames": 8820,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.6499832148197882,
+    "rms": 0.045946721810407265
+  },
+  {
+    "name": "loop_completed.wav",
+    "frames": 22270,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.4499954222235786,
+    "rms": 0.12028799126909277
+  },
+  {
+    "name": "multiplier_raised.wav",
+    "frames": 26019,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.4499954222235786,
+    "rms": 0.12054943418852149
+  },
+  {
+    "name": "ramp_completed.wav",
+    "frames": 26019,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.4499954222235786,
+    "rms": 0.12381106539755758
+  },
+  {
+    "name": "target_validated.wav",
+    "frames": 18522,
+    "rate": 44100,
+    "channels": 1,
+    "peak": 0.4499954222235786,
+    "rms": 0.1115030850410773
+  }
+]

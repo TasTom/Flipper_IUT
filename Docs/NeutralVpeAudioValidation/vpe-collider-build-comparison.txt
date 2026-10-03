@@ -1,0 +1,1 @@
+PASS 56 collider settings, source GUIDs and world matrices unchanged. Runtime EntityIds / host references were reallocated by build scene restoration. Persisted scene physics separately compared byte-for-byte.

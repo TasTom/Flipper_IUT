@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
 
     /// <summary>Émis avec le nombre de billes restantes.</summary>
     public event Action<int> BallsChanged;
+    public event Action ExtraBallAwarded;
 
     /// <summary>Émis avec un message et sa durée d'affichage (0 : permanent).</summary>
     public event Action<string, float> MessageChanged;
@@ -89,9 +90,9 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-        bumpers = FindObjectsByType<Bumper>(FindObjectsSortMode.None);
-        loopGates = FindObjectsByType<LoopGate>(FindObjectsSortMode.None);
-        rampGates = FindObjectsByType<RampGate>(FindObjectsSortMode.None);
+        bumpers = FindObjectsByType<Bumper>();
+        loopGates = FindObjectsByType<LoopGate>();
+        rampGates = FindObjectsByType<RampGate>();
     }
 
     private void OnEnable()
@@ -234,6 +235,7 @@ public class GameManager : MonoBehaviour
 
         BallsRemaining++;
         BallsChanged?.Invoke(BallsRemaining);
+        ExtraBallAwarded?.Invoke();
         Broadcast("BILLE SUPPLÉMENTAIRE !", 2f);
     }
 

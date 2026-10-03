@@ -169,6 +169,7 @@ public class Flipper : MonoBehaviour
 
     /// <summary>Vrai pendant que le flipper est en butée haute.</summary>
     public bool IsPressed => pressed;
+    public event System.Action<bool> PressedChanged;
 
     /// <summary>Côté effectif, une fois <see cref="FlipperSide.Auto"/> résolu.</summary>
     public FlipperSide Side => resolvedSide;
@@ -302,6 +303,7 @@ public class Flipper : MonoBehaviour
     {
         bool avant = pressed;
         pressed = ReadInput();
+        if (pressed != avant) PressedChanged?.Invoke(pressed);
 
         // --- journal des appuis ---------------------------------------------------------------
         // On journalise la TRANSITION, jamais l'état : à 50 pas physiques par seconde, un log

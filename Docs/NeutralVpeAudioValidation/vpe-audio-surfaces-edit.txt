@@ -1,0 +1,267 @@
+PASS Bat_Mesh normals have UVs and tangents
+PASS Bat_Mesh valid tangent basis
+PASS Bat_Mesh normals have UVs and tangents
+PASS Bat_Mesh valid tangent basis
+PASS SlingPlastic_Left normals have UVs and tangents
+PASS SlingPlastic_Left valid tangent basis
+PASS SlingPost_1 normals have UVs and tangents
+PASS SlingPost_1 valid tangent basis
+PASS SlingFastener_1 normals have UVs and tangents
+PASS SlingFastener_1 valid tangent basis
+PASS SlingPost_2 normals have UVs and tangents
+PASS SlingPost_2 valid tangent basis
+PASS SlingFastener_2 normals have UVs and tangents
+PASS SlingFastener_2 valid tangent basis
+PASS SlingPost_3 normals have UVs and tangents
+PASS SlingPost_3 valid tangent basis
+PASS SlingFastener_3 normals have UVs and tangents
+PASS SlingFastener_3 valid tangent basis
+PASS SlingPlastic_Right normals have UVs and tangents
+PASS SlingPlastic_Right valid tangent basis
+PASS SlingPost_1 normals have UVs and tangents
+PASS SlingPost_1 valid tangent basis
+PASS SlingFastener_1 normals have UVs and tangents
+PASS SlingFastener_1 valid tangent basis
+PASS SlingPost_2 normals have UVs and tangents
+PASS SlingPost_2 valid tangent basis
+PASS SlingFastener_2 normals have UVs and tangents
+PASS SlingFastener_2 valid tangent basis
+PASS SlingPost_3 normals have UVs and tangents
+PASS SlingPost_3 valid tangent basis
+PASS SlingFastener_3 normals have UVs and tangents
+PASS SlingFastener_3 valid tangent basis
+PASS Bumper_01_0_Bumper Base - Williams/Bally normals have UVs and tangents
+PASS Bumper_01_0_Bumper Base - Williams/Bally valid tangent basis
+PASS Bumper_01_1_Bumper Ring normals have UVs and tangents
+PASS Bumper_01_1_Bumper Ring valid tangent basis
+PASS BumperCapRim_0 normals have UVs and tangents
+PASS BumperCapRim_0 valid tangent basis
+PASS Bumper_02_0_Bumper Base - Williams/Bally normals have UVs and tangents
+PASS Bumper_02_0_Bumper Base - Williams/Bally valid tangent basis
+PASS Bumper_02_1_Bumper Ring normals have UVs and tangents
+PASS Bumper_02_1_Bumper Ring valid tangent basis
+PASS BumperCapRim_1 normals have UVs and tangents
+PASS BumperCapRim_1 valid tangent basis
+PASS Bumper_03_0_Bumper Base - Williams/Bally normals have UVs and tangents
+PASS Bumper_03_0_Bumper Base - Williams/Bally valid tangent basis
+PASS Bumper_03_1_Bumper Ring normals have UVs and tangents
+PASS Bumper_03_1_Bumper Ring valid tangent basis
+PASS BumperCapRim_2 normals have UVs and tangents
+PASS BumperCapRim_2 valid tangent basis
+PASS Rod normals have UVs and tangents
+PASS Rod valid tangent basis
+PASS Spring normals have UVs and tangents
+PASS Spring valid tangent basis
+PASS Target_Pro normals have UVs and tangents
+PASS Target_Pro valid tangent basis
+PASS RewardBezel_0 normals have UVs and tangents
+PASS RewardBezel_0 valid tangent basis
+PASS Target_Pro normals have UVs and tangents
+PASS Target_Pro valid tangent basis
+PASS RewardBezel_1 normals have UVs and tangents
+PASS RewardBezel_1 valid tangent basis
+PASS Target_Pro normals have UVs and tangents
+PASS Target_Pro valid tangent basis
+PASS RewardBezel_2 normals have UVs and tangents
+PASS RewardBezel_2 valid tangent basis
+PASS Target_Pro normals have UVs and tangents
+PASS Target_Pro valid tangent basis
+PASS RewardBezel_3 normals have UVs and tangents
+PASS RewardBezel_3 valid tangent basis
+PASS Target_Pro normals have UVs and tangents
+PASS Target_Pro valid tangent basis
+PASS RewardBezel_4 normals have UVs and tangents
+PASS RewardBezel_4 valid tangent basis
+PASS Target_Pro normals have UVs and tangents
+PASS Target_Pro valid tangent basis
+PASS RewardBezel_5 normals have UVs and tangents
+PASS RewardBezel_5 valid tangent basis
+PASS TerminalBezel normals have UVs and tangents
+PASS TerminalBezel valid tangent basis
+PASS TerminalFoot_-0.425 normals have UVs and tangents
+PASS TerminalFoot_-0.425 valid tangent basis
+PASS TerminalFoot_0.425 normals have UVs and tangents
+PASS TerminalFoot_0.425 valid tangent basis
+PASS LeftBoundary normals have UVs and tangents
+PASS LeftBoundary valid tangent basis
+PASS ShooterOuter normals have UVs and tangents
+PASS ShooterOuter valid tangent basis
+PASS ShooterDivider normals have UVs and tangents
+PASS ShooterDivider valid tangent basis
+PASS RearOrbitSteel normals have UVs and tangents
+PASS RearOrbitSteel valid tangent basis
+PASS ShooterExit normals have UVs and tangents
+PASS ShooterExit valid tangent basis
+PASS PrintedPlayfield normals have UVs and tangents
+PASS PrintedPlayfield valid tangent basis
+PASS SpinnerMount normals have UVs and tangents
+PASS SpinnerMount valid tangent basis
+PASS InlaneOuter_Left normals have UVs and tangents
+PASS InlaneOuter_Left valid tangent basis
+PASS InlaneInner_Left normals have UVs and tangents
+PASS InlaneInner_Left valid tangent basis
+PASS OutlanePost_Left normals have UVs and tangents
+PASS OutlanePost_Left valid tangent basis
+PASS CoveredDrainGuide_Left normals have UVs and tangents
+PASS CoveredDrainGuide_Left valid tangent basis
+PASS InlaneOuter_Right normals have UVs and tangents
+PASS InlaneOuter_Right valid tangent basis
+PASS InlaneInner_Right normals have UVs and tangents
+PASS InlaneInner_Right valid tangent basis
+PASS OutlanePost_Right normals have UVs and tangents
+PASS OutlanePost_Right valid tangent basis
+PASS CoveredDrainGuide_Right normals have UVs and tangents
+PASS CoveredDrainGuide_Right valid tangent basis
+PASS ApronChromeEdge normals have UVs and tangents
+PASS ApronChromeEdge valid tangent basis
+PASS Vosges_Rim_-1 normals have UVs and tangents
+PASS Vosges_Rim_-1 valid tangent basis
+PASS Vosges_Runner_-1 normals have UVs and tangents
+PASS Vosges_Runner_-1 valid tangent basis
+PASS Vosges_MidRail_-1 normals have UVs and tangents
+PASS Vosges_MidRail_-1 valid tangent basis
+PASS Vosges_Rim_1 normals have UVs and tangents
+PASS Vosges_Rim_1 valid tangent basis
+PASS Vosges_Runner_1 normals have UVs and tangents
+PASS Vosges_Runner_1 valid tangent basis
+PASS Vosges_MidRail_1 normals have UVs and tangents
+PASS Vosges_MidRail_1 valid tangent basis
+PASS Vosges_Brace_88 normals have UVs and tangents
+PASS Vosges_Brace_88 valid tangent basis
+PASS Vosges_Brace_97 normals have UVs and tangents
+PASS Vosges_Brace_97 valid tangent basis
+PASS Vosges_Brace_106 normals have UVs and tangents
+PASS Vosges_Brace_106 valid tangent basis
+PASS Vosges_Brace_115 normals have UVs and tangents
+PASS Vosges_Brace_115 valid tangent basis
+PASS Vosges_Brace_124 normals have UVs and tangents
+PASS Vosges_Brace_124 valid tangent basis
+PASS Vosges_Brace_133 normals have UVs and tangents
+PASS Vosges_Brace_133 valid tangent basis
+PASS Vosges_Brace_142 normals have UVs and tangents
+PASS Vosges_Brace_142 valid tangent basis
+PASS Vosges_Brace_151 normals have UVs and tangents
+PASS Vosges_Brace_151 valid tangent basis
+PASS Vosges_Bow_88 normals have UVs and tangents
+PASS Vosges_Bow_88 valid tangent basis
+PASS Vosges_Bow_106 normals have UVs and tangents
+PASS Vosges_Bow_106 valid tangent basis
+PASS Vosges_Bow_124 normals have UVs and tangents
+PASS Vosges_Bow_124 valid tangent basis
+PASS Vosges_Bow_142 normals have UVs and tangents
+PASS Vosges_Bow_142 valid tangent basis
+PASS IUT_Rim_-1 normals have UVs and tangents
+PASS IUT_Rim_-1 valid tangent basis
+PASS IUT_Runner_-1 normals have UVs and tangents
+PASS IUT_Runner_-1 valid tangent basis
+PASS IUT_MidRail_-1 normals have UVs and tangents
+PASS IUT_MidRail_-1 valid tangent basis
+PASS IUT_Rim_1 normals have UVs and tangents
+PASS IUT_Rim_1 valid tangent basis
+PASS IUT_Runner_1 normals have UVs and tangents
+PASS IUT_Runner_1 valid tangent basis
+PASS IUT_MidRail_1 normals have UVs and tangents
+PASS IUT_MidRail_1 valid tangent basis
+PASS IUT_Brace_64 normals have UVs and tangents
+PASS IUT_Brace_64 valid tangent basis
+PASS IUT_Brace_73 normals have UVs and tangents
+PASS IUT_Brace_73 valid tangent basis
+PASS IUT_Brace_82 normals have UVs and tangents
+PASS IUT_Brace_82 valid tangent basis
+PASS IUT_Brace_91 normals have UVs and tangents
+PASS IUT_Brace_91 valid tangent basis
+PASS IUT_Brace_100 normals have UVs and tangents
+PASS IUT_Brace_100 valid tangent basis
+PASS IUT_Brace_109 normals have UVs and tangents
+PASS IUT_Brace_109 valid tangent basis
+PASS IUT_Brace_118 normals have UVs and tangents
+PASS IUT_Brace_118 valid tangent basis
+PASS IUT_Brace_127 normals have UVs and tangents
+PASS IUT_Brace_127 valid tangent basis
+PASS IUT_Brace_136 normals have UVs and tangents
+PASS IUT_Brace_136 valid tangent basis
+PASS IUT_Brace_145 normals have UVs and tangents
+PASS IUT_Brace_145 valid tangent basis
+PASS IUT_Brace_154 normals have UVs and tangents
+PASS IUT_Brace_154 valid tangent basis
+PASS IUT_Bow_64 normals have UVs and tangents
+PASS IUT_Bow_64 valid tangent basis
+PASS IUT_Bow_82 normals have UVs and tangents
+PASS IUT_Bow_82 valid tangent basis
+PASS IUT_Bow_100 normals have UVs and tangents
+PASS IUT_Bow_100 valid tangent basis
+PASS IUT_Bow_118 normals have UVs and tangents
+PASS IUT_Bow_118 valid tangent basis
+PASS IUT_Bow_136 normals have UVs and tangents
+PASS IUT_Bow_136 valid tangent basis
+PASS IUT_Bow_154 normals have UVs and tangents
+PASS IUT_Bow_154 valid tangent basis
+PASS OrbitFeedCurve normals have UVs and tangents
+PASS OrbitFeedCurve valid tangent basis
+PASS OrbitFeedCurve_right normals have UVs and tangents
+PASS OrbitFeedCurve_right valid tangent basis
+PASS Vosges_RetainingClamp_98_-1 normals have UVs and tangents
+PASS Vosges_RetainingClamp_98_-1 valid tangent basis
+PASS Vosges_FrameBolt_98_-1 normals have UVs and tangents
+PASS Vosges_FrameBolt_98_-1 valid tangent basis
+PASS Vosges_RetainingClamp_98_1 normals have UVs and tangents
+PASS Vosges_RetainingClamp_98_1 valid tangent basis
+PASS Vosges_FrameBolt_98_1 normals have UVs and tangents
+PASS Vosges_FrameBolt_98_1 valid tangent basis
+PASS Vosges_RetainingClamp_116_-1 normals have UVs and tangents
+PASS Vosges_RetainingClamp_116_-1 valid tangent basis
+PASS Vosges_FrameBolt_116_-1 normals have UVs and tangents
+PASS Vosges_FrameBolt_116_-1 valid tangent basis
+PASS Vosges_RetainingClamp_116_1 normals have UVs and tangents
+PASS Vosges_RetainingClamp_116_1 valid tangent basis
+PASS Vosges_FrameBolt_116_1 normals have UVs and tangents
+PASS Vosges_FrameBolt_116_1 valid tangent basis
+PASS Vosges_RetainingClamp_132_-1 normals have UVs and tangents
+PASS Vosges_RetainingClamp_132_-1 valid tangent basis
+PASS Vosges_FrameBolt_132_-1 normals have UVs and tangents
+PASS Vosges_FrameBolt_132_-1 valid tangent basis
+PASS Vosges_RetainingClamp_132_1 normals have UVs and tangents
+PASS Vosges_RetainingClamp_132_1 valid tangent basis
+PASS Vosges_FrameBolt_132_1 normals have UVs and tangents
+PASS Vosges_FrameBolt_132_1 valid tangent basis
+PASS IUT_RetainingClamp_98_-1 normals have UVs and tangents
+PASS IUT_RetainingClamp_98_-1 valid tangent basis
+PASS IUT_FrameBolt_98_-1 normals have UVs and tangents
+PASS IUT_FrameBolt_98_-1 valid tangent basis
+PASS IUT_RetainingClamp_98_1 normals have UVs and tangents
+PASS IUT_RetainingClamp_98_1 valid tangent basis
+PASS IUT_FrameBolt_98_1 normals have UVs and tangents
+PASS IUT_FrameBolt_98_1 valid tangent basis
+PASS IUT_RetainingClamp_116_-1 normals have UVs and tangents
+PASS IUT_RetainingClamp_116_-1 valid tangent basis
+PASS IUT_FrameBolt_116_-1 normals have UVs and tangents
+PASS IUT_FrameBolt_116_-1 valid tangent basis
+PASS IUT_RetainingClamp_116_1 normals have UVs and tangents
+PASS IUT_RetainingClamp_116_1 valid tangent basis
+PASS IUT_FrameBolt_116_1 normals have UVs and tangents
+PASS IUT_FrameBolt_116_1 valid tangent basis
+PASS IUT_RetainingClamp_132_-1 normals have UVs and tangents
+PASS IUT_RetainingClamp_132_-1 valid tangent basis
+PASS IUT_FrameBolt_132_-1 normals have UVs and tangents
+PASS IUT_FrameBolt_132_-1 valid tangent basis
+PASS IUT_RetainingClamp_132_1 normals have UVs and tangents
+PASS IUT_RetainingClamp_132_1 valid tangent basis
+PASS IUT_FrameBolt_132_1 normals have UVs and tangents
+PASS IUT_FrameBolt_132_1 valid tangent basis
+PASS AudioConfig contains ten distinct event cues
+PASS three mixer routes
+PASS FlipperUp mono samples present
+PASS FlipperDown mono samples present
+PASS Launch mono samples present
+PASS TargetValidated mono samples present
+PASS RampCompleted mono samples present
+PASS LoopCompleted mono samples present
+PASS MultiplierRaised mono samples present
+PASS ExtraBall mono samples present
+PASS GameOver mono samples present
+PASS HighScore mono samples present
+PASS two flippers + plunger + six targets + two exits + loop
+PASS long music streams in background
+PASS authored music gain 45 percent
+PASS 56 collider settings, source GUIDs and world matrices preserved after build restoration
+Mapped renderers=82 checks=266 failures=0

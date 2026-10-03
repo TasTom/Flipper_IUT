@@ -1,0 +1,15 @@
+$ErrorActionPreference = 'Stop'
+$taskRoot = 'D:\Flipper_IUT'
+$taskExe = Join-Path $taskRoot 'Tools\build\NeutralVpeQuality\Neutral.exe'
+$taskReport = Join-Path $taskRoot 'Tools\unity\out\vpe-windows-player.json'
+$taskLog = Join-Path $taskRoot 'Tools\unity\out\vpe-windows-player.log'
+$taskArguments = @('-screen-width','1920','-screen-height','1080','-screen-fullscreen','0','-neutralQualityProbe',$taskReport,'-logFile',$taskLog)
+$taskProcess = Start-Process -FilePath $taskExe -ArgumentList $taskArguments -WorkingDirectory (Split-Path -Parent $taskExe) -WindowStyle Hidden -PassThru
+$taskProcess.Id | Set-Content -LiteralPath (Join-Path $taskRoot 'Tools\unity\out\vpe-player-process.txt')
+if ($taskProcess.WaitForExit(45000)) {
+    $taskProcess.Refresh()
+    Write-Output ('Player exit code: ' + $taskProcess.ExitCode)
+    if (Test-Path -LiteralPath $taskReport) { Get-Content -LiteralPath $taskReport -Encoding UTF8 }
+} else {
+    Write-Output ('Player still running, PID ' + $taskProcess.Id)
+}

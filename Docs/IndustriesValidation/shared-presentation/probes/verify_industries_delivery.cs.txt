@@ -1,0 +1,18 @@
+var scene=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+if(UnityEditor.EditorApplication.isPlaying || scene.name!="Industries")throw new Exception("Industries hors Play attendue");
+var gm=UnityEngine.Object.FindAnyObjectByType<GameManager>();var rules=UnityEngine.Object.FindAnyObjectByType<IndustriesVpeGame>();var table=UnityEngine.Object.FindAnyObjectByType<VisualPinball.Unity.TableComponent>();
+var go=scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<Transform>(true)).Select(t=>t.gameObject).ToArray();
+int missing=go.Sum(g=>UnityEditor.GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(g));
+var config=UnityEditor.AssetDatabase.LoadAssetAtPath<IndustriesConfig>("Assets/Generated/Industries/IndustriesConfig.asset");var progression=UnityEditor.AssetDatabase.LoadAssetAtPath<ProgressionConfig>("Assets/Resources/Progression/ProgressionConfig.asset");
+var serialized=new UnityEditor.SerializedObject(gm);
+var scoop=table.GetComponentsInChildren<VisualPinball.Unity.KickerComponent>().First(k=>k.name=="Kicker1");
+var clips=new[]{config.flipperUpSound,config.flipperDownSound,config.launchSound,config.bumperSound,config.targetSound,config.scoopSound,config.bonusSound,config.drainSound};
+var summary=$"scene={scene.path} dirty={scene.isDirty} playing={UnityEditor.EditorApplication.isPlaying}\nobjects={go.Length} missingScripts={missing} targets={table.GetComponentsInChildren<VisualPinball.Unity.TargetComponent>().Length} cameras={UnityEngine.Object.FindObjectsByType<Camera>().Length}\nexternalLifecycle={serialized.FindProperty("externalBallLifecycle").boolValue} autoStart={serialized.FindProperty("autoStartOnPlay").boolValue} scoreThreshold={progression.scoreThreshold} audioClips={clips.Count(c=>c!=null)}/8 scoopRadiusVPX={scoop.Radius}\n";
+var visibility=new UnityEditor.SerializedObject(UnityEngine.Object.FindAnyObjectByType<IndustriesPresentation>()).FindProperty("hiddenRenderers");
+int activeHidden=0;
+for(int i=0;i<visibility.arraySize;i++){var renderer=visibility.GetArrayElementAtIndex(i).objectReferenceValue as Renderer;if(renderer==null || renderer.enabled)activeHidden++;}
+summary+=$"hiddenRenderers={visibility.arraySize} missingOrVisible={activeHidden}\n";
+if(activeHidden>0)throw new Exception(summary);
+if(missing>0 || rules==null || scene.isDirty || clips.Any(c=>c==null) || progression.scoreThreshold!=100000)throw new Exception(summary);
+System.IO.File.WriteAllText("Docs/IndustriesValidation/saved-scene.txt",summary);
+return summary;

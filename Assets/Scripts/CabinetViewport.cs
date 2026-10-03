@@ -6,6 +6,8 @@ using UnityEngine;
 public sealed class CabinetViewport : MonoBehaviour
 {
     [SerializeField] private Transform table;
+    [Tooltip("Géométrie utilisée pour le plan de coupe quand le repère de cadrage est distinct de la table physique.")]
+    [SerializeField] private Transform tableGeometry;
     [SerializeField] private Vector2 horizontalLimits = new Vector2(-4.5f,4.5f);
     [SerializeField] private Vector2 lengthLimits = new Vector2(-.7f,21.1f);
     [SerializeField] private RectTransform scorePanel;
@@ -23,8 +25,9 @@ public sealed class CabinetViewport : MonoBehaviour
     public void Fit()
     {
         if(table==null || view==null)return;
-        float width=horizontalLimits.y-horizontalLimits.x;
-        float length=lengthLimits.y-lengthLimits.x;
+        float metricScale=Mathf.Abs(table.lossyScale.x);
+        float width=(horizontalLimits.y-horizontalLimits.x)*metricScale;
+        float length=(lengthLimits.y-lengthLimits.x)*Mathf.Abs(table.lossyScale.z);
         if(width<=0 || length<=0)return;
         float cosine=Mathf.Clamp(view.aspect*width/length,.25f,1f);
         float sine=Mathf.Sqrt(1-cosine*cosine);
@@ -34,16 +37,16 @@ public sealed class CabinetViewport : MonoBehaviour
         view.orthographic=true;view.orthographicSize=Mathf.Max(width*.5f,length*cosine/(2*view.aspect));
         // The score panel is two units from the camera. Keep it visible while
         // tightening the depth range around the table to reduce surface flicker.
-        float farDepth=35;
+        float farDepth=35*metricScale;
         if(hasClipBounds)
             for(int i=0;i<8;i++)
                 farDepth=Mathf.Max(farDepth,Vector3.Dot(table.TransformPoint(Corner(tableClipBounds,i))-transform.position,transform.forward));
-        view.nearClipPlane=.5f;view.farClipPlane=farDepth+2;view.rect=new Rect(0,0,1,1);
+        view.nearClipPlane=.5f*metricScale;view.farClipPlane=farDepth+2*metricScale;view.rect=new Rect(0,0,1,1);
         if(scorePanel!=null && scorePanel.rect.width>0 && scorePanel.rect.height>0)
         {
             // The cabinet roll is also applied to the display. A camera-facing plane
             // keeps the score within the screen and clear of raised table furniture.
-            scorePanel.position=view.ViewportToWorldPoint(new Vector3(1-scoreScreenFraction*.5f,.5f,2f));
+            scorePanel.position=view.ViewportToWorldPoint(new Vector3(1-scoreScreenFraction*.5f,.5f,2f*metricScale));
             scorePanel.rotation=Quaternion.LookRotation(transform.forward,transform.right);
             scorePanel.localScale=new Vector3(2*view.orthographicSize/scorePanel.rect.width,
                 2*view.orthographicSize*view.aspect*scoreScreenFraction/scorePanel.rect.height,1);
@@ -55,7 +58,8 @@ public sealed class CabinetViewport : MonoBehaviour
     {
         hasClipBounds=false;
         if(table==null)return;
-        foreach(var renderer in table.GetComponentsInChildren<Renderer>())
+        var geometry=tableGeometry!=null?tableGeometry:table;
+        foreach(var renderer in geometry.GetComponentsInChildren<Renderer>())
         {
             if(!renderer.enabled || renderer.GetComponentInParent<Canvas>()!=null)continue;
             for(int i=0;i<8;i++)

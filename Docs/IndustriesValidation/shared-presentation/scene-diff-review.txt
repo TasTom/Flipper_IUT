@@ -1,0 +1,14 @@
+Added blocks: Counter({'43': 149, '1': 14, '114': 14, '224': 13, '222': 12, '4': 1, '223': 1})
+Removed blocks: Counter({'43': 149})
+Changed blocks: Counter({'1001': 106, '114': 4, '4': 2, '1': 1, '20': 1, '223': 1})
+Embedded mesh bodies identical after file ID regeneration: True
+Existing collider blocks unchanged: True
+309074733 type=114 before: ['  m_Enabled: 1'] after: ['  m_Enabled: 0']
+309074735 type=223 before: ['  m_Enabled: 1'] after: ['  m_Enabled: 0']
+991429194 type=4 before: [] after: ['  - {fileID: 1541566069}', '  - {fileID: 1168705097}']
+1198474207 type=114 before: ['  objectivesText: {fileID: 632333173}'] after: ['  objectivesText: {fileID: 1963067836}', '  compactObjectivesLabel: 1']
+1824461826 type=1 before: [] after: ['  - component: {fileID: 1824461831}']
+1824461827 type=4 before: ['  m_LocalRotation: {x: 0.29679605, y: -0.29679605, z: 0.6418038, w: 0.6418038}', '  m_LocalPosition: {x: 0.258, y: 1.5, z: -1.885}'] after: ['  m_LocalRotation: {x: 0.24310926, y: -0.24310926, z: 0.66400146, w: 0.66400146}', '  m_LocalPosition: {x: 0.258, y: 1.5365199, z: -2.2178898}']
+1824461828 type=114 before: ['  m_RenderPostProcessing: 0'] after: ['  m_RenderPostProcessing: 1']
+1824461830 type=20 before: ['  m_BackGroundColor: {r: 0.015, g: 0.025, b: 0.031, a: 1}', '  m_FocalLength: 50', '    width: 0.87', '  near clip plane: 0.01', '  far clip plane: 10', '  field of view: 60', '  orthographic size: 0.3', '  m_Depth: 0'] after: ['  m_BackGroundColor: {r: 0.012, g: 0.021, b: 0.028, a: 1}', '  m_FocalLength: 46.40056', '    width: 1', '  near clip plane: 0.032222223', '  far clip plane: 2.979547', '  field of view: 29', '  orthographic size: 0.29', '  m_Depth: -1']
+1829183568 type=114 before: ['  _instanceID: 159591'] after: ['  _instanceID: 185405']

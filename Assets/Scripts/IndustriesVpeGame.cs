@@ -17,6 +17,7 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     [SerializeField] private ScoreManager score;
     [SerializeField] private InputRouter input;
     [SerializeField] private TMPro.TMP_Text objectivesText;
+    [SerializeField] private bool compactObjectivesLabel;
     private Player player;
     private TableApi api;
     private FlipperApi left, right;
@@ -167,7 +168,7 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     }
     private void RefreshObjectives()
     {
-        if (objectivesText != null) objectivesText.text = "PRODUCTION  " + TargetsLit + "/6  ·  BONUS " + config.sixTargetsBonus.ToString("N0");
+        if (objectivesText != null) objectivesText.text = compactObjectivesLabel ? TargetsLit+" / 6" : "PRODUCTION  " + TargetsLit + "/6  ·  BONUS " + config.sixTargetsBonus.ToString("N0");
         for (int i = 0; i < 3; i++)
         {
             api.Light("l" + (i+1))?.OnLamp((targets & (1 << i)) != 0 ? 1f : .08f);

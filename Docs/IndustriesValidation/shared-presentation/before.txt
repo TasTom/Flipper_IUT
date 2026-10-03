@@ -1,0 +1,238 @@
+SCENE Neutral
+ROOT BackgroundMusic position=(-0.05, 0.99, 7.48) rotation=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+ROOT Main Camera position=(0.00, 23.84, -16.60) rotation=(40.22, 0.00, 90.00) scale=(1.00, 1.00, 1.00)
+CAMERA Main Camera pos=(0.00, 23.84, -16.60) rot=(40.22, 0.00, 90.00) ortho=4,5 rect=(x:0.00, y:0.00, width:1.00, height:1.00) aspect=1,777778 near=0,5 far=47,07383
+  Transform
+  Camera
+  AudioListener
+  UniversalAdditionalCameraData
+  CabinetViewport
+{
+    "MonoBehaviour": {
+        "m_Enabled": true,
+        "m_EditorHideFlags": 0,
+        "m_Name": "",
+        "m_EditorClassIdentifier": "Assembly-CSharp::CabinetViewport",
+        "table": {
+            "instanceID": 0
+        },
+        "horizontalLimits": {
+            "x": -4.5,
+            "y": 4.5
+        },
+        "lengthLimits": {
+            "x": -0.699999988079071,
+            "y": 21.100000381469727
+        },
+        "scorePanel": {
+            "instanceID": 0
+        },
+        "scoreScreenFraction": 0.15000000596046448
+    }
+}
+ROOT Directional Light position=(0.00, 3.00, 0.00) rotation=(50.00, 330.00, 0.00) scale=(1.00, 1.00, 1.00)
+ROOT PinballTable position=(0.00, 0.00, 0.00) rotation=(353.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+CANVAS Backglass parent=PinballTable mode=WorldSpace cam= sorting=0 active=True
+  RectTransform
+  Canvas
+  BackglassDisplay
+UI Backglass parent=PinballTable active=True pos=(0.00, 28.84, -7.22) rot=(47.22, 0.00, 0.00) size=(1612.45, 550.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,Canvas,BackglassDisplay
+UI Fond parent=Backglass active=True pos=(0.00, 0.00, 0.00) rot=(0.00, 0.00, 0.00) size=(0.00, 0.00) anchor=(0.00, 0.00)/(1.00, 1.00) components=RectTransform,CanvasRenderer,Image
+UI ScoreGhost parent=Backglass active=True pos=(0.00, 75.00, 0.00) rot=(0.00, 0.00, 0.00) size=(1450.00, 160.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI HighScoreLabel parent=Backglass active=True pos=(-380.00, 200.00, 0.00) rot=(0.00, 0.00, 0.00) size=(650.00, 75.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI HighScoreValue parent=Backglass active=True pos=(320.00, 200.00, 0.00) rot=(0.00, 0.00, 0.00) size=(650.00, 75.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI ScoreValue parent=Backglass active=True pos=(0.00, 75.00, 0.00) rot=(0.00, 0.00, 0.00) size=(1450.00, 160.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI MessageValue parent=Backglass active=True pos=(0.00, -130.00, 0.00) rot=(0.00, 0.00, 0.00) size=(1450.00, 70.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI BallsLabel parent=Backglass active=True pos=(-585.00, -225.00, 0.00) rot=(0.00, 0.00, 0.00) size=(300.00, 65.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI BallsValue parent=Backglass active=True pos=(-270.00, -225.00, 0.00) rot=(0.00, 0.00, 0.00) size=(290.00, 65.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI MissionsLabel parent=Backglass active=True pos=(225.00, -225.00, 0.00) rot=(0.00, 0.00, 0.00) size=(510.00, 65.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI MissionsValue parent=Backglass active=True pos=(615.00, -225.00, 0.00) rot=(0.00, 0.00, 0.00) size=(200.00, 65.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI MultiplierValue parent=Backglass active=True pos=(0.00, -5.00, 0.00) rot=(0.00, 0.00, 0.00) size=(1450.00, 45.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI ScoreFeedbackValue parent=Backglass active=True pos=(0.00, -58.00, 0.00) rot=(0.00, 0.00, 0.00) size=(1450.00, 48.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+TEXT ScoreGhost value=8 888 888 font=Electronic Highway Sign SDF material=Electronic Highway Sign SDF Material size=140 color=RGBA(0.100, 0.070, 0.025, 1.000)
+TEXT HighScoreLabel value=RECORD font=LiberationSans SDF material=LiberationSans SDF Material size=36 color=RGBA(0.820, 0.900, 0.870, 1.000)
+TEXT HighScoreValue value=0 font=Electronic Highway Sign SDF material=Electronic Highway Sign SDF Material size=56 color=RGBA(0.820, 0.900, 0.870, 1.000)
+TEXT ScoreValue value=0 font=Electronic Highway Sign SDF material=Electronic Highway Sign SDF Material size=140 color=RGBA(1.000, 0.620, 0.170, 1.000)
+TEXT MessageValue value=ESPACE : CHARGER ET LANCER font=LiberationSans SDF material=LiberationSans SDF Material size=38 color=RGBA(0.820, 0.900, 0.870, 1.000)
+TEXT BallsLabel value=BILLES font=LiberationSans SDF material=LiberationSans SDF Material size=28 color=RGBA(0.820, 0.900, 0.870, 1.000)
+TEXT BallsValue value=●●● font=Electronic Highway Sign SDF material=Electronic Highway Sign SDF Material size=40 color=RGBA(0.820, 0.900, 0.870, 1.000)
+TEXT MissionsLabel value=DÉCOUVERTE DU CAMPUS font=LiberationSans SDF material=LiberationSans SDF Material size=25 color=RGBA(0.820, 0.900, 0.870, 1.000)
+TEXT MissionsValue value=0 / 1 font=Electronic Highway Sign SDF material=Electronic Highway Sign SDF Material size=38 color=RGBA(0.820, 0.900, 0.870, 1.000)
+TEXT MultiplierValue value=MULTIPLICATEUR ×1 font=LiberationSans SDF material=LiberationSans SDF Material size=30 color=RGBA(0.720, 0.900, 0.870, 1.000)
+TEXT ScoreFeedbackValue value= font=LiberationSans SDF material=LiberationSans SDF Material size=34 color=RGBA(1.000, 0.780, 0.350, 1.000)
+ROOT InputRouter position=(0.00, 0.00, 0.00) rotation=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+ROOT ScoreManager position=(0.00, 0.00, 0.00) rotation=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+ROOT BallManager position=(0.00, 0.00, 0.00) rotation=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+ROOT Canvas position=(960.00, 540.00, 0.00) rotation=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+CANVAS Canvas parent= mode=ScreenSpaceOverlay cam= sorting=0 active=True
+  RectTransform
+  Canvas
+  CanvasScaler
+  GraphicRaycaster
+  HudController
+  GameOverScreen
+  PauseMenu
+{
+    "MonoBehaviour": {
+        "m_Enabled": true,
+        "m_EditorHideFlags": 0,
+        "m_Name": "",
+        "m_EditorClassIdentifier": "UnityEngine.UI::UnityEngine.UI.CanvasScaler",
+        "m_UiScaleMode": 1,
+        "m_ReferencePixelsPerUnit": 100.0,
+        "m_ScaleFactor": 1.0,
+        "m_ReferenceResolution": {
+            "x": 1920.0,
+            "y": 1080.0
+        },
+        "m_ScreenMatchMode": 0,
+        "m_MatchWidthOrHeight": 0.5,
+        "m_PhysicalUnit": 3,
+        "m_FallbackScreenDPI": 96.0,
+        "m_DefaultSpriteDPI": 96.0,
+        "m_DynamicPixelsPerUnit": 1.0,
+        "m_PresetInfoIsWorld": false
+    }
+}
+UI Canvas parent= active=True pos=(960.00, 540.00, 0.00) rot=(0.00, 0.00, 0.00) size=(1920.00, 1080.00) anchor=(0.00, 0.00)/(0.00, 0.00) components=RectTransform,Canvas,CanvasScaler,GraphicRaycaster,HudController,GameOverScreen,PauseMenu
+UI ScoreText parent=Canvas active=True pos=(-914.00, 494.00, 0.00) rot=(0.00, 0.00, 0.00) size=(620.00, 90.00) anchor=(0.00, 1.00)/(0.00, 1.00) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI HighScoreText parent=Canvas active=True pos=(914.00, 494.00, 0.00) rot=(0.00, 0.00, 0.00) size=(620.00, 90.00) anchor=(1.00, 1.00)/(1.00, 1.00) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI BallsText parent=Canvas active=True pos=(-914.00, -494.00, 0.00) rot=(0.00, 0.00, 0.00) size=(620.00, 90.00) anchor=(0.00, 0.00)/(0.00, 0.00) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI MissionText parent=Canvas active=True pos=(914.00, -494.00, 0.00) rot=(0.00, 0.00, 0.00) size=(760.00, 90.00) anchor=(1.00, 0.00)/(1.00, 0.00) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI MessageText parent=Canvas active=True pos=(0.00, 0.00, 0.00) rot=(0.00, 0.00, 0.00) size=(1400.00, 170.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI GameOver_Panel parent=Canvas active=True pos=(0.00, 0.00, 0.00) rot=(0.00, 0.00, 0.00) size=(0.00, 0.00) anchor=(0.00, 0.00)/(1.00, 1.00) components=RectTransform,CanvasRenderer,Image
+UI GameOver_Title parent=GameOver_Panel active=True pos=(0.00, 216.00, 0.00) rot=(0.00, 0.00, 0.00) size=(0.00, 0.00) anchor=(0.00, 0.55)/(1.00, 0.85) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI GameOver_Score parent=GameOver_Panel active=True pos=(0.00, -27.00, 0.00) rot=(0.00, 0.00, 0.00) size=(0.00, 0.00) anchor=(0.00, 0.40)/(1.00, 0.55) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI GameOver_Record parent=GameOver_Panel active=True pos=(0.00, -172.80, 0.00) rot=(0.00, 0.00, 0.00) size=(0.00, 0.00) anchor=(0.00, 0.28)/(1.00, 0.40) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI GameOver_Prompt parent=GameOver_Panel active=True pos=(0.00, -378.00, 0.00) rot=(0.00, 0.00, 0.00) size=(0.00, 0.00) anchor=(0.00, 0.08)/(1.00, 0.22) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI Pause_Panel parent=Canvas active=True pos=(0.00, 0.00, 0.00) rot=(0.00, 0.00, 0.00) size=(0.00, 0.00) anchor=(0.00, 0.00)/(1.00, 1.00) components=RectTransform,CanvasRenderer,Image
+UI Pause_Title parent=Pause_Panel active=True pos=(0.00, 81.00, 0.00) rot=(0.00, 0.00, 0.00) size=(0.00, 0.00) anchor=(0.00, 0.45)/(1.00, 0.70) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI Pause_Prompt parent=Pause_Panel active=True pos=(0.00, -135.00, 0.00) rot=(0.00, 0.00, 0.00) size=(0.00, 0.00) anchor=(0.00, 0.30)/(1.00, 0.45) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+TEXT ScoreText value=SCORE : 0 font=LiberationSans SDF material=LiberationSans SDF Material size=54 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT HighScoreText value=RECORD : 0 font=LiberationSans SDF material=LiberationSans SDF Material size=54 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT BallsText value=BILLES : 3 font=LiberationSans SDF material=LiberationSans SDF Material size=54 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT MissionText value= font=LiberationSans SDF material=LiberationSans SDF Material size=44 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT MessageText value= font=LiberationSans SDF material=LiberationSans SDF Material size=78 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT GameOver_Title value=FIN DE PARTIE font=LiberationSans SDF material=LiberationSans SDF Material size=64 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT GameOver_Score value=SCORE : 0 font=LiberationSans SDF material=LiberationSans SDF Material size=40 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT GameOver_Record value=RECORD : 0 font=LiberationSans SDF material=LiberationSans SDF Material size=32 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT GameOver_Prompt value=ENTRÉE POUR REJOUER font=LiberationSans SDF material=LiberationSans SDF Material size=26 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT Pause_Title value=PAUSE font=LiberationSans SDF material=LiberationSans SDF Material size=72 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT Pause_Prompt value=ÉCHAP POUR REPRENDRE font=LiberationSans SDF material=LiberationSans SDF Material size=26 color=RGBA(1.000, 1.000, 1.000, 1.000)
+HUD Canvas {
+    "MonoBehaviour": {
+        "m_Enabled": true,
+        "m_EditorHideFlags": 0,
+        "m_Name": "",
+        "m_EditorClassIdentifier": "Assembly-CSharp::HudController",
+        "scoreText": {
+            "instanceID": 0
+        },
+        "highScoreText": {
+            "instanceID": 0
+        },
+        "ballsText": {
+            "instanceID": 0
+        },
+        "messageText": {
+            "instanceID": 0
+        },
+        "multiplierText": {
+            "instanceID": 0
+        },
+        "scoreFeedbackText": {
+            "instanceID": 0
+        },
+        "compactMultiplierLabel": false,
+        "autoFindTexts": true,
+        "defaultMessageDuration": 2.0
+    }
+}
+ROOT GameManager position=(0.00, 0.00, 0.00) rotation=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+ROOT MissionManager position=(0.00, 0.00, 0.00) rotation=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+ROOT MultiballManager position=(0.00, 0.00, 0.00) rotation=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+ROOT TiltController position=(0.00, 0.00, 0.00) rotation=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+SCENE Industries
+ROOT ExampleTable position=(0.00, 0.00, 0.00) rotation=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+ROOT IndustriesPresentation position=(0.00, 0.00, 0.00) rotation=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)
+CAMERA Main Camera pos=(0.26, 1.50, -1.89) rot=(49.64, 0.00, 90.00) ortho=0,3 rect=(x:0.00, y:0.00, width:0.87, height:1.00) aspect=1,546667 near=0,01 far=10
+  Transform
+  Camera
+  AudioListener
+  UniversalAdditionalCameraData
+CANVAS IndustriesHUD parent=IndustriesPresentation mode=ScreenSpaceOverlay cam= sorting=100 active=True
+  RectTransform
+  Canvas
+  CanvasScaler
+  HudController
+{
+    "MonoBehaviour": {
+        "m_Enabled": true,
+        "m_EditorHideFlags": 0,
+        "m_Name": "",
+        "m_EditorClassIdentifier": "UnityEngine.UI::UnityEngine.UI.CanvasScaler",
+        "m_UiScaleMode": 1,
+        "m_ReferencePixelsPerUnit": 100.0,
+        "m_ScaleFactor": 1.0,
+        "m_ReferenceResolution": {
+            "x": 1920.0,
+            "y": 1080.0
+        },
+        "m_ScreenMatchMode": 0,
+        "m_MatchWidthOrHeight": 0.0,
+        "m_PhysicalUnit": 3,
+        "m_FallbackScreenDPI": 96.0,
+        "m_DefaultSpriteDPI": 96.0,
+        "m_DynamicPixelsPerUnit": 1.0,
+        "m_PresetInfoIsWorld": false
+    }
+}
+UI IndustriesHUD parent=IndustriesPresentation active=True pos=(960.00, 540.00, 0.00) rot=(0.00, 0.00, 0.00) size=(1920.00, 1080.00) anchor=(0.00, 0.00)/(0.00, 0.00) components=RectTransform,Canvas,CanvasScaler,HudController
+UI CabinetContent parent=IndustriesHUD active=True pos=(0.00, 0.00, 0.00) rot=(0.00, 0.00, 270.00) size=(1080.00, 1920.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform
+UI ScorePanel parent=CabinetContent active=True pos=(0.00, 960.00, 0.00) rot=(0.00, 0.00, 0.00) size=(1080.00, 250.00) anchor=(0.50, 1.00)/(0.50, 1.00) components=RectTransform,CanvasRenderer,Image
+UI IndustriesTitle parent=CabinetContent active=True pos=(0.00, 905.00, 0.00) rot=(0.00, 0.00, 0.00) size=(980.00, 50.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI ScoreText parent=CabinetContent active=True pos=(-170.00, 835.00, 0.00) rot=(0.00, 0.00, 0.00) size=(620.00, 90.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI BallsText parent=CabinetContent active=True pos=(365.00, 845.00, 0.00) rot=(0.00, 0.00, 0.00) size=(250.00, 65.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI HighScoreText parent=CabinetContent active=True pos=(-200.00, 775.00, 0.00) rot=(0.00, 0.00, 0.00) size=(560.00, 45.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI MultiplierText parent=CabinetContent active=True pos=(363.00, 782.00, 0.00) rot=(0.00, 0.00, 0.00) size=(230.00, 55.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI ProductionText parent=CabinetContent active=True pos=(0.00, 725.00, 0.00) rot=(0.00, 0.00, 0.00) size=(1010.00, 42.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI MessageText parent=CabinetContent active=True pos=(0.00, -875.00, 0.00) rot=(0.00, 0.00, 0.00) size=(1030.00, 65.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+UI ScoreFeedbackText parent=CabinetContent active=True pos=(0.00, -790.00, 0.00) rot=(0.00, 0.00, 0.00) size=(1030.00, 65.00) anchor=(0.50, 0.50)/(0.50, 0.50) components=RectTransform,CanvasRenderer,TextMeshProUGUI
+TEXT IndustriesTitle value=ATELIER DES VOSGES font=LiberationSans SDF material=LiberationSans SDF Material size=34 color=RGBA(0.910, 0.730, 0.440, 1.000)
+TEXT ScoreText value=0 font=LiberationSans SDF material=LiberationSans SDF Material size=64 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT BallsText value=BILLES 3 font=LiberationSans SDF material=LiberationSans SDF Material size=30 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT HighScoreText value=RECORD 0 font=LiberationSans SDF material=LiberationSans SDF Material size=22 color=RGBA(0.490, 0.720, 0.710, 1.000)
+TEXT MultiplierText value=×1 font=LiberationSans SDF material=LiberationSans SDF Material size=35 color=RGBA(0.910, 0.730, 0.440, 1.000)
+TEXT ProductionText value=PRODUCTION 0/6 font=LiberationSans SDF material=LiberationSans SDF Material size=23 color=RGBA(0.630, 0.800, 0.770, 1.000)
+TEXT MessageText value=MAINTENIR ESPACE PUIS RELÂCHER font=LiberationSans SDF material=LiberationSans SDF Material size=25 color=RGBA(1.000, 1.000, 1.000, 1.000)
+TEXT ScoreFeedbackText value= font=LiberationSans SDF material=LiberationSans SDF Material size=25 color=RGBA(0.910, 0.730, 0.440, 1.000)
+HUD IndustriesHUD {
+    "MonoBehaviour": {
+        "m_Enabled": true,
+        "m_EditorHideFlags": 0,
+        "m_Name": "",
+        "m_EditorClassIdentifier": "Assembly-CSharp::HudController",
+        "scoreText": {
+            "instanceID": 0
+        },
+        "highScoreText": {
+            "instanceID": 0
+        },
+        "ballsText": {
+            "instanceID": 0
+        },
+        "messageText": {
+            "instanceID": 0
+        },
+        "multiplierText": {
+            "instanceID": 0
+        },
+        "scoreFeedbackText": {
+            "instanceID": 0
+        },
+        "compactMultiplierLabel": true,
+        "autoFindTexts": true,
+        "defaultMessageDuration": 2.0
+    }
+}
+ROOT Managers position=(0.00, 0.00, 0.00) rotation=(0.00, 0.00, 0.00) scale=(1.00, 1.00, 1.00)

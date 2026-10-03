@@ -1,12 +1,12 @@
 using UnityEngine;
 
 /// <summary>Masque les seuls rendus de démonstration après l'activation des composants visuels VPE.</summary>
-[DefaultExecutionOrder(1000)]
+[ExecuteAlways, DefaultExecutionOrder(1000)]
 public sealed class IndustriesPresentation : MonoBehaviour
 {
     [SerializeField] private Renderer[] hiddenRenderers;
 
-    private void Start()
+    private void OnEnable()
     {
         ApplyVisibility();
     }

@@ -1,0 +1,45 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+var destination=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+if(destination.name!="Industries" || destination.isDirty)throw new Exception("Industries enregistrée attendue");
+var source=UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Neutral.unity",UnityEditor.SceneManagement.OpenSceneMode.Additive);
+try {
+ var camera=destination.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Camera>(true)).Single();
+ var sourceCamera=source.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Camera>(true)).Single();
+ var sourceViewport=sourceCamera.GetComponent<CabinetViewport>();
+ var sourceSettings=new UnityEditor.SerializedObject(sourceViewport);
+ var sourceTable=(Transform)sourceSettings.FindProperty("table").objectReferenceValue;
+ if(sourceTable==null)throw new Exception("Repère de Neutral absent");
+ var sourcePanel=(RectTransform)sourceSettings.FindProperty("scorePanel").objectReferenceValue;
+ if(sourcePanel==null)throw new Exception("Fronton de Neutral absent");
+ var presentation=destination.GetRootGameObjects().Single(g=>g.name=="IndustriesPresentation").transform;
+ if(presentation.Find("Backglass")!=null || presentation.Find("CabinetFraming")!=null)throw new Exception("Présentation commune déjà installée : réglages conservés.");
+ UnityEditor.Undo.IncrementCurrentGroup();int group=UnityEditor.Undo.GetCurrentGroup();UnityEditor.Undo.SetCurrentGroupName("Même caméra et fronton que Neutral");
+ // Copie exacte des styles, polices, rectangles et abonnements du fronton existant.
+ var panelObject=UnityEngine.Object.Instantiate(sourcePanel.gameObject);panelObject.name="Backglass";
+ UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(panelObject,destination);
+ UnityEditor.Undo.RegisterCreatedObjectUndo(panelObject,"Fronton commun");panelObject.transform.SetParent(presentation,true);
+ var panel=(RectTransform)panelObject.transform;
+ var label=panel.Find("MissionsLabel").GetComponent<TMPro.TMP_Text>();label.text="CHAÎNE DE PRODUCTION";
+ panel.Find("MissionsValue").GetComponent<TMPro.TMP_Text>().text="0 / 6";
+ var canvas=panel.GetComponent<Canvas>();canvas.worldCamera=camera;
+ // Un repère de présentation convertit les unités de Neutral en mètres ; aucune pièce VPE n'est déplacée.
+ const float scale=.58f/9f;
+ var frameObject=new GameObject("CabinetFraming");UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(frameObject,destination);
+ UnityEditor.Undo.RegisterCreatedObjectUndo(frameObject,"Repère de caméra");var frame=frameObject.transform;frame.SetParent(presentation,false);
+ frame.position=new Vector3(.258f,0,-1.148f);frame.rotation=sourceTable.rotation;frame.localScale=Vector3.one*scale;
+ UnityEditor.Undo.RecordObject(camera,"Réglages caméra de Neutral");camera.CopyFrom(sourceCamera);camera.targetTexture=null;camera.enabled=true;
+ var sourceData=sourceCamera.GetComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>();var data=camera.GetComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>();
+ UnityEditor.Undo.RecordObject(data,"Rendu caméra de Neutral");UnityEditor.EditorUtility.CopySerialized(sourceData,data);if(data.volumeTrigger==sourceCamera.transform)data.volumeTrigger=camera.transform;
+ var viewport=camera.GetComponent<CabinetViewport>();if(viewport==null)viewport=UnityEditor.Undo.AddComponent<CabinetViewport>(camera.gameObject);
+ var settings=new UnityEditor.SerializedObject(viewport);settings.FindProperty("table").objectReferenceValue=frame;
+ settings.FindProperty("tableGeometry").objectReferenceValue=destination.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<VisualPinball.Unity.PlayfieldComponent>(true)).Single().transform;
+ settings.FindProperty("scorePanel").objectReferenceValue=panel;
+ foreach(var field in new[]{"horizontalLimits","lengthLimits","scoreScreenFraction"})settings.CopyFromSerializedProperty(sourceSettings.FindProperty(field));
+ settings.ApplyModifiedProperties();viewport.Fit();
+ var rules=destination.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<IndustriesVpeGame>(true)).Single();var ruleSettings=new UnityEditor.SerializedObject(rules);
+ ruleSettings.FindProperty("objectivesText").objectReferenceValue=panel.Find("MissionsValue").GetComponent<TMPro.TMP_Text>();ruleSettings.FindProperty("compactObjectivesLabel").boolValue=true;ruleSettings.ApplyModifiedProperties();
+ var old=presentation.Find("IndustriesHUD");UnityEditor.Undo.RecordObject(old.GetComponent<Canvas>(),"Remplacer l'affichage des scores");old.GetComponent<Canvas>().enabled=false;
+ UnityEditor.Undo.RecordObject(old.GetComponent<HudController>(),"Fronton commun actif");old.GetComponent<HudController>().enabled=false;
+ UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(destination);UnityEditor.Undo.CollapseUndoOperations(group);
+ return $"Fronton copié depuis Neutral ; caméra={camera.transform.position} rotation={camera.transform.eulerAngles} ortho={camera.orthographicSize} viewport={camera.rect} échelle={scale}. Scène non enregistrée.";
+} finally {UnityEditor.SceneManagement.EditorSceneManager.CloseScene(source,true);}

@@ -1,0 +1,15 @@
+PASS (1920, 1080) angleError=0 normalizedPositionError=3,438522E-06 normalizedZoomError=1,734187E-07 scoreCornerError=2,980232E-07
+PASS (2560, 1440) angleError=0 normalizedPositionError=3,438522E-06 normalizedZoomError=1,734187E-07 scoreCornerError=2,980232E-07
+PASS (1920, 1200) angleError=0 normalizedPositionError=2,697398E-06 normalizedZoomError=1,734187E-07 scoreCornerError=1,788139E-07
+PASS style et placement ScoreGhost
+PASS style et placement HighScoreLabel
+PASS style et placement HighScoreValue
+PASS style et placement ScoreValue
+PASS style et placement MessageValue
+PASS style et placement BallsLabel
+PASS style et placement BallsValue
+PASS style et placement MissionsLabel
+PASS style et placement MissionsValue
+PASS style et placement MultiplierValue
+PASS style et placement ScoreFeedbackValue
+failures=0

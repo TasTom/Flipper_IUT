@@ -1,0 +1,16 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+var scene=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+if(scene.name!="Industries")throw new Exception("Industries attendue");
+var presentation=UnityEngine.Object.FindAnyObjectByType<IndustriesPresentation>();
+var settings=new UnityEditor.SerializedObject(presentation);
+var hidden=settings.FindProperty("hiddenRenderers");
+int restored=0;
+for(int i=0;i<hidden.arraySize;i++) {
+ var renderer=hidden.GetArrayElementAtIndex(i).objectReferenceValue as Renderer;
+ if(renderer==null)throw new Exception("Référence de visibilité manquante");
+ if(!renderer.enabled)continue;
+ UnityEditor.Undo.RecordObject(renderer,"Conserver la visibilité Industries");
+ renderer.enabled=false;UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(renderer);restored++;
+}
+UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);
+return $"Visibilité : {hidden.arraySize} références valides ; {restored} rendus rétablis. Scène non enregistrée.";

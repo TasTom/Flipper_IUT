@@ -1,0 +1,8 @@
+if(!UnityEditor.EditorApplication.isPlaying)throw new Exception("Play attendu");
+var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+System.IO.Directory.CreateDirectory("Docs/IndustriesValidation/shared-presentation");
+ScreenCapture.CaptureScreenshot("Docs/IndustriesValidation/shared-presentation/"+scene.name+".png");
+var camera=Camera.main;var panel=UnityEngine.Object.FindAnyObjectByType<BackglassDisplay>().GetComponent<RectTransform>();var corners=new Vector3[4];panel.GetWorldCorners(corners);var points=corners.Select(camera.WorldToViewportPoint).ToArray();
+var report=$"scene={scene.name} playing={UnityEditor.EditorApplication.isPlaying} paused={UnityEditor.EditorApplication.isPaused} time={Time.time} scale={Time.timeScale}\ncameraPosition={camera.transform.position} cameraRotation={camera.transform.eulerAngles} ortho={camera.orthographicSize} viewport={camera.rect}\nscorePanelX={points.Min(p=>p.x)}..{points.Max(p=>p.x)} scorePanelY={points.Min(p=>p.y)}..{points.Max(p=>p.y)}\n";
+foreach(var text in panel.GetComponentsInChildren<TMPro.TMP_Text>())report+=text.name+"="+text.text+" font="+text.font.name+" size="+text.fontSize+"\n";
+System.IO.File.WriteAllText("Docs/IndustriesValidation/shared-presentation/"+scene.name+".txt",report);return report;

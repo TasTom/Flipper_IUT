@@ -1,0 +1,14 @@
+scene=Neutral playing=True paused=False time=65,93845 scale=1
+cameraPosition=(0.00, 23.84, -16.60) cameraRotation=(40.22, 0.00, 90.00) ortho=4,5 viewport=(x:0.00, y:0.00, width:1.00, height:1.00)
+scorePanelX=0,8499998..0,9999998 scorePanelY=0..1
+ScoreGhost=8 888 888 font=Electronic Highway Sign SDF size=140
+HighScoreLabel=RECORD font=LiberationSans SDF size=36
+HighScoreValue=179 000 font=Electronic Highway Sign SDF size=56
+ScoreValue=0 font=Electronic Highway Sign SDF size=140
+MessageValue= font=LiberationSans SDF size=38
+BallsLabel=BILLES font=LiberationSans SDF size=28
+BallsValue=●●● font=Electronic Highway Sign SDF size=40
+MissionsLabel=DÉCOUVERTE DU CAMPUS font=LiberationSans SDF size=25
+MissionsValue=0 / 1 font=Electronic Highway Sign SDF size=38
+MultiplierValue=MULTIPLICATEUR ×1 font=LiberationSans SDF size=30
+ScoreFeedbackValue= font=LiberationSans SDF size=34

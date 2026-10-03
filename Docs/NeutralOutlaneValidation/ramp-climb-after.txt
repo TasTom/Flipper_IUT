@@ -16,9 +16,9 @@ Vosges speed=35 offset=0,08 completed=1 returned=False active=True maxY=1,553 fi
 Vosges speed=45 offset=-0,08 completed=1 returned=False active=True maxY=1,581 final=(2.308, 0.706, 6.264)
 Vosges speed=45 offset=0,00 completed=1 returned=False active=True maxY=1,584 final=(2.310, 0.633, 6.277)
 Vosges speed=45 offset=0,08 completed=1 returned=False active=True maxY=1,564 final=(2.328, 0.722, 6.274)
-IUT speed=15 offset=-0,08 completed=0 returned=True active=True maxY=0,441 final=(0.370, 0.227, 10.734)
+IUT speed=15 offset=-0,08 completed=0 returned=True active=True maxY=0,441 final=(0.370, 0.226, 10.735)
 IUT speed=15 offset=0,00 completed=0 returned=True active=True maxY=0,445 final=(0.219, 0.222, 10.795)
-IUT speed=15 offset=0,08 completed=0 returned=True active=True maxY=0,451 final=(-0.062, 0.224, 10.828)
+IUT speed=15 offset=0,08 completed=0 returned=True active=True maxY=0,451 final=(-0.065, 0.234, 10.820)
 IUT speed=20 offset=-0,08 completed=0 returned=True active=True maxY=0,652 final=(-0.052, 0.207, 10.801)
 IUT speed=20 offset=0,00 completed=0 returned=True active=True maxY=0,675 final=(0.076, 0.228, 10.791)
 IUT speed=20 offset=0,08 completed=0 returned=True active=True maxY=0,728 final=(0.003, 0.225, 10.792)
@@ -33,5 +33,5 @@ IUT speed=35 offset=0,00 completed=0 returned=True active=True maxY=1,873 final=
 IUT speed=35 offset=0,08 completed=1 returned=False active=True maxY=1,950 final=(-3.085, 0.671, 6.327)
 IUT speed=45 offset=-0,08 completed=1 returned=False active=True maxY=1,940 final=(-3.060, 0.651, 6.233)
 IUT speed=45 offset=0,00 completed=1 returned=False active=True maxY=1,992 final=(-3.192, 0.707, 6.329)
-IUT speed=45 offset=0,08 completed=1 returned=False active=True maxY=2,000 final=(-3.146, 0.729, 6.303)
+IUT speed=45 offset=0,08 completed=1 returned=False active=True maxY=2,000 final=(-3.146, 0.729, 6.302)
 SUMMARY tests=36 completed=11 returned/drained=25 trapped=0

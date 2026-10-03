@@ -1,0 +1,16 @@
+PASS cadrage et rotation de borne conservés
+PASS ancien script + câblage Auto + profil sur Flipper_Left_Pivot
+PASS bat centré latéralement sur l'axe Flipper_Left_Pivot
+PASS pas de chevauchement statique à -30° pour Flipper_Left_Pivot 
+PASS pas de chevauchement statique à 0° pour Flipper_Left_Pivot 
+PASS pas de chevauchement statique à 30° pour Flipper_Left_Pivot 
+PASS ancien script + câblage Auto + profil sur Flipper_Right_Pivot
+PASS bat centré latéralement sur l'axe Flipper_Right_Pivot
+PASS pas de chevauchement statique à -30° pour Flipper_Right_Pivot 
+PASS pas de chevauchement statique à 0° pour Flipper_Right_Pivot 
+PASS pas de chevauchement statique à 30° pour Flipper_Right_Pivot 
+PASS bille acier : aucune texture de diagnostic
+PASS cartes au-dessus de l'apron, dégagées de la marque
+PASS meshes des flippers persistants
+PASS profil physique câblé sur la bille de scène
+RESULT 15 PASS / 0 FAIL

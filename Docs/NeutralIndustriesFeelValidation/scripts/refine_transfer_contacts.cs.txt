@@ -1,0 +1,12 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Edit attendu");
+var table=GameObject.Find("PinballTable").transform;var config=UnityEditor.AssetDatabase.LoadAssetAtPath<PinballPhysicsConfig>("Assets/Generated/NeutralIndustriesFeel/NeutralPhysicsConfig.asset");
+var metalNames=new[]{"LeftBoundary","ShooterOuter","ShooterDivider","RearOrbit","ShooterExit","GuardLeft","GuardRight","GuardRear","InlaneOuter_Left","InlaneInner_Left","InlaneOuter_Right","InlaneInner_Right","CoveredDrainGuide_Left","CoveredDrainGuide_Right","OrbitFeedCurve","OrbitFeedCurve_right","OutlaneClosure_Left","OutlaneClosure_Right","OutlaneBackstop_Left","OutlaneBackstop_Right","Scoop_Hole_Wall"};
+int count=0;
+foreach(var c in table.GetComponentsInChildren<Collider>(true).Where(c=>c.enabled && !c.isTrigger)){
+ var material=c.sharedMaterial;
+ if(c.name=="Playfield_WithScoop")material=config.playfieldMaterial;
+ else if(metalNames.Contains(c.name))material=config.metalMaterial;
+ else if(c.name.StartsWith("OutlanePost_"))material=config.rubberMaterial;
+ if(material==c.sharedMaterial)continue;UnityEditor.Undo.RecordObject(c,"Contacts cohérents avec la pièce");c.sharedMaterial=material;count++;
+}
+UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(table.gameObject.scene);return count+" surfaces adaptées. Les sols et couvercles de rampe restent sans rebond.";

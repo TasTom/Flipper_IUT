@@ -1,0 +1,26 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Edit attendu");
+var scene=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();if(scene.name!="Neutral" || scene.isDirty)throw new Exception("Neutral enregistrée attendue");
+var table=scene.GetRootGameObjects().Single(g=>g.name=="PinballTable").transform;var lines=new System.Collections.Generic.List<string>();int failures=0;
+void Check(bool valid,string label){lines.Add((valid?"PASS ":"FAIL ")+label);if(!valid)failures++;}
+var camera=Camera.main;Check(Vector3.Distance(camera.transform.position,new Vector3(0,23.84255f,-16.60174f))<.001f && Mathf.Abs(Mathf.DeltaAngle(camera.transform.eulerAngles.z,90))<.001f && Mathf.Abs(camera.orthographicSize-4.5f)<.001f,"cadrage et rotation de borne conservés");
+var config=UnityEditor.AssetDatabase.LoadAssetAtPath<PinballPhysicsConfig>("Assets/Generated/NeutralIndustriesFeel/NeutralPhysicsConfig.asset");
+foreach(var f in table.GetComponentsInChildren<Flipper>()){
+ var so=new UnityEditor.SerializedObject(f);Check(so.FindProperty("useCabinetController").boolValue && so.FindProperty("cabinetAction").enumValueIndex==0 && so.FindProperty("physicsConfig").objectReferenceValue==config,"ancien script + câblage Auto + profil sur "+f.name);
+ var pivot=f.transform;float sign=f.name.Contains("Left")?1f:-1f;
+ var mf=pivot.Find("Flipper_Industries/Base").GetComponent<MeshFilter>();Check(Mathf.Abs(mf.sharedMesh.bounds.min.y+mf.sharedMesh.bounds.max.y)<.001f,"bat centré latéralement sur l'axe "+f.name);
+ var col=pivot.Find("Flipper_Industries").GetComponent<MeshCollider>();
+ foreach(float angle in new[]{-30f,0f,30f}){
+  var q=pivot.parent.rotation*Quaternion.Euler(90,0,0)*Quaternion.AngleAxis(angle*sign,Vector3.forward);
+  var overlaps=new System.Collections.Generic.List<string>();
+  foreach(var other in table.GetComponentsInChildren<Collider>(true).Where(c=>c.enabled && c.gameObject.activeInHierarchy && !c.isTrigger && c.attachedRigidbody==null)){
+   if(Physics.ComputePenetration(col,pivot.position,q,other,other.transform.position,other.transform.rotation,out var direction,out float depth) && depth>.01f)overlaps.Add(other.name+":"+depth);
+  }
+  Check(overlaps.Count==0,"pas de chevauchement statique à "+angle+"° pour "+f.name+" "+string.Join(",",overlaps));
+ }
+}
+var ball=table.Find("Gameplay/Ball").GetComponent<Renderer>();Check(ball.sharedMaterial.GetTexture("_BaseMap")==null && ball.sharedMaterial.GetFloat("_Metallic")>.9f,"bille acier : aucune texture de diagnostic");
+var control=table.Find("ReferencePlayfield/InstructionCards/NeutralControlsCard").GetComponent<MeshFilter>();var rules=table.Find("ReferencePlayfield/InstructionCards/NeutralRulesCard").GetComponent<MeshFilter>();
+Check(Mathf.Abs(control.transform.localPosition.y-.565f)<.0001f && Mathf.Abs(rules.transform.localPosition.y-.565f)<.0001f && control.transform.localPosition.z==1.45f,"cartes au-dessus de l'apron, dégagées de la marque");
+Check(table.GetComponentsInChildren<MeshFilter>(true).Where(m=>m.transform.parent!=null && m.transform.parent.name=="Flipper_Industries").All(m=>UnityEditor.AssetDatabase.Contains(m.sharedMesh)),"meshes des flippers persistants");
+var profileBall=new UnityEditor.SerializedObject(table.Find("Gameplay/Ball").GetComponent<PinballBallPhysics>());Check(profileBall.FindProperty("config").objectReferenceValue==config,"profil physique câblé sur la bille de scène");
+lines.Add("RESULT "+(lines.Count-failures)+" PASS / "+failures+" FAIL");System.IO.File.WriteAllLines("Docs/NeutralIndustriesFeelValidation/saved-scene.txt",lines);return string.Join("\n",lines);

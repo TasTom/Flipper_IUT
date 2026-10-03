@@ -1,0 +1,28 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Edit attendu");
+var ns=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();if(ns.name!="Neutral" || ns.isDirty)throw new Exception("Neutral enregistrée attendue");
+var ins=UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Industries.unity",UnityEditor.SceneManagement.OpenSceneMode.Additive);
+var s=new System.Text.StringBuilder();
+try {
+ foreach(var sc in new[]{ns,ins}){
+  s.AppendLine(sc.name);
+  var all=sc.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Transform>(true)).ToArray();
+  foreach(var t in all.Where(t=>t.GetComponent<Flipper>()!=null || t.GetComponent<VisualPinball.Unity.FlipperComponent>()!=null || t.name.Contains("Apron") || t.name=="ControlsCard" || t.name=="ProductionCard")){
+   s.AppendLine(P(t)+" pos="+t.localPosition+" rot="+t.localEulerAngles+" scale="+t.localScale);
+   foreach(var mf in t.GetComponentsInChildren<MeshFilter>(true))if(mf.sharedMesh!=null && mf.sharedMesh.vertexCount>0){
+    var mat=t.worldToLocalMatrix*mf.transform.localToWorldMatrix;
+    var verts=mf.sharedMesh.vertices.Select(mat.MultiplyPoint3x4).ToArray();var b=new Bounds(verts[0],Vector3.zero);foreach(var v in verts)b.Encapsulate(v);
+    s.AppendLine(" mesh="+P(mf.transform)+" local-bounds="+b+" native="+mf.sharedMesh.bounds+" count="+mf.sharedMesh.vertexCount+" sub="+mf.sharedMesh.subMeshCount+" materials="+string.Join(",",mf.GetComponent<Renderer>().sharedMaterials.Select(m=>UnityEditor.AssetDatabase.GetAssetPath(m))));
+   }
+   foreach(var tx in t.GetComponentsInChildren<TMPro.TMP_Text>(true))s.AppendLine("text="+tx.text);
+  }
+  foreach(var c in all.SelectMany(t=>t.GetComponents<Collider>()).Where(c=>c.enabled && !c.isTrigger && c.sharedMaterial!=null).GroupBy(c=>c.sharedMaterial))s.AppendLine("PHYSICS "+UnityEditor.AssetDatabase.GetAssetPath(c.Key)+" "+UnityEditor.EditorJsonUtility.ToJson(c.Key)+" count="+c.Count());
+  foreach(var c in all.SelectMany(t=>t.GetComponents<Component>()).Where(c=>c!=null && (c.GetType().Name.Contains("Reward")||c.GetType().Name.Contains("Scoop"))))s.AppendLine(c.GetType().Name+" "+UnityEditor.EditorJsonUtility.ToJson(c));
+ }
+ foreach(var path in new[]{"Assets/Resources/VpeUrp/Ball.prefab","Assets/Prefabs/Ball.prefab"}){
+  var p=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(path);s.AppendLine("PREFAB "+path);
+  foreach(var mf in p.GetComponentsInChildren<MeshFilter>(true))s.AppendLine("mesh="+UnityEditor.AssetDatabase.GetAssetPath(mf.sharedMesh)+" bounds="+mf.sharedMesh.bounds+" verts="+mf.sharedMesh.vertexCount+" pos="+mf.transform.localPosition+" scale="+mf.transform.localScale);
+  foreach(var mr in p.GetComponentsInChildren<Renderer>(true))foreach(var m in mr.sharedMaterials)s.AppendLine("material="+UnityEditor.AssetDatabase.GetAssetPath(m)+" "+UnityEditor.EditorJsonUtility.ToJson(m));
+ }
+ System.IO.File.WriteAllText("Tools/unity/out/industry-transfer/geometry.txt",s.ToString());return s.ToString();
+}finally{UnityEditor.SceneManagement.EditorSceneManager.CloseScene(ins,true);}
+string P(Transform t){return t.parent==null?t.name:P(t.parent)+"/"+t.name;}

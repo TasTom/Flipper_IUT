@@ -1,0 +1,26 @@
+if(!UnityEditor.EditorApplication.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().name!="Neutral")throw new Exception("Neutral en Play attendue");
+var plunger=UnityEngine.Object.FindAnyObjectByType<Plunger>();var input=InputRouter.Instance;var gm=GameManager.Instance;
+if(plunger==null || input==null || gm.State!=GameManager.GameState.ReadyToLaunch)throw new Exception("Lanceur et bille au repos attendus");
+var visual=plunger.transform.Find("Plunger_IndustriesVisual");var shooter=GameObject.Find("PinballTable/ReferencePlayfield/IndustriesHardware/Shooter").transform;
+var ball=GameObject.Find("PinballTable/Gameplay/Ball");var table=GameObject.Find("PinballTable").transform;
+bool priorInput=input.enabled;input.enabled=false;
+var held=typeof(InputRouter).GetField("<PlungerHeld>k__BackingField",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance);
+held.SetValue(input,true);float start=Time.time;var rest=plunger.transform.localPosition;var coverRest=shooter.position;
+float maxZ=table.InverseTransformPoint(ball.transform.position).z;bool released=false;float charge=0,travel=0,coverMotion=0;
+System.IO.Directory.CreateDirectory("Docs/NeutralIndustriesFeelValidation");
+UnityEditor.EditorApplication.CallbackFunction tick=null;
+tick=()=> {
+ if(!UnityEditor.EditorApplication.isPlaying || plunger==null){UnityEditor.EditorApplication.update-=tick;return;}
+ if(!released && Time.time-start>=1f) {
+  charge=plunger.Charge;travel=Vector3.Distance(rest,plunger.transform.localPosition);coverMotion=Vector3.Distance(shooter.position,coverRest);
+  ScreenCapture.CaptureScreenshot("Docs/NeutralIndustriesFeelValidation/Neutral-charged.png");
+  held.SetValue(input,false);released=true;
+ }
+ if(released)maxZ=Mathf.Max(maxZ,table.InverseTransformPoint(ball.transform.position).z);
+ if(Time.time-start<4f)return;
+ UnityEditor.EditorApplication.update-=tick;held.SetValue(input,false);input.enabled=priorInput;
+ var report=$"{(charge>.95f && travel>.79f?"PASS":"FAIL")} charge et déplacement du nouveau lanceur : charge={charge}, course={travel}\n{(coverMotion<.0001f?"PASS":"FAIL")} cache Shooter fixe pendant la charge : déplacement={coverMotion}\n{(maxZ>10f?"PASS":"FAIL")} lancement réel vers le haut de la table : zMax={maxZ}\n{(visual.GetComponentsInChildren<Collider>().Length==0 && UnityEngine.Object.FindObjectsByType<VisualPinball.Unity.PlungerComponent>().Length==0?"PASS":"FAIL")} visuel sans collider supplémentaire ni composant VPE dans Neutral\n";
+ System.IO.File.WriteAllText("Docs/NeutralIndustriesFeelValidation/neutral-launch.txt",report);Debug.Log("[Pièces communes] "+report);
+};
+UnityEditor.EditorApplication.update+=tick;
+return "Charge et lancement réels démarrés ; contrôle pendant quatre secondes de jeu.";

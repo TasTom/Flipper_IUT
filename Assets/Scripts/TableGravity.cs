@@ -28,6 +28,9 @@ public class TableGravity : MonoBehaviour
     [Tooltip("Root incliné de la table. Vide : recherché par son nom au démarrage.")]
     [SerializeField] private Transform tiltedRoot;
 
+    [Tooltip("Profil optionnel : pas plus fin pour les flippers arrondis. Vide = réglage historique.")]
+    [SerializeField] private PinballPhysicsConfig physicsConfig;
+
     private const string TableRootName = "PinballTable";
 
     // ── L'échelle de la table, et pourquoi ces trois valeurs ────────────────────────────
@@ -61,7 +64,9 @@ public class TableGravity : MonoBehaviour
         Physics.gravity = CalculateGravity(root);
 
         // Le pas et le solveur vont avec la gravité : les trois forment un seul réglage.
-        Time.fixedDeltaTime = PasPhysique;
+        Time.fixedDeltaTime = physicsConfig != null
+            ? Mathf.Clamp(physicsConfig.simulationStep, 0.001f, 0.02f)
+            : PasPhysique;
         Physics.defaultSolverIterations = IterationsSolveur;
 
         if (root == null)

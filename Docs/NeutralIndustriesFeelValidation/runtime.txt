@@ -1,0 +1,29 @@
+PASS pas physique 500 Hz chargé depuis le profil
+PASS bille de scène : masse et CCD corrects
+PASS diamètre .414 conservé
+PASS finition Industries sur la bille
+PASS aucun moteur VPE ajouté à la table PhysX
+PASS billes supplémentaires : même taille, masse et contact
+PASS partie et multiball utilisent NeutralBall
+PASS profil physique réellement appliqué à une bille instanciée
+PASS collider arrondi solidaire du flipper 0
+PASS aucun ancien collider en doublon 0
+PASS manette : seul le flipper demandé monte 0
+PASS manette : course complète du flipper 0
+PASS le clavier maintient le flipper après relâchement de la manette 0
+PASS la manette maintient le flipper après relâchement clavier 0
+PASS retour exact au repos 0
+PASS clavier seul fonctionnel 0
+PASS collider arrondi solidaire du flipper 1
+PASS aucun ancien collider en doublon 1
+PASS manette : seul le flipper demandé monte 1
+PASS manette : course complète du flipper 1
+PASS le clavier maintient le flipper après relâchement de la manette 1
+PASS la manette maintient le flipper après relâchement clavier 1
+PASS retour exact au repos 1
+PASS clavier seul fonctionnel 1
+PASS 2 cartes d'instructions sans collider
+PASS plateau : restitution .25, friction .075
+PASS les rampes conservent leur surface sans rebond
+PASS les six cibles sont conservées
+RESULT 28 PASS / 0 FAIL

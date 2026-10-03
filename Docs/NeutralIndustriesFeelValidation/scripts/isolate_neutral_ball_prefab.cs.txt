@@ -1,0 +1,17 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Edit attendu");
+const string original="Assets/Prefabs/Ball.prefab",neutral="Assets/Prefabs/NeutralBall.prefab";
+if(System.IO.File.Exists(neutral))throw new Exception("NeutralBall déjà présent : ne pas écraser");
+if(!UnityEditor.AssetDatabase.CopyAsset(original,neutral))throw new Exception("Échec copie de bille");
+var ball=UnityEditor.PrefabUtility.LoadPrefabContents(original);
+try{
+ UnityEditor.Undo.RecordObject(ball.transform,"Conserver la bille des autres scènes");ball.transform.localScale=Vector3.one*.45f;
+ var body=ball.GetComponent<Rigidbody>();UnityEditor.Undo.RecordObject(body,"Conserver la bille des autres scènes");body.angularDamping=.05f;
+ var r=ball.GetComponent<Renderer>();UnityEditor.Undo.RecordObject(r,"Conserver la bille des autres scènes");r.sharedMaterial=UnityEditor.AssetDatabase.LoadAssetAtPath<Material>("Assets/Materials/BallChrome_Mat.mat");
+ var c=ball.GetComponent<SphereCollider>();UnityEditor.Undo.RecordObject(c,"Conserver la bille des autres scènes");c.sharedMaterial=UnityEditor.AssetDatabase.LoadAssetAtPath<PhysicsMaterial>("Assets/Materials/BallPhysics.physicMaterial");c.contactOffset=.01f;
+ UnityEditor.Undo.DestroyObjectImmediate(ball.GetComponent<PinballBallPhysics>());UnityEditor.PrefabUtility.SaveAsPrefabAsset(ball,original);
+}finally{UnityEditor.PrefabUtility.UnloadPrefabContents(ball);}
+var scene=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();var prefab=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(neutral);
+foreach(var c in scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Component>(true)).Where(c=>c is GameManager || c is MultiballManager)){
+ var so=new UnityEditor.SerializedObject(c);so.FindProperty("ballPrefab").objectReferenceValue=prefab;so.ApplyModifiedProperties();
+}
+UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);return "Neutral utilise sa propre bille ; le prefab partagé avec Main retrouve ses réglages d'origine.";

@@ -1,0 +1,8 @@
+﻿{
+    "compilationFailed":  false,
+    "consoleErrors":  2,
+    "recentErrorMessages":  [
+                                "Host type is not matching any asset type at Path Packages/com.unity.render-pipelines.universal/Shaders/AutodeskInteractive/AutodeskInteractiveTransparent.shadergraph.",
+                                "Host type is not matching any asset type at Path Packages/com.unity.render-pipelines.universal/Shaders/AutodeskInteractive/AutodeskInteractiveTransparent.shadergraph."
+                            ]
+}

@@ -1,0 +1,4 @@
+if(!UnityEditor.EditorApplication.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().name!="Neutral")throw new Exception("Neutral en Play attendue");
+var gate=UnityEngine.Object.FindAnyObjectByType<ScoreProgressionGate>();if(gate!=null)gate.enabled=false;
+Application.runInBackground=true;UnityEditor.EditorApplication.isPaused=false;GameManager.Instance.StartGame();
+return "Transition de score désactivée uniquement dans la session de test ; restauration en quittant Play.";

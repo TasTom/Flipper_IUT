@@ -1,0 +1,3 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Edit attendu");
+var scene=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();if(scene.name!="Neutral")throw new Exception("Neutral attendue");
+return UnityEditor.SceneManagement.EditorSceneManager.SaveScene(scene)?"Neutral enregistrée explicitement après l'adaptation et la calibration.":"FAIL enregistrement";

@@ -1,0 +1,4 @@
+Left facteur=15,15256 correction axe=0,1959871 pose=(-1.66, 0.00, 3.10) collider=Center: (0.45, 0.00, -0.21), Extents: (0.61, 0.17, 0.20)
+Right facteur=15,15256 correction axe=0,1959878 pose=(0.86, 0.00, 3.10) collider=Center: (-0.45, 0.00, -0.21), Extents: (0.61, 0.17, 0.20)
+Contacts plateau=0 métal=8 caoutchouc=5 ; rampes existantes conservées.
+Bille scène + prefab : diamètre .414, masse 2, matériau Industries. Flipper.cs et commandes inchangés. Scène non enregistrée.

@@ -1,0 +1,60 @@
+if(!Application.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().name!="Neutral")throw new Exception("Neutral en Play attendue");
+var table=GameObject.Find("PinballTable").transform;var ball=table.Find("Gameplay/Ball").GetComponent<Rigidbody>();
+var config=UnityEditor.AssetDatabase.LoadAssetAtPath<PinballPhysicsConfig>("Assets/Generated/NeutralIndustriesFeel/NeutralPhysicsConfig.asset");
+var flips=new[]{table.Find("Gameplay/Flipper_Left_Pivot").GetComponent<Flipper>(),table.Find("Gameplay/Flipper_Right_Pivot").GetComponent<Flipper>()};
+var input=InputRouter.Instance;var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;
+var fixedFlip=typeof(Flipper).GetMethod("FixedUpdate",flags);var inputFields=new[]{"LeftFlipperHeld","RightFlipperHeld"}.Select(n=>typeof(InputRouter).GetField("<"+n+">k__BackingField",flags)).ToArray();
+var inputBefore=input.enabled;var sim=Physics.simulationMode;var bg=UnityEngine.InputSystem.InputSystem.settings.backgroundBehavior;
+var cabinets=flips.Select(f=>(PinballControls)typeof(Flipper).GetField("cabinet",flags).GetValue(f)).ToArray();var originals=cabinets.Select(c=>UnityEngine.InputSystem.InputActionRebindingExtensions.SaveBindingOverridesAsJson(c.asset)).ToArray();
+var oldLogging=flips.Select(f=>(bool)typeof(Flipper).GetField("logInput",flags).GetValue(f)).ToArray();
+var lines=new System.Collections.Generic.List<string>();int failed=0;
+void Check(bool ok,string msg){lines.Add((ok?"PASS ":"FAIL ")+msg);if(!ok)failed++;}
+var pad=UnityEngine.InputSystem.InputSystem.AddDevice<UnityEngine.InputSystem.Gamepad>();UnityEngine.InputSystem.InputSystem.SetDeviceUsage(pad,"NeutralContactTest");
+void Buttons(bool left,bool right){var state=new UnityEngine.InputSystem.LowLevel.GamepadState();if(left)state=state.WithButton(UnityEngine.InputSystem.LowLevel.GamepadButton.West);if(right)state=state.WithButton(UnityEngine.InputSystem.LowLevel.GamepadButton.East);UnityEngine.InputSystem.InputSystem.QueueStateEvent(pad,state);UnityEngine.InputSystem.InputSystem.Update();}
+void Tick(int count){for(int n=0;n<count;n++){foreach(var f in flips)fixedFlip.Invoke(f,null);Physics.Simulate(Time.fixedDeltaTime);}}
+try{
+ Physics.simulationMode=SimulationMode.Script;input.enabled=false;UnityEngine.InputSystem.InputSystem.settings.backgroundBehavior=UnityEngine.InputSystem.InputSettings.BackgroundBehavior.IgnoreFocus;
+ for(int i=0;i<2;i++){
+  typeof(Flipper).GetField("logInput",flags).SetValue(flips[i],false);
+  UnityEngine.InputSystem.InputActionRebindingExtensions.ApplyBindingOverride(cabinets[i].GamePlayPF.LeftFlipper,0,"<Gamepad>{NeutralContactTest}/buttonWest");
+  UnityEngine.InputSystem.InputActionRebindingExtensions.ApplyBindingOverride(cabinets[i].GamePlayPF.RightFlipper,0,"<Gamepad>{NeutralContactTest}/buttonEast");
+  inputFields[i].SetValue(input,false);
+ }
+ UnityEngine.InputSystem.InputSystem.EnableDevice(pad);UnityEngine.InputSystem.InputSystem.Update();
+ Check(Mathf.Abs(Time.fixedDeltaTime-.002f)<.000001f,"pas physique 500 Hz chargé depuis le profil");
+ Check(Mathf.Abs(ball.mass-2f)<.0001f && ball.collisionDetectionMode==CollisionDetectionMode.ContinuousDynamic,"bille de scène : masse et CCD corrects");
+ Check(Mathf.Abs(ball.GetComponent<SphereCollider>().radius*ball.transform.lossyScale.x-.207f)<.0001f,"diamètre .414 conservé");
+ Check(ball.GetComponent<Renderer>().sharedMaterial.name=="IndustriesBallFinish","finition Industries sur la bille");
+ Check(table.GetComponentsInChildren<VisualPinball.Unity.BallComponent>(true).Length==0 && table.GetComponentsInChildren<VisualPinball.Unity.FlipperComponent>(true).Length==0,"aucun moteur VPE ajouté à la table PhysX");
+ var prefab=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/NeutralBall.prefab");
+ Check(prefab.transform.localScale==ball.transform.localScale && prefab.GetComponent<Rigidbody>().mass==ball.mass && prefab.GetComponent<SphereCollider>().sharedMaterial==ball.GetComponent<SphereCollider>().sharedMaterial,"billes supplémentaires : même taille, masse et contact");
+ Check(new UnityEditor.SerializedObject(GameManager.Instance).FindProperty("ballPrefab").objectReferenceValue==prefab && new UnityEditor.SerializedObject(MultiballManager.Instance).FindProperty("ballPrefab").objectReferenceValue==prefab,"partie et multiball utilisent NeutralBall");
+ var spawned=UnityEngine.Object.Instantiate(prefab,table.TransformPoint(new Vector3(0,10,8)),Quaternion.identity);
+ try{Check(spawned.GetComponent<Rigidbody>().mass==ball.mass && spawned.GetComponent<SphereCollider>().sharedMaterial==config.ballMaterial && Mathf.Abs(spawned.GetComponent<Rigidbody>().angularDamping-config.angularDamping)<.0001f,"profil physique réellement appliqué à une bille instanciée");}
+ finally{UnityEngine.Object.DestroyImmediate(spawned);}
+ for(int side=0;side<2;side++){
+  var f=flips[side];var col=f.transform.Find("Flipper_Industries").GetComponent<MeshCollider>();
+  Check(col.enabled && col.convex && col.sharedMaterial==config.rubberMaterial && col.attachedRigidbody==f.GetComponent<Rigidbody>(),"collider arrondi solidaire du flipper "+side);
+  Check(f.transform.Find("Flipper_Bat").GetComponentsInChildren<Collider>().All(c=>!c.enabled),"aucun ancien collider en doublon "+side);
+  Buttons(false,false);Tick(60);float rest=f.Angle;
+  Buttons(side==0,side==1);Tick(15);
+  Check(f.IsPressed && !flips[1-side].IsPressed,"manette : seul le flipper demandé monte "+side);
+  Check(Mathf.Abs(f.Angle-rest)>59f,"manette : course complète du flipper "+side);
+  inputFields[side].SetValue(input,true);Buttons(false,false);Tick(15);
+  Check(f.IsPressed,"le clavier maintient le flipper après relâchement de la manette "+side);
+  inputFields[side].SetValue(input,false);Buttons(side==0,side==1);Tick(15);
+  Check(f.IsPressed,"la manette maintient le flipper après relâchement clavier "+side);
+  Buttons(false,false);Tick(60);
+  Check(!f.IsPressed && Mathf.Abs(f.Angle-rest)<.001f,"retour exact au repos "+side);
+  inputFields[side].SetValue(input,true);Tick(15);
+  Check(f.IsPressed,"clavier seul fonctionnel "+side);inputFields[side].SetValue(input,false);Tick(60);
+ }
+ var cards=table.Find("ReferencePlayfield/InstructionCards");Check(cards.childCount==2 && cards.GetComponentsInChildren<Collider>(true).Length==0,"2 cartes d'instructions sans collider");
+ var floor=table.GetComponentsInChildren<Collider>().Single(c=>c.name=="Playfield_WithScoop");Check(floor.sharedMaterial==config.playfieldMaterial,"plateau : restitution .25, friction .075");
+ var tracks=table.GetComponentsInChildren<Collider>().Where(c=>c.enabled && c.gameObject.activeInHierarchy && (c.name=="IUT_Track" || c.name=="Vosges_Track")).ToArray();Check(tracks.Length==2 && tracks.All(c=>c.sharedMaterial.bounciness==0f),"les rampes conservent leur surface sans rebond");
+ Check(table.GetComponentsInChildren<SubjectTarget>().Length==6,"les six cibles sont conservées");
+}finally{
+ Buttons(false,false);for(int i=0;i<2;i++){inputFields[i].SetValue(input,false);UnityEngine.InputSystem.InputActionRebindingExtensions.LoadBindingOverridesFromJson(cabinets[i].asset,originals[i]);typeof(Flipper).GetField("logInput",flags).SetValue(flips[i],oldLogging[i]);}
+ UnityEngine.InputSystem.InputSystem.RemoveDevice(pad);input.enabled=inputBefore;UnityEngine.InputSystem.InputSystem.settings.backgroundBehavior=bg;Physics.simulationMode=sim;GameManager.Instance.StartGame();
+}
+lines.Add("RESULT "+(lines.Count-failed)+" PASS / "+failed+" FAIL");System.IO.File.WriteAllLines("Docs/NeutralIndustriesFeelValidation/runtime.txt",lines);return string.Join("\n",lines);

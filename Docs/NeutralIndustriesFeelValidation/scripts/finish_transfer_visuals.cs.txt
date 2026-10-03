@@ -1,0 +1,6 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Edit attendu");
+const string folder="Assets/Generated/NeutralIndustriesFeel";
+var material=UnityEditor.AssetDatabase.LoadAssetAtPath<Material>(folder+"/IndustriesBallFinish.mat");
+UnityEditor.Undo.RecordObject(material,"Bille acier sans texture de diagnostic");material.SetTexture("_BaseMap",null);material.SetTexture("_MainTex",null);material.SetColor("_BaseColor",new Color(.82f,.84f,.87f,1));material.SetColor("_Color",new Color(.82f,.84f,.87f,1));material.SetFloat("_Metallic",.95f);material.SetFloat("_Smoothness",.85f);UnityEditor.EditorUtility.SetDirty(material);UnityEditor.AssetDatabase.SaveAssetIfDirty(material);
+if(UnityEditor.AssetDatabase.LoadAssetAtPath<Texture>(folder+"/BallDebug.png")!=null)UnityEditor.AssetDatabase.DeleteAsset(folder+"/BallDebug.png");
+return "Matériau URP de bille repris et fini en acier poli ; quadrillage de diagnostic VPE supprimé de la copie Neutral.";

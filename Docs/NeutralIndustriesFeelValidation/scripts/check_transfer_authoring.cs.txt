@@ -1,0 +1,11 @@
+var sc=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();var nt=sc.GetRootGameObjects().Single(g=>g.name=="PinballTable").transform;
+var s=new System.Text.StringBuilder();
+foreach(var c in nt.GetComponentsInChildren<Collider>(true).Where(c=>c.enabled && !c.isTrigger))s.AppendLine(c.name+" body="+(c.attachedRigidbody==null?"static":c.attachedRigidbody.name)+" mat="+(c.sharedMaterial==null?"NULL":c.sharedMaterial.name)+" active="+c.gameObject.activeInHierarchy);
+System.IO.File.WriteAllText("Tools/unity/out/industry-transfer/colliders.txt",s.ToString());
+var cam=Camera.main;var pos=cam.transform.position;var rot=cam.transform.rotation;float ortho=cam.orthographicSize;var target=cam.targetTexture;var active=RenderTexture.active;
+var rt=new RenderTexture(1080,1920,24);var tex=new Texture2D(1080,1920,TextureFormat.RGB24,false);
+try{
+ cam.targetTexture=rt;cam.transform.eulerAngles=new Vector3(cam.transform.eulerAngles.x,cam.transform.eulerAngles.y,0);cam.orthographicSize=8f;cam.Render();RenderTexture.active=rt;tex.ReadPixels(new Rect(0,0,1080,1920),0,0);tex.Apply();
+ System.IO.Directory.CreateDirectory("Docs/NeutralIndustriesFeelValidation");System.IO.File.WriteAllBytes("Docs/NeutralIndustriesFeelValidation/Neutral-authoring-upright.png",tex.EncodeToPNG());
+}finally{cam.targetTexture=target;cam.transform.SetPositionAndRotation(pos,rot);cam.orthographicSize=ortho;RenderTexture.active=active;UnityEngine.Object.DestroyImmediate(rt);UnityEngine.Object.DestroyImmediate(tex);}
+return "Capture et audit colliders écrits.";

@@ -1,0 +1,24 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+var neutral=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();if(neutral.name!="Neutral")throw new Exception("Neutral attendue");
+var industry=UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Industries.unity",UnityEditor.SceneManagement.OpenSceneMode.Additive);
+var report=new System.Text.StringBuilder();
+try {
+ foreach(var scene in new[]{neutral,industry}) {
+  report.AppendLine("\nSCENE "+scene.name+" dirty="+scene.isDirty);
+  var all=scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<Transform>(true)).ToArray();
+  foreach(var component in all.SelectMany(t=>t.GetComponents<Component>()).Where(c=>c!=null && new[]{"Flipper","FlipperComponent","FlipperColliderComponent","TableGravity","BallManager","PlayfieldComponent","PlayfieldColliderComponent","BallComponent"}.Contains(c.GetType().Name))) {
+   report.AppendLine(Path(component.transform)+" "+component.GetType().Name+" "+UnityEditor.EditorJsonUtility.ToJson(component));
+  }
+  foreach(var obj in all.Where(t=>t.name=="Ball" || t.name=="Flipper_Bat" || t.name=="ControlsCard" || t.name=="ProductionCard")) {
+   report.AppendLine("OBJECT "+Path(obj)+" local="+obj.localPosition+" rotation="+obj.localEulerAngles+" scale="+obj.localScale);
+   foreach(var r in obj.GetComponentsInChildren<Renderer>(true))report.AppendLine("render="+Path(r.transform)+" enabled="+r.enabled+" bounds="+r.bounds+" mesh="+UnityEditor.AssetDatabase.GetAssetPath(r.GetComponent<MeshFilter>()?.sharedMesh)+" materials="+string.Join(",",r.sharedMaterials.Select(m=>m==null?"NULL":UnityEditor.AssetDatabase.GetAssetPath(m))));
+   foreach(var col in obj.GetComponentsInChildren<Collider>(true))report.AppendLine("collider="+col.GetType().Name+" "+UnityEditor.EditorJsonUtility.ToJson(col));
+   foreach(var body in obj.GetComponentsInChildren<Rigidbody>(true))report.AppendLine("body="+UnityEditor.EditorJsonUtility.ToJson(body));
+  }
+ }
+ var ball=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/VpeUrp/Ball.prefab");
+ report.AppendLine("\nINDUSTRIES BALL PREFAB");foreach(var c in ball.GetComponentsInChildren<Component>(true).Where(c=>c!=null))if(!(c is Transform) && !(c is MeshFilter))report.AppendLine(c.GetType().Name+" "+UnityEditor.EditorJsonUtility.ToJson(c));
+ System.IO.Directory.CreateDirectory("Tools/unity/out/industry-transfer");System.IO.File.WriteAllText("Tools/unity/out/industry-transfer/baseline.txt",report.ToString());
+ return "Comparaison enregistrée dans Tools/unity/out/industry-transfer/baseline.txt";
+} finally {UnityEditor.SceneManagement.EditorSceneManager.CloseScene(industry,true);}
+string Path(Transform t){return t.parent==null?t.name:Path(t.parent)+"/"+t.name;}

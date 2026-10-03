@@ -1,0 +1,9 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Edit attendu");
+var config=UnityEditor.AssetDatabase.LoadAssetAtPath<PinballPhysicsConfig>("Assets/Generated/NeutralIndustriesFeel/NeutralPhysicsConfig.asset");
+UnityEditor.Undo.RecordObject(config,"Profil du moteur calibré");config.simulationStep=.002f;config.flipperRiseSpeed=2600f;config.flipperReturnSpeed=700f;UnityEditor.EditorUtility.SetDirty(config);UnityEditor.AssetDatabase.SaveAssetIfDirty(config);
+var table=GameObject.Find("PinballTable").transform;
+foreach(var component in new Component[]{table.GetComponent<TableGravity>()}.Concat(table.GetComponentsInChildren<Flipper>().Cast<Component>())){
+ var so=new UnityEditor.SerializedObject(component);so.FindProperty("physicsConfig").objectReferenceValue=config;so.ApplyModifiedProperties();
+}
+foreach(var t in table.Find("ReferencePlayfield/InstructionCards").Cast<Transform>()){UnityEditor.Undo.RecordObject(t,"Espacement de la marque et des cartes");t.localPosition=new Vector3(t.localPosition.x,t.localPosition.y,1.45f);}
+UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(table.gameObject.scene);return "Profil 500 Hz, montée 2600°/s et retour 700°/s ; angles et câblage conservés.";

@@ -1,0 +1,91 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Edit attendu");
+var neutral=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+if(neutral.name!="Neutral" || neutral.isDirty)throw new Exception("Neutral enregistrée attendue");
+var industry=UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Industries.unity",UnityEditor.SceneManagement.OpenSceneMode.Additive);
+var nt=neutral.GetRootGameObjects().Single(g=>g.name=="PinballTable").transform;
+const string folder="Assets/Generated/NeutralIndustriesFeel";
+int group=-1;var report=new System.Text.StringBuilder();
+try {
+ if(nt.Find("ReferencePlayfield/InstructionCards")!=null)throw new Exception("Adaptation déjà présente : réglages conservés.");
+ UnityEditor.Undo.IncrementCurrentGroup();group=UnityEditor.Undo.GetCurrentGroup();UnityEditor.Undo.SetCurrentGroupName("Adapter les pièces et contacts d'Industries à Neutral");
+ if(!UnityEditor.AssetDatabase.IsValidFolder(folder))UnityEditor.AssetDatabase.CreateFolder("Assets/Generated","NeutralIndustriesFeel");
+ var profile=ScriptableObject.CreateInstance<PinballPhysicsConfig>();profile.name="NeutralPhysicsConfig";
+ profile.ballMaterial=Material("BallContact",.075f,0f,PhysicsMaterialCombine.Minimum,PhysicsMaterialCombine.Average);
+ profile.playfieldMaterial=Material("PlayfieldContact",.075f,.25f,PhysicsMaterialCombine.Minimum,PhysicsMaterialCombine.Maximum);
+ profile.rubberMaterial=Material("RubberContact",.8f,.8f,PhysicsMaterialCombine.Maximum,PhysicsMaterialCombine.Maximum);
+ profile.metalMaterial=Material("MetalContact",.075f,.45f,PhysicsMaterialCombine.Minimum,PhysicsMaterialCombine.Maximum);
+ UnityEditor.AssetDatabase.CreateAsset(profile,folder+"/NeutralPhysicsConfig.asset");
+ var source=industry.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<VisualPinball.Unity.FlipperComponent>(true)).ToArray();
+ foreach(var side in new[]{"Left","Right"}){
+  bool left=side=="Left";float sign=left?1f:-1f;
+  var pivot=nt.Find("Gameplay/Flipper_"+side+"_Pivot");var old=pivot.Find("Flipper_Bat");
+  var native=source.Single(f=>f.name==(left?"LeftFlipper":"RightFlipper")).transform;
+  var oldVerts=old.GetComponentsInChildren<MeshFilter>().Where(m=>m.sharedMesh!=null).SelectMany(m=>m.sharedMesh.vertices.Select((pivot.worldToLocalMatrix*m.transform.localToWorldMatrix).MultiplyPoint3x4)).ToArray();
+  float lo=oldVerts.Min(v=>v.x*sign),hi=oldVerts.Max(v=>v.x*sign);
+  var nativeVerts=native.GetComponentsInChildren<MeshFilter>().SelectMany(m=>m.sharedMesh.vertices.Select((native.worldToLocalMatrix*m.transform.localToWorldMatrix).MultiplyPoint3x4)).ToArray();
+  float factor=(hi-lo)/(nativeVerts.Max(v=>v.z)-nativeVerts.Min(v=>v.z));
+  float hub=lo-nativeVerts.Min(v=>v.z)*factor;
+  // The old imported bat's hub was offset from its rotating parent. Put the pivot on the hub,
+  // retaining the complete resting footprint and the script's existing angles/input settings.
+  UnityEditor.Undo.RecordObject(pivot,"Axe sur le centre du flipper");pivot.localPosition+=pivot.localRotation*new Vector3(sign*hub,0,0);
+  var visual=New("Flipper_Industries",pivot);
+  var orientation=Quaternion.AngleAxis(left?-90f:90f,Vector3.forward)*Quaternion.Euler(-90,0,0);
+  var parts=new System.Collections.Generic.List<Mesh>();
+  foreach(var mf in native.GetComponentsInChildren<MeshFilter>()){
+   var matrix=Matrix4x4.TRS(Vector3.zero,orientation,Vector3.one*factor)*native.worldToLocalMatrix*mf.transform.localToWorldMatrix;
+   var mesh=UnityEngine.Object.Instantiate(mf.sharedMesh);mesh.name="Flipper_"+side+"_"+mf.name;
+   mesh.vertices=mesh.vertices.Select(matrix.MultiplyPoint3x4).ToArray();mesh.normals=mesh.normals.Select(n=>matrix.inverse.transpose.MultiplyVector(n).normalized).ToArray();
+   mesh.ClearBlendShapes();mesh.RecalculateBounds();mesh.RecalculateTangents();UnityEditor.AssetDatabase.CreateAsset(mesh,folder+"/"+mesh.name+".asset");parts.Add(mesh);
+   var piece=New(mf.name,visual);piece.gameObject.AddComponent<MeshFilter>().sharedMesh=mesh;
+   piece.gameObject.AddComponent<MeshRenderer>().sharedMaterials=mf.GetComponent<Renderer>().sharedMaterials;
+  }
+  var collision=new Mesh();collision.name="Flipper_"+side+"_Collision";
+  collision.CombineMeshes(parts.Select(m=>new CombineInstance{mesh=m,transform=Matrix4x4.identity}).ToArray(),true,false);collision.RecalculateBounds();
+  UnityEditor.AssetDatabase.CreateAsset(collision,folder+"/"+collision.name+".asset");
+  var col=visual.gameObject.AddComponent<MeshCollider>();col.sharedMesh=collision;col.convex=true;col.sharedMaterial=profile.rubberMaterial;col.contactOffset=profile.contactOffset;
+  foreach(var r in old.GetComponentsInChildren<Renderer>(true)){UnityEditor.Undo.RecordObject(r,"Ancien visuel remplacé");r.enabled=false;UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(r);}
+  foreach(var c in old.GetComponentsInChildren<Collider>(true)){UnityEditor.Undo.RecordObject(c,"Contour arrondi du flipper");c.enabled=false;UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(c);}
+  report.AppendLine(side+" facteur="+factor+" correction axe="+hub+" pose="+pivot.localPosition+" collider="+collision.bounds);
+ }
+ var ball=nt.Find("Gameplay/Ball").gameObject;var original=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Resources/VpeUrp/Ball.prefab");
+ var ballMat=UnityEngine.Object.Instantiate(original.GetComponentInChildren<Renderer>().sharedMaterial);ballMat.name="IndustriesBallFinish";UnityEditor.AssetDatabase.CreateAsset(ballMat,folder+"/IndustriesBallFinish.mat");
+ SetupBall(ball);
+ var prefab=UnityEditor.PrefabUtility.LoadPrefabContents("Assets/Prefabs/Ball.prefab");
+ try{prefab.transform.localScale=ball.transform.localScale;SetupBall(prefab);UnityEditor.PrefabUtility.SaveAsPrefabAsset(prefab,"Assets/Prefabs/Ball.prefab");}
+ finally{UnityEditor.PrefabUtility.UnloadPrefabContents(prefab);}
+ int floor=0,metal=0,rubber=0;
+ foreach(var c in nt.GetComponentsInChildren<Collider>(true).Where(c=>c.enabled && !c.isTrigger && c.attachedRigidbody==null && c.sharedMaterial==null)){
+  string name=c.name.ToLowerInvariant();PhysicsMaterial mat;
+  if(c.GetComponentInParent<Slingshot>()!=null || c.GetComponentInParent<Bumper>()!=null || name.Contains("rubber")){mat=profile.rubberMaterial;rubber++;}
+  else if(name.Contains("playfield") || name.Contains("floor")){mat=profile.playfieldMaterial;floor++;}
+  else{mat=profile.metalMaterial;metal++;}
+  UnityEditor.Undo.RecordObject(c,"Contact adapté à la surface");c.sharedMaterial=mat;UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(c);
+ }
+ var cards=New("InstructionCards",nt.Find("ReferencePlayfield"));
+ var cardMesh=UnityEditor.AssetDatabase.LoadAssetAtPath<Mesh>("Assets/Generated/Industries/InstructionCard.asset");
+ foreach(var name in new[]{"NeutralControlsCard","NeutralRulesCard"}){
+  string texturePath="Assets/Art/NeutralInstructionCards/"+name+".png";
+  UnityEditor.AssetDatabase.ImportAsset(texturePath,UnityEditor.ImportAssetOptions.ForceSynchronousImport);
+  var ti=(UnityEditor.TextureImporter)UnityEditor.AssetImporter.GetAtPath(texturePath);ti.mipmapEnabled=true;ti.textureCompression=UnityEditor.TextureImporterCompression.Uncompressed;ti.anisoLevel=8;ti.SaveAndReimport();
+  var mat=UnityEngine.Object.Instantiate(UnityEditor.AssetDatabase.LoadAssetAtPath<Material>("Assets/Generated/Industries/ControlsCard.mat"));mat.name=name;mat.SetTexture("_BaseMap",UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath));mat.SetTexture("_MainTex",UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath));UnityEditor.AssetDatabase.CreateAsset(mat,folder+"/"+name+".mat");
+  var t=New(name,cards);t.localPosition=new Vector3(name.Contains("Controls")?-2.18f:1.38f,.565f,1.35f);t.localScale=new Vector3(2.45f/cardMesh.bounds.size.x,1,1.20f/cardMesh.bounds.size.z);
+  t.gameObject.AddComponent<MeshFilter>().sharedMesh=cardMesh;var r=t.gameObject.AddComponent<MeshRenderer>();r.sharedMaterial=mat;r.shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;r.receiveShadows=false;
+ }
+ // Replace the duplicate small print, leaving the apron brand visible.
+ foreach(var name in new[]{"ApronRules","ApronControls"}){var r=nt.Find("ReferencePlayfield/FlowRefinement/"+name).GetComponent<Renderer>();UnityEditor.Undo.RecordObject(r,"Cartes d'instructions lisibles");r.enabled=false;}
+ UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(neutral);UnityEditor.AssetDatabase.SaveAssets();UnityEditor.Undo.CollapseUndoOperations(group);
+ report.AppendLine("Contacts plateau="+floor+" métal="+metal+" caoutchouc="+rubber+" ; rampes existantes conservées.");
+ report.AppendLine("Bille scène + prefab : diamètre .414, masse 2, matériau Industries. Flipper.cs et commandes inchangés. Scène non enregistrée.");
+ System.IO.File.WriteAllText("Tools/unity/out/industry-transfer/applied.txt",report.ToString());return report.ToString();
+
+ void SetupBall(GameObject go){
+  var r=go.GetComponent<Renderer>();UnityEditor.Undo.RecordObject(r,"Finition de bille Industries");r.sharedMaterial=ballMat;UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(r);
+  var body=go.GetComponent<Rigidbody>();UnityEditor.Undo.RecordObject(body,"Même bille pour toutes les apparitions");body.mass=profile.ballMass;body.angularDamping=profile.angularDamping;body.linearDamping=profile.linearDamping;
+  var c=go.GetComponent<SphereCollider>();UnityEditor.Undo.RecordObject(c,"Contact de bille adapté");c.sharedMaterial=profile.ballMaterial;c.contactOffset=profile.contactOffset;
+  var physics=go.GetComponent<PinballBallPhysics>();if(physics==null)physics=UnityEditor.Undo.AddComponent<PinballBallPhysics>(go);
+  var so=new UnityEditor.SerializedObject(physics);so.FindProperty("config").objectReferenceValue=profile;so.ApplyModifiedProperties();
+ }
+ PhysicsMaterial Material(string name,float friction,float bounce,PhysicsMaterialCombine fc,PhysicsMaterialCombine bc){var m=new PhysicsMaterial(name){dynamicFriction=friction,staticFriction=friction,bounciness=bounce,frictionCombine=fc,bounceCombine=bc};UnityEditor.AssetDatabase.CreateAsset(m,folder+"/"+name+".physicMaterial");return m;}
+ Transform New(string name,Transform parent){var go=new GameObject(name);UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(go,neutral);UnityEditor.Undo.RegisterCreatedObjectUndo(go,"Adaptation Industries");go.transform.SetParent(parent,false);return go.transform;}
+}catch{if(group>=0)UnityEditor.Undo.RevertAllDownToGroup(group);throw;}
+finally{UnityEditor.SceneManagement.EditorSceneManager.CloseScene(industry,true);}

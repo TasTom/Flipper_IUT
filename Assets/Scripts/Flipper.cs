@@ -157,6 +157,9 @@ public class Flipper : MonoBehaviour
              "comme un vrai flipper que le ressort de rappel ramène.")]
     [SerializeField] private float returnSpeed = 700f;
 
+    [Tooltip("Profil optionnel du moteur PhysX. Les angles et toutes les entrées restent ceux de ce script.")]
+    [SerializeField] private PinballPhysicsConfig physicsConfig;
+
     private Rigidbody body;
     private FlipperSide resolvedSide = FlipperSide.Left;
     private bool pressed;
@@ -324,7 +327,10 @@ public class Flipper : MonoBehaviour
         }
 
         float cible = (pressed ? activeAngle : restAngle) * AngleSign(resolvedSide);
-        float vitesse = pressed ? swingSpeed : returnSpeed;
+        float vitesse = physicsConfig != null
+            ? (pressed ? physicsConfig.flipperRiseSpeed : physicsConfig.flipperReturnSpeed)
+            : (pressed ? swingSpeed : returnSpeed);
+        vitesse = Mathf.Max(0f, vitesse);
 
         // On avance vers la cible à vitesse bornée, sans jamais la dépasser : c'est ce qui
         // donne au flipper sa course franche, et ce qui rend son angle déterministe.

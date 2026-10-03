@@ -1,0 +1,24 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Edit attendu");
+const string folder="Assets/Generated/NeutralIndustriesFeel";var table=GameObject.Find("PinballTable").transform;
+var copied=new System.Collections.Generic.Dictionary<Texture,Texture>();var report=new System.Text.StringBuilder();
+foreach(var side in new[]{"Left","Right"}){
+ var root=table.Find("Gameplay/Flipper_"+side+"_Pivot/Flipper_Industries");
+ foreach(var renderer in root.GetComponentsInChildren<Renderer>()){
+  var src=renderer.sharedMaterial;var material=UnityEngine.Object.Instantiate(src);material.name="Flipper_"+side+"_"+renderer.name+"_Finish";
+  CopyTextures(material);UnityEditor.AssetDatabase.CreateAsset(material,folder+"/"+material.name+".mat");UnityEditor.Undo.RecordObject(renderer,"Matériau local de la pièce reprise");renderer.sharedMaterial=material;
+  report.AppendLine(material.name+" <- "+UnityEditor.AssetDatabase.GetAssetPath(src));
+ }
+}
+var ball=UnityEditor.AssetDatabase.LoadAssetAtPath<Material>(folder+"/IndustriesBallFinish.mat");UnityEditor.Undo.RecordObject(ball,"Textures de finition locales");CopyTextures(ball);UnityEditor.EditorUtility.SetDirty(ball);UnityEditor.AssetDatabase.SaveAssets();
+UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(table.gameObject.scene);System.IO.File.WriteAllText("Tools/unity/out/industry-transfer/material-sources.txt",report.ToString());return report.ToString();
+void CopyTextures(Material material){
+ foreach(var prop in material.GetTexturePropertyNames()){
+  var texture=material.GetTexture(prop);if(texture==null)continue;var path=UnityEditor.AssetDatabase.GetAssetPath(texture);if(!path.StartsWith("Assets/"))continue;
+  if(!copied.TryGetValue(texture,out var copy)){
+   string dest=folder+"/"+System.IO.Path.GetFileName(path);if(System.IO.File.Exists(dest))throw new Exception("Copie déjà présente : "+dest);
+   if(!UnityEditor.AssetDatabase.CopyAsset(path,dest))throw new Exception("Échec copie texture : "+path);
+   copy=UnityEditor.AssetDatabase.LoadAssetAtPath<Texture>(dest);copied.Add(texture,copy);report.AppendLine(dest+" <- "+path);
+  }
+  material.SetTexture(prop,copy);
+ }
+}

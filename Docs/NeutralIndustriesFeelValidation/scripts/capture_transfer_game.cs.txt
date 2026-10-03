@@ -1,0 +1,3 @@
+if(!UnityEditor.EditorApplication.isPlaying)throw new Exception("Play attendu");
+ScreenCapture.CaptureScreenshot("Docs/NeutralIndustriesFeelValidation/Neutral-cabinet.png");
+var camera=Camera.main;System.IO.File.WriteAllText("Docs/NeutralIndustriesFeelValidation/camera.txt",$"Position={camera.transform.position}\nRotation={camera.transform.eulerAngles}\nOrtho={camera.orthographicSize}\nTime={Time.time}\nFrame={Time.frameCount}\n");return "Capture de la vue borne demandée.";

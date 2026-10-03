@@ -1,0 +1,7 @@
+Assets/Generated/NeutralIndustriesFeel/flipper_williams_logo_Left.png <- Assets/Tables/ExampleTable/Textures/flipper_williams_logo_Left.png
+Flipper_Left_Base_Finish <- Assets/Tables/ExampleTable/Materials/plastic_white flipper_williams_logo_left.mat
+Flipper_Left_Rubber_Finish <- Assets/Tables/ExampleTable/Materials/red_rubber.mat
+Assets/Generated/NeutralIndustriesFeel/flipper_yellow_red_Right.png <- Assets/Tables/ExampleTable/Textures/flipper_yellow_red_Right.png
+Flipper_Right_Base_Finish <- Assets/Tables/ExampleTable/Materials/plastic_white flipper_yellow_red_right.mat
+Flipper_Right_Rubber_Finish <- Assets/Tables/ExampleTable/Materials/red_rubber.mat
+Assets/Generated/NeutralIndustriesFeel/BallDebug.png <- Assets/VpeUrp/Resources/Textures/BallDebug.png

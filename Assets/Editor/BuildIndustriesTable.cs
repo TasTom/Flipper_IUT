@@ -48,6 +48,20 @@ public static class BuildIndustriesTable
     private const string ThemeFolder = "Assets/VpeUrp/Art/Theme";
 
     /// <summary>
+    /// La « Full Example Table » de Visual Pinball, celle que les docs VPE importent.
+    ///
+    /// <para>Sert de base à la table : elle apporte ce qu'on ne sait pas inventer — les 50 murs du
+    /// plateau, le couloir de lanceur, le drain, les 18 rampes, les 36 lumières et le câblage des
+    /// contacts et des bobines. Un <c>new FileTableContainer()</c> produit une table vide, où les
+    /// flippers flottent sans rien à toucher.</para>
+    ///
+    /// <para>Le fichier vient du build VPinballX de Visual Pinball : <c>assets/exampleTable.vpx</c>
+    /// dans l'archive de release. Il est déposé sous <c>Tools/</c>, qui n'est pas suivi par Git —
+    /// le fichier pèse 19 Mo et se retélécharge en une commande.</para>
+    /// </summary>
+    private const string BaseTableVpx = "Tools/VisualPinball/assets/exampleTable.vpx";
+
+    /// <summary>
     /// Échelle de VPE : la table fait 952 x 2162 unités pour 0,51 x 1,17 m, soit environ
     /// 1867 unités par mètre. Sert à convertir les cotes réelles des décors.
     /// </summary>
@@ -77,8 +91,6 @@ public static class BuildIndustriesTable
             return;
         }
 
-        AddGameplayElements(table);
-        RebuildElementMeshes(table);
         AddLighting(table);
         BuildTheme(table);
         AddCamera();
@@ -118,34 +130,48 @@ public static class BuildIndustriesTable
         return !keep;
     }
 
+    /// <summary>
+    /// Crée la table en important la Full Example Table de Visual Pinball.
+    ///
+    /// <para>C'est le parcours des docs VPE — <c>Pinball &gt; Import</c> — et c'est la seule façon
+    /// d'obtenir une table réellement jouable : le plateau, ses murs, son couloir de lanceur, son
+    /// drain et le câblage de ses contacts viennent du fichier, pas d'une reconstruction.</para>
+    /// </summary>
     private static TableComponent CreateTable()
     {
-        var container = new FileTableContainer();
-        var converter = new VpxSceneConverter(container);
+        if (!System.IO.File.Exists(BaseTableVpx))
+        {
+            Debug.LogError(
+                $"[BuildIndustriesTable] La table de base est absente : « {BaseTableVpx} ».\n" +
+                "Elle vient du build VPinballX de Visual Pinball (assets/exampleTable.vpx) :\n" +
+                "  https://github.com/vpinball/vpinball/releases → Developer.VPinballX-*-Release-win-x64.zip\n" +
+                "Sans elle, la table ne peut pas être construite : un plateau vide n'est pas jouable.");
+            return null;
+        }
 
         GameObject root;
         try
         {
-            root = converter.Convert(TableName);
+            root = VpxImportEngine.ImportIntoScene(BaseTableVpx, tableName: TableName);
         }
         catch (Exception e)
         {
             Debug.LogError(
-                "[BuildIndustriesTable] La table VPE n'a pas pu être créée : " + e.Message + "\n" +
+                "[BuildIndustriesTable] L'import de la table de base a échoué : " + e.Message + "\n" +
                 "Vérifie que l'adaptateur URP est actif — c'est lui qui fournit les prefabs des " +
-                "éléments (Flipper, Plunger, Trough).");
+                "éléments et les matériaux.");
             return null;
         }
 
-        var table = root.GetComponent<TableComponent>();
+        var table = root != null ? root.GetComponent<TableComponent>() : null;
         if (table == null)
         {
-            Debug.LogError("[BuildIndustriesTable] La racine créée ne porte pas de TableComponent.");
+            Debug.LogError("[BuildIndustriesTable] L'import n'a produit aucune TableComponent.");
             return null;
         }
 
-        // Le plan de jeu de VPE est incliné dans une vraie borne ; la table du projet est posée
-        // à plat et c'est la gravité qui porte l'inclinaison (choix de TableGravity du projet).
+        // L'import pose la table à l'échelle du moteur ; on la recentre à l'origine pour que les
+        // décors du thème, qui sont en mètres, tombent au bon endroit.
         root.transform.position = Vector3.zero;
         root.transform.rotation = Quaternion.identity;
 
@@ -153,12 +179,12 @@ public static class BuildIndustriesTable
     }
 
     /// <summary>
-    /// Pose les éléments de jeu.
+    /// Pose les éléments de jeu si la scène partait d'une table vide.
     ///
-    /// <para>Les cotes sont en unités VPX et suivent la disposition d'une table réelle : flippers
-    /// en bas, slingshots juste au-dessus, bumpers en triangle au centre, cibles en haut. Les
-    /// valeurs sont des points de départ plausibles, pas un équilibrage — c'est le genre de
-    /// réglage qui se juge à l'œil et à la main dans l'éditeur.</para>
+    /// <para>Conservé pour le cas où la table de base serait un <c>blankTable.vpx</c> sans
+    /// éléments. Avec la Full Example Table, elle n'est jamais appelée : les 2 flippers,
+    /// 5 bumpers et le lanceur viennent déjà de l'import, et les redoubler créerait deux jeux
+    /// d'éléments superposés.</para>
     /// </summary>
     private static void AddGameplayElements(TableComponent table)
     {

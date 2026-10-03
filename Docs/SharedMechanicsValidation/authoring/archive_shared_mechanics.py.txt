@@ -1,0 +1,123 @@
+from pathlib import Path
+import collections
+import difflib
+import hashlib
+import re
+import shutil
+import subprocess
+
+root = Path(__file__).resolve().parents[2]
+docs = root / "Docs/SharedMechanicsValidation"
+source = docs / "authoring"
+source.mkdir(exist_ok=True)
+for name in (
+    "inspect_shared_mechanical_parts", "apply_shared_mechanics", "refine_shared_mechanics_fit",
+    "save_shared_mechanics", "verify_shared_mechanics_saved", "verify_shared_presentation",
+    "start_neutral_shared_launch", "capture_shared_mechanics", "finish_shared_mechanics",
+):
+    shutil.copyfile(root / f"Tools/unity/{name}.cs", source / f"{name}.cs.txt")
+shutil.copyfile(root / "Assets/Editor/AdaptIndustriesTable.cs", source / "AdaptIndustriesTable.cs.txt")
+shutil.copyfile(Path(__file__), source / "archive_shared_mechanics.py.txt")
+for filename, target in (
+    ("Docs/IndustriesValidation/runtime.txt", "industries-runtime.txt"),
+    ("Docs/IndustriesValidation/transition.txt", "transition.txt"),
+    ("Docs/IndustriesValidation/shared-presentation/comparison.txt", "camera-score-comparison.txt"),
+    ("Tools/unity/out/shared-mechanics-before.txt", "source-inspection.txt"),
+    ("Tools/unity/out/shared-mechanics-applied.txt", "initial-authoring.txt"),
+):
+    shutil.copyfile(root / filename, docs / target)
+
+def blocks(text):
+    result = {}
+    for block in re.split(r"(?=^--- !u!)", text, flags=re.M)[1:]:
+        match = re.match(r"--- !u!(\d+) &(-?\d+).*\n", block)
+        result[match[2]] = (match[1], block[match.end():].strip())
+    return result
+
+neutral_path = root / "Assets/Scenes/Neutral.unity"
+baseline = (root / "Tools/unity/out/neutral-before-shared-mechanics.unity").read_text(encoding="utf-8")
+current = neutral_path.read_text(encoding="utf-8")
+old = blocks(baseline)
+new = blocks(current)
+changed = [key for key in old.keys() & new.keys() if old[key] != new[key]]
+removed = old.keys() - new.keys()
+added = new.keys() - old.keys()
+protected = {"114", "54", "56", "64", "65", "135", "136"}
+defaults = {"2054311436": "  tableGeometry: {fileID: 0}", "1818851149": "  compactMultiplierLabel: 0", "796815582": "  externalBallLifecycle: 0"}
+def without_new_defaults(key, body):
+    field = defaults.get(key)
+    if field and field not in old[key][1].splitlines():
+        return "\n".join(line for line in body.splitlines() if line != field)
+    return body
+neutral_unchanged = not removed and not any(old[key][0] in protected and old[key][1] != without_new_defaults(key, new[key][1]) for key in changed)
+assert neutral_unchanged, "Unexpected existing Neutral physics/script change"
+
+industry_old = blocks((root / "Tools/unity/out/industries-before-shared-mechanics.unity").read_text(encoding="utf-8"))
+industry_new = blocks((root / "Assets/Scenes/Industries.unity").read_text(encoding="utf-8"))
+mesh_old = collections.defaultdict(list)
+mesh_new = collections.defaultdict(list)
+for key, (kind, body) in industry_old.items():
+    if kind == "43": mesh_old[body].append(key)
+for key, (kind, body) in industry_new.items():
+    if kind == "43": mesh_new[body].append(key)
+assert {body: len(ids) for body, ids in mesh_old.items()} == {body: len(ids) for body, ids in mesh_new.items()}, "Native geometry changed"
+def normalize_refs(body, documents):
+    def replace(match):
+        key = match[1]
+        item = documents.get(key)
+        if item and item[0] == "43":
+            return "fileID: mesh-content-" + hashlib.sha256(item[1].encode("utf-8")).hexdigest()
+        return match[0]
+    return re.sub(r"fileID: (-?\d+)", replace, body)
+
+native_changed = []
+lamp_instances = {"1494186559", "1830714388", "942733302", "1250472031", "1723421771"}
+lamp_position_pattern = r"(target: \{fileID: 8610125003353710624, guid: 0b5e22facf585114ca5130d9e38dbdeb, type: 3\}\n      propertyPath: m_LocalPosition\.([xyz])\n      value: )([^\n]+)"
+for key in industry_old.keys() & industry_new.keys():
+    kind, body = industry_old[key]
+    if kind not in protected | {"1001"}: continue
+    now = normalize_refs(industry_new[key][1], industry_new)
+    body = normalize_refs(body, industry_old)
+    if key in lamp_instances:
+        before_values = {m[2]: float(m[3]) for m in re.finditer(lamp_position_pattern, body)}
+        after_values = {m[2]: float(m[3]) for m in re.finditer(lamp_position_pattern, now)}
+        assert abs(before_values["x"] - after_values["x"]) < 0.0000002
+        assert abs(before_values["z"] - after_values["z"]) < 0.0000002
+        assert abs(before_values["y"] / 15.6055355 - after_values["y"]) < 0.00000001
+        body = re.sub(lamp_position_pattern, lambda m: m[1] + "<native-lamp-position>", body)
+        now = re.sub(lamp_position_pattern, lambda m: m[1] + "<native-lamp-position>", now)
+    # Native generated mesh IDs change at save, but their contents are equal.
+    if now != body:
+        if kind == "114" and re.sub(r"_instanceID: \d+", "_instanceID: 0", now) == re.sub(r"_instanceID: \d+", "_instanceID: 0", body): continue
+        native_changed.append((key, kind))
+assert not native_changed, f"Unexpected native parameters or prefab overrides: {native_changed}"
+
+report = (
+    "PASS Neutral: existing physics, colliders and MonoBehaviour field values unchanged from source baseline.\n"
+    "Unity serialized three previously missing default fields: tableGeometry=null, compactMultiplierLabel=false, externalBallLifecycle=false. Existing behavior retained.\n"
+    f"Added Neutral blocks: {dict(collections.Counter(new[key][0] for key in added))}\n"
+    f"Changed Neutral blocks: {dict(collections.Counter(new[key][0] for key in changed))}\n"
+    "PASS Industries: 149 embedded mesh contents identical after generated ID remapping.\n"
+    "PASS Industries: existing physics components, colliders and mechanical prefab overrides unchanged after mesh ID remapping (one editor object instance ID ignored).\n"
+    "Five native decorative lamp heights are recalculated by VPE SetChildrenZPosition/SetZPosition in world units when the root changes scale; their local Y is divided by 15.6055355. X/Z only differ by floating point rounding <0.0000002. No lamp configuration or collision setting changes.\n"
+)
+(docs / "scene-diff-audit.txt").write_text(report, encoding="utf-8")
+patch = "".join(difflib.unified_diff(baseline.splitlines(keepends=True), current.splitlines(keepends=True), fromfile="a/Assets/Scenes/Neutral.unity", tofile="b/Assets/Scenes/Neutral.unity", n=3))
+(root / "Tools/unity/out/neutral-owned.patch").write_text(patch, encoding="utf-8", newline="\n")
+print(report)
+print("Owned Neutral patch generated from pre-change baseline; existing user rotations excluded.")
+
+industry_doc = root / "Docs/Industries.md"
+text = industry_doc.read_text(encoding="utf-8")
+text = text.replace("La session test conserve sept billes : trois initiales, une accordée par le scénario, trois accordées par les paliers déjà actifs dans Neutral.", "Le compteur attendu est relevé après les paliers de récompense de Neutral, puis comparé à l’arrivée.")
+text = text.replace("Capture actuelle : [Industries](IndustriesValidation/shared-presentation/Industries.png), [Neutral de référence](IndustriesValidation/shared-presentation/Neutral.png).", "Captures après harmonisation des largeurs : [Industries](SharedMechanicsValidation/Industries.png), [Neutral](SharedMechanicsValidation/Neutral.png).")
+text = text.replace("Les positions relatives des pièces, les dimensions VPX", "Les positions relatives des pièces mécaniques, les dimensions VPX")
+industry_doc.write_text(text, encoding="utf-8", newline="\n")
+
+readme = docs / "README.md"
+text = readme.read_text(encoding="utf-8")
+text = text.replace("Les pièces gardent leurs proportions et leurs positions locales.", "Les pièces mécaniques gardent leurs proportions et leurs positions locales. VPE recalcule en unités mondiales la hauteur de cinq lampes décoratives attachées à une surface ; cette différence de sérialisation est détaillée dans l’audit.")
+text = text.replace("Les captures montrent les scènes en Play Mode.", "Les [7 contrôles de transition](transition.txt) passent également. Les [13 contrôles des scènes rechargées](saved-scenes.txt) confirment les largeurs, les positions, l’absence de scripts manquants et la conservation des références. Les [14 comparaisons caméra/fronton](camera-score-comparison.txt) passent sur trois formats d’écran. Les captures [Neutral](Neutral.png), [lanceur chargé](Neutral-charged.png) et [Industries](Industries.png) montrent les scènes en Play Mode. L’[audit des différences](scene-diff-audit.txt) vérifie que les paramètres existants de physique et les maillages natifs d’Industries n’ont pas changé.")
+compile_note = "Compilation C# réussie. La Console conserve l’erreur d’import antérieure `AutodeskInteractiveTransparent.shadergraph` du package URP ; aucune autre erreur n’apparaît dans les entrées consultées après ces contrôles."
+if compile_note not in text: text += "\n" + compile_note + "\n"
+readme.write_text(text, encoding="utf-8", newline="\n")

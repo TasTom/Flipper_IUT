@@ -1,0 +1,14 @@
+PASS largeurs extérieures égales : Neutral=9,020000 Industries=9,020000
+PASS échelle Industries uniforme : (15.605540, 15.605540, 15.605540)
+PASS trois pièces reprises sans physique supplémentaire : Plunger, Shooter, Ramp17
+PASS lanceur Neutral PhysX unique et collider conservé
+PASS bille au repos dégagée du cache fixe : frontZ=1,918000 marge=0,025000
+PASS Ramp17 visible sur l'apron et avant les flippers : bounds=Center: (0.00, 0.56, 0.35), Extents: (4.37, 0.00, 0.25)
+PASS réparation du scoop indépendante de l'échelle : diamètre local=0,045000 monde=0,702249
+PASS visibilité du template conservée : masqués=99 actifs=0 manquants=0
+PASS décor suit l'échelle de la table
+PASS six cibles VPE
+PASS Neutral : scripts et caméra : scripts manquants=0
+PASS Industries : scripts et caméra : scripts manquants=0
+PASS pose caméra et zoom identiques : (0.000000, 23.842550, -16.601740)
+failures=0

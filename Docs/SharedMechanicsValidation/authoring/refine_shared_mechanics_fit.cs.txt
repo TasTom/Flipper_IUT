@@ -1,0 +1,23 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+var neutral=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();if(neutral.name!="Neutral" || neutral.isDirty)throw new Exception("Neutral enregistrée attendue");
+var nt=neutral.GetRootGameObjects().Single(g=>g.name=="PinballTable").transform;
+var hardware=nt.Find("ReferencePlayfield/IndustriesHardware");var shooter=hardware.Find("Shooter");var ramp=hardware.Find("Ramp17");
+UnityEditor.Undo.IncrementCurrentGroup();int group=UnityEditor.Undo.GetCurrentGroup();UnityEditor.Undo.SetCurrentGroupName("Ajuster les caches et le décor à l'échelle commune");
+var mf=shooter.GetComponentInChildren<MeshFilter>();var bounds=BoundsInTable(mf);
+var spawn=nt.Find("Gameplay/BallSpawnPoint");var ball=nt.Find("Gameplay/Ball").GetComponent<SphereCollider>();
+float front=nt.InverseTransformPoint(spawn.position).z-ball.radius*ball.transform.lossyScale.x-.025f;
+UnityEditor.Undo.RecordObject(shooter,"Cache derrière la bille au repos");shooter.localPosition+=Vector3.forward*(front-bounds.max.z);
+var bar=ramp.GetComponentInChildren<MeshFilter>();float barHeight=BoundsInTable(bar).max.y;
+UnityEditor.Undo.RecordObject(ramp,"Cache métallique au-dessus de l'apron");ramp.localPosition+=Vector3.up*(.56f-barHeight);
+UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(neutral);
+var industry=UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Industries.unity",UnityEditor.SceneManagement.OpenSceneMode.Additive);
+var table=industry.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<VisualPinball.Unity.TableComponent>()).Single().transform;
+var presentation=industry.GetRootGameObjects().Single(g=>g.name=="IndustriesPresentation").transform;
+var backdrop=presentation.Find("WorkshopBackdrop");
+if(backdrop!=null){var pos=backdrop.localPosition;var rot=backdrop.localRotation;var scale=backdrop.localScale;UnityEditor.Undo.SetTransformParent(backdrop,table,"Décor à l'échelle Industries");UnityEditor.Undo.RecordObject(backdrop,"Décor à l'échelle Industries");backdrop.localPosition=pos;backdrop.localRotation=rot;backdrop.localScale=scale;}
+UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(industry);UnityEditor.Undo.CollapseUndoOperations(group);
+return $"Shooter : front={front}, bille visible au repos. Ramp17 : hauteur=.56, au-dessus de l'apron .55. Décor Industries à l'échelle de la table. Scènes non enregistrées.";
+Bounds BoundsInTable(MeshFilter mesh) {
+ var b=mesh.sharedMesh.bounds;var matrix=nt.worldToLocalMatrix*mesh.transform.localToWorldMatrix;var result=new Bounds(matrix.MultiplyPoint3x4(b.center),Vector3.zero);
+ for(int i=0;i<8;i++)result.Encapsulate(matrix.MultiplyPoint3x4(b.center+Vector3.Scale(b.extents,new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1))));return result;
+}

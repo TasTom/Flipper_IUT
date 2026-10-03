@@ -1,0 +1,5 @@
+scene=Industries time=324,5746 paused=False timeScale=1
+camera=(0.00, 23.84, -16.60) rotation=(40.22, 0.00, 90.00) ortho=4,5
+ExampleTable world=(-4.05, 0.00, 19.21) local=(-4.05, 0.00, 19.21) scale=(15.61, 15.61, 15.61)
+Shooter world=(3.27, 0.65, 2.77) local=(0.47, 0.03, -1.05) scale=(1560.55, 1560.55, 1560.55)
+Ramp17 world=(-0.02, 0.03, 0.52) local=(0.26, 0.00, -1.20) scale=(15.61, 15.61, 15.61)

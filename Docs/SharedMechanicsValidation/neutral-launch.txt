@@ -1,0 +1,4 @@
+PASS charge et déplacement du nouveau lanceur : charge=1, course=0,8
+PASS cache Shooter fixe pendant la charge : déplacement=0
+PASS lancement réel vers le haut de la table : zMax=17,39537
+PASS visuel sans collider supplémentaire ni composant VPE dans Neutral

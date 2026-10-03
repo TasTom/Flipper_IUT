@@ -1,0 +1,4 @@
+Largeur extérieure Neutral=9,020000 ; Industries avant=0,578000 ; facteur uniforme=15,605540 ; Industries après=9,020000
+Industries root=(-4.05, 0.00, 19.21) scale=(15.61, 15.61, 15.61)
+Neutral lanceur=(2.30, -0.21, 1.73) Shooter=(3.84, 0.18, 2.06) Ramp17=(0.00, -0.73, 0.35)
+Colliders ajoutés=0 ; réglages PhysX et VPX inchangés. Scènes non enregistrées.

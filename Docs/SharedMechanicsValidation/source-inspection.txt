@@ -1,0 +1,119 @@
+SCENE Industries
+ExampleTable/Playfield pos=(0.00000, 0.00000, 0.00000) local=(0.00000, 0.00000, 0.00000) rot=(0.0000, 0.0000, 0.0000) scale=(1.000000, 1.000000, 1.000000) active=True
+ COMPONENT Transform
+ COMPONENT PhysicsEngine {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"VisualPinball.Unity::VisualPinball.Unity.PhysicsEngine","GravityStrength":1.7629847526550293,"KeyboardNudgeMode":2,"KeyboardNudgeStrength":1.0,"KeyboardCabinetDamping":0.5,"SimulatedPlumb":false,"PlumbDamping":1.0,"PlumbThresholdAngle":2.0,"VisualNudgeStrength":1.0}}
+ COMPONENT SimulationThreadComponent {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"VisualPinball.Unity::VisualPinball.Unity.Simulation.SimulationThreadComponent","EnableSimulationThread":true,"EnableNativeInput":true,"InputPollingIntervalUs":500,"NudgeSensors":[],"ShowStatistics":false,"StatisticsInterval":5.0,"RecordSimulationTrace":true}}
+ COMPONENT PlayfieldComponent {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"VisualPinball.Unity::VisualPinball.Unity.PlayfieldComponent","_editorLayer":0,"_editorLayerName":"","_editorLayerVisibility":true,"GlassHeight":400.0,"Left":0.0,"Right":952.0,"Top":0.0,"Bottom":2162.0,"AngleTiltMax":6.0,"AngleTiltMin":6.0,"RenderSlope":3.5999999046325684,"PlayfieldDetailLevel":10,"_playfieldImage":"p1-beachwood","_playfieldMaterial":"Playfield"}}
+ COMPONENT PlayfieldColliderComponent {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"VisualPinball.Unity::VisualPinball.Unity.PlayfieldColliderComponent","PhysicsMaterial":{"instanceID":0},"ShowColliderMesh":false,"ShowColliderOctree":false,"ShowAabbs":false,"_isKinematic":false,"Gravity":1.7629847526550293,"Elasticity":0.25,"ElasticityFalloff":0.0,"Friction":0.07500000298023224,"Scatter":0.0,"DefaultScatter":0.0,"CollideWithBounds":true,"CollideWithBackside":true}}
+ COMPONENT PlayfieldMeshComponent {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"VisualPinball.Unity::VisualPinball.Unity.Playfield.PlayfieldMeshComponent","_playfieldDimensions":{"x":0.0,"y":0.0},"_instanceID":196115,"AutoGenerate":false}}
+ COMPONENT MeshFilter
+ COMPONENT MeshRenderer
+ MESH Playfield enabled=False path=Assets/Generated/Industries/IndustriesPlayfield.asset localBounds=Center: (0.26, 0.00, -0.58), Extents: (0.26, 0.00, 0.58) world=Center: (0.26, 0.00, -0.58), Extents: (0.26, 0.00, 0.58) viewport=Center: (0.39, 0.50, 2.24), Extents: (0.37, 0.44, 0.45) mat=Assets/Generated/Industries/PlayfieldPrint.mat
+ MESH PrintedPlayfield enabled=True path=Assets/Generated/Industries/IndustriesPlayfield.asset localBounds=Center: (0.26, 0.00, -0.58), Extents: (0.26, 0.00, 0.58) world=Center: (0.26, 0.00, -0.58), Extents: (0.26, 0.00, 0.58) viewport=Center: (0.39, 0.50, 2.24), Extents: (0.37, 0.44, 0.45) mat=Assets/Generated/Industries/PlayfieldPrint.mat
+ExampleTable/Playfield/Plungers/Plunger pos=(0.48631, 0.00000, -1.12987) local=(0.48631, 0.00000, -1.12987) rot=(0.0000, 0.0000, 0.0000) scale=(1.000000, 1.000000, 1.000000) active=True
+ COMPONENT Transform
+ COMPONENT PlungerComponent {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"","_editorLayer":0,"_editorLayerName":"Main Layout","_editorLayerVisibility":true,"Width":25.0,"Height":20.0,"analogPlungerAction":{"instanceID":0}}}
+ COMPONENT PlungerColliderComponent {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"","PhysicsMaterial":{"instanceID":0},"ShowColliderMesh":true,"ShowColliderOctree":false,"ShowAabbs":false,"_isKinematic":false,"SpeedPull":0.25,"SpeedFire":100.0,"Stroke":180.0,"ScatterVelocity":0.0,"IsMechPlunger":true,"IsAutoPlunger":false,"MechStrength":100.0,"MomentumXfer":1.0,"ParkPosition":0.16670000553131104}}
+ COMPONENT CoilSoundComponent {"MonoBehaviour":{"m_Enabled":false,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"","SoundAsset":{"fileID":11400000,"guid":"29e4e44178845b941a136cf944a6b484","type":2},"MultiPlayMode":3,"Volume":1.0,"Priority":2,"CalloutMaxQueueTime":-1.0,"StartWhen":0,"StopWhen":0,"CoilName":"c_pull"}}
+ COMPONENT CoilSoundComponent {"MonoBehaviour":{"m_Enabled":false,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"","SoundAsset":{"fileID":11400000,"guid":"1db86f03e09f46740a32096157585e5d","type":2},"MultiPlayMode":3,"Volume":1.0,"Priority":2,"CalloutMaxQueueTime":-1.0,"StartWhen":0,"StopWhen":0,"CoilName":"c_autofire"}}
+ COMPONENT CoilSoundComponent {"MonoBehaviour":{"m_Enabled":false,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"","SoundAsset":{"fileID":11400000,"guid":"1db86f03e09f46740a32096157585e5d","type":2},"MultiPlayMode":3,"Volume":1.0,"Priority":2,"CalloutMaxQueueTime":-1.0,"StartWhen":1,"StopWhen":0,"CoilName":"c_pull"}}
+ MESH Rod enabled=True path= localBounds=Center: (0.00, 0.01, 0.02), Extents: (0.01, 0.01, 0.08) world=Center: (0.49, 0.01, -1.11), Extents: (0.01, 0.01, 0.08) viewport=Center: (0.07, 0.11, 1.83), Extents: (0.05, 0.01, 0.06) mat=Assets/Tables/ExampleTable/Materials/plastic_with_an_image customwhitetip.mat
+ MESH Spring enabled=True path= localBounds=Center: (0.00, 0.01, 0.01), Extents: (0.01, 0.01, 0.07) world=Center: (0.49, 0.01, -1.12), Extents: (0.01, 0.01, 0.07) viewport=Center: (0.06, 0.11, 1.82), Extents: (0.05, 0.01, 0.05) mat=Assets/Tables/ExampleTable/Materials/plastic_with_an_image customwhitetip.mat
+ExampleTable/Playfield/Primitives/Shooter pos=(0.46904, 0.03023, -1.05143) local=(0.46904, 0.03023, -1.05143) rot=(0.0000, 0.0000, 0.0000) scale=(100.000000, 100.000000, 100.000000) active=True
+ COMPONENT Transform
+ COMPONENT PrimitiveComponent {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"","_editorLayer":0,"_editorLayerName":"Main Layout","_editorLayerVisibility":true}}
+ COMPONENT PrimitiveMeshComponent {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"","_playfieldDimensions":{"x":0.0,"y":0.0},"_instanceID":197219,"UseLegacyMesh":false,"Sides":4}}
+ COMPONENT MeshFilter
+ COMPONENT MeshRenderer
+ MESH Shooter enabled=True path=Assets/Tables/ExampleTable/Meshes/Shooter.fbx localBounds=Center: (0.00, 0.00, 0.00), Extents: (0.00, 0.00, 0.00) world=Center: (0.49, 0.02, -1.10), Extents: (0.02, 0.01, 0.05) viewport=Center: (0.07, 0.10, 1.83), Extents: (0.05, 0.04, 0.05) mat=Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image1 plungercover.mat
+ExampleTable/Playfield/Ramps/Ramp17 pos=(0.25800, 0.00000, -1.19768) local=(0.25800, 0.00000, -1.19768) rot=(0.0000, 0.0000, 0.0000) scale=(1.000000, 1.000000, 1.000000) active=True
+ COMPONENT Transform
+ COMPONENT RampComponent {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"","_editorLayer":0,"_editorLayerName":"Main Layout","_editorLayerVisibility":true,"_type":0,"_heightBottom":116.0,"_heightTop":116.0,"_imageAlignment":1,"_leftWallHeightVisible":0.0,"_rightWallHeightVisible":0.0,"_widthBottom":1038.0,"_widthTop":1038.0,"_wireDiameter":8.0,"_wireDistanceX":38.0,"_wireDistanceY":88.0,"_dragPoints":[],"_dragPointSpline":{"instanceID":0},"uvOffset":{"x":478.00152587890625,"y":2218.94384765625,"z":0.0}}}
+ COMPONENT RampColliderComponent {"MonoBehaviour":{"m_Enabled":false,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"","PhysicsMaterial":{"instanceID":0},"ShowColliderMesh":true,"ShowColliderOctree":false,"ShowAabbs":false,"_isKinematic":false,"HitEvent":false,"Threshold":2.0,"LeftWallHeight":62.0,"RightWallHeight":62.0,"OverwritePhysics":true,"Elasticity":0.30000001192092896,"Friction":0.30000001192092896,"Scatter":0.0}}
+ MESH Walls enabled=True path= localBounds=Center: (0.00, 0.00, 0.00), Extents: (0.00, 0.00, 0.00) world=Center: (0.26, 0.00, -1.20), Extents: (0.00, 0.00, 0.00) viewport=Center: (0.00, 0.50, 1.77), Extents: (0.00, 0.00, 0.00) mat=Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image lockdownbarreal-jr.mat
+ MESH Floor enabled=True path= localBounds=Center: (0.00, 0.06, 0.00), Extents: (0.28, 0.00, 0.04) world=Center: (0.26, 0.06, -1.20), Extents: (0.28, 0.00, 0.04) viewport=Center: (0.05, 0.50, 1.73), Extents: (0.03, 0.48, 0.03) mat=Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image lockdownbarreal-jr.mat
+ MESH Wires enabled=True path= localBounds=Center: (0.00, 0.00, 0.00), Extents: (0.00, 0.00, 0.00) world=Center: (0.26, 0.00, -1.20), Extents: (0.00, 0.00, 0.00) viewport=Center: (0.00, 0.50, 1.77), Extents: (0.00, 0.00, 0.00) mat=Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image lockdownbarreal-jr.mat
+ExampleTable/Playfield/PrintedPlayfield pos=(0.00000, 0.00020, 0.00000) local=(0.00000, 0.00020, 0.00000) rot=(0.0000, 0.0000, 0.0000) scale=(1.000000, 1.000000, 1.000000) active=True
+ COMPONENT Transform
+ COMPONENT MeshFilter
+ COMPONENT MeshRenderer
+ MESH PrintedPlayfield enabled=True path=Assets/Generated/Industries/IndustriesPlayfield.asset localBounds=Center: (0.26, 0.00, -0.58), Extents: (0.26, 0.00, 0.58) world=Center: (0.26, 0.00, -0.58), Extents: (0.26, 0.00, 0.58) viewport=Center: (0.39, 0.50, 2.24), Extents: (0.37, 0.44, 0.45) mat=Assets/Generated/Industries/PlayfieldPrint.mat
+ExampleTable/Playfield/LeftRail pos=(-0.01700, 0.01200, -0.58300) local=(-0.01700, 0.01200, -0.58300) rot=(0.0000, 0.0000, 0.0000) scale=(1.000000, 1.000000, 1.000000) active=True
+ COMPONENT Transform
+ COMPONENT MeshFilter
+ COMPONENT MeshRenderer
+ MESH LeftRail enabled=True path=Assets/Generated/Industries/LeftRail(0.03, 0.03, 1.20).asset localBounds=Center: (0.00, 0.00, 0.00), Extents: (0.01, 0.01, 0.60) world=Center: (-0.02, 0.01, -0.58), Extents: (0.01, 0.01, 0.60) viewport=Center: (0.39, 0.97, 2.23), Extents: (0.39, 0.02, 0.47) mat=Assets/Generated/Industries/BrushedSteel.mat
+ExampleTable/Playfield/RightRail pos=(0.53600, 0.01200, -0.58300) local=(0.53600, 0.01200, -0.58300) rot=(0.0000, 0.0000, 0.0000) scale=(1.000000, 1.000000, 1.000000) active=True
+ COMPONENT Transform
+ COMPONENT MeshFilter
+ COMPONENT MeshRenderer
+ MESH RightRail enabled=True path=Assets/Generated/Industries/RightRail(0.03, 0.03, 1.20).asset localBounds=Center: (0.00, 0.00, 0.00), Extents: (0.01, 0.01, 0.60) world=Center: (0.54, 0.01, -0.58), Extents: (0.01, 0.01, 0.60) viewport=Center: (0.39, 0.02, 2.23), Extents: (0.39, 0.02, 0.47) mat=Assets/Generated/Industries/BrushedSteel.mat
+SCENE Neutral
+PinballTable/Gameplay/Plunger pos=(1.54000, 0.43015, 0.28672) local=(1.54000, 0.39200, 0.33700) rot=(353.0000, 0.0000, 0.0000) scale=(1.000000, 1.000000, 1.000000) active=True
+ COMPONENT Transform
+ COMPONENT Plunger {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"Assembly-CSharp::Plunger","pullSpeed":1.600000023841858,"maxPull":0.800000011920929,"launchForce":105.0,"catchHalfWidth":0.5,"catchHalfHeight":0.5,"catchOffset":0.6000000238418579,"headCollider":{"instanceID":0},"relaunchDelay":0.30000001192092896,"returnSpeed":100.0,"plungerKey":32,"useCabinetController":true,"logInput":true}}
+ COMPONENT PinballMechanismAudio {"MonoBehaviour":{"m_Enabled":true,"m_EditorHideFlags":0,"m_Name":"","m_EditorClassIdentifier":"Assembly-CSharp::PinballMechanismAudio"}}
+ MESH Rod enabled=True path=Assets/Models/Parts/Miscellaneous/Plunger.fbx localBounds=Center: (0.00, 21.69, 0.00), Extents: (11.75, 81.91, 11.75) world=Center: (3.84, 0.47, 0.65), Extents: (0.20, 0.36, 1.38) viewport=Center: (0.08, 0.07, 28.26), Extents: (0.07, 0.02, 1.07) mat=Assets/Models/Parts/Miscellaneous/Plunger.fbx,Assets/Generated/NeutralVpeFinish/Metal - Steel with AO dirt_PBR.mat
+ MESH Spring enabled=True path=Assets/Models/Parts/Miscellaneous/Plunger.fbx localBounds=Center: (-0.12, 40.69, -0.13), Extents: (10.16, 61.21, 10.17) world=Center: (3.84, 0.43, 0.28), Extents: (0.17, 0.29, 1.03) viewport=Center: (0.06, 0.07, 28.01), Extents: (0.05, 0.02, 0.82) mat=Assets/Generated/NeutralVpeFinish/Metal - Zinc with AO dirt_PBR.mat
+ MESH Solenoid_Piece enabled=False path=Assets/Models/Parts/Miscellaneous/Solenoid.fbx localBounds=Center: (0.00, 0.00, 0.00), Extents: (0.00, 0.00, 0.00) world=Center: (1.54, 0.52, -0.93), Extents: (0.24, 0.72, 0.33) viewport=Center: (0.02, 0.33, 27.02), Extents: (0.04, 0.03, 0.68) mat=Assets/Materials/Metal_Mat.mat,Assets/Models/Parts/Miscellaneous/Solenoid.fbx,Assets/Models/Parts/Miscellaneous/Solenoid.fbx
+ COLLIDER Rod Center: (3.84, 0.47, 0.65), Extents: (0.20, 0.36, 1.38) enabled=True trigger=False
+PinballTable/Gameplay/Plunger/Plunger_Rod pos=(3.83900, 0.43015, 0.28672) local=(2.29900, 0.00000, 0.00000) rot=(277.0000, 180.0000, 0.0000) scale=(0.016667, 0.016667, 0.016667) active=True
+ COMPONENT Transform
+ MESH Rod enabled=True path=Assets/Models/Parts/Miscellaneous/Plunger.fbx localBounds=Center: (0.00, 21.69, 0.00), Extents: (11.75, 81.91, 11.75) world=Center: (3.84, 0.47, 0.65), Extents: (0.20, 0.36, 1.38) viewport=Center: (0.08, 0.07, 28.26), Extents: (0.07, 0.02, 1.07) mat=Assets/Models/Parts/Miscellaneous/Plunger.fbx,Assets/Generated/NeutralVpeFinish/Metal - Steel with AO dirt_PBR.mat
+ MESH Spring enabled=True path=Assets/Models/Parts/Miscellaneous/Plunger.fbx localBounds=Center: (-0.12, 40.69, -0.13), Extents: (10.16, 61.21, 10.17) world=Center: (3.84, 0.43, 0.28), Extents: (0.17, 0.29, 1.03) viewport=Center: (0.06, 0.07, 28.01), Extents: (0.05, 0.02, 0.82) mat=Assets/Generated/NeutralVpeFinish/Metal - Zinc with AO dirt_PBR.mat
+ COLLIDER Rod Center: (3.84, 0.47, 0.65), Extents: (0.20, 0.36, 1.38) enabled=True trigger=False
+PinballTable/Gameplay/BallSpawnPoint pos=(3.85000, 0.50222, 2.10448) local=(3.85000, 0.24200, 2.15000) rot=(0.0000, 0.0000, 0.0000) scale=(1.000000, 1.000000, 1.000000) active=True
+ COMPONENT Transform
+PinballTable/Gameplay/Ball pos=(3.85000, 0.50222, 2.10448) local=(3.85000, 0.24200, 2.15000) rot=(0.0000, 0.0000, 0.0000) scale=(0.414000, 0.414000, 0.414000) active=True
+ COMPONENT Transform
+ COMPONENT MeshFilter
+ COMPONENT MeshRenderer
+ COMPONENT SphereCollider
+ COMPONENT Rigidbody
+ MESH Ball enabled=True path=Library/unity default resources localBounds=Center: (0.00, 0.00, 0.00), Extents: (0.50, 0.50, 0.50) world=Center: (3.85, 0.50, 2.10), Extents: (0.21, 0.21, 0.21) viewport=Center: (0.14, 0.07, 29.35), Extents: (0.02, 0.02, 0.29) mat=Assets/Materials/BallChrome_Mat.mat
+ COLLIDER Ball Center: (3.85, 0.50, 2.10), Extents: (0.21, 0.21, 0.21) enabled=True trigger=False
+PinballTable/Table/Pinball_Table/Playfield pos=(0.00000, 0.00000, 0.00000) local=(0.00000, 0.00000, 0.00000) rot=(277.0000, 180.0000, 180.0000) scale=(1666.667000, 1666.667000, 1666.667000) active=True
+ COMPONENT Transform
+ COLLIDER LaneFloor Center: (1.82, -0.09, -0.74), Extents: (0.00, 0.00, 0.00) enabled=False trigger=False
+ COLLIDER Surface Center: (-0.67, -0.04, -0.35), Extents: (0.00, 0.00, 0.00) enabled=False trigger=False
+PinballTable/ReferencePlayfield/Playfield pos=(0.00000, 1.03517, 9.33341) local=(0.00000, -0.11000, 9.39000) rot=(353.0000, 0.0000, 0.0000) scale=(8.573000, 0.220000, 16.780000) active=True
+ COMPONENT Transform
+ COMPONENT MeshFilter
+ COMPONENT BoxCollider
+ COMPONENT MeshRenderer
+ MESH Playfield enabled=False path=Library/unity default resources localBounds=Center: (0.00, 0.00, 0.00), Extents: (0.50, 0.50, 0.50) world=Center: (0.00, 1.04, 9.33), Extents: (4.29, 1.13, 8.34) viewport=Center: (0.46, 0.50, 34.53), Extents: (0.39, 0.48, 5.78) mat=Assets/Generated/NeutralReference/Playfield.mat
+ COLLIDER Playfield Center: (0.00, 1.04, 9.33), Extents: (0.00, 0.00, 0.00) enabled=False trigger=False
+PinballTable/ReferencePlayfield/LeftCabinet pos=(-4.40000, 0.43948, 8.91288) local=(-4.40000, -0.65000, 8.90000) rot=(353.0000, 0.0000, 0.0000) scale=(0.220000, 1.600000, 18.000000) active=True
+ COMPONENT Transform
+ COMPONENT MeshFilter
+ COMPONENT MeshRenderer
+ MESH LeftCabinet enabled=True path=Library/unity default resources localBounds=Center: (0.00, 0.00, 0.00), Extents: (0.50, 0.50, 0.50) world=Center: (-4.40, 0.44, 8.91), Extents: (0.11, 1.89, 9.03) viewport=Center: (0.41, 0.99, 34.59), Extents: (0.45, 0.01, 6.70) mat=Assets/Generated/NeutralVpeFinish/EnamelMidnight_PBR.mat
+PinballTable/ReferencePlayfield/RightCabinet pos=(4.40000, 0.43948, 8.91288) local=(4.40000, -0.65000, 8.90000) rot=(353.0000, 0.0000, 0.0000) scale=(0.220000, 1.600000, 18.000000) active=True
+ COMPONENT Transform
+ COMPONENT MeshFilter
+ COMPONENT MeshRenderer
+ MESH RightCabinet enabled=True path=Library/unity default resources localBounds=Center: (0.00, 0.00, 0.00), Extents: (0.50, 0.50, 0.50) world=Center: (4.40, 0.44, 8.91), Extents: (0.11, 1.89, 9.03) viewport=Center: (0.41, 0.01, 34.59), Extents: (0.45, 0.01, 6.70) mat=Assets/Generated/NeutralVpeFinish/EnamelMidnight_PBR.mat
+PinballTable/ReferencePlayfield/ShooterOuter pos=(0.00000, 0.00000, 0.00000) local=(0.00000, 0.00000, 0.00000) rot=(353.0000, 0.0000, 0.0000) scale=(1.000000, 1.000000, 1.000000) active=True
+ COMPONENT Transform
+ COMPONENT MeshFilter
+ COMPONENT MeshRenderer
+ COMPONENT MeshCollider
+ MESH ShooterOuter enabled=True path=Assets/Generated/NeutralSurfaceCoordinates/015_ShooterOuter_SurfaceCoordinates.asset localBounds=Center: (4.20, 0.38, 8.25), Extents: (0.05, 0.38, 7.25) world=Center: (4.20, 1.38, 8.14), Extents: (0.05, 1.26, 7.24) viewport=Center: (0.43, 0.03, 33.40), Extents: (0.35, 0.01, 5.20) mat=Assets/Generated/NeutralVpeFinish/PolishedSteel_PBR.mat
+ COLLIDER ShooterOuter Center: (4.20, 1.38, 8.14), Extents: (0.05, 1.26, 7.24) enabled=True trigger=False
+PinballTable/ReferencePlayfield/ShooterDivider pos=(0.00000, 0.00000, 0.00000) local=(0.00000, 0.00000, 0.00000) rot=(353.0000, 0.0000, 0.0000) scale=(1.000000, 1.000000, 1.000000) active=True
+ COMPONENT Transform
+ COMPONENT MeshFilter
+ COMPONENT MeshRenderer
+ COMPONENT MeshCollider
+ MESH ShooterDivider enabled=True path=Assets/Generated/NeutralSurfaceCoordinates/016_ShooterDivider_SurfaceCoordinates.asset localBounds=Center: (3.50, 0.33, 7.85), Extents: (0.05, 0.33, 6.85) world=Center: (3.50, 1.28, 7.75), Extents: (0.05, 1.16, 6.84) viewport=Center: (0.41, 0.11, 33.17), Extents: (0.33, 0.01, 4.89) mat=Assets/Generated/NeutralVpeFinish/PolishedSteel_PBR.mat
+ COLLIDER ShooterDivider Center: (3.50, 1.28, 7.75), Extents: (0.05, 1.16, 6.84) enabled=True trigger=False
+PinballTable/ReferencePlayfield/CabinetBackdrop pos=(0.00000, 0.92545, 10.16297) local=(0.00000, -0.32000, 10.20000) rot=(353.0000, 0.0000, 0.0000) scale=(9.000000, 0.100000, 21.800000) active=True
+ COMPONENT Transform
+ COMPONENT MeshFilter
+ COMPONENT MeshRenderer
+ MESH CabinetBackdrop enabled=True path=Library/unity default resources localBounds=Center: (0.00, 0.00, 0.00), Extents: (0.50, 0.50, 0.50) world=Center: (0.00, 0.93, 10.16), Extents: (4.50, 1.38, 10.82) viewport=Center: (0.49, 0.50, 35.23), Extents: (0.50, 0.50, 7.44) mat=Assets/Generated/NeutralVpeFinish/EnamelMidnight_PBR.mat
+PinballTable/ReferencePlayfield/ProfessionalArt/PrintedPlayfield pos=(0.00000, 0.00000, 0.00000) local=(0.00000, 0.00000, 0.00000) rot=(353.0000, 0.0000, 0.0000) scale=(1.000000, 1.000000, 1.000000) active=True
+ COMPONENT Transform
+ COMPONENT MeshFilter
+ COMPONENT MeshRenderer
+ MESH PrintedPlayfield enabled=False path=Assets/Generated/NeutralSurfaceCoordinates/019_0_PrintedPlayfield_SurfaceCoordinates.asset localBounds=Center: (0.00, 0.01, 9.39), Extents: (4.29, 0.00, 8.39) world=Center: (0.00, 1.15, 9.31), Extents: (4.29, 1.02, 8.32) viewport=Center: (0.46, 0.50, 34.44), Extents: (0.38, 0.48, 5.70) mat=Assets/Generated/NeutralVpeFinish/PlayfieldPrint_PBR.mat

@@ -1,0 +1,11 @@
+if(!UnityEditor.EditorApplication.isPlaying)throw new Exception("Play attendu");
+var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+var folder="Docs/SharedMechanicsValidation";System.IO.Directory.CreateDirectory(folder);
+ScreenCapture.CaptureScreenshot(folder+"/"+scene.name+".png");
+var camera=Camera.main;
+var report=$"scene={scene.name} time={Time.time} paused={UnityEditor.EditorApplication.isPaused} timeScale={Time.timeScale}\ncamera={camera.transform.position} rotation={camera.transform.eulerAngles} ortho={camera.orthographicSize}\n";
+foreach(var root in scene.GetRootGameObjects())foreach(var tr in root.GetComponentsInChildren<Transform>(true)) {
+ if(tr.name=="Plunger_IndustriesVisual" || tr.name=="Shooter" || tr.name=="Ramp17" || tr.name=="ExampleTable")report+=tr.name+" world="+tr.position+" local="+tr.localPosition+" scale="+tr.lossyScale+"\n";
+}
+System.IO.File.WriteAllText(folder+"/"+scene.name+"-capture.txt",report);
+return report;

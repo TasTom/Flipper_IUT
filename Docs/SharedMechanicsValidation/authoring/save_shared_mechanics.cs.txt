@@ -1,0 +1,10 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+var neutral=UnityEngine.SceneManagement.SceneManager.GetSceneByPath("Assets/Scenes/Neutral.unity");
+var industry=UnityEngine.SceneManagement.SceneManager.GetSceneByPath("Assets/Scenes/Industries.unity");
+if(!neutral.isLoaded || !industry.isLoaded)throw new Exception("Les deux scènes sont attendues");
+var root=neutral.GetRootGameObjects().Single(g=>g.name=="PinballTable");
+if(root.transform.Find("ReferencePlayfield/IndustriesHardware/Shooter")==null || root.transform.Find("ReferencePlayfield/IndustriesHardware/Ramp17")==null || root.transform.Find("Gameplay/Plunger/Plunger_IndustriesVisual")==null)throw new Exception("Pièces incomplètes");
+UnityEditor.SceneManagement.EditorSceneManager.SaveScene(neutral);
+UnityEditor.SceneManagement.EditorSceneManager.SaveScene(industry);
+UnityEditor.SceneManagement.EditorSceneManager.CloseScene(neutral,true);
+return "Neutral et Industries enregistrées explicitement ; Industries reste active.";

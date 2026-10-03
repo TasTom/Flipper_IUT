@@ -1,0 +1,27 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+var industry=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+if(industry.name!="Industries" || industry.isDirty)throw new Exception("Industries enregistrée attendue");
+var neutral=UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Neutral.unity",UnityEditor.SceneManagement.OpenSceneMode.Additive);
+var report=new System.Text.StringBuilder();
+try {
+ foreach(var scene in new[]{industry,neutral}) {
+  report.AppendLine("SCENE "+scene.name);
+  var all=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Transform>(true)).ToArray();
+  var camera=all.Select(t=>t.GetComponent<Camera>()).Single(c=>c!=null);
+  foreach(var tr in all.Where(t=>new[]{"Plunger","Shooter","Ramp17","Plunger_Rod","BallSpawnPoint","Ball","PrintedPlayfield","Playfield","CabinetBackdrop","LeftCabinet","RightCabinet","LeftRail","RightRail","ShooterOuter","ShooterDivider"}.Contains(t.name))) {
+   string path=tr.name;for(var parent=tr.parent;parent!=null;parent=parent.parent)path=parent.name+"/"+path;
+   report.AppendLine(path+" pos="+tr.position.ToString("F5")+" local="+tr.localPosition.ToString("F5")+" rot="+tr.eulerAngles.ToString("F4")+" scale="+tr.lossyScale.ToString("F6")+" active="+tr.gameObject.activeSelf);
+   foreach(var comp in tr.GetComponents<Component>())report.AppendLine(" COMPONENT "+comp.GetType().Name+(comp is MonoBehaviour?" "+UnityEditor.EditorJsonUtility.ToJson(comp):""));
+   foreach(var mf in tr.GetComponentsInChildren<MeshFilter>(true)) {
+    if(tr.name=="Playfield" && mf.name!=tr.name && mf.name!="PrintedPlayfield")continue;
+    var r=mf.GetComponent<Renderer>();if(mf.sharedMesh==null){report.AppendLine(" EMPTY MESH "+mf.name);continue;}
+    Bounds wb=new Bounds(mf.transform.TransformPoint(mf.sharedMesh.bounds.center),Vector3.zero);Bounds pb=new Bounds();bool has=false;
+    for(int i=0;i<8;i++) {var p=mf.sharedMesh.bounds.center+Vector3.Scale(mf.sharedMesh.bounds.extents,new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1));var w=mf.transform.TransformPoint(p);wb.Encapsulate(w);var s=camera.WorldToViewportPoint(w);if(!has){pb=new Bounds(s,Vector3.zero);has=true;}else pb.Encapsulate(s);}
+    report.AppendLine(" MESH "+mf.name+" enabled="+r.enabled+" path="+UnityEditor.AssetDatabase.GetAssetPath(mf.sharedMesh)+" localBounds="+mf.sharedMesh.bounds+" world="+wb+" viewport="+pb+" mat="+string.Join(",",r.sharedMaterials.Select(m=>m==null?"null":UnityEditor.AssetDatabase.GetAssetPath(m))));
+   }
+   foreach(var collider in tr.GetComponentsInChildren<Collider>(true))report.AppendLine(" COLLIDER "+collider.name+" "+collider.bounds+" enabled="+collider.enabled+" trigger="+collider.isTrigger);
+  }
+ }
+ System.IO.File.WriteAllText("Tools/unity/out/shared-mechanics-before.txt",report.ToString());
+ return report.ToString();
+} finally {UnityEditor.SceneManagement.EditorSceneManager.CloseScene(neutral,true);}

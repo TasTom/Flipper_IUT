@@ -1,0 +1,32 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+var destination=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();if(destination.name!="Industries" || destination.isDirty)throw new Exception("Industries enregistrée attendue");
+var source=UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Neutral.unity",UnityEditor.SceneManagement.OpenSceneMode.Additive);
+var report=new System.Text.StringBuilder();int failures=0;
+try {
+ var reference=source.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Camera>(true)).Single();var camera=destination.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Camera>(true)).Single();
+ var sourceViewport=reference.GetComponent<CabinetViewport>();var viewport=camera.GetComponent<CabinetViewport>();
+ var sourceSettings=new UnityEditor.SerializedObject(sourceViewport);var settings=new UnityEditor.SerializedObject(viewport);
+ var sourceFrame=(Transform)sourceSettings.FindProperty("table").objectReferenceValue;var frame=(Transform)settings.FindProperty("table").objectReferenceValue;
+ var sourcePanel=(RectTransform)sourceSettings.FindProperty("scorePanel").objectReferenceValue;var panel=(RectTransform)settings.FindProperty("scorePanel").objectReferenceValue;
+ foreach(var size in new[]{new Vector2Int(1920,1080),new Vector2Int(2560,1440),new Vector2Int(1920,1200)}) {
+  var texture=new RenderTexture(size.x,size.y,24);
+  try {
+   reference.targetTexture=texture;camera.targetTexture=texture;sourceViewport.Fit();viewport.Fit();
+   float angle=Quaternion.Angle(reference.transform.rotation,camera.transform.rotation);
+   float position=Vector3.Distance(sourceFrame.InverseTransformPoint(reference.transform.position),frame.InverseTransformPoint(camera.transform.position));
+   float zoom=Mathf.Abs(reference.orthographicSize-camera.orthographicSize/frame.lossyScale.x);
+   var sourceCorners=new Vector3[4];var corners=new Vector3[4];sourcePanel.GetWorldCorners(sourceCorners);panel.GetWorldCorners(corners);
+   float cornerError=0;for(int i=0;i<4;i++)cornerError=Mathf.Max(cornerError,Vector2.Distance(reference.WorldToViewportPoint(sourceCorners[i]),camera.WorldToViewportPoint(corners[i])));
+   bool pass=angle<.05f && position<.0001f && zoom<.00001f && cornerError<.00001f && camera.rect==reference.rect;
+   if(!pass)failures++;report.AppendLine((pass?"PASS ":"FAIL ")+size+" angleError="+angle+" normalizedPositionError="+position+" normalizedZoomError="+zoom+" scoreCornerError="+cornerError);
+  } finally {reference.targetTexture=null;camera.targetTexture=null;UnityEngine.Object.DestroyImmediate(texture);sourceViewport.Fit();viewport.Fit();}
+ }
+ foreach(var text in sourcePanel.GetComponentsInChildren<TMPro.TMP_Text>()) {
+  var copy=panel.Find(text.name).GetComponent<TMPro.TMP_Text>();var a=text.rectTransform;var b=copy.rectTransform;
+  bool pass=text.font==copy.font && text.fontSharedMaterial==copy.fontSharedMaterial && text.fontSize==copy.fontSize && text.color==copy.color && text.alignment==copy.alignment && a.anchorMin==b.anchorMin && a.anchorMax==b.anchorMax && a.sizeDelta==b.sizeDelta && a.anchoredPosition==b.anchoredPosition && a.pivot==b.pivot;
+  if(!pass)failures++;report.AppendLine((pass?"PASS ":"FAIL ")+"style et placement "+text.name);
+ }
+ report.AppendLine("failures="+failures);
+ System.IO.File.WriteAllText("Docs/IndustriesValidation/shared-presentation/comparison.txt",report.ToString());
+ return report.ToString();
+} finally {UnityEditor.SceneManagement.EditorSceneManager.CloseScene(source,true);}

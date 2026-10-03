@@ -1,0 +1,54 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+var industry=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+if(industry.name!="Industries" || industry.isDirty)throw new Exception("Industries enregistrée attendue");
+var neutral=UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Neutral.unity",UnityEditor.SceneManagement.OpenSceneMode.Additive);
+var report=new System.Text.StringBuilder();int failures=0;
+try {
+ var nt=neutral.GetRootGameObjects().Single(g=>g.name=="PinballTable").transform;
+ var reference=nt.Find("ReferencePlayfield");
+ var table=industry.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<VisualPinball.Unity.TableComponent>(true)).Single();
+ var pf=table.GetComponentInChildren<VisualPinball.Unity.PlayfieldComponent>().transform;
+ float neutralWidth=BoundsFor(new[]{reference.Find("LeftCabinet"),reference.Find("RightCabinet")},null).size.x;
+ float industryWidth=BoundsFor(new[]{pf.Find("LeftRail"),pf.Find("RightRail")},null).size.x;
+ Check("largeurs extérieures égales",Mathf.Abs(neutralWidth-industryWidth)<.0001f,$"Neutral={neutralWidth:F6} Industries={industryWidth:F6}");
+ Check("échelle Industries uniforme",Mathf.Abs(table.transform.localScale.x-table.transform.localScale.y)<.00001f && Mathf.Abs(table.transform.localScale.y-table.transform.localScale.z)<.00001f,table.transform.localScale.ToString("F6"));
+ var plunger=nt.Find("Gameplay/Plunger");var visual=plunger.Find("Plunger_IndustriesVisual");var hardware=reference.Find("IndustriesHardware");
+ Check("trois pièces reprises sans physique supplémentaire",visual!=null && hardware.Find("Shooter")!=null && hardware.Find("Ramp17")!=null && visual.GetComponentsInChildren<Collider>(true).Length==0 && hardware.GetComponentsInChildren<Collider>(true).Length==0,"Plunger, Shooter, Ramp17");
+ Check("lanceur Neutral PhysX unique et collider conservé",neutral.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Plunger>(true)).Count()==1 && plunger.Find("Plunger_Rod").GetComponentsInChildren<BoxCollider>(true).Length==1 && neutral.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<VisualPinball.Unity.PlungerComponent>(true)).Count()==0,"");
+ float front=BoundsFor(new[]{hardware.Find("Shooter")},nt).max.z;
+ var spawn=nt.Find("Gameplay/BallSpawnPoint");var ball=nt.Find("Gameplay/Ball").GetComponent<SphereCollider>();
+ float clearance=nt.InverseTransformPoint(spawn.position).z-ball.radius*ball.transform.lossyScale.x-front;
+ Check("bille au repos dégagée du cache fixe",clearance>.024f,$"frontZ={front:F6} marge={clearance:F6}");
+ var bar=BoundsFor(new[]{hardware.Find("Ramp17")},nt);
+ Check("Ramp17 visible sur l'apron et avant les flippers",Mathf.Abs(bar.max.y-.56f)<.0001f && bar.min.z>.09f && bar.max.z<.61f,$"bounds={bar}");
+ var localBounds=typeof(AdaptIndustriesTable).GetMethod("PlayfieldBounds",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Static);
+ var cup=table.GetComponentsInChildren<VisualPinball.Unity.PrimitiveComponent>(true).Single(t=>t.name=="kickerCup1").GetComponent<MeshRenderer>();
+ var cb=(Bounds)localBounds.Invoke(null,new object[]{cup,table});
+ Check("réparation du scoop indépendante de l'échelle",Mathf.Abs(cb.size.x-.045f)<.0001f,$"diamètre local={cb.size.x:F6} monde={cup.bounds.size.x:F6}");
+ var presentation=industry.GetRootGameObjects().Single(g=>g.name=="IndustriesPresentation").GetComponent<IndustriesPresentation>();
+ var so=new UnityEditor.SerializedObject(presentation);var hidden=so.FindProperty("hiddenRenderers");int active=0,missing=0;
+ for(int i=0;i<hidden.arraySize;i++){var renderer=(Renderer)hidden.GetArrayElementAtIndex(i).objectReferenceValue;if(renderer==null)missing++;else if(renderer.enabled)active++;}
+ Check("visibilité du template conservée",hidden.arraySize==99 && active==0 && missing==0,$"masqués={hidden.arraySize} actifs={active} manquants={missing}");
+ Check("décor suit l'échelle de la table",table.transform.Find("WorkshopBackdrop")!=null,"");
+ Check("six cibles VPE",table.GetComponentsInChildren<VisualPinball.Unity.DropTargetComponent>(true).Length+table.GetComponentsInChildren<VisualPinball.Unity.HitTargetComponent>(true).Length==6,"");
+ foreach(var scene in new[]{neutral,industry}) {
+  var objects=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Transform>(true)).ToArray();
+  int absent=objects.Sum(t=>UnityEditor.GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(t.gameObject));
+  Check(scene.name+" : scripts et caméra",absent==0 && objects.Select(t=>t.GetComponent<Camera>()).Count(c=>c!=null)==1,$"scripts manquants={absent}");
+ }
+ var camera=industry.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Camera>(true)).Single();
+ var sourceCamera=neutral.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Camera>(true)).Single();
+ Check("pose caméra et zoom identiques",Vector3.Distance(camera.transform.position,sourceCamera.transform.position)<.0001f && Quaternion.Angle(camera.transform.rotation,sourceCamera.transform.rotation)<.01f && Mathf.Abs(camera.orthographicSize-sourceCamera.orthographicSize)<.0001f,camera.transform.position.ToString("F6"));
+ report.AppendLine("failures="+failures);System.IO.File.WriteAllText("Docs/SharedMechanicsValidation/saved-scenes.txt",report.ToString());
+ return report.ToString();
+} finally {UnityEditor.SceneManagement.EditorSceneManager.CloseScene(neutral,true);}
+void Check(string name,bool pass,string detail){if(!pass)failures++;report.AppendLine((pass?"PASS ":"FAIL ")+name+(detail.Length>0?" : "+detail:""));}
+Bounds BoundsFor(Transform[] roots,Transform space) {
+ Bounds result=new Bounds();bool has=false;
+ foreach(var root in roots)foreach(var mesh in root.GetComponentsInChildren<MeshFilter>(true)) {
+  if(mesh.sharedMesh==null || mesh.sharedMesh.vertexCount==0)continue;
+  var b=mesh.sharedMesh.bounds;var matrix=(space!=null?space.worldToLocalMatrix:Matrix4x4.identity)*mesh.transform.localToWorldMatrix;
+  for(int i=0;i<8;i++){var point=matrix.MultiplyPoint3x4(b.center+Vector3.Scale(b.extents,new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1)));if(!has){result=new Bounds(point,Vector3.zero);has=true;}else result.Encapsulate(point);}
+ }
+ return result;
+}

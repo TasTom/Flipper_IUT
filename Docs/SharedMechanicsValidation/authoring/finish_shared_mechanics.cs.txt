@@ -1,0 +1,9 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+UnityEditor.PlayerSettings.runInBackground=false;
+UnityEngine.Application.runInBackground=false;
+var entries=typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.LogEntries");
+entries.GetMethod("SetConsoleFlag",System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.NonPublic).Invoke(null,new object[]{4,true});
+var scene=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+if(scene.isDirty)throw new Exception("Scène modifiée : pas de fermeture automatique");
+scene=UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Neutral.unity",UnityEditor.SceneManagement.OpenSceneMode.Single);
+return "Neutral ouverte hors Play ; scènes enregistrées ; exécution en arrière-plan désactivée ; Error Pause rétabli.";

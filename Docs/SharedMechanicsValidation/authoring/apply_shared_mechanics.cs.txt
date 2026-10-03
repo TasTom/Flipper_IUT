@@ -1,0 +1,92 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new Exception("Hors Play attendu");
+var industry=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+if(industry.name!="Industries" || industry.isDirty)throw new Exception("Industries enregistrée attendue");
+var neutral=UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Neutral.unity",UnityEditor.SceneManagement.OpenSceneMode.Additive);
+int group=-1;
+try {
+ var nt=neutral.GetRootGameObjects().Single(g=>g.name=="PinballTable").transform;
+ var reference=nt.Find("ReferencePlayfield");var plunger=nt.Find("Gameplay/Plunger");
+ if(reference.Find("IndustriesHardware")!=null)throw new Exception("Pièces déjà reprises : réglages conservés");
+ var table=industry.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<VisualPinball.Unity.TableComponent>(true)).Single();
+ if(table.transform.localScale!=Vector3.one)throw new Exception("Échelle Industries déjà ajustée : inspection requise");
+ var pf=table.GetComponentInChildren<VisualPinball.Unity.PlayfieldComponent>().transform;
+ var nativePlunger=pf.GetComponentsInChildren<VisualPinball.Unity.PlungerComponent>().Single().transform;
+ var nativeShooter=pf.GetComponentsInChildren<Transform>().Single(t=>t.name=="Shooter");
+ var nativeRamp=pf.GetComponentsInChildren<VisualPinball.Unity.RampComponent>().Single(r=>r.name=="Ramp17").transform;
+ var nb=CombinedBounds(new[]{reference.Find("LeftCabinet"),reference.Find("RightCabinet")},nt);
+ var ib=CombinedBounds(new[]{pf.Find("LeftRail"),pf.Find("RightRail")},pf);
+ float scale=nb.size.x/ib.size.x;
+ var floor=pf.Find("PrintedPlayfield").GetComponent<MeshFilter>().sharedMesh.bounds;
+ var neutralFloor=CombinedBounds(new[]{reference.Find("Playfield")},nt);
+ System.IO.File.Copy("Assets/Scenes/Neutral.unity","Tools/unity/out/neutral-before-shared-mechanics.unity",true);
+ System.IO.File.Copy("Assets/Scenes/Industries.unity","Tools/unity/out/industries-before-shared-mechanics.unity",true);
+ UnityEditor.Undo.IncrementCurrentGroup();group=UnityEditor.Undo.GetCurrentGroup();UnityEditor.Undo.SetCurrentGroupName("Pièces Industries dans Neutral et largeur commune");
+ const string folder="Assets/Generated/SharedIndustriesHardware";
+ if(!UnityEditor.AssetDatabase.IsValidFolder(folder))UnityEditor.AssetDatabase.CreateFolder("Assets/Generated","SharedIndustriesHardware");
+ var hardware=New("IndustriesHardware",reference);
+ var visual=CopyVisual(nativePlunger,"Plunger_IndustriesVisual",plunger,nativePlunger,scale);
+ var old=plunger.Find("Plunger_Rod");var head=old.GetComponentInChildren<BoxCollider>();
+ if(head==null)throw new Exception("Collider du lanceur Neutral absent");
+ var hc=new Bounds(head.center,head.size);var oldBounds=TransformBounds(hc,plunger.worldToLocalMatrix*head.transform.localToWorldMatrix);
+ var rod=visual.Find("Rod").GetComponent<MeshFilter>().sharedMesh.bounds;
+ visual.localPosition=new Vector3(oldBounds.center.x-rod.center.x,oldBounds.center.y-rod.center.y,oldBounds.max.z-rod.max.z);
+ foreach(var renderer in old.GetComponentsInChildren<Renderer>(true)) {
+  UnityEditor.Undo.RecordObject(renderer,"Lanceur Industries visible");renderer.enabled=false;UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(renderer);
+ }
+ var shooter=CopyVisual(nativeShooter,"Shooter",hardware,nativePlunger,scale);
+ shooter.localPosition=hardware.InverseTransformPoint(plunger.TransformPoint(visual.localPosition));
+ var ramp=CopyVisual(nativeRamp,"Ramp17",hardware,nativeRamp,scale);
+ var rampBounds=CombinedBounds(new[]{ramp},ramp);
+ ramp.localScale=new Vector3(1,1,.5f/rampBounds.size.z);
+ ramp.localPosition=new Vector3(nb.center.x-rampBounds.center.x,.25f-rampBounds.max.y,neutralFloor.min.z-.65f-rampBounds.center.z*ramp.localScale.z);
+ // VPE simule dans le repère du playfield : seule la conversion vers les unités de scène change.
+ UnityEditor.Undo.RecordObject(table.transform,"Largeur commune de table");
+ table.transform.localScale=Vector3.one*scale;
+ table.transform.position=new Vector3(nb.center.x-ib.center.x*scale,0,neutralFloor.min.z-floor.min.z*scale);
+ var presentation=industry.GetRootGameObjects().Single(g=>g.name=="IndustriesPresentation").transform;
+ var frame=presentation.Find("CabinetFraming");UnityEditor.Undo.RecordObject(frame,"Repère caméra de Neutral");
+ frame.position=nt.position;frame.rotation=nt.rotation;frame.localScale=nt.lossyScale;
+ var viewport=industry.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<CabinetViewport>()).Single();
+ UnityEditor.Undo.RecordObject(viewport.transform,"Cadrage à l'échelle Neutral");UnityEditor.Undo.RecordObject(viewport.GetComponent<Camera>(),"Cadrage à l'échelle Neutral");
+ viewport.Fit();
+ UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(neutral);UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(industry);
+ UnityEditor.AssetDatabase.SaveAssets();UnityEditor.Undo.CollapseUndoOperations(group);
+ var report=$"Largeur extérieure Neutral={nb.size.x:F6} ; Industries avant={ib.size.x:F6} ; facteur uniforme={scale:F6} ; Industries après={ib.size.x*scale:F6}\nIndustries root={table.transform.position} scale={table.transform.localScale}\nNeutral lanceur={visual.localPosition} Shooter={shooter.localPosition} Ramp17={ramp.localPosition}\nColliders ajoutés=0 ; réglages PhysX et VPX inchangés. Scènes non enregistrées.\n";
+ System.IO.File.WriteAllText("Tools/unity/out/shared-mechanics-applied.txt",report);
+ return report;
+
+ Transform CopyVisual(Transform original,string name,Transform parent,Transform origin,float factor) {
+  var root=New(name,parent);
+  foreach(var mf in original.GetComponentsInChildren<MeshFilter>(true)) {
+   if(mf.sharedMesh==null || mf.sharedMesh.vertexCount==0)continue;
+   var matrix=Matrix4x4.Scale(Vector3.one*factor)*origin.worldToLocalMatrix*mf.transform.localToWorldMatrix;
+   var mesh=UnityEngine.Object.Instantiate(mf.sharedMesh);mesh.name=name+"_"+mf.name;
+   mesh.vertices=mesh.vertices.Select(matrix.MultiplyPoint3x4).ToArray();
+   var normals=mesh.normals;if(normals.Length>0){var normalMatrix=matrix.inverse.transpose;mesh.normals=normals.Select(n=>normalMatrix.MultiplyVector(n).normalized).ToArray();}
+   // Les meshes de repos deviennent des visuels PhysX ; les générateurs/animations VPE ne sont pas copiés.
+   mesh.ClearBlendShapes();mesh.RecalculateBounds();mesh.RecalculateTangents();
+   UnityEditor.AssetDatabase.CreateAsset(mesh,folder+"/"+mesh.name+".asset");
+   var piece=New(mf.transform==original?"Visual":mf.name,root);
+   piece.gameObject.AddComponent<MeshFilter>().sharedMesh=mesh;
+   var renderer=piece.gameObject.AddComponent<MeshRenderer>();var sourceRenderer=mf.GetComponent<Renderer>();renderer.sharedMaterials=sourceRenderer.sharedMaterials;
+   renderer.shadowCastingMode=sourceRenderer.shadowCastingMode;renderer.receiveShadows=sourceRenderer.receiveShadows;
+  }
+  return root;
+ }
+ Transform New(string name,Transform parent) {var go=new GameObject(name);UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(go,neutral);UnityEditor.Undo.RegisterCreatedObjectUndo(go,"Pièces de table communes");go.transform.SetParent(parent,false);return go.transform;}
+ Bounds CombinedBounds(Transform[] roots,Transform space) {
+  Bounds result=new Bounds();bool has=false;
+  foreach(var root in roots)foreach(var mf in root.GetComponentsInChildren<MeshFilter>(true)) {
+   if(mf.sharedMesh==null || mf.sharedMesh.vertexCount==0)continue;
+   var b=TransformBounds(mf.sharedMesh.bounds,space.worldToLocalMatrix*mf.transform.localToWorldMatrix);
+   if(!has){result=b;has=true;}else result.Encapsulate(b);
+  }
+  if(!has)throw new Exception("Géométrie absente");return result;
+ }
+ Bounds TransformBounds(Bounds b,Matrix4x4 matrix) {
+  var result=new Bounds(matrix.MultiplyPoint3x4(b.center),Vector3.zero);
+  for(int i=0;i<8;i++)result.Encapsulate(matrix.MultiplyPoint3x4(b.center+Vector3.Scale(b.extents,new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1))));
+  return result;
+ }
+} catch {if(group>=0)UnityEditor.Undo.RevertAllDownToGroup(group);UnityEditor.SceneManagement.EditorSceneManager.CloseScene(neutral,true);throw;}
+// Neutral reste ouverte : l'enregistrement explicite vient après la vérification.

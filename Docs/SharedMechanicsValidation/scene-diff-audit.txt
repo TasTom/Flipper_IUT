@@ -1,0 +1,7 @@
+PASS Neutral: existing physics, colliders and MonoBehaviour field values unchanged from source baseline.
+Unity serialized three previously missing default fields: tableGeometry=null, compactMultiplierLabel=false, externalBallLifecycle=false. Existing behavior retained.
+Added Neutral blocks: {'33': 4, '23': 4, '4': 8, '1': 8}
+Changed Neutral blocks: {'4': 2, '1001': 1, '114': 3}
+PASS Industries: 149 embedded mesh contents identical after generated ID remapping.
+PASS Industries: existing physics components, colliders and mechanical prefab overrides unchanged after mesh ID remapping (one editor object instance ID ignored).
+Five native decorative lamp heights are recalculated by VPE SetChildrenZPosition/SetZPosition in world units when the root changes scale; their local Y is divided by 15.6055355. X/Z only differ by floating point rounding <0.0000002. No lamp configuration or collision setting changes.

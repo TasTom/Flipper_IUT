@@ -1,0 +1,5 @@
+scene=Neutral time=196,1265 paused=False timeScale=1
+camera=(0.00, 23.84, -16.60) rotation=(40.22, 0.00, 90.00) ortho=4,5
+Plunger_IndustriesVisual world=(3.84, 0.43, 2.03) local=(2.30, -0.21, 1.73) scale=(1.00, 1.00, 1.00)
+Shooter world=(3.84, 0.26, 0.62) local=(3.84, 0.18, 0.64) scale=(1.00, 1.00, 1.00)
+Ramp17 world=(0.00, -0.37, 0.40) local=(0.00, -0.42, 0.35) scale=(1.00, 1.00, 0.40)

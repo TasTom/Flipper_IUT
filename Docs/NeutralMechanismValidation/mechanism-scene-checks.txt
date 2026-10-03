@@ -1,0 +1,131 @@
+PASS Mechanism revision exists
+PASS Imported table surface stays at y=0
+PASS Exactly six reward targets
+PASS Two existing flippers retained
+PASS Two slingshots retained
+PASS Three bumpers retained
+PASS Ball radius remains 0.207
+PASS Vosges_Track finite geometry
+PASS Vosges_Track UV and tangents
+PASS Vosges_Cover finite geometry
+PASS Vosges_Cover UV and tangents
+PASS Vosges_UndercutGuard finite geometry
+PASS Vosges_UndercutGuard UV and tangents
+PASS Vosges_Rim_-1 finite geometry
+PASS Vosges_Rim_-1 UV and tangents
+PASS Vosges_Runner_-1 finite geometry
+PASS Vosges_Runner_-1 UV and tangents
+PASS Vosges_MidRail_-1 finite geometry
+PASS Vosges_MidRail_-1 UV and tangents
+PASS Vosges_Rim_1 finite geometry
+PASS Vosges_Rim_1 UV and tangents
+PASS Vosges_Runner_1 finite geometry
+PASS Vosges_Runner_1 UV and tangents
+PASS Vosges_MidRail_1 finite geometry
+PASS Vosges_MidRail_1 UV and tangents
+PASS Vosges_Brace_88 finite geometry
+PASS Vosges_Brace_88 UV and tangents
+PASS Vosges_Brace_100 finite geometry
+PASS Vosges_Brace_100 UV and tangents
+PASS Vosges_Brace_112 finite geometry
+PASS Vosges_Brace_112 UV and tangents
+PASS Vosges_Brace_124 finite geometry
+PASS Vosges_Brace_124 UV and tangents
+PASS Vosges_Brace_136 finite geometry
+PASS Vosges_Brace_136 UV and tangents
+PASS Vosges_Brace_148 finite geometry
+PASS Vosges_Brace_148 UV and tangents
+PASS LockLegend finite geometry
+PASS LockLegend UV and tangents
+PASS MagnetLegend finite geometry
+PASS MagnetLegend UV and tangents
+PASS IUT_Track finite geometry
+PASS IUT_Track UV and tangents
+PASS IUT_Cover finite geometry
+PASS IUT_Cover UV and tangents
+PASS IUT_UndercutGuard finite geometry
+PASS IUT_UndercutGuard UV and tangents
+PASS IUT_Rim_-1 finite geometry
+PASS IUT_Rim_-1 UV and tangents
+PASS IUT_Runner_-1 finite geometry
+PASS IUT_Runner_-1 UV and tangents
+PASS IUT_MidRail_-1 finite geometry
+PASS IUT_MidRail_-1 UV and tangents
+PASS IUT_Rim_1 finite geometry
+PASS IUT_Rim_1 UV and tangents
+PASS IUT_Runner_1 finite geometry
+PASS IUT_Runner_1 UV and tangents
+PASS IUT_MidRail_1 finite geometry
+PASS IUT_MidRail_1 UV and tangents
+PASS IUT_Brace_64 finite geometry
+PASS IUT_Brace_64 UV and tangents
+PASS IUT_Brace_76 finite geometry
+PASS IUT_Brace_76 UV and tangents
+PASS IUT_Brace_88 finite geometry
+PASS IUT_Brace_88 UV and tangents
+PASS IUT_Brace_100 finite geometry
+PASS IUT_Brace_100 UV and tangents
+PASS IUT_Brace_112 finite geometry
+PASS IUT_Brace_112 UV and tangents
+PASS IUT_Brace_124 finite geometry
+PASS IUT_Brace_124 UV and tangents
+PASS IUT_Brace_136 finite geometry
+PASS IUT_Brace_136 UV and tangents
+PASS IUT_Brace_148 finite geometry
+PASS IUT_Brace_148 UV and tangents
+PASS PrintedPlayfield_WithScoop finite geometry
+PASS PrintedPlayfield_WithScoop UV and tangents
+PASS Playfield_WithScoop finite geometry
+PASS Playfield_WithScoop UV and tangents
+PASS Scoop_Hole_Wall finite geometry
+PASS Scoop_Hole_Wall UV and tangents
+PASS 15 independent lamp groups
+PASS 42 explicit lamp emitters
+PASS Target_Matieres_01 reward lamp clears adjacent bezels
+PASS Target_Matieres_02 reward lamp clears adjacent bezels
+PASS Target_Matieres_03 reward lamp clears adjacent bezels
+PASS Target_Java_01 reward lamp clears adjacent bezels
+PASS Target_Projet_01 reward lamp clears adjacent bezels
+PASS Target_Cafe_01 reward lamp clears adjacent bezels
+PASS Ramp_Vosges config and emitters wired
+PASS Ramp_Vosges lenses have no collision
+PASS Ramp_IUT config and emitters wired
+PASS Ramp_IUT lenses have no collision
+PASS Scoop config and emitters wired
+PASS Scoop lenses have no collision
+PASS BallLock config and emitters wired
+PASS BallLock lenses have no collision
+PASS Magnet config and emitters wired
+PASS Magnet lenses have no collision
+PASS Loop config and emitters wired
+PASS Loop lenses have no collision
+PASS Reward_Matieres_01 config and emitters wired
+PASS Reward_Matieres_01 lenses have no collision
+PASS Reward_Matieres_02 config and emitters wired
+PASS Reward_Matieres_02 lenses have no collision
+PASS Reward_Matieres_03 config and emitters wired
+PASS Reward_Matieres_03 lenses have no collision
+PASS Reward_Java_01 config and emitters wired
+PASS Reward_Java_01 lenses have no collision
+PASS Reward_Projet_01 config and emitters wired
+PASS Reward_Projet_01 lenses have no collision
+PASS Reward_Cafe_01 config and emitters wired
+PASS Reward_Cafe_01 lenses have no collision
+PASS GI_Left config and emitters wired
+PASS GI_Left lenses have no collision
+PASS GI_Right config and emitters wired
+PASS GI_Right lenses have no collision
+PASS GI_Back config and emitters wired
+PASS GI_Back lenses have no collision
+PASS No extra real-time table Light added
+PASS Real aperture through the physical playfield
+PASS Solid playfield alongside aperture
+PASS Previous uncut floor retired
+PASS Scoop sensor sits beneath playfield
+PASS PinballScoop configuration wired
+PASS BallLock configuration wired
+PASS PlayfieldMagnet configuration wired
+PASS Flush magnet core has no obstacle collider
+PASS Spinner joint remains anchored after relocation
+PASS No test harness in saved scene
+SUMMARY checks=130 failures=0

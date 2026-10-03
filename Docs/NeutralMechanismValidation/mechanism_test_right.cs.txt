@@ -1,0 +1,42 @@
+if(!Application.isPlaying)throw new Exception("Play required");
+var table=GameObject.Find("PinballTable").transform;var ball=table.Find("Gameplay/Ball").GetComponent<Rigidbody>();
+var routesRoot=table.Find("Rails/MechanismRevision");var flips=new[]{table.Find("Gameplay/Flipper_Left_Pivot").GetComponent<Flipper>(),table.Find("Gameplay/Flipper_Right_Pivot").GetComponent<Flipper>()};
+var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;var fixedFlip=typeof(Flipper).GetMethod("FixedUpdate",flags);var clamp=typeof(BallManager).GetMethod("ClampSpeed",flags);var logging=typeof(Flipper).GetField("logInput",flags);
+var devices=new UnityEngine.InputSystem.Gamepad[2];var cabinets=new PinballControls[2];var saves=new string[2];var oldLogging=flips.Select(f=>(bool)logging.GetValue(f)).ToArray();var down=new[]{false,false};
+var previous=Physics.simulationMode;var background=UnityEngine.InputSystem.InputSystem.settings.backgroundBehavior;float dt=Time.fixedDeltaTime;var sb=new System.Text.StringBuilder();var trace=new System.Text.StringBuilder();
+int[] successes={0,0};int[] aimed={0,0};int[] firedCount={0,0};
+void Input(int i,bool value){if(down[i]==value)return;down[i]=value;var state=new UnityEngine.InputSystem.LowLevel.GamepadState();if(value)state=state.WithButton(UnityEngine.InputSystem.LowLevel.GamepadButton.South);UnityEngine.InputSystem.InputSystem.QueueStateEvent(devices[i],state);UnityEngine.InputSystem.InputSystem.Update();}
+void Tick(){for(int j=0;j<2;j++)fixedFlip.Invoke(flips[j],null);clamp.Invoke(BallManager.Instance,new object[]{ball});Physics.Simulate(dt);}
+try{
+ Physics.simulationMode=SimulationMode.Script;UnityEngine.InputSystem.InputSystem.settings.backgroundBehavior=UnityEngine.InputSystem.InputSettings.BackgroundBehavior.IgnoreFocus;
+ for(int i=0;i<2;i++){logging.SetValue(flips[i],false);devices[i]=UnityEngine.InputSystem.InputSystem.AddDevice<UnityEngine.InputSystem.Gamepad>();UnityEngine.InputSystem.InputSystem.SetDeviceUsage(devices[i],"RampAccessTest"+i);cabinets[i]=(PinballControls)typeof(Flipper).GetField("cabinet",flags).GetValue(flips[i]);saves[i]=UnityEngine.InputSystem.InputActionRebindingExtensions.SaveBindingOverridesAsJson(cabinets[i].asset);foreach(var a in new[]{cabinets[i].GamePlayPF.LeftFlipper,cabinets[i].GamePlayPF.RightFlipper})UnityEngine.InputSystem.InputActionRebindingExtensions.ApplyBindingOverride(a,0,"<Gamepad>{RampAccessTest"+i+"}/buttonSouth");}
+ for(int i=0;i<2;i++){UnityEngine.InputSystem.InputSystem.EnableDevice(devices[i]);int resolved=cabinets[i].GamePlayPF.LeftFlipper.controls.Count+cabinets[i].GamePlayPF.RightFlipper.controls.Count;}UnityEngine.InputSystem.InputSystem.Update();
+ foreach(int side in new[]{1}){
+  string ramp=side==0?"IUT":"Vosges";var route=JsonUtility.FromJson<RefineNeutralFlow.Routes>(System.IO.File.ReadAllText("Tools/unity/out/mechanism-paths.json")).routes.First(r=>r.name==ramp);Vector3 mouth=route.points[0];Vector3 tangent=route.points[1]-mouth;tangent.y=0;tangent.Normalize();Vector3 normal=new Vector3(tangent.z,0,-tangent.x);
+  var exit=table.Find("Gameplay/Ramp_"+ramp+"_Out").GetComponent<RampGate>();
+  for(int trial=0;trial<=20;trial++){
+   float threshold=3.75f-trial*.025f;GameManager.Instance.StartGame();foreach(var target in table.GetComponentsInChildren<SubjectTarget>())typeof(SubjectTarget).GetField("dernierHit",flags).SetValue(target,float.NegativeInfinity);foreach(var sling in table.GetComponentsInChildren<Slingshot>())typeof(Slingshot).GetField("lastKickTime",flags).SetValue(sling,float.NegativeInfinity);
+   for(int j=0;j<2;j++)Input(j,false);for(int n=0;n<25;n++)Tick();ball.position=table.TransformPoint(new Vector3(side==0?-3.1f:2.34f,.90f,6.9f));ball.linearVelocity=-table.forward*12f;ball.angularVelocity=Vector3.zero;ball.useGravity=true;Physics.SyncTransforms();
+   bool fired=false,entered=false,shotRead=false;int done=0,after=0;float closest=99,maxY=0,entrySpeed=0,entryOffset=99;Vector3 shot=Vector3.zero,shotPos=Vector3.zero;var last=table.InverseTransformPoint(ball.position);
+   Action<RampGate,Collider> completed=(g,b)=>done++;exit.Completed+=completed;
+   try{
+    for(int n=0;n<(int)(8f/dt)&&ball.gameObject.activeSelf&&done==0;n++){
+     var p=table.InverseTransformPoint(ball.position);if(!fired&&p.z<threshold&&p.z>2.2f&&(side==0?p.x<-.4f:p.x>-.4f)){fired=true;Input(side,true);firedCount[side]++;}
+     Tick();if(fired&&!flips[side].IsPressed)throw new Exception("Virtual button was not read by "+flips[side].name);p=table.InverseTransformPoint(ball.position);var velocity=table.InverseTransformDirection(ball.linearVelocity);
+     if(fired){after++;maxY=Mathf.Max(maxY,p.y);if(!shotRead&&p.z>5.5f&&velocity.z>0){shot=velocity;shotPos=p;shotRead=true;}closest=Mathf.Min(closest,new Vector2(p.x-mouth.x,p.z-mouth.z).magnitude);
+      if(Vector3.Dot(last-mouth,tangent)<0&&Vector3.Dot(p-mouth,tangent)>=0&&p.y<.65f){float offset=Mathf.Abs(Vector3.Dot(p-mouth,normal));if(offset<.4f){entered=true;entryOffset=offset;entrySpeed=velocity.magnitude;}}
+      if(trial==16&&after%5==0)trace.AppendLine(string.Join("\t",new[]{ramp,threshold.ToString("F3",System.Globalization.CultureInfo.InvariantCulture),(after*dt).ToString("F3",System.Globalization.CultureInfo.InvariantCulture),p.x.ToString("F4",System.Globalization.CultureInfo.InvariantCulture),p.y.ToString("F4",System.Globalization.CultureInfo.InvariantCulture),p.z.ToString("F4",System.Globalization.CultureInfo.InvariantCulture),velocity.x.ToString("F3",System.Globalization.CultureInfo.InvariantCulture),velocity.z.ToString("F3",System.Globalization.CultureInfo.InvariantCulture)}));
+      if(after>(int)(6f/dt))break;
+     }last=p;
+    }
+   }finally{exit.Completed-=completed;}
+   if(entered)aimed[side]++;if(done>0)successes[side]++;
+   sb.AppendLine("SHOT "+(side==0?"Left":"Right")+" -> "+ramp+" threshold="+threshold.ToString("F2")+" fired="+fired+" shotP="+shotPos.ToString("F3")+" shotV="+shot.ToString("F2")+" entered="+entered+" entryV="+entrySpeed.ToString("F2")+" offset="+entryOffset.ToString("F3")+" completed="+done+" closest="+closest.ToString("F3")+" maxY="+maxY.ToString("F2"));
+  }
+ }
+ sb.AppendLine("SUMMARY Left->IUT fired="+firedCount[0]+" aimed="+aimed[0]+" completed="+successes[0]+"/21; Right->Vosges fired="+firedCount[1]+" aimed="+aimed[1]+" completed="+successes[1]+"/21");
+}finally{
+ for(int i=0;i<2;i++){logging.SetValue(flips[i],oldLogging[i]);if(cabinets[i]!=null&&saves[i]!=null)UnityEngine.InputSystem.InputActionRebindingExtensions.LoadBindingOverridesFromJson(cabinets[i].asset,saves[i]);if(devices[i]!=null)UnityEngine.InputSystem.InputSystem.RemoveDevice(devices[i]);}
+ UnityEngine.InputSystem.InputSystem.settings.backgroundBehavior=background;GameManager.Instance.StartGame();Physics.simulationMode=previous;
+}
+string variant=System.IO.File.Exists("Tools/unity/out/ramp-access-modified.flag")?"after-right":"before-right";System.IO.File.WriteAllText("Tools/unity/out/mechanism-flipper-access-"+variant+".txt",sb.ToString());System.IO.File.WriteAllText("Tools/unity/out/mechanism-flipper-trace-"+variant+".tsv",trace.ToString());return sb.ToString();

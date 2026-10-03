@@ -1,0 +1,26 @@
+PASS bounded twelve-voice pool
+PASS single authored music source reused at configured gain
+PASS music routed through mixer
+PASS round-robin flipper sample 0
+PASS round-robin flipper sample 1
+PASS round-robin flipper sample 2
+PASS mechanical routing
+PASS reward cue plays
+PASS reward routing
+PASS reward cue prevents immediate duplicate
+PASS slow grazing contact stays silent
+PASS normal impact selects middle bumper sample
+PASS collision cooldown suppresses rebound duplicates
+PASS Flipper_Left_Pivot press event plays coil sample
+PASS Flipper_Left_Pivot release event plays return sample
+PASS Flipper_Right_Pivot press event plays coil sample
+PASS Flipper_Right_Pivot release event plays return sample
+PASS actual launcher release emits launch sample
+PASS game pause pauses audio
+PASS paused audio ignores mechanism requests
+PASS resume restores audio playback
+PASS extra ball event has a dedicated reward
+PASS multiplier increase has dedicated reward
+PASS repeated cues allocate no extra AudioSources
+PASS missing clips safely ignored
+Checks=25 failures=0

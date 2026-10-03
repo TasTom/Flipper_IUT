@@ -47,6 +47,7 @@ public class BallManager : MonoBehaviour
     [SerializeField] private Rigidbody sceneBall;
 
     private readonly List<Rigidbody> liveBalls = new List<Rigidbody>();
+    private readonly HashSet<Rigidbody> heldBalls = new HashSet<Rigidbody>();
     private readonly Dictionary<Rigidbody, float> stuckTimers = new Dictionary<Rigidbody, float>();
     private readonly Dictionary<Rigidbody, int> nudgeCounts = new Dictionary<Rigidbody, int>();
 
@@ -65,6 +66,8 @@ public class BallManager : MonoBehaviour
 
     /// <summary>Émis après chaque création ou retrait de bille.</summary>
     public event Action BallCountChanged;
+    public event Action BallsCleared;
+    public int HeldBallCount => heldBalls.Count;
 
     /// <summary>Nombre de billes actuellement en jeu.</summary>
     public int LiveBallCount
@@ -86,7 +89,7 @@ public class BallManager : MonoBehaviour
                 }
             }
 
-            return liveBalls.Count;
+            return liveBalls.Count - heldBalls.Count;
         }
     }
 
@@ -136,6 +139,7 @@ public class BallManager : MonoBehaviour
                 continue;
             }
 
+            if (heldBalls.Contains(ball)) continue;
             ClampSpeed(ball);
             CheckStuck(ball);
             CheckFellThroughWorld(ball);
@@ -247,6 +251,7 @@ public class BallManager : MonoBehaviour
     /// <summary>Retire toutes les billes en jeu, sans émettre <see cref="BallDrained"/>.</summary>
     public void ClearAll()
     {
+        BallsCleared?.Invoke();
         for (int i = liveBalls.Count - 1; i >= 0; i--)
         {
             Rigidbody ball = liveBalls[i];
@@ -271,6 +276,7 @@ public class BallManager : MonoBehaviour
         }
 
         liveBalls.Clear();
+        heldBalls.Clear();
         stuckTimers.Clear();
         nudgeCounts.Clear();
         BallCountChanged?.Invoke();
@@ -291,8 +297,7 @@ public class BallManager : MonoBehaviour
             return;
         }
 
-        ball.linearVelocity = Vector3.zero;
-        ball.angularVelocity = Vector3.zero;
+        if (!ball.isKinematic) { ball.linearVelocity = Vector3.zero; ball.angularVelocity = Vector3.zero; }
 
         // Kinématique en plus d'inactive : si l'objet était réactivé autrement que par
         // `Wake`, la bille resterait sur place au lieu de se remettre à tomber.
@@ -310,6 +315,7 @@ public class BallManager : MonoBehaviour
 
         ball.gameObject.SetActive(true);
         ball.isKinematic = false;
+        ball.detectCollisions = true;
         ball.linearVelocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
 
@@ -403,10 +409,30 @@ public class BallManager : MonoBehaviour
 
         if (liveBalls.Remove(ball))
         {
+            heldBalls.Remove(ball);
             stuckTimers.Remove(ball);
             nudgeCounts.Remove(ball);
             BallCountChanged?.Invoke();
         }
+    }
+
+    public void HoldBall(Rigidbody ball)
+    {
+        if (ball == null || heldBalls.Contains(ball)) return;
+        Register(ball);
+        ball.linearVelocity = Vector3.zero; ball.angularVelocity = Vector3.zero;
+        ball.isKinematic = true; ball.detectCollisions = false;
+        heldBalls.Add(ball); stuckTimers[ball] = 0; nudgeCounts[ball] = 0;
+        BallCountChanged?.Invoke();
+    }
+
+    public void ReleaseHeldBall(Rigidbody ball, Vector3 position, Quaternion rotation)
+    {
+        if (ball == null) return;
+        heldBalls.Remove(ball);
+        Wake(ball, position, rotation); Register(ball);
+        stuckTimers[ball] = 0; nudgeCounts[ball] = 0;
+        BallCountChanged?.Invoke();
     }
 
     /// <summary>
@@ -517,6 +543,7 @@ public class BallManager : MonoBehaviour
         {
             if (liveBalls[i] == null)
             {
+                heldBalls.Remove(liveBalls[i]);
                 liveBalls.RemoveAt(i);
                 BallCountChanged?.Invoke();
             }
@@ -542,7 +569,7 @@ public class BallManager : MonoBehaviour
         {
             Rigidbody body = candidate.GetComponent<Rigidbody>();
 
-            if (body != null && body != sceneBall)
+            if (body != null && body != sceneBall && !heldBalls.Contains(body))
             {
                 return body;
             }

@@ -11,7 +11,9 @@ public class MultiballManager : MonoBehaviour
     [SerializeField] private Transform[] releasePoints;
     [SerializeField] private int extraBalls = 2;
     [SerializeField] private float spawnImpulse = 5f;
+    [SerializeField] private BallLock ballLock;
     private float ballRadius;
+    private bool fromPhysicalLock;
 
     private void Awake()
     {
@@ -78,6 +80,8 @@ public class MultiballManager : MonoBehaviour
 
     public void TriggerMultiball()
     {
+        if (ballLock != null && ballLock.IsReleasing) return;
+        if (ballLock != null && ballLock.LockedCount > 0) { ballLock.ReleaseMultiball(); return; }
         if (ballPrefab == null || ballRadius <= 0f || (spawnPoint == null && (releasePoints == null || releasePoints.Length == 0)))
         {
             Debug.LogWarning("[MultiballManager] Bille sphérique ou sorties de multiball non assignées.", this);
@@ -86,7 +90,8 @@ public class MultiballManager : MonoBehaviour
 
         bool alreadyMultiball = BallManager.Instance != null && BallManager.Instance.LiveBallCount > 1;
         int released = 0;
-        for (int i = 0; i < extraBalls; i++)
+        int needed = BallManager.Instance != null ? Mathf.Max(0, Mathf.Min(3, extraBalls + 1) - BallManager.Instance.LiveBallCount) : extraBalls;
+        for (int i = 0; i < needed; i++)
         {
             Physics.SyncTransforms();
             Transform release = FindFreeRelease();
@@ -106,9 +111,12 @@ public class MultiballManager : MonoBehaviour
                 released++;
             }
         }
-        if (released > 0 && !alreadyMultiball && ScoreManager.Instance != null)
+        if (released > 0 && (!alreadyMultiball || fromPhysicalLock) && ScoreManager.Instance != null)
             ScoreManager.Instance.RecordMultiballStarted();
+        fromPhysicalLock = false;
     }
+
+    public void TriggerLockedMultiball() { fromPhysicalLock = true; TriggerMultiball(); }
 
     private Transform FindFreeRelease()
     {

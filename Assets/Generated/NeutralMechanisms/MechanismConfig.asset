@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e81589c6f08807442ae47253bf8eef1e, type: 3}
+  m_Name: MechanismConfig
+  m_EditorClassIdentifier: Assembly-CSharp::PinballMechanismConfig
+  magneticRadius: 0.62
+  magneticHeight: 0.42
+  magneticAcceleration: 110
+  magneticDamping: 8
+  coilRise: 0.045
+  coilFall: 0.08
+  magneticPulse: 1.4
+  scoopDwell: 0.55
+  ejectCooldown: 0.8
+  ejectSpeed: 18
+  lockCapacity: 2
+  releaseSpacing: 0.45
+  scoopPoints: 1000
+  lockPoints: 3000
+  lampIdle: 0.1
+  lampEmission: 2.4
+  lampPeriod: 1.4
+  lampFlashDuration: 0.65

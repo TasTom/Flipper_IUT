@@ -108,7 +108,10 @@ Les valeurs VPX ne sont pas des valeurs PhysX interchangeables ; voir le
 
 Pour dépasser cette finition, les principaux sujets de qualité restants sont une
 illustration de plateau réellement plus définie avec masques propres aux encres
-et inserts, l'audio/mixage, puis le profilage dans un build sur le matériel cible.
+et inserts, ainsi que la qualification sur la borne et en WebGL.
+L'[audio/mixage et les UV](NeutralVpeAudio.md) ont depuis été améliorés et
+mesurés dans un player Windows local. Les [nouveaux mécanismes](NeutralMechanisms.md)
+complètent l’agencement sans constituer une certification de toute la table.
 La source actuelle de 887 × 1 774 pixels ne devient pas plus détaillée en augmentant
 uniquement sa taille d'import. Le GDD demande aussi des fonctions et parcours
 encore ouverts, notamment les déverrouillages de missions, la porte IUT, le flipper

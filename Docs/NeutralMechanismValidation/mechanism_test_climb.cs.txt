@@ -1,0 +1,15 @@
+if(!Application.isPlaying)throw new Exception("Play required");
+var table=GameObject.Find("PinballTable").transform;var ball=table.Find("Gameplay/Ball").GetComponent<Rigidbody>();var root=table.Find("Rails/MechanismRevision");var flips=table.GetComponentsInChildren<Flipper>();
+var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic;var fixedFlip=typeof(Flipper).GetMethod("FixedUpdate",flags);var clamp=typeof(BallManager).GetMethod("ClampSpeed",flags);var previous=Physics.simulationMode;float dt=Time.fixedDeltaTime;var sb=new System.Text.StringBuilder();int completed=0,returned=0,trapped=0;
+try{Physics.simulationMode=SimulationMode.Script;
+ foreach(string name in new[]{"Vosges","IUT"}){var route=JsonUtility.FromJson<RefineNeutralFlow.Routes>(System.IO.File.ReadAllText("Tools/unity/out/mechanism-paths.json")).routes.First(r=>r.name==name);var mouth=route.points[0];var tangent=route.points[1]-mouth;tangent.y=0;tangent.Normalize();var normal=new Vector3(tangent.z,0,-tangent.x);var gate=table.Find("Gameplay/Ramp_"+name+"_Out").GetComponent<RampGate>();
+  foreach(float speed in new[]{15f,20f,25f,30f,35f,45f})foreach(float offset in new[]{-.08f,0f,.08f}){
+   GameManager.Instance.StartGame();ball.position=table.TransformPoint(mouth-tangent*.65f+normal*offset+Vector3.up*.207f);ball.linearVelocity=table.TransformDirection(tangent)*speed;ball.angularVelocity=Vector3.zero;ball.useGravity=true;Physics.SyncTransforms();int done=0;bool back=false;float maxY=0;Vector3 final=Vector3.zero;
+   Action<RampGate,Collider> action=(g,c)=>done++;gate.Completed+=action;
+   try{for(int n=0;n<(int)(8f/dt)&&ball.gameObject.activeSelf&&done==0;n++){foreach(var f in flips)fixedFlip.Invoke(f,null);clamp.Invoke(BallManager.Instance,new object[]{ball});Physics.Simulate(dt);var p=table.InverseTransformPoint(ball.position);var velocity=table.InverseTransformDirection(ball.linearVelocity);maxY=Mathf.Max(maxY,p.y);final=p;if(n>20&&p.y<.55f&&Mathf.Abs(Vector3.Dot(p-mouth,normal))<.7f&&Vector3.Dot(p-mouth,tangent)<-.35f&&Vector3.Dot(velocity,tangent)<-1){back=true;break;}}}finally{gate.Completed-=action;}
+   if(done>0)completed++;else if(back||!ball.gameObject.activeSelf)returned++;else trapped++;
+   sb.AppendLine(name+" speed="+speed.ToString("F0")+" offset="+offset.ToString("F2")+" completed="+done+" returned="+back+" active="+ball.gameObject.activeSelf+" maxY="+maxY.ToString("F3")+" final="+final.ToString("F3"));
+  }
+ }
+}finally{GameManager.Instance.StartGame();Physics.simulationMode=previous;}
+sb.AppendLine("SUMMARY tests=36 completed="+completed+" returned/drained="+returned+" trapped="+trapped);System.IO.File.WriteAllText("Tools/unity/out/mechanism-ramp-climb.txt",sb.ToString());return sb.ToString();

@@ -7,13 +7,17 @@ Date : 2 octobre 2026. Révision examinée : `8df1903`.
 [combos, multiplicateur et bonus de bille](NeutralScoreRules.md), puis
 [accès aux rampes depuis les flippers](NeutralRampAccess.md),
 [déformation centrale des caoutchoucs](NeutralRubberAnimation.md) et
-[finition PBR adaptée des guides VPE](NeutralVpeQuality.md).
+[finition PBR adaptée des guides VPE](NeutralVpeQuality.md),
+[audio, UV et build Windows local](NeutralVpeAudio.md), puis
+[rampes reculées, scoop, lock, aimant et groupes lumineux](NeutralMechanisms.md).
 Les mesures et réserves ci-dessous décrivent la révision examinée. Les principaux
 écarts de score (combos, progression jusqu'à ×5, affichage et bonus de bille) sont
 désormais traités et validés. Les jackpots, récompenses spécifiques de missions
 et le parcours utilisateur restent ouverts ; voir les comptes rendus de ces passes.
 La finition PBR corrige notamment les reflets des rampes, les imprimés des slingshots
 et les flashes des bumpers qui visaient auparavant des modèles masqués.
+
+Les derniers mécanismes sont des ajouts explicites de l’utilisateur, hors du GDD initial. Le lock dispose d’un parcours testé jusqu’à trois billes ; il ne complète pas le mode Nuit de l’Info, les jackpots ou les déverrouillages manquants. AudioConfig et MechanismConfig regroupent désormais leurs paramètres. Le build Windows de contrôle utilise explicitement Neutral, sans changer les Build Settings qui restent sur Main ; WebGL et la borne restent à qualifier.
 
 Source de conception : [GameDesignDocument.docx](../GameDesignDocument.docx). Les décisions explicites de l'utilisateur prévalent : **six cibles de récompense**, caméra tournée pour la borne, plateau et scores occupant l'écran.
 

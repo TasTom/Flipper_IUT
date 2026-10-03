@@ -1,0 +1,23 @@
+PASS Magnet attracts a surface ball gradually
+PASS Magnet adds no vertical movement
+PASS Magnet keeps a live physical ball
+PASS Overhead ramp ball unaffected by magnet
+PASS Coil off removes attraction
+PASS Physical shot falls through aperture and is captured
+PASS Unlit scoop returns its ball
+PASS Unlit scoop does not create or lose a ball
+PASS First lit scoop shot locks one physical ball
+PASS Stored ball is explicitly excluded from active physics
+PASS Replacement ball ready in launcher
+PASS Lock does not spend a player ball
+PASS Replacement accepts launcher input
+PASS Pause stops scoop dwell and release timers
+PASS Both locked balls released
+PASS Lock starts exactly three active balls
+PASS Each stored ball ejected once
+PASS Released balls regain collisions
+PASS Repeated start cannot exceed three active balls
+PASS Restart clears multiball and returns to single-ball play
+PASS Ball retained for restart-during-lock test
+PASS Restart also clears a still-locked physical ball
+SUMMARY checks=22 failures=0

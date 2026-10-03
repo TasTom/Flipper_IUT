@@ -1,0 +1,1 @@
+Collision preparation: nativeMeshes=0, modelImports=1, colliderMeshes=62

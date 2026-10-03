@@ -1,0 +1,18 @@
+var scene=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();if(scene.name!="Neutral")throw new Exception("Neutral attendue");
+var table=GameObject.Find("PinballTable").transform;var report=new System.Text.StringBuilder();int failures=0;
+var areas=new List<float>();
+foreach(string side in new[]{"Left","Right"}) {
+ var filter=table.Find("Gameplay/Slingshot_"+side+"/MechanicalAssembly/SlingPlastic_"+side).GetComponent<MeshFilter>();var mesh=filter.sharedMesh;var vertices=mesh.vertices.Select(v=>table.InverseTransformPoint(filter.transform.TransformPoint(v))).ToArray();var triangles=mesh.triangles;
+ float upward=0,downward=0;for(int i=0;i<triangles.Length;i+=3){var n=Vector3.Cross(vertices[triangles[i+1]]-vertices[triangles[i]],vertices[triangles[i+2]]-vertices[triangles[i]]);if(n.normalized.y>.5f)upward+=n.magnitude*.5f;else if(n.normalized.y<-.5f)downward+=n.magnitude*.5f;}
+ areas.Add(upward);Check(side+" : faces supérieure et inférieure fermées",upward>.6f && downward>.6f,$"dessus={upward:F6}, dessous={downward:F6}, triangles={triangles.Length/3}");
+ Check(side+" : coordonnées PBR complètes",mesh.uv.Length==mesh.vertexCount && mesh.normals.Length==mesh.vertexCount && mesh.tangents.Length==mesh.vertexCount,"");
+ Check(side+" : asset uniquement visuel",UnityEngine.Object.FindObjectsByType<MeshCollider>(FindObjectsSortMode.None).All(c=>c.sharedMesh!=mesh),"");
+ var material=filter.GetComponent<Renderer>().sharedMaterial;Check(side+" : matériau opaque",material.GetFloat("_Surface")==0f && material.GetColor("_BaseColor").a==1f && material.renderQueue==2000,material.name);
+}
+Check("aires des deux couvercles cohérentes",Mathf.Abs(areas[0]-areas[1])<.0001f,$"écart={Mathf.Abs(areas[0]-areas[1]):F8}");
+var left=table.Find("Gameplay/Slingshot_Left/MechanicalAssembly/SlingPlastic_Left").GetComponent<Renderer>();var source=table.Find("Gameplay/Slingshot_Left").GetComponent<Slingshot>();var serialized=new UnityEditor.SerializedObject(source);
+Check("liaison du flash conservée",serialized.FindProperty("flashRenderers").GetArrayElementAtIndex(0).objectReferenceValue==left,"");
+Check("animation du rubber conservée",table.Find("Gameplay/Slingshot_Left/MechanicalAssembly/SlingRubber_Left").GetComponent<SlingshotRubberAnimation>()!=null,"");
+report.AppendLine("failures="+failures+" play="+UnityEditor.EditorApplication.isPlaying+" dirty="+scene.isDirty);
+System.IO.File.WriteAllText("Tools/unity/out/sling-plastic/validation-"+(UnityEditor.EditorApplication.isPlaying?"play":"edit")+".txt",report.ToString());return report.ToString();
+void Check(string label,bool pass,string detail){if(!pass)failures++;report.AppendLine((pass?"PASS ":"FAIL ")+label+(detail.Length>0?" : "+detail:""));}

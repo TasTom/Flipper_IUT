@@ -1,0 +1,4 @@
+Faces ajoutées : dessus=35 triangles, dessous=35 triangles.
+Mesh gauche : 900 → 972 vertices ; 518 → 588 triangles.
+Sommets, normales et UV existants conservés ; biseau, contour, matériau et placement inchangés.
+Aucun collider ni script modifié ; scène non réenregistrée ; asset visuel enregistré avec Undo.

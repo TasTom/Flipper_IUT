@@ -1,0 +1,10 @@
+if(UnityEditor.EditorApplication.isPlaying || UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().name!="Neutral")throw new Exception("Neutral hors Play attendue");
+var table=GameObject.Find("PinballTable").transform;var mf=table.Find("Gameplay/Slingshot_Left/MechanicalAssembly/SlingPlastic_Left").GetComponent<MeshFilter>();
+string label=mf.sharedMesh.triangles.Length/3>530?"after":"before";
+var source=UnityEngine.Object.FindAnyObjectByType<Camera>();var holder=new GameObject("SlingPlasticCapture"){hideFlags=HideFlags.HideAndDontSave};
+var camera=holder.AddComponent<Camera>();camera.CopyFrom(source);camera.enabled=false;
+var centre=table.TransformPoint(new Vector3(-.4f,.4f,5.3f));camera.transform.position=centre+table.up*10f;camera.transform.rotation=Quaternion.LookRotation(-table.up,table.forward);camera.orthographic=true;camera.orthographicSize=1.65f;camera.nearClipPlane=.1f;camera.farClipPlane=20f;
+var texture=new RenderTexture(1600,800,24);var original=RenderTexture.active;Texture2D pixels=null;
+try {camera.targetTexture=texture;camera.Render();RenderTexture.active=texture;pixels=new Texture2D(texture.width,texture.height,TextureFormat.RGB24,false);pixels.ReadPixels(new Rect(0,0,texture.width,texture.height),0,0);pixels.Apply();System.IO.File.WriteAllBytes("Tools/unity/out/sling-plastic/"+label+".png",pixels.EncodeToPNG());}
+finally {RenderTexture.active=original;camera.targetTexture=null;UnityEngine.Object.DestroyImmediate(texture);if(pixels!=null)UnityEngine.Object.DestroyImmediate(pixels);UnityEngine.Object.DestroyImmediate(holder);}
+return "Capture des deux plastiques : "+label;

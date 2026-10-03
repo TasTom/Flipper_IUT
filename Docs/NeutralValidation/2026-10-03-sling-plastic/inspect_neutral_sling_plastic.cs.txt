@@ -1,0 +1,24 @@
+var scene=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+if(scene.name!="Neutral")throw new Exception("Neutral attendue");
+var table=scene.GetRootGameObjects().Single(g=>g.name=="PinballTable").transform;
+var camera=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<Camera>(true)).Single();
+var report=new System.Text.StringBuilder();
+report.AppendLine("scene="+scene.name+" dirty="+scene.isDirty+" play="+UnityEditor.EditorApplication.isPlaying+" camera="+camera.transform.position);
+foreach(var renderer in table.GetComponentsInChildren<MeshRenderer>(true).Where(r=>r.name.IndexOf("Sling",StringComparison.OrdinalIgnoreCase)>=0 || Path(r.transform).IndexOf("Slingshot",StringComparison.OrdinalIgnoreCase)>=0)) {
+ report.AppendLine("\n"+Path(renderer.transform)+" active="+renderer.gameObject.activeInHierarchy+" enabled="+renderer.enabled+" local="+renderer.transform.localPosition+" scale="+renderer.transform.lossyScale+" det="+renderer.transform.localToWorldMatrix.determinant);
+ var block=new MaterialPropertyBlock();renderer.GetPropertyBlock(block);report.AppendLine("propertyBlock="+renderer.HasPropertyBlock()+" _BaseColor="+block.GetColor("_BaseColor"));
+ foreach(var material in renderer.sharedMaterials) {
+  if(material==null){report.AppendLine("NULL material");continue;}
+  report.AppendLine("material="+material.name+" path="+UnityEditor.AssetDatabase.GetAssetPath(material)+" shader="+material.shader.name+" queue="+material.renderQueue+" keywords="+string.Join(",",material.shaderKeywords));
+  foreach(var field in new[]{"_Surface","_Blend","_Cull","_ZWrite","_AlphaClip","_SrcBlend","_DstBlend","_Cutoff"})if(material.HasProperty(field))report.Append(field+"="+material.GetFloat(field)+" ");
+  if(material.HasProperty("_BaseColor"))report.Append(" color="+material.GetColor("_BaseColor"));report.AppendLine();
+ }
+ var filter=renderer.GetComponent<MeshFilter>();if(filter==null || filter.sharedMesh==null)continue;
+ var mesh=filter.sharedMesh;report.AppendLine("mesh="+mesh.name+" path="+UnityEditor.AssetDatabase.GetAssetPath(mesh)+" bounds="+mesh.bounds+" vertices="+mesh.vertexCount+" triangles="+mesh.triangles.Length/3);
+ var verts=mesh.vertices;var tris=mesh.triangles;float areaUp=0,areaDown=0,areaSide=0;var cameraDir=camera.transform.position-renderer.bounds.center;int facing=0,away=0;
+ for(int i=0;i<tris.Length;i+=3){var a=table.InverseTransformPoint(renderer.transform.TransformPoint(verts[tris[i]]));var b=table.InverseTransformPoint(renderer.transform.TransformPoint(verts[tris[i+1]]));var c=table.InverseTransformPoint(renderer.transform.TransformPoint(verts[tris[i+2]]));var normal=Vector3.Cross(b-a,c-a);float area=normal.magnitude*.5f;if(normal.normalized.y>.5f)areaUp+=area;else if(normal.normalized.y<-.5f)areaDown+=area;else areaSide+=area;var wa=renderer.transform.TransformPoint(verts[tris[i]]);var wb=renderer.transform.TransformPoint(verts[tris[i+1]]);var wc=renderer.transform.TransformPoint(verts[tris[i+2]]);if(Vector3.Dot(Vector3.Cross(wb-wa,wc-wa),cameraDir)>0)facing++;else away++;}
+ report.AppendLine($"triangleArea tableUp={areaUp:F6} down={areaDown:F6} side={areaSide:F6} towardCamera={facing} away={away}");
+}
+System.IO.Directory.CreateDirectory("Tools/unity/out/sling-plastic");System.IO.File.WriteAllText("Tools/unity/out/sling-plastic/baseline.txt",report.ToString());
+return report.ToString();
+string Path(Transform t){return t.parent==null?t.name:Path(t.parent)+"/"+t.name;}

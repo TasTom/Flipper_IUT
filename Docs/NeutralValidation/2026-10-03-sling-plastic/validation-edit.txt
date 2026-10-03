@@ -1,0 +1,12 @@
+PASS Left : faces supérieure et inférieure fermées : dessus=0,612601, dessous=0,612602, triangles=588
+PASS Left : coordonnées PBR complètes
+PASS Left : asset uniquement visuel
+PASS Left : matériau opaque : ForestPlastic_PBR
+PASS Right : faces supérieure et inférieure fermées : dessus=0,612597, dessous=0,612598, triangles=572
+PASS Right : coordonnées PBR complètes
+PASS Right : asset uniquement visuel
+PASS Right : matériau opaque : ForestPlastic_PBR
+PASS aires des deux couvercles cohérentes : écart=0,00000411
+PASS liaison du flash conservée
+PASS animation du rubber conservée
+failures=0 play=False dirty=False

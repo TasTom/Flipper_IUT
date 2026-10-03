@@ -1,0 +1,47 @@
+if(UnityEditor.EditorApplication.isPlaying || UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().name!="Neutral")throw new Exception("Neutral hors Play attendue");
+var table=GameObject.Find("PinballTable").transform;
+var filter=table.Find("Gameplay/Slingshot_Left/MechanicalAssembly/SlingPlastic_Left").GetComponent<MeshFilter>();
+var mesh=filter.sharedMesh;
+const string path="Assets/Generated/NeutralSurfaceCoordinates/000_SlingPlastic_Left_SurfaceCoordinates.asset";
+if(UnityEditor.AssetDatabase.GetAssetPath(mesh)!=path || mesh.subMeshCount!=1 || mesh.triangles.Length/3!=518)throw new Exception("Le plastique a changé ou est déjà réparé : ne pas écraser les ajustements");
+if(UnityEngine.Object.FindObjectsByType<MeshCollider>(FindObjectsSortMode.None).Any(c=>c.sharedMesh==mesh))throw new Exception("Ce mesh est utilisé en physique : inspection requise");
+var positions=mesh.vertices.Select(v=>table.InverseTransformPoint(filter.transform.TransformPoint(v))).ToArray();
+var originalVertices=mesh.vertices;var originalNormals=mesh.normals;var originalUV=mesh.uv;
+if(originalNormals.Length!=mesh.vertexCount || originalUV.Length!=mesh.vertexCount)throw new Exception("Coordonnées de surface complètes attendues");
+float top=positions.Max(v=>v.y),bottom=positions.Min(v=>v.y);
+var upper=Boundary(top);var lower=Boundary(bottom);
+if(upper.Length<3 || lower.Length<3)throw new Exception("Contour de face introuvable");
+var vertices=new List<Vector3>(originalVertices);var normals=new List<Vector3>(originalNormals);var uv=new List<Vector2>(originalUV);var triangles=new List<int>(mesh.triangles);
+Cap(upper,top,1);Cap(lower,bottom,-1);
+System.IO.File.Copy(path,"Tools/unity/out/sling-plastic/mesh-before.asset",true);
+var sceneBefore=System.IO.File.ReadAllBytes("Assets/Scenes/Neutral.unity");
+UnityEditor.Undo.RegisterCompleteObjectUndo(mesh,"Fermer les faces manquantes du plastique gauche");
+mesh.SetVertices(vertices);mesh.SetNormals(normals);mesh.SetUVs(0,uv);mesh.SetTriangles(triangles,0);mesh.RecalculateBounds();mesh.RecalculateTangents();UnityEditor.EditorUtility.SetDirty(mesh);
+UnityEditor.AssetDatabase.SaveAssetIfDirty(mesh);
+if(!sceneBefore.SequenceEqual(System.IO.File.ReadAllBytes("Assets/Scenes/Neutral.unity")))throw new Exception("La scène ne devait pas être réenregistrée");
+var report=$"Faces ajoutées : dessus={upper.Length} triangles, dessous={lower.Length} triangles.\nMesh gauche : {originalVertices.Length} → {mesh.vertexCount} vertices ; 518 → {mesh.triangles.Length/3} triangles.\nSommets, normales et UV existants conservés ; biseau, contour, matériau et placement inchangés.\nAucun collider ni script modifié ; scène non réenregistrée ; asset visuel enregistré avec Undo.\n";
+System.IO.File.WriteAllText("Tools/unity/out/sling-plastic/repair.txt",report);return report;
+Vector2[] Boundary(float height) {
+ var points=positions.Where(v=>Mathf.Abs(v.y-height)<.00001f).Select(v=>new Vector2(v.x,v.z)).Distinct().OrderBy(v=>v.x).ThenBy(v=>v.y).ToArray();
+ var low=new List<Vector2>();var high=new List<Vector2>();
+ foreach(var p in points){while(low.Count>1 && Cross(low[low.Count-2],low[low.Count-1],p)<=.000001f)low.RemoveAt(low.Count-1);low.Add(p);}
+ foreach(var p in points.Reverse()){while(high.Count>1 && Cross(high[high.Count-2],high[high.Count-1],p)<=.000001f)high.RemoveAt(high.Count-1);high.Add(p);}
+ return low.Take(low.Count-1).Concat(high.Take(high.Count-1)).ToArray();
+}
+float Cross(Vector2 a,Vector2 b,Vector2 c){return(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);}
+void Cap(Vector2[] boundary,float height,int sign) {
+ int centreIndex=vertices.Count;var centre=boundary.Aggregate(Vector2.zero,(v,p)=>v+p)/boundary.Length;
+ var normal=filter.transform.localToWorldMatrix.transpose.MultiplyVector(table.TransformDirection(Vector3.up*sign)).normalized;
+ AddVertex(new Vector3(centre.x,height,centre.y),normal);foreach(var p in boundary)AddVertex(new Vector3(p.x,height,p.y),normal);
+ for(int i=0;i<boundary.Length;i++) {
+  int a=centreIndex,b=centreIndex+1+i,c=centreIndex+1+(i+1)%boundary.Length;
+  var worldNormal=Vector3.Cross(table.TransformPoint(new Vector3(boundary[i].x,height,boundary[i].y))-table.TransformPoint(new Vector3(centre.x,height,centre.y)),table.TransformPoint(new Vector3(boundary[(i+1)%boundary.Length].x,height,boundary[(i+1)%boundary.Length].y))-table.TransformPoint(new Vector3(centre.x,height,centre.y)));
+  if(Vector3.Dot(worldNormal,table.TransformDirection(Vector3.up))*sign<0){int swap=b;b=c;c=swap;}
+  triangles.AddRange(new[]{a,b,c});
+ }
+}
+void AddVertex(Vector3 tablePoint,Vector3 normal) {
+ var local=filter.transform.InverseTransformPoint(table.TransformPoint(tablePoint));vertices.Add(local);normals.Add(normal);
+ int axis=Mathf.Abs(normal.y)>=Mathf.Abs(normal.x) && Mathf.Abs(normal.y)>=Mathf.Abs(normal.z)?1:Mathf.Abs(normal.x)>=Mathf.Abs(normal.z)?0:2;
+ var coords=axis==0?new Vector2(local.z,local.y):axis==1?new Vector2(local.x,local.z):new Vector2(local.x,local.y);if(normal[axis]<0)coords.x=-coords.x;uv.Add(coords);
+}

@@ -1,0 +1,17 @@
+var scene=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+if(scene.name!="Neutral" || UnityEditor.EditorApplication.isPlaying)throw new Exception("Neutral hors Play attendue");
+var table=GameObject.Find("PinballTable").transform;var report=new System.Text.StringBuilder();
+foreach(string side in new[]{"Left","Right"}) {
+ var filter=table.Find("Gameplay/Slingshot_"+side+"/MechanicalAssembly/SlingPlastic_"+side).GetComponent<MeshFilter>();
+ var mesh=filter.sharedMesh;var positions=mesh.vertices.Select(v=>table.InverseTransformPoint(filter.transform.TransformPoint(v))).ToArray();
+ float top=positions.Max(v=>v.y),bottom=positions.Min(v=>v.y);var topPoints=positions.Where(v=>Mathf.Abs(v.y-top)<.00001f).Select(v=>new Vector2(v.x,v.z)).Distinct().OrderBy(v=>v.x).ThenBy(v=>v.y).ToArray();
+ var low=new List<Vector2>();var high=new List<Vector2>();foreach(var p in topPoints){while(low.Count>1 && Cross(low[low.Count-2],low[low.Count-1],p)<=.000001f)low.RemoveAt(low.Count-1);low.Add(p);}foreach(var p in topPoints.Reverse()){while(high.Count>1 && Cross(high[high.Count-2],high[high.Count-1],p)<=.000001f)high.RemoveAt(high.Count-1);high.Add(p);}var hull=low.Take(low.Count-1).Concat(high.Take(high.Count-1)).ToArray();
+ float area=0;for(int i=0;i<hull.Length;i++)area+=hull[i].x*hull[(i+1)%hull.Length].y-hull[(i+1)%hull.Length].x*hull[i].y;area=Mathf.Abs(area)*.5f;
+ var centroid=hull.Aggregate(Vector2.zero,(v,p)=>v+p)/hull.Length;var ray=new Ray(new Vector3(centroid.x,top+1,centroid.y),Vector3.down);int hits=0;var tris=mesh.triangles;
+ for(int i=0;i<tris.Length;i+=3)if(Hit(ray,positions[tris[i]],positions[tris[i+1]],positions[tris[i+2]]))hits++;
+ report.AppendLine($"{side} minY={bottom:F8} maxY={top:F8} topVertices={topPoints.Length} topHull={hull.Length} area={area:F8} centreRayHits={hits} physicsReferences={UnityEngine.Object.FindObjectsByType<MeshCollider>(FindObjectsSortMode.None).Count(c=>c.sharedMesh==mesh)}");
+ report.AppendLine(string.Join("; ",hull.Select(p=>p.ToString("F8"))));
+}
+System.IO.File.WriteAllText("Tools/unity/out/sling-plastic/cap-probe.txt",report.ToString());return report.ToString();
+float Cross(Vector2 a,Vector2 b,Vector2 c){return(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);}
+bool Hit(Ray ray,Vector3 a,Vector3 b,Vector3 c){var edge=b-a;var other=c-a;var cross=Vector3.Cross(ray.direction,other);float det=Vector3.Dot(edge,cross);if(Mathf.Abs(det)<.0000001f)return false;float inv=1f/det;var s=ray.origin-a;float u=Vector3.Dot(s,cross)*inv;if(u<0 || u>1)return false;var q=Vector3.Cross(s,edge);float v=Vector3.Dot(ray.direction,q)*inv;if(v<0 || u+v>1)return false;return Vector3.Dot(other,q)*inv>=0;}

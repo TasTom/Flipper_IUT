@@ -1,0 +1,15 @@
+scene=Neutral dirty=False play=False camera=(0.00, 23.84, -16.60)
+
+PinballTable/Gameplay/Slingshot_Left/MechanicalAssembly/SlingPlastic_Left active=True enabled=True local=(10.01, -0.20, -0.09) scale=(1666.67, 1666.67, 1666.67) det=4,629628E+09
+propertyBlock=False _BaseColor=RGBA(0.000, 0.000, 0.000, 0.000)
+material=ForestPlastic_PBR path=Assets/Generated/NeutralVpeFinish/ForestPlastic_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_EMISSION,_METALLICSPECGLOSSMAP,_NORMALMAP
+_Surface=0 _Blend=0 _Cull=2 _ZWrite=1 _AlphaClip=0 _SrcBlend=1 _DstBlend=0 _Cutoff=0,5  color=RGBA(0.025, 0.150, 0.125, 1.000)
+mesh=000_SlingPlastic_Left_SurfaceCoordinates path=Assets/Generated/NeutralSurfaceCoordinates/000_SlingPlastic_Left_SurfaceCoordinates.asset bounds=Center: (0.00, 0.00, 0.00), Extents: (0.00, 0.00, 0.00) vertices=900 triangles=518
+triangleArea tableUp=0,017970 down=0,017971 side=0,140137 towardCamera=254 away=264
+
+PinballTable/Gameplay/Slingshot_Right/MechanicalAssembly/SlingPlastic_Right active=True enabled=True local=(-9.47, -0.20, -1.39) scale=(1666.67, 1666.67, 1666.67) det=4,629628E+09
+propertyBlock=False _BaseColor=RGBA(0.000, 0.000, 0.000, 0.000)
+material=ForestPlastic_PBR path=Assets/Generated/NeutralVpeFinish/ForestPlastic_PBR.mat shader=Universal Render Pipeline/Lit queue=2000 keywords=_EMISSION,_METALLICSPECGLOSSMAP,_NORMALMAP
+_Surface=0 _Blend=0 _Cull=2 _ZWrite=1 _AlphaClip=0 _SrcBlend=1 _DstBlend=0 _Cutoff=0,5  color=RGBA(0.025, 0.150, 0.125, 1.000)
+mesh=001_SlingPlastic_Right_SurfaceCoordinates path=Assets/Generated/NeutralSurfaceCoordinates/001_SlingPlastic_Right_SurfaceCoordinates.asset bounds=Center: (0.00, 0.00, 0.00), Extents: (0.00, 0.00, 0.00) vertices=938 triangles=572
+triangleArea tableUp=0,612597 down=0,612598 side=0,140134 towardCamera=282 away=290

@@ -1,0 +1,324 @@
+using System;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using TMPro;
+using VisualPinball.Unity;
+using VisualPinball.Unity.Playfield;
+using Object = UnityEngine.Object;
+using Material = UnityEngine.Material;
+using Mesh = UnityEngine.Mesh;
+
+/// <summary>Habille la table VPE importée. Undo, reprise des champs vides et aucune sauvegarde automatique.</summary>
+public static class AdaptIndustriesTable
+{
+    private const string Folder = "Assets/Generated/Industries";
+    [MenuItem("Flipper/Industries/Adapter la table importée")]
+    public static void Apply()
+    {
+        var scene = EditorSceneManager.GetActiveScene();
+        if (scene.name != "Industries" || EditorApplication.isPlaying)
+            throw new InvalidOperationException("Ouvrir Industries hors Play avant l'adaptation.");
+        var table = Object.FindAnyObjectByType<TableComponent>();
+        if (table == null) throw new InvalidOperationException("Aucune table VPE dans Industries.");
+        if (GameObject.Find("IndustriesPresentation") != null)
+        { Debug.Log("[Industries] Adaptation déjà présente ; réglages manuels conservés."); return; }
+        Undo.IncrementCurrentGroup();
+        int undo = Undo.GetCurrentGroup(); Undo.SetCurrentGroupName("Adapter Industries");
+        EnsureFolder(Folder);
+        var root = New("IndustriesPresentation").transform;
+        var steel = Mat("BrushedSteel", new Color(.32f,.37f,.4f), 1f, .62f);
+        var brass = Mat("Brass", new Color(.68f,.40f,.13f), 1f, .48f);
+        var dark = Mat("PaintedSteel", new Color(.024f,.055f,.072f), 0f, .44f);
+        var teal = Mat("EnamelTeal", new Color(.055f,.31f,.32f), 0f, .7f);
+        var cream = Mat("IvoryPlastic", new Color(.88f,.85f,.68f), 0f, .63f);
+
+        // Les maillages et colliders natifs restent sur leurs hôtes VPE animés.
+        foreach (var b in table.GetComponentsInChildren<BumperComponent>())
+        {
+            Fill(b.transform.Find("Base"), "Bumpers/Bumper_Base.fbx", "BumperBase", cream);
+            Fill(b.transform.Find("Skirt"), "Bumpers/Bumper_Socket.fbx", "BumperSkirt", teal);
+            Fill(b.transform.Find("Ring"), "Bumpers/Bumper_Ring.fbx", "BumperRing", steel);
+            Fill(b.transform.Find("Cap"), "Bumpers/Bumper_Cap_-_Round_Clip_1000.fbx", "BumperCap", b.name=="Bumper1" ? brass : teal);
+        }
+        foreach (var t in table.GetComponentsInChildren<DropTargetComponent>())
+        {
+            Fill(t.transform,"Switches/Drop_Target.fbx","DropTarget",brass,.005f);
+            var col=t.GetComponent<DropTargetColliderComponent>();
+            FillTargetCollider(col);
+        }
+        foreach (var t in table.GetComponentsInChildren<HitTargetComponent>())
+        {
+            Fill(t.transform,"Switches/Target_Static_Williams_80s.fbx","HitTarget",cream,.028f);
+            var col=t.GetComponent<HitTargetColliderComponent>();
+            if(col.FrontColliderMesh==null){Undo.RecordObject(col,"Collider cible");col.FrontColliderMesh=BoxMesh("HitCollisionAligned",new Vector3(.012f,.028f,.004f),new Vector3(0,.014f,0));PrefabUtility.RecordPrefabInstancePropertyModifications(col);}
+        }
+        foreach(var g in table.GetComponentsInChildren<GateComponent>())
+        {
+            FillBox(g.transform.Find("Bracket"),"GateBracket",new Vector3(.044f,.005f,.005f),new Vector3(0,.026f,0),steel);
+            FillBox(g.transform.Find("Wire"),"GateWire",new Vector3(.036f,.002f,.002f),new Vector3(0,.003f,0),steel);
+        }
+        foreach(var s in table.GetComponentsInChildren<SpinnerComponent>())
+        {
+            FillBox(s.transform.Find("Bracket"),"SpinnerBracket",new Vector3(.038f,.005f,.005f),new Vector3(0,.033f,0),steel);
+            FillBox(s.transform.Find("Plate"),"SpinnerPlate",new Vector3(.029f,.019f,.002f),Vector3.zero,brass);
+        }
+        foreach(var r in table.GetComponentsInChildren<MeshRenderer>())
+        {
+            var b=r.bounds;
+            bool outside=b.max.x<-.03f || b.min.x>.56f || b.max.z<-1.24f || b.min.z>.05f;
+            bool oldCap=r.sharedMaterials.Any(m=>m!=null && m.name.Contains("bumper-cap"));
+            bool oldApron=r.sharedMaterials.Any(m=>m!=null && m.name.ToLowerInvariant().Contains("apron"));
+            if(outside || oldCap || oldApron){Undo.RecordObject(r,"Masquer visuel template");r.enabled=false;}
+        }
+
+        var playfield=table.GetComponentsInChildren<MeshFilter>().First(f=>f.name=="Playfield");
+        var print=Mat("PlayfieldPrint",Color.white,0f,.48f);
+        AssetDatabase.ImportAsset("Assets/Art/Industries/IndustriesPlayfield.png",ImportAssetOptions.ForceSynchronousImport);
+        var importer=(TextureImporter)AssetImporter.GetAtPath("Assets/Art/Industries/IndustriesPlayfield.png");
+        importer.maxTextureSize=4096; importer.wrapMode=TextureWrapMode.Clamp; importer.SaveAndReimport();
+        print.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>(importer.assetPath));
+        AssetDatabase.ImportAsset("Assets/Art/Industries/IndustriesMicroNormal.png",ImportAssetOptions.ForceSynchronousImport);
+        var normal=(TextureImporter)AssetImporter.GetAtPath("Assets/Art/Industries/IndustriesMicroNormal.png");
+        normal.textureType=TextureImporterType.NormalMap; normal.SaveAndReimport();
+        print.SetTexture("_BumpMap",AssetDatabase.LoadAssetAtPath<Texture2D>(normal.assetPath)); print.SetFloat("_BumpScale",.16f); print.EnableKeyword("_NORMALMAP");
+        var mesh=Object.Instantiate(playfield.sharedMesh); mesh.name="IndustriesPlayfield";
+        // UVs dérivés des dimensions du plateau : pas de modification du maillage de collision.
+        var bounds=mesh.bounds;
+        mesh.uv=mesh.vertices.Select(v=>new Vector2(Mathf.InverseLerp(bounds.min.x,bounds.max.x,v.x),Mathf.InverseLerp(bounds.min.z,bounds.max.z,v.z))).ToArray();
+        AssetDatabase.CreateAsset(mesh,Folder+"/IndustriesPlayfield.asset");
+        var visual=New("PrintedPlayfield",playfield.transform);
+        visual.transform.localPosition=Vector3.up*.0002f;
+        visual.AddComponent<MeshFilter>().sharedMesh=mesh;visual.AddComponent<MeshRenderer>().sharedMaterial=print;
+        Undo.RecordObject(playfield.GetComponent<MeshRenderer>(),"Art Industries");playfield.GetComponent<MeshRenderer>().enabled=false;
+
+        // La table reste de dimension réelle. Les décors sont hors des trajectoires, sans collider.
+        Piece(root,"Cabinet",new Vector3(.258f,-.10f,-.583f),new Vector3(.56f,.19f,1.21f),dark);
+        Piece(root,"LeftRail",new Vector3(-.017f,.012f,-.583f),new Vector3(.025f,.026f,1.2f),steel);
+        Piece(root,"RightRail",new Vector3(.536f,.012f,-.583f),new Vector3(.025f,.026f,1.2f),steel);
+        Piece(root,"TopRail",new Vector3(.259f,.012f,.015f),new Vector3(.58f,.026f,.026f),steel);
+        foreach(var z in new[]{-.18f,-.42f,-.68f,-.93f})
+            foreach(var x in new[]{-.014f,.536f})
+                Piece(root,"RailFastener",new Vector3(x,.027f,z),new Vector3(.009f,.002f,.009f),brass);
+        Piece(root,"WorkshopBackdrop",new Vector3(.258f,-.23f,-.55f),new Vector3(1.4f,.02f,1.6f),dark);
+        foreach(Transform child in root.Cast<Transform>().Where(t=>t.name!="WorkshopBackdrop").ToArray())
+            Undo.SetTransformParent(child,playfield.transform,"Décor solidaire du plateau VPE");
+        var presentation=Undo.AddComponent<IndustriesPresentation>(root.gameObject);
+        SetHiddenRenderers(presentation,table);
+        EnsureBallPrefab();
+        ConfigureScoop(table);
+        AddInstructionCards(table);
+
+        var managers=New("Managers");
+        var gm=Undo.AddComponent<GameManager>(managers); var score=Undo.AddComponent<ScoreManager>(managers);
+        var input=Undo.AddComponent<InputRouter>(managers);
+        Set(gm,"externalBallLifecycle",true); Set(gm,"autoStartOnPlay",false);
+        var config=ScriptableObject.CreateInstance<IndustriesConfig>();
+        AssetDatabase.CreateAsset(config,Folder+"/IndustriesConfig.asset");
+        var defaultEngine=table.GetComponent<DefaultGamelogicEngine>();
+        if(defaultEngine!=null) Undo.DestroyObjectImmediate(defaultEngine);
+        var rules=Undo.AddComponent<IndustriesVpeGame>(table.gameObject);
+        Set(rules,"config",config);Set(rules,"game",gm);Set(rules,"score",score);Set(rules,"input",input);
+        ConfigureAudio(table,config);
+        var hud=BuildHud(root,gm,score);
+        Set(rules,"objectivesText",hud);
+        // Suppression des fils de commande du template : toutes les entrées de jeu passent par InputRouter/borne.
+        Undo.RecordObject(table,"Commandes Industries");
+        table.MappingConfig.Wires.RemoveAll(w=>w.Source==SwitchSource.InputSystem);
+        PrefabUtility.RecordPrefabInstancePropertyModifications(table);
+        var plunger=table.GetComponentInChildren<PlungerComponent>();
+        var so=new SerializedObject(plunger); var it=so.GetIterator();
+        while(it.NextVisible(true)) if(it.propertyType==SerializedPropertyType.ObjectReference && it.type.Contains("InputActionReference")) it.objectReferenceValue=null;
+        so.ApplyModifiedProperties();
+
+        AddCamera(root);
+        var key=New("WorkshopKey",root).AddComponent<Light>();key.type=LightType.Directional;key.color=new Color(1f,.89f,.73f);key.intensity=1.5f;key.shadows=LightShadows.Soft;key.transform.rotation=Quaternion.Euler(48,-28,0);
+        var fill=New("WorkshopFill",root).AddComponent<Light>();fill.type=LightType.Directional;fill.color=new Color(.53f,.79f,.83f);fill.intensity=.65f;fill.transform.rotation=Quaternion.Euler(30,140,0);
+        RenderSettings.ambientMode=AmbientMode.Trilight; RenderSettings.ambientSkyColor=new Color(.24f,.29f,.33f);RenderSettings.ambientEquatorColor=new Color(.12f,.17f,.19f);RenderSettings.ambientGroundColor=new Color(.055f,.07f,.08f);
+        RenderSettings.fog=false;
+        var progression=AssetDatabase.LoadAssetAtPath<ProgressionConfig>("Assets/Resources/Progression/ProgressionConfig.asset");
+        if(progression!=null){Undo.RecordObject(progression,"Seuil 100000");progression.scoreThreshold=100000;progression.sourceSceneName="Neutral";progression.cabinetRotation=-90f;EditorUtility.SetDirty(progression);}
+        EditorSceneManager.MarkSceneDirty(scene); AssetDatabase.SaveAssets();
+        Undo.CollapseUndoOperations(undo);
+        Debug.Log("[Industries] Table adaptée : assets, six cibles, caméra de borne, HUD et règles VPE. Scène non enregistrée.");
+    }
+
+    private static GameObject New(string name,Transform parent=null)
+    {var go=new GameObject(name);Undo.RegisterCreatedObjectUndo(go,"Industries");if(parent!=null)go.transform.SetParent(parent,false);return go;}
+    private static void EnsureFolder(string path)
+    {if(AssetDatabase.IsValidFolder(path))return;var parent=System.IO.Path.GetDirectoryName(path).Replace('\\','/');EnsureFolder(parent);AssetDatabase.CreateFolder(parent,System.IO.Path.GetFileName(path));}
+    private static Material Mat(string name,Color color,float metallic,float smoothness)
+    {var p=Folder+"/"+name+".mat";var m=AssetDatabase.LoadAssetAtPath<Material>(p);if(m!=null)return m;m=new Material(Shader.Find("Universal Render Pipeline/Lit")){name=name};m.SetColor("_BaseColor",color);m.SetFloat("_Metallic",metallic);m.SetFloat("_Smoothness",smoothness);AssetDatabase.CreateAsset(m,p);return m;}
+    private static Mesh BoxMesh(string name,Vector3 size,Vector3 center)
+    {var path=Folder+"/"+name+".asset";var found=AssetDatabase.LoadAssetAtPath<Mesh>(path);if(found!=null)return found;var cube=GameObject.CreatePrimitive(PrimitiveType.Cube);var m=Object.Instantiate(cube.GetComponent<MeshFilter>().sharedMesh);Object.DestroyImmediate(cube);m.name=name;m.vertices=m.vertices.Select(v=>Vector3.Scale(v,size)+center).ToArray();m.RecalculateBounds();AssetDatabase.CreateAsset(m,path);return m;}
+    private static void FillBox(Transform host,string name,Vector3 size,Vector3 center,Material material)
+    {if(host==null)return;var mf=host.GetComponent<MeshFilter>();if(mf==null || mf.sharedMesh!=null)return;Undo.RecordObject(mf,"Maillage VPE");mf.sharedMesh=BoxMesh(name,size,center);var r=host.GetComponent<MeshRenderer>();Undo.RecordObject(r,"Matériau VPE");r.sharedMaterial=material;}
+    private static void Fill(Transform host,string source,string name,Material material,float sink=0)
+    {
+        if(host==null)return;var mf=host.GetComponent<MeshFilter>();if(mf==null || mf.sharedMesh!=null)return;
+        var path=Folder+"/"+name+".asset";var mesh=AssetDatabase.LoadAssetAtPath<Mesh>(path);
+        if(mesh==null)
+        {
+            var prefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Models/Parts/"+source);
+            if(prefab==null)throw new InvalidOperationException("Pièce absente : "+source);
+            var model=Object.Instantiate(prefab);var f=model.GetComponentInChildren<MeshFilter>();
+            mesh=Object.Instantiate(f.sharedMesh);mesh.name=name;
+            var matrix=f.transform.localToWorldMatrix;
+            var v=mesh.vertices.Select(p=>matrix.MultiplyPoint3x4(p)*.06f).ToArray();
+            var b=new Bounds(v[0],Vector3.zero);foreach(var p in v)b.Encapsulate(p);
+            mesh.vertices=v.Select(p=>p-new Vector3(b.center.x,sink,b.center.z)).ToArray();
+            mesh.RecalculateNormals();mesh.RecalculateBounds();Object.DestroyImmediate(model);
+            AssetDatabase.CreateAsset(mesh,path);
+        }
+        Undo.RecordObject(mf,"Maillage VPE");mf.sharedMesh=mesh;
+        var r=host.GetComponent<MeshRenderer>();Undo.RecordObject(r,"Matériau VPE");r.sharedMaterial=material;
+        PrefabUtility.RecordPrefabInstancePropertyModifications(mf);PrefabUtility.RecordPrefabInstancePropertyModifications(r);
+    }
+    private static void Piece(Transform parent,string name,Vector3 position,Vector3 size,Material material)
+    {var go=New(name,parent);go.transform.position=position;go.AddComponent<MeshFilter>().sharedMesh=BoxMesh(name+size.ToString(),size,Vector3.zero);go.AddComponent<MeshRenderer>().sharedMaterial=material;}
+    private static void Set(Object target,string field,Object value)
+    {var so=new SerializedObject(target);so.FindProperty(field).objectReferenceValue=value;so.ApplyModifiedProperties();}
+    private static void Set(Object target,string field,bool value)
+    {var so=new SerializedObject(target);so.FindProperty(field).boolValue=value;so.ApplyModifiedProperties();}
+    private static void AddCamera(Transform parent)
+    {
+        if(Object.FindAnyObjectByType<Camera>()!=null)return;
+        var cam=New("Main Camera",parent).AddComponent<Camera>();cam.tag="MainCamera";
+        cam.transform.position=new Vector3(.258f,1.5f,-1.885f);
+        cam.transform.rotation=Quaternion.LookRotation(new Vector3(0,-1,.85f),Vector3.forward)*Quaternion.Euler(0,0,90);
+        cam.orthographic=true;cam.orthographicSize=.30f;cam.rect=new Rect(0,0,.87f,1f);cam.nearClipPlane=.01f;cam.farClipPlane=10f;cam.clearFlags=CameraClearFlags.SolidColor;cam.backgroundColor=new Color(.015f,.025f,.031f);
+        cam.gameObject.AddComponent<AudioListener>();var data=cam.gameObject.AddComponent<UniversalAdditionalCameraData>();data.antialiasing=AntialiasingMode.SubpixelMorphologicalAntiAliasing;
+    }
+    private static TMP_Text BuildHud(Transform parent,GameManager game,ScoreManager score)
+    {
+        var go=New("IndustriesHUD",parent);var canvas=go.AddComponent<Canvas>();canvas.renderMode=RenderMode.ScreenSpaceOverlay;canvas.sortingOrder=100;
+        var scaler=go.AddComponent<UnityEngine.UI.CanvasScaler>();scaler.uiScaleMode=UnityEngine.UI.CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(1920,1080);
+        var content=New("CabinetContent",go.transform).AddComponent<RectTransform>();content.anchorMin=content.anchorMax=new Vector2(.5f,.5f);content.sizeDelta=new Vector2(1080,1920);content.localRotation=Quaternion.Euler(0,0,-90);
+        var band=New("ScorePanel",content).AddComponent<UnityEngine.UI.Image>();band.color=new Color(.021f,.042f,.053f,.98f);band.raycastTarget=false;band.rectTransform.anchorMin=band.rectTransform.anchorMax=new Vector2(.5f,1f);band.rectTransform.pivot=new Vector2(.5f,1f);band.rectTransform.sizeDelta=new Vector2(1080,250);band.rectTransform.anchoredPosition=Vector2.zero;
+        Text(content,"IndustriesTitle","ATELIER DES VOSGES",new Vector2(0,905),new Vector2(980,50),34,new Color(.91f,.73f,.44f));
+        var scoreText=Text(content,"ScoreText","0",new Vector2(-170,835),new Vector2(620,90),64,Color.white);
+        var balls=Text(content,"BallsText","BILLES 3",new Vector2(365,845),new Vector2(250,65),30,Color.white);
+        var high=Text(content,"HighScoreText","RECORD 0",new Vector2(-200,775),new Vector2(560,45),22,new Color(.49f,.72f,.71f));
+        var multiplier=Text(content,"MultiplierText","×1",new Vector2(363,782),new Vector2(230,55),35,new Color(.91f,.73f,.44f));
+        var objectives=Text(content,"ProductionText","PRODUCTION 0/6",new Vector2(0,725),new Vector2(1010,42),23,new Color(.63f,.80f,.77f));
+        var message=Text(content,"MessageText","MAINTENIR ESPACE PUIS RELÂCHER",new Vector2(0,-875),new Vector2(1030,65),25,Color.white);
+        var feedback=Text(content,"ScoreFeedbackText","",new Vector2(0,-790),new Vector2(1030,65),25,new Color(.91f,.73f,.44f));
+        var hud=Undo.AddComponent<HudController>(go);Set(hud,"scoreText",scoreText);Set(hud,"highScoreText",high);Set(hud,"ballsText",balls);Set(hud,"messageText",message);Set(hud,"multiplierText",multiplier);Set(hud,"scoreFeedbackText",feedback);
+        Set(hud,"compactMultiplierLabel",true);
+        return objectives;
+    }
+    private static TMP_Text Text(Transform parent,string name,string text,Vector2 position,Vector2 size,float fontSize,Color color)
+    {var go=New(name,parent);var t=go.AddComponent<TextMeshProUGUI>();t.font=TMP_Settings.defaultFontAsset;t.text=text;t.fontSize=fontSize;t.color=color;t.alignment=TextAlignmentOptions.Center;t.raycastTarget=false;t.textWrappingMode=TextWrappingModes.NoWrap;t.rectTransform.anchorMin=t.rectTransform.anchorMax=new Vector2(.5f,.5f);t.rectTransform.sizeDelta=size;t.rectTransform.anchoredPosition=position;return t;}
+
+    private static void FillTargetCollider(DropTargetColliderComponent col)
+    {
+        if(col.FrontColliderMesh!=null && col.BackColliderMesh!=null)return;
+        // Une seule face déclenche ; les cinq autres ferment le solide sans second contact superposé.
+        var cube=BoxMesh("TargetCollisionBodyAligned",new Vector3(.019f,.027f,.004f),new Vector3(0,.0135f,0));
+        var vertices=cube.vertices; var indices=cube.triangles;
+        var front=new System.Collections.Generic.List<int>();var back=new System.Collections.Generic.List<int>();
+        for(int i=0;i<indices.Length;i+=3)
+        {
+            bool face=vertices[indices[i]].z<-.001f && vertices[indices[i+1]].z<-.001f && vertices[indices[i+2]].z<-.001f;
+            var dst=face?front:back;dst.Add(indices[i]);dst.Add(indices[i+1]);dst.Add(indices[i+2]);
+        }
+        Undo.RecordObject(col,"Colliders distincts cible");
+        if(col.FrontColliderMesh==null)col.FrontColliderMesh=PartialMesh("TargetContactAligned",cube,front.ToArray());
+        if(col.BackColliderMesh==null)col.BackColliderMesh=PartialMesh("TargetHousingAligned",cube,back.ToArray());
+        PrefabUtility.RecordPrefabInstancePropertyModifications(col);
+    }
+    private static Mesh PartialMesh(string name,Mesh source,int[] triangles)
+    {
+        var path=Folder+"/"+name+".asset";var mesh=AssetDatabase.LoadAssetAtPath<Mesh>(path);if(mesh!=null)return mesh;
+        mesh=Object.Instantiate(source);mesh.name=name;mesh.triangles=triangles;mesh.RecalculateBounds();AssetDatabase.CreateAsset(mesh,path);return mesh;
+    }
+    private static void SetHiddenRenderers(IndustriesPresentation presentation,TableComponent table)
+    {
+        var hidden=table.GetComponentsInChildren<MeshRenderer>(true).Where(r=>
+            r.GetComponent<PlayfieldMeshComponent>()!=null ||
+            r.bounds.max.x<-.03f || r.bounds.min.x>.56f || r.bounds.max.z<-1.24f || r.bounds.min.z>.05f ||
+            r.name=="Primitive48" || r.name=="Primitive49" || r.name.StartsWith("BallShadow") || r.name=="FlipperLSh" || r.name=="FlipperRSh" ||
+            r.sharedMaterials.Any(m=>m!=null && (m.name.Contains("bumper-cap")||m.name.ToLowerInvariant().Contains("apron")))).ToArray();
+        var so=new SerializedObject(presentation);var list=so.FindProperty("hiddenRenderers");list.arraySize=hidden.Length;
+        for(int i=0;i<hidden.Length;i++){list.GetArrayElementAtIndex(i).objectReferenceValue=hidden[i];Undo.RecordObject(hidden[i],"Masquer visuel template");hidden[i].enabled=false;PrefabUtility.RecordPrefabInstancePropertyModifications(hidden[i]);}
+        so.ApplyModifiedProperties();
+    }
+    private static void EnsureBallPrefab()
+    {
+        const string path="Assets/Resources/VpeUrp/Ball.prefab";
+        if(AssetDatabase.LoadAssetAtPath<GameObject>(path)!=null)return;
+        EnsureFolder("Assets/Resources/VpeUrp");
+        AssetDatabase.CopyAsset("Assets/VpeUrp/Resources/Prefabs/DefaultBall.prefab",path);
+        var contents=PrefabUtility.LoadPrefabContents(path);
+        try {
+            // Le rayon VPE 25 vaut 13,49 mm. La primitive Unity mesure 1 m de diamètre.
+            contents.transform.Find("Sphere").localScale=Vector3.one*(50f*VisualPinball.Unity.Physics.ScaleInv);
+            PrefabUtility.SaveAsPrefabAsset(contents,path);
+        } finally {PrefabUtility.UnloadPrefabContents(contents);}
+    }
+    private static void ConfigureScoop(TableComponent table)
+    {
+        var scoop=table.GetComponentsInChildren<KickerComponent>().FirstOrDefault(k=>k.name=="Kicker1");
+        // Le trou de démonstration fait 8 VPX de rayon, soit 4,3 mm : une bille de 27 mm n'y entre pas.
+        if(scoop==null)return;
+        if(Mathf.Approximately(scoop.Radius,8f)) {
+            Undo.RecordObject(scoop.transform,"Scoop adapté à la bille");scoop.Radius=30f;PrefabUtility.RecordPrefabInstancePropertyModifications(scoop.transform);
+        }
+        var cup=table.GetComponentsInChildren<PrimitiveComponent>().FirstOrDefault(p=>p.name=="kickerCup1");
+        if(cup!=null) {
+            var renderer=cup.GetComponent<MeshRenderer>();
+            if(renderer!=null && renderer.bounds.size.x>.06f) {
+                Undo.RecordObject(cup.transform,"Coupelle du scoop");cup.transform.localScale*=.045f/renderer.bounds.size.x;PrefabUtility.RecordPrefabInstancePropertyModifications(cup.transform);
+            }
+            // La capture est assurée par le kicker natif, pas par la coupelle décorative.
+            var collider=cup.GetComponent<PrimitiveColliderComponent>();
+            if(collider!=null && collider.enabled){Undo.RecordObject(collider,"Coupelle décorative");collider.enabled=false;PrefabUtility.RecordPrefabInstancePropertyModifications(collider);}
+        }
+    }
+    private static void AddInstructionCards(TableComponent table)
+    {
+        var pf=table.GetComponentInChildren<PlayfieldComponent>().transform;
+        foreach(var name in new[]{"ControlsCard","ProductionCard"}) {
+            if(GameObject.Find(name)!=null)continue;
+            var meshPath=Folder+"/InstructionCard.asset";var mesh=AssetDatabase.LoadAssetAtPath<Mesh>(meshPath);
+            if(mesh==null){mesh=new Mesh{name="InstructionCard"};mesh.vertices=new[]{new Vector3(-.065f,0,-.036f),new Vector3(.065f,0,-.036f),new Vector3(.065f,0,.036f),new Vector3(-.065f,0,.036f)};mesh.uv=new[]{Vector2.zero,Vector2.right,Vector2.one,Vector2.up};mesh.triangles=new[]{0,2,1,0,3,2};mesh.RecalculateNormals();mesh.RecalculateBounds();AssetDatabase.CreateAsset(mesh,meshPath);}
+            var material=Mat(name,Color.white,0f,.24f);AssetDatabase.ImportAsset("Assets/Art/Industries/"+name+".png",ImportAssetOptions.ForceSynchronousImport);material.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/Industries/"+name+".png"));
+            var card=New(name,pf);card.transform.localPosition=new Vector3(name=="ControlsCard"?.09f:.38f,.043f,-1.10f);
+            card.AddComponent<MeshFilter>().sharedMesh=mesh;card.AddComponent<MeshRenderer>().sharedMaterial=material;
+        }
+    }
+    private static void ConfigureAudio(TableComponent table,IndustriesConfig config)
+    {
+        if(config==null)return;
+        var settings=new SerializedObject(config);
+        var fields=new[]{"flipperUpSound","flipperDownSound","launchSound","bumperSound","targetSound","scoopSound","bonusSound","drainSound"};
+        var clips=new[]{"fx_Flipperup","fx_Flipperdown","plunger","fx_bumper1","target","kicker_enter_center","knocker","drain"};
+        for(int i=0;i<fields.Length;i++)if(settings.FindProperty(fields[i]).objectReferenceValue==null)settings.FindProperty(fields[i]).objectReferenceValue=AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Tables/ExampleTable/Sounds/"+clips[i]+".wav");settings.ApplyModifiedProperties();
+        var audio=table.GetComponent<IndustriesAudio>();if(audio==null)audio=Undo.AddComponent<IndustriesAudio>(table.gameObject);Set(audio,"config",config);
+        foreach(var old in table.GetComponentsInChildren<SoundComponent>(true)){Undo.RecordObject(old,"Audio Industries");old.enabled=false;PrefabUtility.RecordPrefabInstancePropertyModifications(old);}
+    }
+
+    [MenuItem("Flipper/Industries/Réparer les liaisons de l'adaptation")]
+    public static void RepairBindings()
+    {
+        if(EditorApplication.isPlaying || EditorSceneManager.GetActiveScene().name!="Industries")throw new InvalidOperationException("Industries hors Play attendu.");
+        var table=Object.FindAnyObjectByType<TableComponent>();var root=GameObject.Find("IndustriesPresentation");
+        if(table==null || root==null)throw new InvalidOperationException("Adaptation absente.");
+        Undo.IncrementCurrentGroup();var group=Undo.GetCurrentGroup();Undo.SetCurrentGroupName("Liaisons Industries");
+        foreach(var col in table.GetComponentsInChildren<DropTargetColliderComponent>())FillTargetCollider(col);
+        foreach(var col in table.GetComponentsInChildren<HitTargetColliderComponent>())if(col.FrontColliderMesh==null){Undo.RecordObject(col,"Collider cible");col.FrontColliderMesh=BoxMesh("HitCollisionAligned",new Vector3(.012f,.028f,.004f),new Vector3(0,.014f,0));PrefabUtility.RecordPrefabInstancePropertyModifications(col);}
+        var pf=table.GetComponentInChildren<PlayfieldComponent>();var print=GameObject.Find("PrintedPlayfield");
+        if(print!=null && print.transform.parent!=pf.transform){Undo.SetTransformParent(print.transform,pf.transform,"Plateau graphique VPE");Undo.RecordObject(print.transform,"Plateau graphique VPE");print.transform.localPosition=Vector3.up*.0002f;print.transform.localRotation=Quaternion.identity;print.transform.localScale=Vector3.one;}
+        foreach(var t in root.transform.Cast<Transform>().Where(t=>t.name=="Cabinet" || t.name.EndsWith("Rail") || t.name=="RailFastener").ToArray())Undo.SetTransformParent(t,pf.transform,"Décor VPE");
+        var presentation=root.GetComponent<IndustriesPresentation>();if(presentation==null)presentation=Undo.AddComponent<IndustriesPresentation>(root);SetHiddenRenderers(presentation,table);
+        foreach(var r in table.GetComponentsInChildren<MeshRenderer>(true)) {
+            PrefabUtility.RecordPrefabInstancePropertyModifications(r);
+            var f=r.GetComponent<MeshFilter>();if(f!=null)PrefabUtility.RecordPrefabInstancePropertyModifications(f);
+        }
+        var hud=root.GetComponentInChildren<HudController>();if(hud!=null)Set(hud,"compactMultiplierLabel",true);
+        EnsureBallPrefab();ConfigureScoop(table);AddInstructionCards(table);ConfigureAudio(table,AssetDatabase.LoadAssetAtPath<IndustriesConfig>(Folder+"/IndustriesConfig.asset"));AssetDatabase.SaveAssets();EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());Undo.CollapseUndoOperations(group);
+    }
+}

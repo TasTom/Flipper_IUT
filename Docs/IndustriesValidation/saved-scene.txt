@@ -1,0 +1,3 @@
+scene=Assets/Scenes/Industries.unity dirty=False playing=False
+objects=808 missingScripts=0 targets=6 cameras=1
+externalLifecycle=True autoStart=False scoreThreshold=100000 audioClips=8/8 scoopRadiusVPX=30

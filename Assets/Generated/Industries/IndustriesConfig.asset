@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b35792344e220e4f9a996258a4d4c03, type: 3}
+  m_Name: IndustriesConfig
+  m_EditorClassIdentifier: Assembly-CSharp::IndustriesConfig
+  startingBalls: 3
+  bumperPoints: 100
+  targetPoints: 500
+  lanePoints: 250
+  spinnerPoints: 50
+  slingshotPoints: 50
+  scoopPoints: 1000
+  sixTargetsBonus: 5000
+  scoopHoldSeconds: 0.65
+  targetResetSeconds: 1
+  serveDelay: 0.3
+  scoopKickAngle: 165
+  scoopKickSpeed: 12
+  flipperUpSound: {fileID: 8300000, guid: 767188f3f05f5c441a5a094c7001f1be, type: 3}
+  flipperDownSound: {fileID: 8300000, guid: 24b102f88dcf4154fb2294d32ec1e9e9, type: 3}
+  launchSound: {fileID: 8300000, guid: a076e72fa1d023249b3b6270ef109e95, type: 3}
+  bumperSound: {fileID: 8300000, guid: aff0949c76b802b49adaf30a8c0e5799, type: 3}
+  targetSound: {fileID: 8300000, guid: 166c5565b302d1148b73712ee6abac0a, type: 3}
+  scoopSound: {fileID: 8300000, guid: f79359731f155c044bf6a20fe2266cfc, type: 3}
+  bonusSound: {fileID: 8300000, guid: b8b4406ae52b29246a0c773f9f0fcd0c, type: 3}
+  drainSound: {fileID: 8300000, guid: ed9bf3220166fe745a8dbd6944d25c40, type: 3}
+  soundVolume: 0.5

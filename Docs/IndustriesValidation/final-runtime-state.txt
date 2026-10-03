@@ -1,0 +1,5 @@
+Unity=6000.6.0f1 scene=Industries VPE=True
+Audio clips=8/8
+Score=0 balls=3 state=ReadyToLaunch
+Camera roll=90 orthographic=0,3 viewport=(x:0.00, y:0.00, width:0.87, height:1.00)
+Native targets=6

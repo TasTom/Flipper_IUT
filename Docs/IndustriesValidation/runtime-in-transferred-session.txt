@@ -1,0 +1,16 @@
+PASS initialisation native et distribution d'une bille
+PASS commandes des deux flippers depuis InputRouter
+PASS lancement VPE : sortie du chenal vers le haut du plateau
+PASS pause : bille native immobile
+PASS collision physique cible sw13
+PASS collision physique cible sw12
+PASS collision physique cible sw3
+PASS collision physique cible sw2
+PASS collision physique cible sw11
+PASS collision physique cible sw1
+FAIL six collisions : bonus de production
+PASS scoop : collision physique, score et libération native (points=2000, hits=1, captured=False, balls=1, position=(0.27, 0.01, -0.65))
+FAIL drain : 2 bille(s) restante(s)
+FAIL drain : 1 bille(s) restante(s)
+FAIL drain : 0 bille(s) restante(s)
+PASS nouvelle partie sans relancer la scène

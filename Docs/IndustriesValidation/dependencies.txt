@@ -1,0 +1,564 @@
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/plunger_spring.png
+Assets/Tables/ExampleTable/Textures/flippers_shadow.png
+Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image bumper-cap-t5.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/plunger.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Ramp/RampWireMeshComponent.cs
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image sidewood._h.mat
+Assets/Tables/ExampleTable/Materials/plastic_cobalt_blue aluminum.mat
+Assets/Tables/ExampleTable/Meshes/screw1.fbx
+Assets/Tables/ExampleTable/Textures/DropTargetFlatSimple.png
+Assets/Tables/ExampleTable/Materials/plastic kickerwilliams.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Kicker/KickerComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/Simulation/SimulationThreadComponent.cs
+Assets/Tables/ExampleTable/Meshes/PegPlasticT43.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Trigger/TriggerAnimationComponent.cs
+Assets/Tables/ExampleTable/Meshes/Primitive45.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT36.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/playfield.png
+Packages/com.unity.ugui/Runtime/UGUI/UI/Core/Image.cs
+Assets/Tables/ExampleTable/Textures/kickerGottlieb.png
+Assets/Tables/ExampleTable/Textures/bumper-cap-t4.png
+Assets/Generated/Industries/GateWire.asset
+Assets/VpeUrp/Resources/Prefabs/Drop Target - Simple Flat.prefab
+Assets/Generated/Industries/GateBracket.asset
+Assets/Tables/ExampleTable/Textures/flipper_yellow_red_Right.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Primitive/PrimitiveColliderComponent.cs
+Assets/Tables/ExampleTable/Sounds/fx_bumper1.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/trigger.png
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling6.wav
+Assets/Tables/ExampleTable/Sounds/popper_ball.wav
+Assets/Tables/ExampleTable/Meshes/Primitive22.fbx
+Assets/Tables/ExampleTable/Materials/plastic_white flipper_williams_logo_left.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/flipper.png
+Assets/Tables/ExampleTable/Materials/metal0.8 left_rail_brighter.mat
+Assets/Tables/ExampleTable/Textures/inchesandmm.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/gate.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT23.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive83.fbx
+Assets/Tables/ExampleTable/Materials/plastictrigger.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/Sound/MusicCoordinator.cs
+Assets/Tables/ExampleTable/Meshes/PegMetalT8.fbx
+Assets/Tables/ExampleTable/Sounds/gate4.wav
+Assets/Tables/ExampleTable/Sounds/gate.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Art/Meshes/Light/Light (Socket).mesh
+Assets/Tables/ExampleTable/Materials/metal.mat
+Assets/Generated/Industries/RailFastener(0.01, 0.00, 0.01).asset
+Packages/com.unity.ugui/Runtime/UGUI/UI/Core/Layout/CanvasScaler.cs
+Assets/Tables/ExampleTable/Meshes/PegPlasticT30.fbx
+Assets/Tables/ExampleTable/Meshes/screw13.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT41.fbx
+Assets/VpeUrp/Resources/Prefabs/Hit Target - Rectangle.prefab
+Assets/Tables/ExampleTable/Meshes/screw11.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT52.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT26.fbx
+Assets/Tables/ExampleTable/Meshes/BallShadow3.fbx
+Assets/Tables/ExampleTable/Meshes/FlasherT1.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT11.fbx
+Assets/Tables/ExampleTable/Meshes/Ruler_mm.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT40.fbx
+Assets/VpeUrp/Resources/Prefabs/Gate - Wire W.prefab
+Assets/Tables/ExampleTable/Textures/ColorGradeLUT256x16_1to1.png
+Assets/Tables/ExampleTable/Meshes/Peg5.fbx
+Assets/Art/Industries/ControlsCard.png
+Assets/Tables/ExampleTable/Textures/flipper_gottlieb_left.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/surface.png
+Assets/Tables/ExampleTable/Meshes/PegMetalT5.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Flipper/FlipperColliderComponent.cs
+Assets/Tables/ExampleTable/Materials/ombra flippers_shadow.mat
+Assets/Tables/ExampleTable/Materials/plastic_white.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/trigger.png
+Assets/Tables/ExampleTable/Materials/plastic_white flipper_yellow_red_right.mat
+Assets/Tables/ExampleTable/Textures/mm.png
+Assets/Generated/Industries/PaintedSteel.mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT19.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive69.fbx
+Assets/Tables/ExampleTable/Textures/kickerT1.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/surface.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Table/LegacyContainer.cs
+Assets/Tables/ExampleTable/Meshes/FlipperRSh.fbx
+Assets/Generated/Industries/LeftRail(0.03, 0.03, 1.20).asset
+Assets/Tables/ExampleTable/Meshes/Primitive200.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive205.fbx
+Assets/Tables/ExampleTable/Textures/inches.png
+Assets/Generated/Industries/TopRail(0.58, 0.03, 0.03).asset
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image inchesandmm.mat
+Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image1 plungercover.mat
+Assets/Tables/ExampleTable/Textures/bally_miniflipper_right.jpg
+Assets/Generated/Industries/IvoryPlastic.mat
+Assets/Tables/ExampleTable/Sounds/fx_ball_drop3.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/playfield.png
+Assets/Tables/ExampleTable/Meshes/Primitive66.fbx
+Assets/Tables/ExampleTable/Textures/sidewood._h.png
+Assets/Tables/ExampleTable/Sounds/metalhit2.wav
+Assets/Tables/ExampleTable/Meshes/Primitive36.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Trigger/TriggerColliderComponent.cs
+Assets/Generated/Industries/BumperCap.asset
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/flipper.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/musical_note.png
+Assets/Tables/ExampleTable/Textures/bumper-cap-t5.png
+Assets/Tables/ExampleTable/Meshes/Primitive37.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive31.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/ramp_wall.png
+Assets/VpeUrp/Resources/Prefabs/Bumper.prefab
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/Sound/CalloutCoordinator.cs
+Assets/Tables/ExampleTable/Meshes/Ruler_inches_and_mm.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/player.png
+Assets/Tables/ExampleTable/Meshes/Bally Mini Flipper Left.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive27.fbx
+Assets/VpeUrp/Art/Materials/Visual Pinball/Drop Target - Simple Flat.mat
+Assets/Generated/Industries/TargetHousingAligned.asset
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/drop_target_anim.png
+Assets/Tables/ExampleTable/Sounds/drain.wav
+Assets/Tables/ExampleTable/Meshes/Primitive204.fbx
+Assets/Tables/ExampleTable/Sounds/metalhit_thin.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/gate.png
+Assets/VpeUrp/Resources/Prefabs/Drop Target - Beveled.prefab
+Assets/VpeUrp/Art/Materials/Visual Pinball/Spinner (Plate).mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT39.fbx
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling12.wav
+Assets/Tables/ExampleTable/Sounds/fx_Flipperdown.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/kicker.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Rubber/RubberColliderComponent.cs
+Assets/Tables/ExampleTable/Materials/metal0.8 aluminum.mat
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image inches.mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT14.fbx
+Assets/Tables/ExampleTable/Textures/angle.png
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling1.wav
+Assets/Tables/ExampleTable/Meshes/Primitive48.fbx
+Assets/Tables/ExampleTable/Meshes/FlasherT2.fbx
+Assets/Tables/ExampleTable/Meshes/Peg6.fbx
+Assets/VpeUrp/Art/Materials/Visual Pinball/Light (Bulb).mat
+Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image bumper-cap-t3.mat
+Assets/Tables/ExampleTable/Meshes/Primitive29.fbx
+Assets/Tables/ExampleTable/Textures/rubber-emwheel.png
+Assets/Tables/ExampleTable/Meshes/Primitive34.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/HitTarget/DropTargetAnimationComponentLegacy.cs
+Assets/Tables/ExampleTable/Textures/kickerHoleWood.png
+Assets/Generated/Industries/SpinnerBracket.asset
+Assets/Tables/ExampleTable/Textures/emkicker-t1.png
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image bally_miniflipper_left.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Flipper/FlipperRubberMeshComponent.cs
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling5.wav
+Assets/Tables/ExampleTable/Meshes/screw7.fbx
+Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image sidewood.mat
+Assets/Tables/ExampleTable/Sounds/left_slingshot.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/spinner_plate.png
+Assets/Generated/Industries/BumperBase.asset
+Assets/Generated/Industries/ControlsCard.mat
+Assets/Generated/Industries/DropTarget.asset
+Assets/VpeUrp/Art/Materials/Visual Pinball/Gate (Bracket).mat
+Packages/com.unity.ugui/Runtime/TMP/TextMeshProUGUI.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/ramp_wires.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/spinner.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT47.fbx
+Assets/Tables/ExampleTable/Materials/ballshadow ballshadow.mat
+Assets/Tables/ExampleTable/Sounds/plunger.wav
+Packages/com.unity.render-pipelines.universal/Editor/AssetVersion.cs
+Assets/Tables/ExampleTable/Textures/JPBall-Dark2.png
+Assets/Generated/Industries/ProductionCard.mat
+Assets/Scripts/IndustriesPresentation.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/ramp.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT2.fbx
+Assets/Generated/Industries/RightRail(0.03, 0.03, 1.20).asset
+Assets/Tables/ExampleTable/Materials/metal emkicker-t1.mat
+Assets/Tables/ExampleTable/Textures/flipper_williams_logo_Right.png
+Assets/VpeUrp/Art/Materials/Visual Pinball/Hit Target - Rectangle.mat
+Assets/Tables/ExampleTable/Meshes/screw8.fbx
+Assets/Tables/ExampleTable/Sounds/kicker_enter_center.wav
+Assets/Scripts/IndustriesVpeGame.cs
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image bumper-cap-t2.mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT15.fbx
+Assets/Tables/ExampleTable/Materials/metal aluminum.mat
+Assets/VpeUrp/Resources/Prefabs/Hit Target.prefab
+Assets/Tables/ExampleTable/Textures/bally_miniflipper_left.jpg
+Assets/Tables/ExampleTable/Meshes/PegPlasticT1Mini2.fbx
+Assets/Tables/ExampleTable/Meshes/kickerGottlieb.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Resources/Prefabs/Primitive.prefab
+Assets/Art/Industries/ProductionCard.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Playfield/PlayfieldColliderComponent.cs
+Assets/Tables/ExampleTable/Materials/plastic.mat
+Assets/Generated/Industries/IndustriesPlayfield.asset
+Assets/Tables/ExampleTable/Meshes/kickerHoleSimple.fbx
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling8.wav
+Assets/Tables/ExampleTable/Meshes/PegMetalT2.fbx
+Assets/Tables/ExampleTable/Sounds/fx_ball_drop5.wav
+Assets/Tables/ExampleTable/Sounds/fx_ball_drop1.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/plunger.png
+Packages/com.unity.ugui/Editor Resources/Gizmos/TMP - Font Asset Icon.psd
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image sidewood.mat
+Assets/Tables/ExampleTable/Meshes/Primitive67.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Trigger/TriggerMeshComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/Sound/SwitchSoundComponent.cs
+Assets/VpeUrp/Art/Materials/Visual Pinball/Spinner (Bracket).mat
+Assets/Tables/ExampleTable/Textures/environment_shiny3blur4.hdr
+Assets/Tables/ExampleTable/Sounds/fx_spinner.wav
+Assets/Tables/ExampleTable/Textures/kickerCup.png
+Assets/Tables/ExampleTable/Sounds/ballrelease.wav
+Packages/com.unity.ugui/Runtime/TMP/TMP_FontAsset.cs
+Assets/Tables/ExampleTable/Sounds/flip_hit_3.wav
+Assets/Tables/ExampleTable/Meshes/kickerCup1.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive33.fbx
+Assets/Tables/ExampleTable/Meshes/Ruler_inches.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/HitTarget/DropTargetColliderComponent.cs
+Packages/com.unity.render-pipelines.universal/Shaders/Lit.shader
+Assets/Tables/ExampleTable/Meshes/BallShadow1.fbx
+Assets/Tables/ExampleTable/Sounds/fx_bumper2.wav
+Assets/Tables/ExampleTable/Meshes/PegPlasticT28.fbx
+Assets/Tables/ExampleTable/Sounds/fx_rubber2.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Bumper/BumperComponent.cs
+Assets/Tables/ExampleTable/Sounds/rubber_hit_2.wav
+Assets/Tables/ExampleTable/Meshes/PegPlasticT32.fbx
+Assets/VpeUrp/Art/Materials/Visual Pinball/Drop Target - Beveled.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/light.png
+Assets/Tables/ExampleTable/Materials/plastic kickergottlieb.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/primitive.png
+Assets/VpeUrp/Art/Materials/Visual Pinball/Light (Socket).mat
+Assets/Tables/ExampleTable/Meshes/Sling2.fbx
+Assets/Tables/ExampleTable/Meshes/kickerHole.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT3.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive28.fbx
+Assets/VpeUrp/Resources/Prefabs/Light.prefab
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling9.wav
+Assets/Tables/ExampleTable/Materials/peg purple_peg.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Art/Meshes/Light/Light (Bulb).mesh
+Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset
+Assets/Scenes/Industries.unity
+Assets/Tables/ExampleTable/Meshes/Primitive41.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Surface/SurfaceTopMeshComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/primitive.png
+Assets/Tables/ExampleTable/Meshes/BallShadow5.fbx
+Assets/Tables/ExampleTable/Sounds/plungerpull.wav
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling3.wav
+Assets/Tables/ExampleTable/Meshes/PegMetalT7.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Resources/Prefabs/Trigger.prefab
+Assets/Tables/ExampleTable/Meshes/PlasticTipSlingArm.fbx
+Assets/Tables/ExampleTable/Meshes/screw9.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT50.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Flipper/FlipperComponent.cs
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image mm.mat
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image flipper_gottlieb_left.mat
+Assets/Tables/ExampleTable/Meshes/Peg.fbx
+Assets/Tables/ExampleTable/Meshes/screw10.fbx
+Assets/Tables/ExampleTable/Textures/CustomBlackTip.png
+Assets/Tables/ExampleTable/Meshes/PegMetalT10.fbx
+Assets/Tables/ExampleTable/Textures/environment.hdr
+Assets/Tables/ExampleTable/Materials/metal0.8 right_rail_brighter.mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT34.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT8Twin1.fbx
+Assets/Tables/ExampleTable/Sounds/fx_ball_drop2.wav
+Assets/Tables/ExampleTable/Meshes/Primitive49.fbx
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling10.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/speaker.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/hit_target_anim.png
+Assets/Scripts/IndustriesConfig.cs
+Assets/Tables/ExampleTable/Materials/rubber_white.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Resources/Prefabs/Rubber.prefab
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/flipper_rubber.png
+Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image sidewood._h.mat
+Assets/Tables/ExampleTable/Meshes/RubberEMWheel.fbx
+Assets/Generated/Industries/EnamelTeal.mat
+Assets/Generated/Industries/IndustriesConfig.asset
+Assets/VpeUrp/Art/Materials/Visual Pinball/Bumper (Skirt).mat
+Assets/Generated/Industries/InstructionCard.asset
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/bumper.png
+Assets/VpeUrp/Resources/Prefabs/Hit Target - Rectangle Fat.prefab
+Assets/Generated/Industries/BumperRing.asset
+Assets/Tables/ExampleTable/Sounds/metalhit_medium.wav
+Assets/Tables/ExampleTable/Meshes/PegMetalT11.fbx
+Assets/Tables/ExampleTable/Meshes/Peg2.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/Game/BallRollerComponent.cs
+Assets/Tables/ExampleTable/Meshes/Primitive7.fbx
+Assets/TextMesh Pro/Fonts/LiberationSans.ttf
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Playfield/PlayfieldMeshComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Light/LightComponent.cs
+Assets/Tables/ExampleTable/Meshes/Primitive38.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT21.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT48.fbx
+Assets/Tables/ExampleTable/Sounds/knocker.wav
+Assets/Tables/ExampleTable/Meshes/screw6.fbx
+Assets/VpeUrp/Art/Materials/Visual Pinball/Hit Target - Rectangle Fat.mat
+Assets/Tables/ExampleTable/Meshes/PegMetalT4.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive44.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Surface/SurfaceSideMeshComponent.cs
+Assets/Art/Industries/IndustriesMicroNormal.png
+Assets/Tables/ExampleTable/Sounds/target.wav
+Assets/Tables/ExampleTable/Meshes/Primitive30.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/surface_side.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/hit_target.png
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling2.wav
+Assets/Tables/ExampleTable/Meshes/Primitive2.fbx
+Assets/Generated/Industries/WorkshopBackdrop(1.40, 0.02, 1.60).asset
+Packages/com.unity.ugui/Editor Resources/Gizmos/TMP - Text Component Icon.psd
+Assets/Tables/ExampleTable/Meshes/PegPlasticT18.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive19.fbx
+Assets/Tables/ExampleTable/Textures/kickerWilliams.png
+Assets/Tables/ExampleTable/Materials/plastic rubber-emwheel.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Trough/TroughComponent.cs
+Assets/Tables/ExampleTable/Meshes/PegPlasticT37.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Gate/GateComponent.cs
+Assets/Tables/ExampleTable/Textures/HitTarget.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Gate/GateColliderComponent.cs
+Assets/Tables/ExampleTable/Textures/flipperImage-testW.png
+Assets/Art/Industries/IndustriesPlayfield.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/HitTarget/HitTargetComponent.cs
+Assets/Tables/ExampleTable/Meshes/Primitive21.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/Sound/CoilSoundComponent.cs
+Assets/Tables/ExampleTable/Textures/rubber-post-t1-black.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT42.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/hit_target.png
+Assets/Tables/ExampleTable/Meshes/Primitive26.fbx
+Assets/Tables/ExampleTable/Textures/aluminum.jpg
+Assets/Tables/ExampleTable/Meshes/PegMetalT9.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/physics-thread.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT27.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Curves/Flipper Corrections/Mid 80s to early 90s.asset
+Assets/Tables/ExampleTable/Meshes/Primitive32.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT44.fbx
+Assets/Scripts/IndustriesAudio.cs
+Assets/Tables/ExampleTable/Meshes/kickerWilliams.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT29.fbx
+Assets/VpeUrp/Resources/Prefabs/Gate.prefab
+Assets/VpeUrp/Resources/Prefabs/Drop Target.prefab
+Assets/Generated/Industries/BumperSkirt.asset
+Assets/Tables/ExampleTable/Materials/metal0.8.mat
+Assets/Tables/ExampleTable/Sounds/rubber_hit_3.wav
+Assets/Tables/ExampleTable/Textures/flipperImage-test.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/kicker.png
+Assets/Generated/Industries/Cabinet(0.56, 0.19, 1.21).asset
+Assets/Scripts/HudController.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/bumper_skirt.png
+Assets/Tables/ExampleTable/Materials/metal0.8 metal3.mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT1Mini1.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT9.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Surface/SurfaceComponent.cs
+Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset
+Assets/Tables/ExampleTable/Meshes/Primitive47.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive3.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT22.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive42.fbx
+Assets/Tables/ExampleTable/Meshes/PegMetalT6.fbx
+Assets/Tables/ExampleTable/Meshes/PegMetalT12.fbx
+Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image lockdownbarreal-jr.mat
+Assets/Tables/ExampleTable/Meshes/Primitive25.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Flipper/FlipperBaseMeshComponent.cs
+Assets/Tables/ExampleTable/Meshes/Primitive43.fbx
+Assets/Tables/ExampleTable/Materials/std.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Ramp/RampColliderComponent.cs
+Assets/Tables/ExampleTable/Materials/red_rubber.mat
+Assets/Tables/ExampleTable/Meshes/Primitive52.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/DragPoint/DragPointSplineComponent.cs
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image gottlieb_flipper_red.mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT8Twin.fbx
+Assets/Tables/ExampleTable/Textures/purple peg.png
+Assets/Tables/ExampleTable/Textures/metal3.jpg
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/spinner.png
+Assets/VpeUrp/Resources/Prefabs/Flipper.prefab
+Assets/Tables/ExampleTable/Sounds/fx_bumper3.wav
+Assets/Tables/ExampleTable/Meshes/Primitive16.fbx
+Assets/Tables/ExampleTable/Meshes/screw14.fbx
+Assets/Tables/ExampleTable/Meshes/screw12.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Gate/GateWireAnimationComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/trough.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/HitTarget/HitTargetColliderComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Bumper/BumperColliderComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/tilt-bob.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/ramp_floor.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/surface_top.png
+Assets/Tables/ExampleTable/Meshes/BallShadow2.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Plunger/PlungerColliderComponent.cs
+Assets/Tables/ExampleTable/Textures/bumper-cap-t3.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Plunger/PlungerComponent.cs
+Assets/Tables/ExampleTable/Meshes/Primitive46.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/rubber.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT1.fbx
+Assets/Tables/ExampleTable/Legacy Data.asset
+Assets/Tables/ExampleTable/Textures/gottlieb_mini_flipper_left.png
+Assets/Tables/ExampleTable/Physics Materials/a_physics_Rubbers.asset
+Assets/Tables/ExampleTable/Meshes/PegPlasticT51.fbx
+Assets/Tables/ExampleTable/Textures/ApronGenericWilliams.png
+Assets/Tables/ExampleTable/Materials/metal metal3.mat
+Assets/Tables/ExampleTable/Meshes/Primitive59.fbx
+Assets/Tables/ExampleTable/Meshes/PegMetalT13.fbx
+Assets/Tables/ExampleTable/Textures/bumper-cap-t2.png
+Assets/Tables/ExampleTable/Meshes/screw15.fbx
+Assets/Tables/ExampleTable/Textures/CustomWhiteTip.png
+Assets/Tables/ExampleTable/Meshes/Primitive39.fbx
+Assets/Tables/ExampleTable/Meshes/Apron.fbx
+Assets/VpeUrp/Art/Materials/Visual Pinball/Bumper (Base).mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT46.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/DragPoint/GeneratedDragPointSplineComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/Game/Player.cs
+Assets/Tables/ExampleTable/Textures/ColorGradeLUT256x16_ConSat.png
+Assets/Tables/ExampleTable/Meshes/screw17.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/playfield.png
+Assets/Tables/ExampleTable/Textures/flipper_yellow_red_Left.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/rubber.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT49.fbx
+Assets/Tables/ExampleTable/Textures/gottlieb_flipper_red.jpg
+Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image bumper-cap-t4.mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT8.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive40.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive68.fbx
+Assets/Tables/ExampleTable/Meshes/Peg1.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT25.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive9.fbx
+Assets/Generated/Industries/HitCollisionAligned.asset
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/physics.png
+Assets/Tables/ExampleTable/Textures/PlungerCover.png
+Assets/Tables/ExampleTable/Textures/flipper_gottlieb_right.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Bumper/BumperRingAnimationComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/bumper.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT33.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Primitive/PrimitiveComponent.cs
+Assets/Tables/ExampleTable/Meshes/PegPlasticT7.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/TiltBob/TiltBobComponent.cs
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling4.wav
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image customwhitetip.mat
+Assets/VpeUrp/Resources/Prefabs/Kicker - Invisible.prefab
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/ramp.png
+Assets/Tables/ExampleTable/Meshes/Gottlieb Mini-Flipper.fbx
+Assets/Tables/ExampleTable/Textures/Left_rail_brighter.png
+Assets/Tables/ExampleTable/Sounds/flip_hit_1.wav
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image bally_miniflipper_right.mat
+Assets/Tables/ExampleTable/Meshes/Primitive15.fbx
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image.mat
+Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile.shader
+Assets/Tables/ExampleTable/Textures/DropTargetSimple.png
+Assets/Tables/ExampleTable/Textures/bumper-cap-t2(2).png
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling7.wav
+Assets/VpeUrp/Resources/Prefabs/Hit Target - Round.prefab
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/flipper_base.png
+Assets/Tables/ExampleTable/Meshes/Primitive35.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/gate_wire.png
+Assets/Tables/ExampleTable/Meshes/Primitive1.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive18.fbx
+Assets/Tables/ExampleTable/Materials/plastic kickerholewood.mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT4.fbx
+Assets/VpeUrp/Resources/Prefabs/Plunger.prefab
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Spinner/SpinnerColliderComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Rubber/RubberMeshComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/HitTarget/DropTargetComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/HitTarget/HitTargetAnimationComponent.cs
+Assets/Tables/ExampleTable/Meshes/screw5.fbx
+Assets/Tables/ExampleTable/Sounds/right_slingshot.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/drop_target.png
+Assets/Tables/ExampleTable/Textures/Right_rail_brighter.png
+Assets/Generated/Industries/SpinnerPlate.asset
+Assets/VpeUrp/Art/Materials/Metal.mat
+Assets/VpeUrp/Art/Materials/Visual Pinball/Bumper (Ring).mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT10.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/primitive.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT53.fbx
+Assets/Tables/ExampleTable/Meshes/PegMetalT3.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Surface/SurfaceColliderComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Plunger/PlungerRodMeshComponent.cs
+Assets/Tables/ExampleTable/Meshes/Gottlieb Flipper.fbx
+Assets/Tables/ExampleTable/Textures/gottlieb_mini_flipper_right.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Primitive/PrimitiveMeshComponent.cs
+Assets/Tables/ExampleTable/Meshes/PegPlasticT17.fbx
+Assets/Tables/ExampleTable/Textures/ball_HDR.hdr
+Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image bumper-cap-t2.mat
+Assets/Tables/ExampleTable/Textures/sidewood.png
+Packages/com.unity.splines/Runtime/SplineContainer.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Playfield/PlayfieldComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Flipper/FlipperCorrectionAsset.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Plunger/PlungerSpringMeshComponent.cs
+Assets/Tables/ExampleTable/Meshes/Primitive5.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/rubber.png
+Assets/VpeUrp/Art/Materials/Visual Pinball/Hit Target - Round.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/plunger_rod.png
+Assets/Tables/ExampleTable/Sounds/rubber_hit_1.wav
+Assets/Tables/ExampleTable/Meshes/BallShadow4.fbx
+Assets/VpeUrp/Art/Materials/Visual Pinball/Gate (Wire).mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Rubber/RubberComponent.cs
+Assets/Tables/ExampleTable/Meshes/Primitive50.fbx
+Assets/Tables/ExampleTable/Sounds/flip_hit_2.wav
+Assets/Tables/ExampleTable/Meshes/Primitive17.fbx
+Assets/Tables/ExampleTable/Meshes/PegMetalT1.fbx
+Assets/VpeUrp/Resources/Prefabs/Kicker.prefab
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Spinner/SpinnerComponent.cs
+Assets/Tables/ExampleTable/Meshes/FlipperLSh.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT5.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Spinner/SpinnerPlateAnimationComponent.cs
+Assets/Tables/ExampleTable/Meshes/PegMetalT15.fbx
+Assets/Tables/ExampleTable/Meshes/FlasherT7.fbx
+Assets/Tables/ExampleTable/Meshes/PegPlasticT8Twin2.fbx
+Assets/Tables/ExampleTable/Sounds/fx_ball_drop0.wav
+Assets/Tables/ExampleTable/Meshes/screw28.fbx
+Assets/Scripts/GameManager.cs
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling13.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Table/TableComponent.cs
+Assets/Tables/ExampleTable/Meshes/PegPlasticT24.fbx
+Assets/VpeUrp/Art/Materials/Visual Pinball/Drop Target - Simple.mat
+Assets/Tables/ExampleTable/Textures/flipper_williams_logo_Left.png
+Assets/Tables/ExampleTable/Meshes/Primitive20.fbx
+Assets/Tables/ExampleTable/Meshes/screw18.fbx
+Assets/Tables/ExampleTable/Meshes/kickerCup2.fbx
+Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image1 aprongenericwilliams.mat
+Assets/Tables/ExampleTable/Sounds/fx_ball_drop4.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Resources/Prefabs/Surface.prefab
+Assets/Tables/ExampleTable/Meshes/Shooter.fbx
+Assets/Tables/ExampleTable/Textures/ballshadow.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Bumper/BumperSkirtAnimationComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Ramp/RampFloorMeshComponent.cs
+Assets/VpeUrp/Art/Materials/Visual Pinball/Bumper (Cap).mat
+Assets/Generated/Industries/PlayfieldPrint.mat
+Assets/Tables/ExampleTable/Materials/plastictrigger aluminum.mat
+Assets/Tables/ExampleTable/Materials/plastic kickert1.mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT35.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/ball_roller.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT20.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive24.fbx
+Assets/Tables/ExampleTable/Textures/p1-beachwood.png
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling11.wav
+Assets/Tables/ExampleTable/Sounds/fx_collide.wav
+Assets/Tables/ExampleTable/Materials/peg.mat
+Assets/Tables/ExampleTable/Materials/plastic_with_an_image rubber-post-t1-black.mat
+Assets/Tables/ExampleTable/Textures/ColorGradeLUT256x16_Sepia.png
+Assets/Generated/Industries/HitTarget.asset
+Assets/Tables/ExampleTable/Materials/plastic_with_opaque_image bumper-cap-t2_2.mat
+Assets/Tables/ExampleTable/Meshes/PegPlasticT1Mini.fbx
+Assets/Tables/ExampleTable/Materials/opacity80.mat
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/drop_target.png
+Assets/Tables/ExampleTable/Meshes/Bally Mini Flipper Right.fbx
+Packages/com.unity.render-pipelines.universal/Runtime/UniversalAdditionalLightData.cs
+Assets/VpeUrp/Resources/Prefabs/Spinner.prefab
+Assets/Tables/ExampleTable/Meshes/Sling1.fbx
+Assets/Tables/ExampleTable/Textures/LockdownBarreal-JR.png
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/Game/PhysicsEngine.cs
+Assets/Tables/ExampleTable/Textures/Scratches.png
+Assets/Tables/ExampleTable/Textures/spinner.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT38.fbx
+Assets/Generated/Industries/TargetContactAligned.asset
+Assets/VpeUrp/Resources/Prefabs/Drop Target - Simple.prefab
+Assets/Tables/ExampleTable/Sounds/fx_bumper4.wav
+Assets/Tables/ExampleTable/Sounds/fx_ballrolling0.wav
+Assets/Tables/ExampleTable/Sounds/fx_Flipperup.wav
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Ramp/RampComponent.cs
+Assets/Tables/ExampleTable/Sounds/pinhit_low.wav
+Assets/Generated/Industries/Brass.mat
+Assets/Tables/ExampleTable/Meshes/Peg7.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_green/bumper_ring.png
+Packages/com.unity.render-pipelines.universal/Runtime/UniversalAdditionalCameraData.cs
+Assets/Scripts/ScoreManager.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Kicker/KickerColliderComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Ramp/RampWallMeshComponent.cs
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/Trigger/TriggerComponent.cs
+Assets/Tables/ExampleTable/Meshes/PegPlasticT45.fbx
+Assets/Tables/ExampleTable/Meshes/Gottlieb Flipper - newer.fbx
+Assets/Tables/ExampleTable/Meshes/PegMetalT14.fbx
+Assets/Tables/ExampleTable/Meshes/BallyEMSlingArm.fbx
+Assets/Tables/ExampleTable/Meshes/Primitive51.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/VisualPinball.Unity/VPT/PhysicsMaterialAsset.cs
+Assets/Tables/ExampleTable/Meshes/GottliebEMSlingArm.fbx
+Assets/Tables/ExampleTable/Textures/DropTargetBeveled.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT31.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Resources/Prefabs/Ramp.prefab
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_blue/trigger.png
+Assets/Tables/ExampleTable/Meshes/kickerCup.fbx
+Assets/Generated/Industries/BrushedSteel.mat
+Assets/Scripts/InputRouter.cs
+Assets/VpeUrp/Resources/Prefabs/Trough.prefab
+Assets/Tables/ExampleTable/Meshes/PegPlasticT6.fbx
+Packages/org.visualpinball.engine.unity/VisualPinball.Unity/Assets/Editor/Icons/small_orange/table.png
+Assets/Tables/ExampleTable/Meshes/PegPlasticT16.fbx

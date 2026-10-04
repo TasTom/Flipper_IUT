@@ -20,6 +20,11 @@ MonoBehaviour:
   slingshotPoints: 50
   scoopPoints: 1000
   sixTargetsBonus: 5000
+  productionEnabled: 1
+  productionRouteSeconds: 8
+  processingBonus: 1000
+  deliveryBonusPerProduct: 4000
+  combinedDeliveryBonus: 2000
   scoopHoldSeconds: 0.65
   targetResetSeconds: 1
   serveDelay: 0.3
@@ -27,7 +32,7 @@ MonoBehaviour:
   targetIndicatorRadius: 0.0075
   targetIndicatorLightRange: 0.035
   targetIndicatorLightIntensity: 0.4
-  scoopKickAngle: 165
+  scoopKickAngle: 150
   scoopKickSpeed: 12
   flipperUpSound: {fileID: 8300000, guid: 767188f3f05f5c441a5a094c7001f1be, type: 3}
   flipperDownSound: {fileID: 8300000, guid: 24b102f88dcf4154fb2294d32ec1e9e9, type: 3}

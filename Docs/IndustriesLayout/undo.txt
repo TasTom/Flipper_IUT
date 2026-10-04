@@ -1,0 +1,3 @@
+PASS Undo : création, placement et collider restaurés
+PASS Redo : création, placement et collider rétablis
+PASS Seconde installation : layout inchangé, aucune rampe dupliquée

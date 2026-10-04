@@ -28,10 +28,12 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     private IndustriesAudio audio;
     private bool initialized, lastLeft, lastRight, lastLaunch;
     private int targets;
+    private IndustriesProduction production;
     private readonly HashSet<int> drains = new HashSet<int>();
     private readonly List<Action> unbind = new List<Action>();
     private readonly List<DropTargetApi> dropTargets = new List<DropTargetApi>();
     public bool IsInitialized => initialized;
+    public IndustriesProduction Production => production;
     public int TargetsLit { get { int count = 0; for (int i = 0; i < 6; i++) if ((targets & (1 << i)) != 0) count++; return count; } }
     public string Name => "Vosges Mania — Industries";
 
@@ -83,12 +85,13 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
             return Task.CompletedTask;
         }
         foreach (var c in GetComponentsInChildren<BumperComponent>()) BindHit(api.Bumper(c), config.bumperPoints);
-        int index = 0;
+        var targetNames = new[] { "sw1", "sw2", "sw3", "sw11", "sw12", "sw13" };
         foreach (var c in GetComponentsInChildren<DropTargetComponent>())
         {
             var target = api.DropTarget(c);
             if (target == null) continue;
-            int bit = index++;
+            int bit = Array.IndexOf(targetNames, c.name);
+            if (bit < 0) continue;
             EventHandler<HitEventArgs> handler = (_, __) => HitTarget(bit);
             target.Hit += handler; unbind.Add(() => target.Hit -= handler); dropTargets.Add(target);
         }
@@ -96,7 +99,8 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         {
             var target = api.HitTarget(c);
             if (target == null) continue;
-            int bit = index++;
+            int bit = Array.IndexOf(targetNames, c.name);
+            if (bit < 0) continue;
             EventHandler<HitEventArgs> handler = (_, __) => HitTarget(bit);
             target.Hit += handler; unbind.Add(() => target.Hit -= handler);
         }
@@ -106,6 +110,24 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
             var trigger = api.Trigger(c);
             EventHandler<HitEventArgs> handler = (_, __) => Award(config.lanePoints);
             trigger.Hit += handler; unbind.Add(() => trigger.Hit -= handler);
+        }
+        if (config.productionEnabled)
+        {
+            var sensors = new[] { IndustriesProduction.WoodEntry, IndustriesProduction.WoodExit,
+                IndustriesProduction.TextileEntry, IndustriesProduction.TextileExit };
+            var routes = Array.ConvertAll(sensors, name => api.Trigger(name));
+            if (Array.Exists(routes, route => route == null))
+                Debug.LogWarning("[Industries] Un capteur de production manque : règle des six cibles conservée. Appliquer le layout Atelier.", this);
+            else
+            {
+                production = new IndustriesProduction(config);
+                for (int i = 0; i < routes.Length; i++)
+                {
+                    var trigger = routes[i]; int line = i / 2; bool entry = i % 2 == 0;
+                    EventHandler<HitEventArgs> handler = (_, e) => OnRoute(line, entry, e.BallId);
+                    trigger.Hit += handler; unbind.Add(() => trigger.Hit -= handler);
+                }
+            }
         }
         foreach (var c in GetComponentsInChildren<SurfaceComponent>())
         {
@@ -143,15 +165,21 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     }
     private void Award(int points)
     {
-        if (initialized && Time.timeScale > 0f && !SceneTransition.IsPlaying) score.Add(points);
+        if (CanScore()) score.Add(points);
     }
     private void HitTarget(int index)
     {
-        if (!initialized || Time.timeScale <= 0f || game.State == GameManager.GameState.GameOver) return;
+        if (!CanScore()) return;
         Award(config.targetPoints);
         audio?.Play(IndustriesSound.Target);
-        targets |= 1 << index;
-        if (targets == 63)
+        if (production != null)
+        {
+            if (production.HitTarget(index))
+                game.ShowMessage((index < 3 ? "BOIS" : "TEXTILE") + " CHARGÉ · VISER LA RAMPE", 2f);
+            targets = production.Targets;
+        }
+        else targets |= 1 << index;
+        if (production == null && targets == 63)
         {
             score.AddBonus(config.sixTargetsBonus);
             audio?.Play(IndustriesSound.Bonus);
@@ -164,11 +192,14 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     private IEnumerator ResetTargets()
     {
         yield return new WaitForSeconds(config.targetResetSeconds);
-        foreach (var t in dropTargets) t.IsDropped = false;
+        if (production == null || (production.Loaded & 1) == 0)
+            foreach (var t in dropTargets) t.IsDropped = false;
     }
     private void RefreshObjectives()
     {
-        if (objectivesText != null) objectivesText.text = compactObjectivesLabel ? TargetsLit+" / 6" : "PRODUCTION  " + TargetsLit + "/6  ·  BONUS " + config.sixTargetsBonus.ToString("N0");
+        if (objectivesText != null) objectivesText.text = production != null
+            ? "BOIS " + production.Status(0) + (compactObjectivesLabel ? "\n" : " · ") + "TEXTILE " + production.Status(1)
+            : compactObjectivesLabel ? TargetsLit+" / 6" : "PRODUCTION  " + TargetsLit + "/6  ·  BONUS " + config.sixTargetsBonus.ToString("N0");
         for (int i = 0; i < 3; i++)
         {
             api.Light("l" + (i+1))?.OnLamp((targets & (1 << i)) != 0 ? 1f : .08f);
@@ -177,12 +208,37 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     }
     private void OnDrain(object sender, HitEventArgs e)
     {
-        if (initialized && drains.Add(e.BallId)) { audio?.Play(IndustriesSound.Drain); game.LoseBall(); }
+        if (initialized && drains.Add(e.BallId)) { production?.ForgetBall(e.BallId); audio?.Play(IndustriesSound.Drain); game.LoseBall(); }
     }
+    private void OnRoute(int line, bool entry, int ball)
+    {
+        if (!CanScore() || production == null) return;
+        if (entry) production.Enter(line, ball, Time.time);
+        else if (production.Exit(line, ball, Time.time))
+        {
+            score.AddBonus(config.processingBonus);
+            audio?.Play(IndustriesSound.Bonus);
+            game.ShowMessage((line == 0 ? "BOIS" : "TEXTILE") + " TRANSFORMÉ · VISER LIVRAISON", 2f);
+            RefreshObjectives();
+        }
+    }
+    private bool CanScore() => initialized && Time.timeScale > 0f && !SceneTransition.IsPlaying &&
+        (game.State == GameManager.GameState.Playing || game.State == GameManager.GameState.ReadyToLaunch);
     private void OnScoop(object sender, HitEventArgs e)
     {
+        if (!CanScore()) return;
         Award(config.scoopPoints);
         audio?.Play(IndustriesSound.Scoop);
+        if (production != null && production.Processed != 0)
+        {
+            int bonus = production.Deliver();
+            score.AddBonus(bonus);
+            audio?.Play(IndustriesSound.Bonus);
+            game.ShowMessage("LIVRAISON +" + bonus.ToString("N0"), 2f);
+            targets = production.Targets;
+            StartCoroutine(ResetTargets());
+            RefreshObjectives();
+        }
         StartCoroutine(EjectScoop());
     }
     private IEnumerator EjectScoop()
@@ -194,6 +250,7 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     {
         StopAllCoroutines();
         targets = 0;
+        production?.Reset();
         foreach (var t in dropTargets) t.IsDropped = false;
         RefreshObjectives();
         StartCoroutine(ServeAfterDelay());

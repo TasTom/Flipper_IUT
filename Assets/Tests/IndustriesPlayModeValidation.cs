@@ -73,7 +73,32 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
             Check("collision physique cible "+target.name,score.Score-beforeHit>=500);
             ClearBalls();
         }
-        Check("six collisions : bonus de production",score.Score-points==8000 && Object.FindAnyObjectByType<IndustriesVpeGame>().TargetsLit==0);
+        var engine=Object.FindAnyObjectByType<IndustriesVpeGame>();
+        var config=UnityEditor.AssetDatabase.LoadAssetAtPath<IndustriesConfig>("Assets/Generated/Industries/IndustriesConfig.asset");
+        Check("six collisions : banques chargées, bonus différé",engine.Production!=null
+            ? score.Score-points==6*config.targetPoints && engine.Production.Loaded==3 && engine.Production.Processed==0 && engine.TargetsLit==6
+            : score.Score-points==6*config.targetPoints+config.sixTargetsBonus && engine.TargetsLit==0);
+        if(engine.Production!=null)
+        {
+            // Vrais tirs depuis les entrées des deux rampes, sans appeler les règles directement.
+            var shots=new[]{new Vector3(.184f,0,-.73f),new Vector3(.355f,0,-.57f)};
+            var directions=new[]{Vector3.forward,new Vector3(.53f,0,.85f)};
+            for(int line=0;line<2;line++)
+            {
+                var trace=new System.Text.StringBuilder();
+                EventHandler<HitEventArgs> entry=(_,e)=>trace.Append(" ENTRY "+e.BallId);
+                EventHandler<HitEventArgs> exit=(_,e)=>trace.Append(" EXIT "+e.BallId);
+                var entryApi=api.Trigger(line==0?IndustriesProduction.WoodEntry:IndustriesProduction.TextileEntry);
+                var exitApi=api.Trigger(line==0?IndustriesProduction.WoodExit:IndustriesProduction.TextileExit);
+                entryApi.Hit+=entry;exitApi.Hit+=exit;
+                ClearBalls();points=score.Score;CreateProbe(shots[line],directions[line]*2f);
+                float end=Time.time+2f, next=Time.time;
+                while(Time.time<end && (engine.Production.Processed&(1<<line))==0){
+                    if(Time.time>=next){if(Balls().Length>0)trace.Append(" "+pf.InverseTransformPoint(Balls()[0].transform.position).ToString("F3"));next+=.1f;}yield return null;}
+                Check("tir complet rampe "+(line==0?"bois":"textile")+trace,(engine.Production.Processed&(1<<line))!=0 && score.Score>=points+config.processingBonus);
+                entryApi.Hit-=entry;exitApi.Hit-=exit;
+            }
+        }
         ClearBalls();
         points=score.Score;var scoop=api.Kicker("Kicker1");
         int scoopHits=0;EventHandler<HitEventArgs> observe=(_,e)=>scoopHits++;scoop.Hit+=observe;
@@ -81,8 +106,15 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
         CreateProbe(pf.InverseTransformPoint(scoopComponent.transform.position)+Vector3.back*.055f,Vector3.forward);
         float captureDeadline=Time.realtimeSinceStartup+3f;
         while(scoopHits==0 && Time.realtimeSinceStartup<captureDeadline)yield return null;
-        yield return new WaitForSeconds(.9f);
-        Check("scoop : collision physique, score et libération native (points="+(score.Score-points)+", hits="+scoopHits+", captured="+scoop.HasBall()+", balls="+Balls().Length+", position="+(Balls().Length>0?pf.InverseTransformPoint(Balls()[0].transform.position).ToString():"absent")+")",score.Score>=points+1000 && !scoop.HasBall() && Balls().Length==1);scoop.Hit-=observe;
+        yield return new WaitForSeconds(1.15f);
+        int expectedScoop=engine.Production!=null ? config.scoopPoints+2*config.deliveryBonusPerProduct+config.combinedDeliveryBonus : config.scoopPoints;
+        Check("scoop : livraison, score et libération native (points="+(score.Score-points)+", hits="+scoopHits+", captured="+scoop.HasBall()+", balls="+Balls().Length+")",score.Score==points+expectedScoop && !scoop.HasBall() && Balls().Length==1);scoop.Hit-=observe;
+        if(engine.Production!=null)
+        {
+            float rearmDeadline=Time.time+2f;
+            while(Time.time<rearmDeadline && Array.Exists(Object.FindObjectsByType<DropTargetComponent>(),t=>api.DropTarget(t).IsDropped))yield return null;
+            Check("livraison : commandes consommées et cibles réarmées (loaded="+engine.Production.Loaded+", processed="+engine.Production.Processed+", lit="+engine.TargetsLit+", drops="+string.Join(",",Array.ConvertAll(Object.FindObjectsByType<DropTargetComponent>(),t=>t.name+":"+api.DropTarget(t).IsDropped))+")",engine.Production.Loaded==0 && engine.Production.Processed==0 && engine.TargetsLit==0 && Array.TrueForAll(Object.FindObjectsByType<DropTargetComponent>(),t=>!api.DropTarget(t).IsDropped));
+        }
         KickerComponent drain=null;foreach(var k in Object.FindObjectsByType<KickerComponent>())if(k.name=="Drain")drain=k;
         for(int expected=2;expected>=0;expected--){
             ClearBalls();CreateProbe(pf.InverseTransformPoint(drain.transform.position)+Vector3.forward*.055f,Vector3.back);
@@ -93,7 +125,8 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
         ClearBalls();game.StartGame();yield return new WaitForSeconds(.8f);
         Check("nouvelle partie sans relancer la scène",game.BallsRemaining==3 && score.Score==0 && Balls().Length==1);
         SetInput("PlungerHeld",false);input.enabled=inputEnabled;
-        Directory.CreateDirectory("Docs/IndustriesValidation");File.WriteAllLines("Docs/IndustriesValidation/runtime.txt",results);
+        string report=engine.Production!=null?"Docs/IndustriesLayout":"Docs/IndustriesValidation";
+        Directory.CreateDirectory(report);File.WriteAllLines(report+"/runtime.txt",results);
         Debug.Log("[Industries validation] "+string.Join(" | ",results));
         Destroy(gameObject);
     }
@@ -108,7 +141,7 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
         public ProbeOrigin(Vector3 p,Vector3 d)
         {
             float scale=VisualPinball.Unity.Physics.ScaleInv;
-            position=new Vertex3D(p.x/scale,-p.z/scale,0);
+            position=new Vertex3D(p.x/scale,-p.z/scale,p.y/scale);
             // La vitesse VPE est exprimée par pas de référence de 10 ms.
             velocity=new Vertex3D(d.x*.015f/scale,-d.z*.015f/scale,0);
         }

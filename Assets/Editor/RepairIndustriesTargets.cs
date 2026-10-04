@@ -65,6 +65,7 @@ public static class RepairIndustriesTargets
         int group = Undo.GetCurrentGroup();
         Undo.SetCurrentGroupName("Corriger les six cibles Industries");
         var pf = playfield.transform;
+        bool productionLayout = pf.Find("ProductionLayout") != null;
         // Axe des deux banques existantes, sans supposer que le couloir du lanceur est centré.
         float axis = targets.Average(t => pf.InverseTransformPoint(t.transform.position).x);
         var referenceMesh = targets[0].GetComponent<MeshFilter>().sharedMesh;
@@ -75,11 +76,14 @@ public static class RepairIndustriesTargets
             var destination = targets[i + 3].transform;
             var position = pf.InverseTransformPoint(source.position);
             position.x = 2 * axis - position.x;
-            Undo.RecordObject(destination, "Banques de cibles en miroir");
-            destination.position = pf.TransformPoint(position);
-            var relativeRotation = Quaternion.Inverse(pf.rotation) * source.rotation;
-            destination.rotation = pf.rotation * Quaternion.Euler(0, -relativeRotation.eulerAngles.y, 0);
-            Record(destination);
+            if (!productionLayout)
+            {
+                Undo.RecordObject(destination, "Banques de cibles en miroir");
+                destination.position = pf.TransformPoint(position);
+                var relativeRotation = Quaternion.Inverse(pf.rotation) * source.rotation;
+                destination.rotation = pf.rotation * Quaternion.Euler(0, -relativeRotation.eulerAngles.y, 0);
+                Record(destination);
+            }
 
             var filter = targets[i + 3].GetComponent<MeshFilter>();
             var renderer = targets[i + 3].GetComponent<MeshRenderer>();
@@ -149,14 +153,19 @@ public static class RepairIndustriesTargets
             material.SetTexture("_BaseMap", texture);
             AssetDatabase.CreateAsset(material, materialPath);
         }
-        Undo.RecordObject(print, "Plateau sans anciens numéros imprimés");
-        print.sharedMaterial = material;
-        Record(print);
+        if (!productionLayout)
+        {
+            Undo.RecordObject(print, "Plateau sans anciens numéros imprimés");
+            print.sharedMaterial = material;
+            Record(print);
+        }
         EditorUtility.SetDirty(config);
         AssetDatabase.SaveAssetIfDirty(config);
         EditorSceneManager.MarkSceneDirty(scene);
         Undo.CollapseUndoOperations(group);
-        Debug.Log("[Industries] Six cibles harmonisées, banques en miroir et numéros centrés. Ctrl+Z annule ; scène non enregistrée.");
+        Debug.Log(productionLayout
+            ? "[Industries] Six cibles harmonisées et numéros centrés ; layout de production conservé. Ctrl+Z annule ; scène non enregistrée."
+            : "[Industries] Six cibles harmonisées, banques en miroir et numéros centrés. Ctrl+Z annule ; scène non enregistrée.");
     }
 
     private static Vector3 VisibleFront(Mesh mesh)

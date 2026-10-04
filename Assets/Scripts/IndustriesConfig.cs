@@ -11,6 +11,12 @@ public class IndustriesConfig : ScriptableObject
     [Min(0)] public int slingshotPoints = 50;
     [Min(0)] public int scoopPoints = 1000;
     [Min(0)] public int sixTargetsBonus = 5000;
+    [Header("Atelier : charger, transformer, livrer (GDD : cibles, rampes, combos)")]
+    public bool productionEnabled;
+    [Min(.5f)] public float productionRouteSeconds = 8f;
+    [Min(0)] public int processingBonus = 1000;
+    [Min(0)] public int deliveryBonusPerProduct = 4000;
+    [Min(0)] public int combinedDeliveryBonus = 2000;
     [Min(.1f)] public float scoopHoldSeconds = .65f;
     [Min(.1f)] public float targetResetSeconds = 1f;
     [Min(.1f)] public float serveDelay = .3f;

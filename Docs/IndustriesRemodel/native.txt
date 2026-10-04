@@ -1,0 +1,3 @@
+PASS 1179 composants VPE identiques (donnees serialisees avant/apres)
+SHA256 avant : 4002262fc2b1b152dbbeadd614a8b4f19c66c12cb2a882d4d8d8f4a280e3aa33
+SHA256 apres : 4002262fc2b1b152dbbeadd614a8b4f19c66c12cb2a882d4d8d8f4a280e3aa33

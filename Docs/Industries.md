@@ -37,6 +37,8 @@ Contrôles : Q/A à gauche, D à droite, Espace maintenu puis relâché pour le 
 
 ## Présentation et méthode
 
+Le [remodelage de l'atelier](IndustriesRemodel/README.md) remplace désormais l'apparence des plastiques, rampes et flippers du template : carters 3D chanfreinés avec bordures cuivre, portique industriel, cinq chapeaux de bumpers à manomètre, flippers assortis et nouvelle signalétique du plateau/apron. Les colliders et hôtes VPE restent séparés de ces visuels. `Flipper > Industries > Remodeler l'habillage atelier (Undo)` applique ce remplacement explicite une seule fois, sans sauvegarder la scène ; les relances préservent les réglages manuels. Les sources et captures avant/après sont archivées dans `Docs/IndustriesRemodel`.
+
 Habillage original : plateau imprimé « Atelier des Vosges », motifs de transmission et de production, peinture pétrole, laiton, métal et ivoire. Les deux cartes sur l’apron indiquent les commandes et les règles. Les textures sont générées à leur résolution source par les scripts archivés dans `IndustriesValidation/art-source/` ; aucun éclairage n’est peint dans le plateau. La microtexture utilise une normal map séparée.
 
 La caméra et le fronton reprennent désormais ceux de **Neutral** : projection orthographique, angle, rotation de borne à 90°, cadrage relatif et panneau des scores occupant 15 % de l'écran. `Backglass` a été copié depuis la scène source, avec ses polices, couleurs, positions, pastilles de billes, record, multiplicateur et messages. Le libellé de mission indique « CHAÎNE DE PRODUCTION », avec le compteur des six cibles d'Industries. L'ancien HUD d'Industries est conservé mais désactivé.

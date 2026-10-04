@@ -1,0 +1,10 @@
+PASS Industries hors Play, corrections non enregistrées
+PASS Huit carters 3D et portique présents
+PASS Aucun collider PhysX ajouté au nouvel habillage
+PASS Cinq manomètres suivent les chapeaux natifs
+PASS Deux flippers utilisent le même matériau, sans logos du template
+PASS Les six indicateurs de cibles restent présents
+PASS Maillages et matériaux persistants
+PASS Relance sans doublons ni remplacement des réglages existants
+PASS Portique ajusté au cadrage de borne
+PASS Aucun script manquant

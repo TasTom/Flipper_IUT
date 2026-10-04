@@ -1,0 +1,2 @@
+PASS Undo retire l'habillage et les cinq manomètres
+PASS Redo restaure l'habillage et les cinq manomètres

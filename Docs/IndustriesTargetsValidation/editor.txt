@@ -1,0 +1,30 @@
+PASS 3 cibles tombantes et 3 fixes conservées
+PASS sw1 même maillage et matériau
+PASS sw1 numéro centré, 18 mm devant la face
+PASS sw1 voyant de 15 mm et chiffre présent
+PASS sw1 décoration sans collider
+PASS sw2 même maillage et matériau
+PASS sw2 numéro centré, 18 mm devant la face
+PASS sw2 voyant de 15 mm et chiffre présent
+PASS sw2 décoration sans collider
+PASS sw3 même maillage et matériau
+PASS sw3 numéro centré, 18 mm devant la face
+PASS sw3 voyant de 15 mm et chiffre présent
+PASS sw3 décoration sans collider
+PASS sw11 même maillage et matériau
+PASS sw11 numéro centré, 18 mm devant la face
+PASS sw11 voyant de 15 mm et chiffre présent
+PASS sw11 décoration sans collider
+PASS sw12 même maillage et matériau
+PASS sw12 numéro centré, 18 mm devant la face
+PASS sw12 voyant de 15 mm et chiffre présent
+PASS sw12 décoration sans collider
+PASS sw13 même maillage et matériau
+PASS sw13 numéro centré, 18 mm devant la face
+PASS sw13 voyant de 15 mm et chiffre présent
+PASS sw13 décoration sans collider
+PASS paire sw1/sw11 en miroir
+PASS paire sw2/sw12 en miroir
+PASS paire sw3/sw13 en miroir
+PASS colliders fixes adaptés au gabarit commun
+TOTAL 29 PASS; dirty=True

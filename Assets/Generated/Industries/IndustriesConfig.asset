@@ -23,6 +23,10 @@ MonoBehaviour:
   scoopHoldSeconds: 0.65
   targetResetSeconds: 1
   serveDelay: 0.3
+  targetNumberFrontGap: 0.018
+  targetIndicatorRadius: 0.0075
+  targetIndicatorLightRange: 0.035
+  targetIndicatorLightIntensity: 0.4
   scoopKickAngle: 165
   scoopKickSpeed: 12
   flipperUpSound: {fileID: 8300000, guid: 767188f3f05f5c441a5a094c7001f1be, type: 3}

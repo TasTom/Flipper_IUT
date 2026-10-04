@@ -14,6 +14,11 @@ public class IndustriesConfig : ScriptableObject
     [Min(.1f)] public float scoopHoldSeconds = .65f;
     [Min(.1f)] public float targetResetSeconds = 1f;
     [Min(.1f)] public float serveDelay = .3f;
+    [Header("Présentation des six cibles (mètres VPE)")]
+    [Min(.001f)] public float targetNumberFrontGap = .018f;
+    [Min(.001f)] public float targetIndicatorRadius = .0075f;
+    [Min(.001f)] public float targetIndicatorLightRange = .035f;
+    [Min(0)] public float targetIndicatorLightIntensity = .4f;
     public float scoopKickAngle = 165f;
     [Min(1)] public float scoopKickSpeed = 12f;
     [Header("Retours sonores")]

@@ -16,6 +16,10 @@ La géométrie jouable du modèle de départ est conservée : flippers VPE, lanc
 
 La récompense de production utilise **six cibles** : trois tombantes et trois fixes. Les indicateurs représentent les cibles déjà touchées ; terminer la série attribue le bonus puis relève les cibles tombantes. Les contacts répétés avec une cible fixe continuent de marquer, mais ne comptent pas comme une nouvelle cible pour compléter la série.
 
+La correction des cibles reprend le gabarit de `sw1–sw3` pour les six visuels : largeur de 19 mm, sommet à 27 mm au-dessus du plateau et même matériau laiton. `sw11–sw13` conservent leurs composants de cibles fixes et reçoivent un collider correspondant au nouveau gabarit. Leur banque est placée en miroir de celle des cibles tombantes, autour de l'axe moyen des banques existantes. Les chiffres ne sont plus peints dans le plateau : chacun est centré à 18 mm devant sa cible, dans un voyant de 15 mm lié aux lampes natives `l1–l3` et `l11–l13`. Les numéros restent en place quand une cible tombe. Le recul, le rayon et la lumière se règlent dans `IndustriesConfig`. Le plateau d'origine reste conservé ; la variante sans numéros se régénère avec `python Docs/IndustriesValidation/art-source/generate_industries_art.py --without-target-numbers`.
+
+`Flipper > Industries > Corriger les six cibles et leurs numéros` applique cette correction explicitement, avec Undo, sans enregistrer la scène. Les autres pièces restent en place. Voir les [captures et validations de cette correction](IndustriesTargetsValidation/README.md).
+
 | Élément | Points de base |
 | --- | ---: |
 | Bumper | 100 |

@@ -1,0 +1,6 @@
+PASS l11 anneau piloté par VPE émission=RGBA(2.000, 1.100, 0.350, 0.000) éteint=RGBA(0.000, 0.000, 0.000, 0.000)
+PASS l3 anneau piloté par VPE émission=RGBA(2.000, 1.100, 0.350, 0.000) éteint=RGBA(0.000, 0.000, 0.000, 0.000)
+PASS l1 anneau piloté par VPE émission=RGBA(2.000, 1.100, 0.350, 0.000) éteint=RGBA(0.000, 0.000, 0.000, 0.000)
+PASS l2 anneau piloté par VPE émission=RGBA(2.000, 1.100, 0.350, 0.000) éteint=RGBA(0.000, 0.000, 0.000, 0.000)
+PASS l12 anneau piloté par VPE émission=RGBA(2.000, 1.100, 0.350, 0.000) éteint=RGBA(0.000, 0.000, 0.000, 0.000)
+PASS l13 anneau piloté par VPE émission=RGBA(2.000, 1.100, 0.350, 0.000) éteint=RGBA(0.000, 0.000, 0.000, 0.000)

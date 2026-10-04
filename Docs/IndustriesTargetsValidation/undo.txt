@@ -1,0 +1,3 @@
+PASS Undo restaure la position antérieure
+PASS Redo rétablit la correction
+PASS Relancer la commande ne duplique aucun objet

@@ -1,6 +1,9 @@
 from PIL import Image, ImageDraw, ImageFont
 from pathlib import Path
-import math, random
+import argparse, math, random
+parser=argparse.ArgumentParser()
+parser.add_argument('--without-target-numbers',action='store_true')
+args=parser.parse_args()
 out=Path('Assets/Art/Industries'); out.mkdir(parents=True,exist_ok=True)
 W,H=2048,4096
 im=Image.new('RGB',(W,H),(15,28,36)); d=ImageDraw.Draw(im)
@@ -21,10 +24,11 @@ line([(55,1700),(110,1310),(150,890),(98,690),(105,420),(205,280),(410,120),(780
 line([(82,1665),(145,1220),(185,880),(170,750)],'#4f9696',4)
 line([(801,1665),(758,1180),(730,870),(762,750)],'#4f9696',4)
 # Six reward target call-outs sit in the actual banks at y=1100..1210.
-for i,(x,y) in enumerate([(750,1100),(768,1150),(782,1200),(177,1100),(162,1150),(150,1200)]):
-    cx,cy=xy(x,y); r=30
-    d.ellipse((cx-r,cy-r,cx+r,cy+r),fill='#1e4249',outline='#d8a75f',width=4)
-    d.text((cx,cy),str(i+1),font=font(30),fill='#e8cfa1',anchor='mm')
+if not args.without_target_numbers:
+    for i,(x,y) in enumerate([(750,1100),(768,1150),(782,1200),(177,1100),(162,1150),(150,1200)]):
+        cx,cy=xy(x,y); r=30
+        d.ellipse((cx-r,cy-r,cx+r,cy+r),fill='#1e4249',outline='#d8a75f',width=4)
+        d.text((cx,cy),str(i+1),font=font(30),fill='#e8cfa1',anchor='mm')
 # Architectural gear emblem kept in the open middle shooting area.
 cx,cy=xy(443,1420)
 pts=[]
@@ -49,12 +53,13 @@ random.seed(19)
 for i in range(1600):
     x=random.randrange(W); y=random.randrange(H)
     d.line((x,y,x+random.randint(1,10),y+random.randint(0,2)),fill=(26,40,46),width=1)
-im.save(out/'IndustriesPlayfield.png')
+im.save(out/('IndustriesPlayfieldWithoutTargets.png' if args.without_target_numbers else 'IndustriesPlayfield.png'))
 # Micro scratches are lighting-independent, stored as a real tangent-space normal.
 normal=Image.new('RGB',(512,1024),(128,128,255)); nd=ImageDraw.Draw(normal)
 random.seed(7)
 for i in range(900):
     x=random.randrange(512); y=random.randrange(1024)
     nd.line((x,y,x+random.randrange(2,13),y),fill=(126,131,254),width=1)
-normal.save(out/'IndustriesMicroNormal.png')
+if not args.without_target_numbers:
+    normal.save(out/'IndustriesMicroNormal.png')
 print('Industries artwork: 2048x4096, normal 512x1024')

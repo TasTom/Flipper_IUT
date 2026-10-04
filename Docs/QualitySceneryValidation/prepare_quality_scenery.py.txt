@@ -1,0 +1,97 @@
+"""Prepare supplied IUT architecture and hand-authored CC0 Poly Haven models.
+Preserves UVs and material appearance. One metre/unit normalized prop bounds,
+centered in X/Z, anchored at base; source assets are never overwritten.
+"""
+import bpy,bmesh,json,math,sys
+from pathlib import Path
+from mathutils import Vector,Matrix
+ROOT=Path('D:/Flipper_IUT');OUT=ROOT/'Assets/Art/Scenery/Quality';OUT.mkdir(parents=True,exist_ok=True)
+REPORT=ROOT/'Tools/unity/out/quality-scenery';manifest=[]
+
+def reset():
+    bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
+    for m in list(bpy.data.materials):bpy.data.materials.remove(m)
+
+def export(asset,source,max_tris=None):
+    objects=[o for o in bpy.context.scene.objects if o.type=='MESH']
+    bpy.context.view_layer.update()
+    # Bake world pose before joining: glTF hierarchies often carry unit conversion.
+    for o in objects:
+        o.data.transform(o.matrix_world);o.matrix_world=Matrix.Identity(4)
+    bpy.ops.object.select_all(action='DESELECT')
+    for o in objects:o.select_set(True)
+    bpy.context.view_layer.objects.active=objects[0];bpy.ops.object.join();o=bpy.context.object
+    o.name=asset;data=o.data
+    lo=Vector([min(v.co[i] for v in data.vertices) for i in range(3)]);hi=Vector([max(v.co[i] for v in data.vertices) for i in range(3)])
+    origin=Vector(((hi.x+lo.x)/2,(hi.y+lo.y)/2,lo.z));size=hi-lo;k=1/max(size)
+    for v in data.vertices:v.co=(v.co-origin)*k
+    before=sum(len(p.vertices)-2 for p in data.polygons)
+    if max_tris and before>max_tris:
+        mod=o.modifiers.new('Table scale geometry budget','DECIMATE');mod.ratio=max_tris/before
+        mod.use_collapse_triangulate=True;bpy.ops.object.modifier_apply(modifier=mod.name)
+    # Mirror both horizontal axes as in the project's validated FBX pipeline.
+    for v in data.vertices:v.co.x=-v.co.x;v.co.y=-v.co.y
+    bm=bmesh.new();bm.from_mesh(data);bmesh.ops.recalc_face_normals(bm,faces=bm.faces);bm.to_mesh(data);bm.free()
+    bpy.context.view_layer.update()
+    specs=[]
+    for m in data.materials:
+        p=m.node_tree.nodes.get('Principled BSDF') if m.use_nodes else None
+        specs.append({'name':m.name,'color':list(p.inputs['Base Color'].default_value) if p else list(m.diffuse_color),
+                      'metallic':p.inputs['Metallic'].default_value if p else 0,'roughness':p.inputs['Roughness'].default_value if p else .6})
+    path=OUT/(asset+'.fbx')
+    bpy.ops.export_scene.fbx(filepath=str(path),use_selection=True,object_types={'MESH'},axis_forward='-Z',axis_up='Y',global_scale=1,apply_unit_scale=True,bake_anim=False,add_leaf_bones=False,path_mode='STRIP',use_mesh_modifiers=True)
+    triangles=sum(len(p.vertices)-2 for p in data.polygons)
+    entry={'asset':asset,'source':source,'sourceDimensions':list(size),'dimensions':list(size*k),
+           'originalTriangles':before,'triangles':triangles,'materials':specs}
+    manifest.append(entry);print(asset,'triangles',triangles,'size',list(size*k),'materials',len(specs))
+
+reset();bpy.ops.wm.obj_import(filepath=str(ROOT/'Assets/Art/IUT/IUT2.obj'))
+o=next(o for o in bpy.context.scene.objects if o.type=='MESH')
+bm=bmesh.new();bm.from_mesh(o.data);bmesh.ops.triangulate(bm,faces=bm.faces[:]);bm.normal_update()
+seen=set();duplicates=[]
+for face in bm.faces:
+    key=tuple(sorted(tuple(round(c,5) for c in v.co) for v in face.verts))
+    if key in seen:duplicates.append(face)
+    seen.add(key)
+bmesh.ops.delete(bm,geom=duplicates,context='FACES_ONLY')
+# The source's metal roof sheets are coplanar with its ceiling/floor geometry.
+# Lift only those existing architectural sheets 30 mm to eliminate raster z-fighting.
+# Their footprint and pitch are unchanged; the supplied source remains untouched.
+roof=[f for f in bm.faces if o.data.materials[f.material_index].name.startswith('tole') and abs(f.normal.z)>.5 and sum(v.co.z for v in f.verts)/len(f.verts)>9]
+copies=bmesh.ops.duplicate(bm,geom=roof)['geom'];roofverts=[v for v in copies if isinstance(v,bmesh.types.BMVert)]
+bmesh.ops.translate(bm,verts=roofverts,vec=Vector((0,0,.03)))
+bmesh.ops.delete(bm,geom=roof,context='FACES_ONLY');bm.to_mesh(o.data);bm.free()
+print('IUT duplicate triangles removed',len(duplicates),'roof sheets repaired',len(roof))
+# The supplied architecture contains 222 duplicated material slots. Consolidate
+# exact appearance duplicates; geometry, façades, roofs and interiors are retained.
+lookup={};remap={};materials=[]
+for i,m in enumerate(o.data.materials):
+    p=m.node_tree.nodes.get('Principled BSDF');color=tuple(round(v,5) for v in p.inputs['Base Color'].default_value)
+    glass=any(s in m.name.lower() for s in ('vitre','verre','fenetre','fenêtre','vitrage'))
+    rough=.20 if glass else .70
+    key=(color,rough)
+    if key not in lookup:
+        n=bpy.data.materials.new(f'IUT_Material_{len(materials):02d}');n.use_nodes=True
+        bs=n.node_tree.nodes.get('Principled BSDF');bs.inputs['Base Color'].default_value=color;bs.inputs['Roughness'].default_value=rough
+        lookup[key]=len(materials);materials.append(n)
+    remap[i]=lookup[key]
+indices=[remap[p.material_index] for p in o.data.polygons]
+o.data.materials.clear()
+for m in materials:o.data.materials.append(m)
+for p,i in zip(o.data.polygons,indices):p.material_index=i
+export('IUT_Campus_Actual','Assets/Art/IUT/IUT2.obj')
+
+for asset in (() if '--only-iut' in sys.argv else ('small_lpg_tank','spinning_wheel_01','hand_plane_no4','drill_press_01','fir_sapling','tree_stump_01','bench_vice_01')):
+    reset();bpy.ops.import_scene.gltf(filepath=str(ROOT/'Tools/quality-sources'/asset/(asset+'.gltf')))
+    if asset=='fir_sapling':
+        # The source is a contact sheet of three sapling variants, not one tree.
+        # Keep variant A with its original branches/twig slots.
+        meshes=[o for o in bpy.context.scene.objects if o.type=='MESH']
+        for o in meshes[1:]:bpy.data.objects.remove(o,do_unlink=True)
+    # Fir uses actual modeled needles rather than alpha billboards. Reduce only
+    # this unusually heavy source at miniature viewing distance, keep UVs.
+    export(asset,'https://polyhaven.com/a/'+asset,30000 if asset=='fir_sapling' else None)
+(REPORT/'prepared-models.json').write_text(json.dumps(manifest,indent=2),encoding='utf-8')
+existing=json.loads((OUT/'ModelMaterials.json').read_text())['models'] if (OUT/'ModelMaterials.json').exists() else []
+keys={m['asset'] for m in manifest};existing=[m for m in existing if m['asset'] not in keys]+manifest
+(OUT/'ModelMaterials.json').write_text(json.dumps({'models':existing},indent=2),encoding='utf-8')

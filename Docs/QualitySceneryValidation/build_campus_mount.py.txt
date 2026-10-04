@@ -1,0 +1,38 @@
+"""Original machined miniature display tray. Fits the actual campus plus firs.
+Visual-only mount, beveled rim, inset panel and recessed hex fasteners.
+"""
+import bpy,bmesh,json,math
+from pathlib import Path
+from mathutils import Vector
+root=Path('D:/Flipper_IUT');out=root/'Assets/Art/Scenery/Quality'
+bpy.ops.object.select_all(action='SELECT');bpy.ops.object.delete(use_global=False)
+mats=[]
+for name,color,metal,rough in [('CampusMountEnamel',(.035,.08,.10,1),.35,.38),('CampusMountSteel',(.30,.34,.36,1),1,.30),('CampusMountBrass',(.52,.32,.10,1),1,.38)]:
+    m=bpy.data.materials.new(name);m.use_nodes=True;p=m.node_tree.nodes.get('Principled BSDF');p.inputs['Base Color'].default_value=color;p.inputs['Metallic'].default_value=metal;p.inputs['Roughness'].default_value=rough;mats.append(m)
+parts=[]
+def finish(o,name,index,bevel):
+    o.name=name;o.data.materials.append(mats[index]);bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
+    mod=o.modifiers.new('Machined edge','BEVEL');mod.width=bevel;mod.segments=3;bpy.context.view_layer.objects.active=o;bpy.ops.object.modifier_apply(modifier=mod.name)
+    mod=o.modifiers.new('Weighted normals','WEIGHTED_NORMAL');mod.keep_sharp=True;bpy.ops.object.modifier_apply(modifier=mod.name);parts.append(o)
+def box(name,p,dimensions,index,bevel):
+    bpy.ops.mesh.primitive_cube_add(size=1,location=p);o=bpy.context.object;o.scale=dimensions;finish(o,name,index,bevel)
+box('Machined base',(0,0,.035),(2.10,1.15,.07),1,.028)
+box('Inset powder-coated panel',(0,0,.074),(2.04,1.09,.008),0,.012)
+for x in (-.985,.985):
+    for y in (-.52,.52):
+        bpy.ops.mesh.primitive_cylinder_add(vertices=16,radius=.020,depth=.009,location=(x,y,.083));finish(bpy.context.object,'Countersunk fixing',1,.003)
+        bpy.ops.mesh.primitive_cylinder_add(vertices=6,radius=.009,depth=.001,location=(x,y,.088));finish(bpy.context.object,'Hex socket',0,.0002)
+for x in (-.95,.95):box('Edge inlay',(x,0,.080),(.012,.91,.004),2,.002)
+bpy.ops.object.select_all(action='DESELECT')
+for o in parts:o.select_set(True)
+bpy.context.view_layer.objects.active=parts[0];bpy.ops.object.join();o=bpy.context.object;o.name='CampusDisplayMount';bpy.ops.object.transform_apply(location=True,rotation=True,scale=True)
+for v in o.data.vertices:v.co=Vector((-v.co.x/2.1,-v.co.y/2.1,v.co.z/2.1))
+bm=bmesh.new();bm.from_mesh(o.data);bmesh.ops.recalc_face_normals(bm,faces=bm.faces);bm.to_mesh(o.data);bm.free()
+bpy.ops.object.mode_set(mode='EDIT');bpy.ops.mesh.select_all(action='SELECT');bpy.ops.uv.smart_project(island_margin=.02);bpy.ops.object.mode_set(mode='OBJECT')
+bpy.ops.export_scene.fbx(filepath=str(out/'CampusDisplayMount.fbx'),use_selection=True,axis_forward='-Z',axis_up='Y',global_scale=1,apply_unit_scale=True,bake_anim=False,add_leaf_bones=False)
+specs=[]
+for m in o.data.materials:
+    p=m.node_tree.nodes.get('Principled BSDF');specs.append({'name':m.name,'color':list(p.inputs['Base Color'].default_value),'metallic':p.inputs['Metallic'].default_value,'roughness':p.inputs['Roughness'].default_value})
+entry={'asset':'CampusDisplayMount','source':'Original geometry, build_campus_mount.py','triangles':sum(len(p.vertices)-2 for p in o.data.polygons),'materials':specs}
+path=out/'ModelMaterials.json';data=json.loads(path.read_text());data['models']=[m for m in data['models'] if m['asset']!=entry['asset']]+[entry];path.write_text(json.dumps(data,indent=2),encoding='utf-8')
+print(entry['asset'],entry['triangles'],'triangles')

@@ -1,0 +1,11 @@
+if(UnityEditor.EditorApplication.isPlaying)throw new System.Exception("Edition attendue");
+var sc=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();var root=sc.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<UnityEngine.Transform>(true)).Single(t=>t.name=="QualityScenery");
+if(root.GetComponentsInChildren<UnityEngine.Collider>(true).Length>0 || root.GetComponentsInChildren<UnityEngine.Component>(true).Any(c=>c!=null && c.GetType().Name.Contains("ColliderComponent")))throw new System.Exception("Décor physique inattendu");
+var sb=new System.Text.StringBuilder();
+foreach(var r in root.GetComponentsInChildren<UnityEngine.MeshRenderer>(true)){
+var mesh=r.GetComponent<UnityEngine.MeshFilter>().sharedMesh;if(mesh==null || r.sharedMaterials.Any(m=>m==null))throw new System.Exception("Mesh/matériau absent");
+sb.AppendLine(r.transform.parent.name+" triangles="+mesh.triangles.Length/3+" bounds="+r.bounds.size.ToString("F3")+" materials="+r.sharedMaterials.Length);
+}
+var cam=UnityEngine.Camera.main;if(UnityEngine.Vector3.Distance(cam.transform.position,new UnityEngine.Vector3(0,23.84255f,-16.60174f))>.001f || Mathf.Abs(Mathf.DeltaAngle(cam.transform.eulerAngles.z,90))>.001f)throw new System.Exception("Cadrage modifié");
+sb.AppendLine("PASS persistent meshes and materials; no decoration collider; original cabinet camera.");
+System.IO.File.WriteAllText("Tools/unity/out/quality-scenery/"+sc.name+"-assets.txt",sb.ToString());return sb.ToString();

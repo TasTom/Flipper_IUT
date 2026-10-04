@@ -1,0 +1,20 @@
+if(!UnityEditor.EditorApplication.isPlaying)throw new System.Exception("Play attendu");
+var sc=UnityEngine.SceneManagement.SceneManager.GetActiveScene();var sb=new System.Text.StringBuilder();
+var root=sc.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<UnityEngine.Transform>(true)).Single(t=>t.name=="QualityScenery");
+if(root.GetComponentsInChildren<UnityEngine.Collider>(true).Length>0 || root.GetComponentsInChildren<UnityEngine.Component>(true).Any(c=>c!=null && c.GetType().Name.Contains("ColliderComponent")))throw new System.Exception("Collider de décor inattendu");
+foreach(var mf in root.GetComponentsInChildren<UnityEngine.MeshFilter>(true))if(mf.sharedMesh==null)throw new System.Exception("Mesh absent : "+mf.name);
+foreach(var rr in root.GetComponentsInChildren<UnityEngine.Renderer>(true))if(rr.sharedMaterials.Any(m=>m==null || m.shader==null || m.shader.name=="Hidden/InternalErrorShader"))throw new System.Exception("Matériau absent : "+rr.name);
+var balls=sc.name=="Industries" ? UnityEngine.Object.FindObjectsByType<VisualPinball.Unity.BallComponent>(UnityEngine.FindObjectsSortMode.None).Select(b=>b.gameObject).ToArray() : UnityEngine.Object.FindObjectsByType<UnityEngine.GameObject>(UnityEngine.FindObjectsSortMode.None).Where(g=>g.CompareTag("Ball")).ToArray();
+if(balls.Length==0)throw new System.Exception("Bille jouable absente");
+if(GameManager.Instance==null || ScoreManager.Instance==null || InputRouter.Instance==null)throw new System.Exception("Gestionnaires manquants");
+if(Mathf.Abs(Mathf.DeltaAngle(UnityEngine.Camera.main.transform.eulerAngles.z,90))>.001f)throw new System.Exception("Orientation borne modifiée");
+sb.AppendLine("PASS runtime meshes/materials present; no decorative PhysX/VPE collider; cabinet roll 90°; managers and ball present.");
+sb.AppendLine("Scene="+sc.name+" state="+GameManager.Instance.State+" balls="+balls.Length+" credits="+GameManager.Instance.BallsRemaining+" score="+ScoreManager.Instance.Score);
+if(sc.name=="Industries"){
+if(!UnityEngine.Object.FindAnyObjectByType<IndustriesVpeGame>().IsInitialized)throw new System.Exception("VPE non initialisé");
+if(UnityEngine.Object.FindObjectsByType<VisualPinball.Unity.TargetComponent>(UnityEngine.FindObjectsSortMode.None).Length!=6)throw new System.Exception("Six cibles attendues");
+sb.AppendLine("PASS native VPE initialization and six reward targets.");
+}else{
+var ball=balls[0].GetComponent<UnityEngine.Rigidbody>();if(ball==null)throw new System.Exception("Rigidbody manquant");sb.AppendLine("PhysX mass="+ball.mass+" collision="+ball.collisionDetectionMode+" step="+UnityEngine.Time.fixedDeltaTime);
+}
+System.IO.File.WriteAllText("Tools/unity/out/quality-scenery/"+sc.name+"-runtime.txt",sb.ToString());return sb.ToString();

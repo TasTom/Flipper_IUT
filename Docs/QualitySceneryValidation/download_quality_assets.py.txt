@@ -1,0 +1,26 @@
+"""Offline preparation only. Powered by Poly Haven, assets CC0.
+Downloads immutable files verified against the published MD5, 1K for table-sized props.
+"""
+from pathlib import Path
+import urllib.request,json,hashlib
+audit=Path('Tools/unity/out/quality-scenery')
+raw=Path('Tools/quality-sources');raw.mkdir(parents=True,exist_ok=True)
+assets=['small_lpg_tank','spinning_wheel_01','hand_plane_no4','drill_press_01','fir_sapling','tree_stump_01','bench_vice_01']
+manifest=[]
+def download(entry,path):
+    path.parent.mkdir(parents=True,exist_ok=True)
+    if path.exists() and hashlib.md5(path.read_bytes()).hexdigest()==entry['md5']:return
+    req=urllib.request.Request(entry['url'],headers={'User-Agent':'VosgesManiaAssetPreparation/1.0'})
+    payload=urllib.request.urlopen(req,timeout=45).read()
+    assert hashlib.md5(payload).hexdigest()==entry['md5'],str(path)+' checksum mismatch'
+    path.write_bytes(payload)
+for asset in assets:
+    data=json.loads((audit/(asset+'-files.json')).read_text())
+    entry=data['gltf']['1k']['gltf'];folder=raw/asset
+    dest=folder/(asset+'.gltf');download(entry,dest)
+    for name,inc in entry.get('include',{}).items():download(inc,folder/name)
+    meta=json.loads((audit/'polyhaven-assets.json').read_text())[asset]
+    (folder/'source.json').write_text(json.dumps(meta,indent=2),encoding='utf-8')
+    manifest.append({'id':asset,'page':'https://polyhaven.com/a/'+asset,'license':'CC0-1.0','gltf':entry,'authors':meta.get('authors',{}),'triangles':meta.get('polycount')})
+    print(asset,'downloaded',sum(p.stat().st_size for p in folder.rglob('*') if p.is_file()),'bytes')
+(audit/'sources.json').write_text(json.dumps(manifest,indent=2),encoding='utf-8')

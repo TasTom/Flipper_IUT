@@ -1,0 +1,6 @@
+var sc=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();var cam=UnityEngine.Camera.main;
+var rot=cam.transform.rotation;var ortho=cam.orthographicSize;var target=cam.targetTexture;var active=UnityEngine.RenderTexture.active;
+var rt=new UnityEngine.RenderTexture(900,1600,24);var tex=new UnityEngine.Texture2D(900,1600,UnityEngine.TextureFormat.RGB24,false);
+try{cam.targetTexture=rt;cam.transform.eulerAngles=new UnityEngine.Vector3(cam.transform.eulerAngles.x,cam.transform.eulerAngles.y,0);cam.orthographicSize=8;cam.Render();UnityEngine.RenderTexture.active=rt;tex.ReadPixels(new UnityEngine.Rect(0,0,900,1600),0,0);tex.Apply();System.IO.Directory.CreateDirectory("Tools/unity/out/quality-scenery");System.IO.File.WriteAllBytes("Tools/unity/out/quality-scenery/"+sc.name+".png",tex.EncodeToPNG());}
+finally{cam.targetTexture=target;cam.transform.rotation=rot;cam.orthographicSize=ortho;UnityEngine.RenderTexture.active=active;UnityEngine.Object.DestroyImmediate(rt);UnityEngine.Object.DestroyImmediate(tex);}
+return sc.name+" rendered";

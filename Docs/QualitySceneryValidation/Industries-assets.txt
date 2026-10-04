@@ -1,0 +1,7 @@
+QualityScenery triangles=15042 bounds=(0.586, 0.750, 0.586) materials=1
+QualityScenery triangles=52023 bounds=(0.690, 0.651, 0.329) materials=1
+QualityScenery triangles=41046 bounds=(0.574, 0.230, 0.640) materials=1
+QualityScenery triangles=8220 bounds=(0.392, 0.227, 0.192) materials=1
+QualityScenery triangles=58511 bounds=(0.346, 0.880, 0.585) materials=1
+QualityScenery triangles=2863 bounds=(0.345, 0.490, 0.680) materials=1
+PASS persistent meshes and materials; no decoration collider; original cabinet camera.

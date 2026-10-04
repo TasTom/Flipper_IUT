@@ -1,0 +1,3 @@
+PASS runtime meshes/materials present; no decorative PhysX/VPE collider; cabinet roll 90°; managers and ball present.
+Scene=Neutral state=ReadyToLaunch balls=1 credits=3 score=0
+PhysX mass=2 collision=ContinuousDynamic step=0,002

@@ -1,0 +1,1 @@
+PASS repeated authoring preserves all existing components, values, placements and scene cleanliness.

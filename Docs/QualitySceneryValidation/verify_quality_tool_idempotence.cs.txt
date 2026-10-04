@@ -1,0 +1,9 @@
+var scene=UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
+var items=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<UnityEngine.Component>(true)).Where(c=>c!=null).ToArray();
+var before=items.ToDictionary(c=>c,c=>UnityEditor.EditorJsonUtility.ToJson(c));bool dirty=scene.isDirty;
+QualitySceneryAuthoring.ApplyQualityReplacement();
+var after=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<UnityEngine.Component>(true)).Where(c=>c!=null).ToArray();
+if(after.Length!=items.Length || after.Any(c=>!before.ContainsKey(c) || before[c]!=UnityEditor.EditorJsonUtility.ToJson(c)))throw new System.Exception("L'outil a réinitialisé un objet existant");
+if(scene.isDirty!=dirty)throw new System.Exception("Une passe sans changement ne doit pas salir la scène");
+System.IO.File.WriteAllText("Tools/unity/out/quality-scenery/"+scene.name+"-idempotence.txt","PASS repeated authoring preserves all existing components, values, placements and scene cleanliness.");
+return "PASS reprise sans doublons, sans réinitialisation ni scène salie";

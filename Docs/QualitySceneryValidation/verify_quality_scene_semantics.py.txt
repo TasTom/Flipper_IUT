@@ -1,0 +1,25 @@
+"""Inspect normalized serialized components; native VPE inline mesh IDs can churn.
+Reports changed old bodies without touching scene serialization.
+"""
+from pathlib import Path
+import re,collections,json
+out=Path('Tools/unity/out/quality-scenery')
+def blocks(text):
+    return [(int(m[1]),m[3]) for m in re.finditer(r'^--- !u!(\d+) &(-?\d+)[^\n]*\n(.*?)(?=^--- !u!|\Z)',text,re.M|re.S)]
+def normalize(s):
+    s=re.sub(r'fileID: -?\d+','fileID: ID',s)
+    return re.sub(r'(_instanceID: )-?\d+',r'\1ID',s)
+report={}
+for name in ('Neutral','Industries'):
+    base=blocks((out/(name+'-baseline.unity')).read_text(encoding='utf-8'))
+    final=blocks(Path(f'Assets/Scenes/{name}.unity').read_text(encoding='utf-8'))
+    stats={}
+    for typ in (43,54,64,65,114,135,136,146):
+        a=collections.Counter(normalize(s) for t,s in base if t==typ);b=collections.Counter(normalize(s) for t,s in final if t==typ)
+        removed=a-b;added=b-a
+        stats[str(typ)]={'baseline':sum(a.values()),'final':sum(b.values()),'oldBodiesChanged':sum(removed.values()),'newBodies':sum(added.values())}
+        if removed:
+            (out/(name+f'-semantic-removed-{typ}.txt')).write_text('\n---\n'.join(removed),encoding='utf-8')
+        if typ in (43,54,64,65,114,135,136,146):assert not removed,(name,typ,stats[str(typ)])
+    report[name]=stats
+(out/'scene-semantics.json').write_text(json.dumps(report,indent=2),encoding='utf-8');print(json.dumps(report,indent=2))

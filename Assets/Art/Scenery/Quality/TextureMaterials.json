@@ -1,0 +1,68 @@
+{
+  "materials": [
+    {
+      "asset": "bench_vice_01",
+      "name": "bench_vice_01",
+      "Diffuse": "Assets/Art/Scenery/Quality/Textures/bench_vice_01/Diffuse.jpg",
+      "Normal": "Assets/Art/Scenery/Quality/Textures/bench_vice_01/Normal.jpg",
+      "Mask": "Assets/Art/Scenery/Quality/Textures/bench_vice_01/Mask.png",
+      "doubleSided": true
+    },
+    {
+      "asset": "drill_press_01",
+      "name": "drill_press_01",
+      "Diffuse": "Assets/Art/Scenery/Quality/Textures/drill_press_01/Diffuse.jpg",
+      "Normal": "Assets/Art/Scenery/Quality/Textures/drill_press_01/Normal.jpg",
+      "Mask": "Assets/Art/Scenery/Quality/Textures/drill_press_01/Mask.png",
+      "doubleSided": true
+    },
+    {
+      "asset": "fir_sapling",
+      "name": "fir_sapling_branches",
+      "Diffuse": "Assets/Art/Scenery/Quality/Textures/fir_sapling_branches/Diffuse.jpg",
+      "Normal": "Assets/Art/Scenery/Quality/Textures/fir_sapling_branches/Normal.jpg",
+      "Mask": "Assets/Art/Scenery/Quality/Textures/fir_sapling_branches/Mask.png",
+      "doubleSided": true
+    },
+    {
+      "asset": "fir_sapling",
+      "name": "fir_sapling_twigs",
+      "Diffuse": "Assets/Art/Scenery/Quality/Textures/fir_sapling_twigs/Diffuse.jpg",
+      "Normal": "Assets/Art/Scenery/Quality/Textures/fir_sapling_twigs/Normal.jpg",
+      "Mask": "Assets/Art/Scenery/Quality/Textures/fir_sapling_twigs/Mask.png",
+      "doubleSided": true
+    },
+    {
+      "asset": "hand_plane_no4",
+      "name": "hand_plane_no4",
+      "Diffuse": "Assets/Art/Scenery/Quality/Textures/hand_plane_no4/Diffuse.jpg",
+      "Normal": "Assets/Art/Scenery/Quality/Textures/hand_plane_no4/Normal.jpg",
+      "Mask": "Assets/Art/Scenery/Quality/Textures/hand_plane_no4/Mask.png",
+      "doubleSided": true
+    },
+    {
+      "asset": "small_lpg_tank",
+      "name": "small_lpg_tank",
+      "Diffuse": "Assets/Art/Scenery/Quality/Textures/small_lpg_tank/Diffuse.jpg",
+      "Normal": "Assets/Art/Scenery/Quality/Textures/small_lpg_tank/Normal.jpg",
+      "Mask": "Assets/Art/Scenery/Quality/Textures/small_lpg_tank/Mask.png",
+      "doubleSided": true
+    },
+    {
+      "asset": "spinning_wheel_01",
+      "name": "spinning_wheel_01",
+      "Diffuse": "Assets/Art/Scenery/Quality/Textures/spinning_wheel_01/Diffuse.jpg",
+      "Normal": "Assets/Art/Scenery/Quality/Textures/spinning_wheel_01/Normal.jpg",
+      "Mask": "Assets/Art/Scenery/Quality/Textures/spinning_wheel_01/Mask.png",
+      "doubleSided": true
+    },
+    {
+      "asset": "tree_stump_01",
+      "name": "tree_stump_01",
+      "Diffuse": "Assets/Art/Scenery/Quality/Textures/tree_stump_01/Diffuse.jpg",
+      "Normal": "Assets/Art/Scenery/Quality/Textures/tree_stump_01/Normal.jpg",
+      "Mask": "Assets/Art/Scenery/Quality/Textures/tree_stump_01/Mask.png",
+      "doubleSided": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+"""Preserve glTF diffuse + GL normal, repack ARM for URP: Metal/AO/0/Smooth.
+No color edits or image generation. Pure channel conversion of source data.
+"""
+from pathlib import Path
+import json,shutil
+import numpy as np
+from PIL import Image
+root=Path('Assets/Art/Scenery/Quality');manifest=[]
+for gltf in Path('Tools/quality-sources').glob('*/*.gltf'):
+    data=json.loads(gltf.read_text())
+    for material in data.get('materials',[]):
+        name=material['name'];folder=root/'Textures'/name;folder.mkdir(parents=True,exist_ok=True)
+        def source(prop):return gltf.parent/data['images'][data['textures'][prop['index']]['source']]['uri']
+        pbr=material.get('pbrMetallicRoughness',{})
+        paths={}
+        for key,prop in [('Diffuse',pbr.get('baseColorTexture')),('Normal',material.get('normalTexture'))]:
+            if prop:
+                src=source(prop);dst=folder/(key+src.suffix);shutil.copy2(src,dst);paths[key]=str(dst).replace('\\','/')
+        mr=pbr.get('metallicRoughnessTexture')
+        if mr:
+            arm=np.array(Image.open(source(mr)).convert('RGB'));packed=np.zeros((*arm.shape[:2],4),dtype=np.uint8)
+            packed[:,:,0]=arm[:,:,2];packed[:,:,1]=arm[:,:,0];packed[:,:,3]=255-arm[:,:,1]
+            dst=folder/'Mask.png';Image.fromarray(packed).save(dst);paths['Mask']=str(dst).replace('\\','/')
+        manifest.append({'asset':gltf.parent.name,'name':name,**paths,'doubleSided':material.get('doubleSided',False)})
+(Path('Tools/unity/out/quality-scenery')/'prepared-textures.json').write_text(json.dumps(manifest,indent=2),encoding='utf-8')
+(root/'TextureMaterials.json').write_text(json.dumps({'materials':manifest},indent=2),encoding='utf-8')
+print('Prepared',len(manifest),'PBR materials')

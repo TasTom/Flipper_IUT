@@ -1,0 +1,271 @@
+[
+  {
+    "id": "small_lpg_tank",
+    "page": "https://polyhaven.com/a/small_lpg_tank",
+    "license": "CC0-1.0",
+    "gltf": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/small_lpg_tank/small_lpg_tank_1k.gltf",
+      "md5": "1660bf4ea12c6ed9fd7523a54720c54a",
+      "size": 2792,
+      "include": {
+        "textures/small_lpg_tank_nor_gl_1k.jpg": {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/small_lpg_tank/small_lpg_tank_nor_gl_1k.jpg",
+          "md5": "11d55dbb80f58c0eb3e344f32c6ea307",
+          "size": 750461
+        },
+        "textures/small_lpg_tank_diff_1k.jpg": {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/small_lpg_tank/small_lpg_tank_diff_1k.jpg",
+          "md5": "074120d4d0db683233da0ccd6db6680a",
+          "size": 712049
+        },
+        "textures/small_lpg_tank_arm_1k.jpg": {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/small_lpg_tank/small_lpg_tank_arm_1k.jpg",
+          "md5": "7a8c9b8ff1eb2a921ae46e2d768f9c4e",
+          "size": 926422
+        },
+        "small_lpg_tank.bin": {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/small_lpg_tank/small_lpg_tank.bin",
+          "md5": "786464f59e40ece95700db135626de59",
+          "size": 388716
+        }
+      }
+    },
+    "authors": {
+      "Ulan Cabanilla": "All"
+    },
+    "triangles": 15042
+  },
+  {
+    "id": "spinning_wheel_01",
+    "page": "https://polyhaven.com/a/spinning_wheel_01",
+    "license": "CC0-1.0",
+    "gltf": {
+      "include": {
+        "textures/spinning_wheel_01_diff_1k.jpg": {
+          "size": 233457,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/spinning_wheel_01/spinning_wheel_01_diff_1k.jpg",
+          "md5": "fafaee776a28fba00a99751aeed9997f"
+        },
+        "spinning_wheel_01.bin": {
+          "size": 1444300,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/spinning_wheel_01/spinning_wheel_01.bin",
+          "md5": "2db8e2c16dbe4b28305704ba7602cf6e"
+        },
+        "textures/spinning_wheel_01_nor_gl_1k.jpg": {
+          "size": 209097,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/spinning_wheel_01/spinning_wheel_01_nor_gl_1k.jpg",
+          "md5": "d46c99ff191e82a57f91436dfc7af8a9"
+        },
+        "textures/spinning_wheel_01_arm_1k.jpg": {
+          "size": 235836,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/spinning_wheel_01/spinning_wheel_01_arm_1k.jpg",
+          "md5": "069808ba8a4a563f6c9933641427a7d3"
+        }
+      },
+      "size": 2737,
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/spinning_wheel_01/spinning_wheel_01_1k.gltf",
+      "md5": "7cafc1cb742c3498a693669b1d7075c9"
+    },
+    "authors": {
+      "Sofia Pahaoja": "All"
+    },
+    "triangles": 52023
+  },
+  {
+    "id": "hand_plane_no4",
+    "page": "https://polyhaven.com/a/hand_plane_no4",
+    "license": "CC0-1.0",
+    "gltf": {
+      "include": {
+        "textures/hand_plane_no4_diff_1k.jpg": {
+          "size": 733120,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/hand_plane_no4/hand_plane_no4_diff_1k.jpg",
+          "md5": "fb9fa732a71e8fd39daedb78e0d551a1"
+        },
+        "textures/hand_plane_no4_arm_1k.jpg": {
+          "size": 711004,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/hand_plane_no4/hand_plane_no4_arm_1k.jpg",
+          "md5": "cc5885ccbbc6bd3b1a3799946426d2e7"
+        },
+        "textures/hand_plane_no4_nor_gl_1k.jpg": {
+          "size": 875917,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/hand_plane_no4/hand_plane_no4_nor_gl_1k.jpg",
+          "md5": "1125b3d2e2541b1bb80296dfa0563a38"
+        },
+        "hand_plane_no4.bin": {
+          "size": 229256,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/hand_plane_no4/hand_plane_no4.bin",
+          "md5": "100169419da665726938e1a5bcc24121"
+        }
+      },
+      "size": 2917,
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/hand_plane_no4/hand_plane_no4_1k.gltf",
+      "md5": "b55927f3de30b83c6dd1761f92a1206d"
+    },
+    "authors": {
+      "Satyaki Mandal": "All"
+    },
+    "triangles": 8220
+  },
+  {
+    "id": "drill_press_01",
+    "page": "https://polyhaven.com/a/drill_press_01",
+    "license": "CC0-1.0",
+    "gltf": {
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/drill_press_01/drill_press_01_1k.gltf",
+      "md5": "d0c8a1129283a4554983dcff450d8ccc",
+      "size": 21382,
+      "include": {
+        "textures/drill_press_01_nor_gl_1k.jpg": {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/drill_press_01/drill_press_01_nor_gl_1k.jpg",
+          "md5": "5ca3f57733fcdba6de5c82d310c8b0c6",
+          "size": 672092
+        },
+        "textures/drill_press_01_diff_1k.jpg": {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/drill_press_01/drill_press_01_diff_1k.jpg",
+          "md5": "46c429f55302b33a65decda70a7bdce6",
+          "size": 610938
+        },
+        "textures/drill_press_01_arm_1k.jpg": {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/drill_press_01/drill_press_01_arm_1k.jpg",
+          "md5": "ee280b9ca3252dad7cf28c60c53eed10",
+          "size": 817996
+        },
+        "drill_press_01.bin": {
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/drill_press_01/drill_press_01.bin",
+          "md5": "6f4a830570aa92b2089f16c9f0e1a663",
+          "size": 1911136
+        }
+      }
+    },
+    "authors": {
+      "Viktor": "All"
+    },
+    "triangles": 58526
+  },
+  {
+    "id": "fir_sapling",
+    "page": "https://polyhaven.com/a/fir_sapling",
+    "license": "CC0-1.0",
+    "gltf": {
+      "include": {
+        "textures/fir_sapling_twigs_nor_gl_1k.jpg": {
+          "size": 474717,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/fir_sapling/fir_sapling_twigs_nor_gl_1k.jpg",
+          "md5": "764771b717c54b86fa7d3eadc4a1ada5"
+        },
+        "textures/fir_sapling_branches_diff_1k.jpg": {
+          "size": 776633,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/fir_sapling/fir_sapling_branches_diff_1k.jpg",
+          "md5": "84f1d40b80a015d65c0ded042a10765b"
+        },
+        "textures/fir_sapling_twigs_diff_1k.jpg": {
+          "size": 252678,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/fir_sapling/fir_sapling_twigs_diff_1k.jpg",
+          "md5": "cd218269e0b34bd1bdb48a8daf21be67"
+        },
+        "textures/fir_sapling_branches_nor_gl_1k.jpg": {
+          "size": 1137599,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/fir_sapling/fir_sapling_branches_nor_gl_1k.jpg",
+          "md5": "db70c4595cf207cc04a02b49c195b78d"
+        },
+        "textures/fir_sapling_twigs_arm_1k.jpg": {
+          "size": 300249,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/fir_sapling/fir_sapling_twigs_arm_1k.jpg",
+          "md5": "cf97b5de863ebad9a48cb187ef3c3e74"
+        },
+        "textures/fir_sapling_branches_arm_1k.jpg": {
+          "size": 793567,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/fir_sapling/fir_sapling_branches_arm_1k.jpg",
+          "md5": "29a9ff22b8f7f224069b1254db171c05"
+        },
+        "fir_sapling.bin": {
+          "size": 21677180,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/fir_sapling/fir_sapling.bin",
+          "md5": "b329143a90d95201891afc52daeb9698"
+        }
+      },
+      "size": 10979,
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/fir_sapling/fir_sapling_1k.gltf",
+      "md5": "7b1a5ceae7be69954510b5a5c719b4fb"
+    },
+    "authors": {
+      "Rob Tuytel": "photography",
+      "Rico Cilliers": "modeling"
+    },
+    "triangles": 433021
+  },
+  {
+    "id": "tree_stump_01",
+    "page": "https://polyhaven.com/a/tree_stump_01",
+    "license": "CC0-1.0",
+    "gltf": {
+      "include": {
+        "tree_stump_01.bin": {
+          "size": 965380,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/tree_stump_01/tree_stump_01.bin",
+          "md5": "acb292727949126b92e58217fd50fca9"
+        },
+        "textures/tree_stump_01_diff_1k.jpg": {
+          "size": 907451,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/tree_stump_01/tree_stump_01_diff_1k.jpg",
+          "md5": "c71fe60400276a37b8847048cbec3720"
+        },
+        "textures/tree_stump_01_nor_gl_1k.jpg": {
+          "size": 1238404,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/tree_stump_01/tree_stump_01_nor_gl_1k.jpg",
+          "md5": "cc2a3c6e4682a521b15cccc61a416bbf"
+        },
+        "textures/tree_stump_01_arm_1k.jpg": {
+          "size": 825646,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/tree_stump_01/tree_stump_01_arm_1k.jpg",
+          "md5": "09b7aa228dccb93f5cf4188ba5530578"
+        }
+      },
+      "size": 2793,
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/tree_stump_01/tree_stump_01_1k.gltf",
+      "md5": "fedfc620634a8dbaf6345413b13abe1a"
+    },
+    "authors": {
+      "Rob Tuytel": "All"
+    },
+    "triangles": 41046
+  },
+  {
+    "id": "bench_vice_01",
+    "page": "https://polyhaven.com/a/bench_vice_01",
+    "license": "CC0-1.0",
+    "gltf": {
+      "include": {
+        "textures/bench_vice_01_diff_1k.jpg": {
+          "size": 724482,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/bench_vice_01/bench_vice_01_diff_1k.jpg",
+          "md5": "3165de5dc903b01d870f0ab0a9933d0a"
+        },
+        "bench_vice_01.bin": {
+          "size": 131404,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/4k/bench_vice_01/bench_vice_01.bin",
+          "md5": "0f8ba7b2c41f23b4e7461c68c5aca898"
+        },
+        "textures/bench_vice_01_arm_1k.jpg": {
+          "size": 704241,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/bench_vice_01/bench_vice_01_arm_1k.jpg",
+          "md5": "3609f55fe2315d08136b3610ba319cc9"
+        },
+        "textures/bench_vice_01_nor_gl_1k.jpg": {
+          "size": 866287,
+          "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/1k/bench_vice_01/bench_vice_01_nor_gl_1k.jpg",
+          "md5": "45262442f2b1e26559407ff89212b625"
+        }
+      },
+      "size": 13222,
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/1k/bench_vice_01/bench_vice_01_1k.gltf",
+      "md5": "732cc8a08f98136922ddc5ef0fad7bba"
+    },
+    "authors": {
+      "Yann Kervran": "Rigging",
+      "Antanas Kep": "Modeling & Texturing"
+    },
+    "triangles": 2864
+  }
+]

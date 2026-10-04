@@ -1,0 +1,102 @@
+{
+  "Neutral": {
+    "43": {
+      "baseline": 2,
+      "final": 2,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "54": {
+      "baseline": 4,
+      "final": 4,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "64": {
+      "baseline": 72,
+      "final": 72,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "65": {
+      "baseline": 56,
+      "final": 56,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "114": {
+      "baseline": 188,
+      "final": 189,
+      "oldBodiesChanged": 0,
+      "newBodies": 1
+    },
+    "135": {
+      "baseline": 0,
+      "final": 0,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "136": {
+      "baseline": 13,
+      "final": 13,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "146": {
+      "baseline": 0,
+      "final": 0,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    }
+  },
+  "Industries": {
+    "43": {
+      "baseline": 209,
+      "final": 209,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "54": {
+      "baseline": 0,
+      "final": 0,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "64": {
+      "baseline": 0,
+      "final": 0,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "65": {
+      "baseline": 0,
+      "final": 0,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "114": {
+      "baseline": 535,
+      "final": 535,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "135": {
+      "baseline": 0,
+      "final": 0,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "136": {
+      "baseline": 0,
+      "final": 0,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    },
+    "146": {
+      "baseline": 0,
+      "final": 0,
+      "oldBodiesChanged": 0,
+      "newBodies": 0
+    }
+  }
+}

@@ -28,4 +28,7 @@ PASS Ramp1 : sol abaissé sous 47 mm
 PASS Ramp1 : segment 2–6 droit dans le maillage (écart=0,000 mm)
 PASS Ramp1 : parois visuelles et physiques de 20 mm
 PASS Ramp1 : plafond physique natif VPE
+PASS Ramp1 : plafond indépendant du pivot recalculé par VPE
+PASS Ramp1 : bordures centrées sur les parois (écart=0,027 mm)
+PASS Ramp1 : plafond aligné et passage de 34 mm (écart=0,003 mm)
 PASS Ramp1 : raccord au retour sans marche

@@ -20,6 +20,7 @@ public static class RefineIndustriesRamp
     private const string Folder = "Assets/Generated/Industries/Ramp1";
     private const string Marker = "Ramp1CoveredRefit";
     private const string StraightMarker = "Ramp1EntryStraightened";
+    private const string CoverGroup = "Ramp1Cover";
     public const string RoofName = "Ramp1TurnCeiling";
     public const float WallHeight = .020f;
     public const float CeilingClearance = .034f;
@@ -135,7 +136,12 @@ public static class RefineIndustriesRamp
         { Debug.LogWarning("[Industries] Ramp1, plateau ou config manquant ; aucune modification."); return; }
         var layout = pf.Find("ProductionLayout");
         if (layout == null) { Debug.LogWarning("[Industries] Installer le layout Industries avant cette correction."); return; }
-        if (layout.Find(Marker) != null) { StraightenEntry(); Debug.Log("[Industries] Ramp1 couverte déjà corrigée ; réglages manuels conservés."); return; }
+        if (layout.Find(Marker) != null)
+        {
+            StraightenEntry();
+            if(layout.Find(CoverGroup)==null)RealignCover();
+            Debug.Log("[Industries] Ramp1 couverte déjà corrigée ; réglages manuels conservés.");return;
+        }
         if (!game.GetComponentsInChildren<PrimitiveComponent>(true).Any(p => p.name == "Primitive28") ||
             !game.GetComponentsInChildren<PrimitiveComponent>(true).Any(p => p.name == "Primitive29") ||
             !game.GetComponentsInChildren<SurfaceComponent>(true).Any(s => s.name == "Wall36"))
@@ -218,14 +224,68 @@ public static class RefineIndustriesRamp
         foreach (var obj in new Object[] { ramp, ramp.transform, ramp.DragPointSpline, ramp.DragPointSpline.Container, collider }) Record(obj);
     }
 
+    // VPE recentre le pivot de la rampe et ajuste la hauteur de ses enfants Primitive.
+    // Les pièces ajustées au sol restent donc dans le repère stable du plateau.
+    private static Transform GetCoverRoot(RampComponent ramp, Transform pf)
+    {
+        var layout=pf.Find("ProductionLayout");
+        if(layout==null)throw new InvalidOperationException("ProductionLayout manque.");
+        var parent=layout.Find(CoverGroup);
+        if(parent==null)
+        {
+            var go=new GameObject(CoverGroup);Undo.RegisterCreatedObjectUndo(go,"Support stable du plafond de Ramp1");
+            go.transform.SetParent(layout,false);parent=go.transform;
+        }
+        foreach(var name in new[]{"EdgeRails",RoofName,"RoofClips"})
+        {
+            var old=ramp.transform.Find(name);
+            if(old==null)continue;
+            if(parent.Find(name)!=null)throw new InvalidOperationException("Pièce Ramp1 en double : "+name);
+            Undo.SetTransformParent(old,parent,"Pièce de Ramp1 dans le repère du plateau");Record(old);
+        }
+        return parent;
+    }
+
+    [MenuItem("Flipper/Industries/Realigner les bordures et le plafond de Ramp1")]
+    public static void RealignCover()
+    {
+        var scene=EditorSceneManager.GetActiveScene();
+        if(scene.name!="Industries"||EditorApplication.isPlaying)
+        {Debug.LogWarning("[Industries] Ouvrir Industries hors Play pour recaler le plafond.");return;}
+        var game=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<IndustriesVpeGame>(true)).FirstOrDefault();
+        var pf=game!=null?game.GetComponentInChildren<PlayfieldComponent>()?.transform:null;
+        var ramp=game!=null?game.GetComponentsInChildren<RampComponent>(true).FirstOrDefault(r=>r.name=="Ramp1"):null;
+        if(pf==null||ramp==null||pf.Find("ProductionLayout/"+Marker)==null)
+        {Debug.LogWarning("[Industries] Installer la rampe couverte avant de recaler ses pièces.");return;}
+        Undo.IncrementCurrentGroup();int group=Undo.GetCurrentGroup();Undo.SetCurrentGroupName("Recaler le plafond et les bordures de Ramp1");
+        try
+        {
+            GetCoverRoot(ramp,pf);
+            BuildEdgeRails(ramp,pf);BuildCeiling(ramp,pf,true);
+            // Une reconstruction VPE peut remplacer les références par des maillages en mémoire.
+            foreach(var filter in ramp.GetComponentsInChildren<MeshFilter>(true).Where(f=>f.name=="Floor"||f.name=="Walls"))
+            {
+                var owned=AssetDatabase.LoadAssetAtPath<Mesh>(Folder+"/Ramp1"+filter.name+".asset");
+                if(owned==null||filter.sharedMesh==null)continue;
+                Undo.RecordObjects(new Object[]{filter,owned},"Conserver le maillage natif actuel");
+                if(filter.sharedMesh!=owned)EditorUtility.CopySerialized(filter.sharedMesh,owned);
+                owned.name="Ramp1"+filter.name;filter.sharedMesh=owned;Record(filter);
+                EditorUtility.SetDirty(owned);AssetDatabase.SaveAssetIfDirty(owned);
+            }
+            EditorSceneManager.MarkSceneDirty(scene);Undo.CollapseUndoOperations(group);Selection.activeGameObject=ramp.gameObject;
+        }
+        catch(Exception e){Undo.RevertAllDownToGroup(group);Debug.LogError("[Industries] Recalage annulé : "+e);}
+    }
+
     private static void BuildEdgeRails(RampComponent ramp, Transform pf)
     {
         var floor = ramp.GetComponentsInChildren<MeshFilter>(true).First(f => f.name == "Floor");
-        var edge = ramp.transform.Find("EdgeRails");
+        var parent = GetCoverRoot(ramp, pf);
+        var edge = parent.Find("EdgeRails");
         if (edge == null)
         {
             var go = new GameObject("EdgeRails"); Undo.RegisterCreatedObjectUndo(go, "Bordures de Ramp1");
-            go.transform.SetParent(ramp.transform, false); go.AddComponent<MeshFilter>(); go.AddComponent<MeshRenderer>(); edge = go.transform;
+            go.transform.SetParent(parent, false); go.AddComponent<MeshFilter>(); go.AddComponent<MeshRenderer>(); edge = go.transform;
         }
         string path = Folder + "/Ramp1EdgeRails.asset";
         var mesh = AssetDatabase.LoadAssetAtPath<Mesh>(path);
@@ -233,15 +293,15 @@ public static class RefineIndustriesRamp
         Undo.RecordObject(mesh, "Bordures ajustées au profil Ramp1");
         var vertices = new System.Collections.Generic.List<Vector3>(); var triangles = new System.Collections.Generic.List<int>();
         var surface = floor.sharedMesh.vertices; int count = surface.Length / 2;
-        var lift = ramp.transform.InverseTransformVector(pf.TransformVector(Vector3.up * WallHeight));
+        var lift = edge.InverseTransformVector(pf.TransformVector(Vector3.up * WallHeight));
         const int sides = 6;
         for (int side = 0; side < 2; side++)
         {
             int start = vertices.Count;
             for (int i = 0; i < count; i++)
             {
-                var p = ramp.transform.InverseTransformPoint(floor.transform.TransformPoint(surface[i * 2 + side])) + lift;
-                var q = ramp.transform.InverseTransformPoint(floor.transform.TransformPoint(surface[(i == count - 1 ? i - 1 : i + 1) * 2 + side])) + lift;
+                var p = edge.InverseTransformPoint(floor.transform.TransformPoint(surface[i * 2 + side])) + lift;
+                var q = edge.InverseTransformPoint(floor.transform.TransformPoint(surface[(i == count - 1 ? i - 1 : i + 1) * 2 + side])) + lift;
                 var tangent = (q - p).normalized * (i == count - 1 ? -1 : 1);
                 var across = Vector3.Cross(tangent, lift.normalized).normalized; var up = Vector3.Cross(across, tangent).normalized;
                 for (int j = 0; j < sides; j++)
@@ -267,11 +327,12 @@ public static class RefineIndustriesRamp
             pf.InverseTransformPoint(floor.transform.TransformPoint(rows[i*2])),
             pf.InverseTransformPoint(floor.transform.TransformPoint(rows[i*2+1]))
         }).Where(v => (v[0].y+v[1].y)*.5f >= .004f && (v[0].x+v[1].x)*.5f > .258f).ToArray();
-        var ceiling = ramp.transform.Find(RoofName);
+        var parent = GetCoverRoot(ramp, pf);
+        var ceiling = parent.Find(RoofName);
         if (ceiling == null)
         {
             var go = new GameObject(RoofName); Undo.RegisterCreatedObjectUndo(go, "Plafond physique des virages");
-            go.transform.SetParent(ramp.transform, false); ceiling = go.transform;
+            go.transform.SetParent(parent, false); ceiling = go.transform;
             Undo.AddComponent<MeshFilter>(go); Undo.AddComponent<MeshRenderer>(go);
             Undo.AddComponent<PrimitiveComponent>(go); Undo.AddComponent<PrimitiveColliderComponent>(go);
         }
@@ -341,11 +402,12 @@ public static class RefineIndustriesRamp
     // Attaches fines entre les bordures courtes et le plafond, sans collision de décor.
     private static void BuildRoofClips(RampComponent ramp, Transform pf, Vector3[][] pairs)
     {
-        var host = ramp.transform.Find("RoofClips");
+        var parent = GetCoverRoot(ramp, pf);
+        var host = parent.Find("RoofClips");
         if (host == null)
         {
             var go = new GameObject("RoofClips"); Undo.RegisterCreatedObjectUndo(go, "Attaches du plafond de Ramp1");
-            go.transform.SetParent(ramp.transform, false); host = go.transform;
+            go.transform.SetParent(parent, false); host = go.transform;
             Undo.AddComponent<MeshFilter>(go); Undo.AddComponent<MeshRenderer>(go);
         }
         var vertices = new System.Collections.Generic.List<Vector3>(); var triangles = new System.Collections.Generic.List<int>();

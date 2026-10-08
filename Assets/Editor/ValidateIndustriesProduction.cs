@@ -91,6 +91,49 @@ public static class ValidateIndustriesProduction
                     && Mathf.Abs(collider.RightWallHeight*k-.020f)<.0001f && Mathf.Abs(ramp._leftWallHeightVisible*k-.020f)<.0001f
                     && Mathf.Abs(ramp._rightWallHeightVisible*k-.020f)<.0001f);
                 Check("Ramp1 : plafond physique natif VPE",roof.GetComponent<PrimitiveColliderComponent>()?.enabled==true&&roof.GetUnityMesh()!=null);
+                var cover=pf.Find("ProductionLayout/Ramp1Cover");
+                Check("Ramp1 : plafond indépendant du pivot recalculé par VPE",cover!=null&&roof.transform.parent==cover&&roof.GetComponentInParent<RampComponent>()==null);
+                var floorVertices=floor.sharedMesh.vertices;
+                var pairs=Enumerable.Range(0,floorVertices.Length/2).Select(i=>new[]{
+                    pf.InverseTransformPoint(floor.transform.TransformPoint(floorVertices[2*i])),
+                    pf.InverseTransformPoint(floor.transform.TransformPoint(floorVertices[2*i+1]))}).ToArray();
+                var edges=cover!=null?cover.Find("EdgeRails"):null;
+                var edgeMesh=edges!=null?edges.GetComponent<MeshFilter>().sharedMesh:null;
+                float edgeError=float.MaxValue;
+                if(edgeMesh!=null&&edgeMesh.vertexCount%12==0&&pairs.Length>1)
+                {
+                    edgeError=0;var vertices=edgeMesh.vertices;int edgeRows=vertices.Length/12;
+                    for(int side=0;side<2;side++)for(int row=0;row<edgeRows;row++)
+                    {
+                        var centre=Vector3.zero;
+                        for(int j=0;j<6;j++)centre+=pf.InverseTransformPoint(edges.TransformPoint(vertices[(side*edgeRows+row)*6+j]))/6;
+                        centre-=Vector3.up*RefineIndustriesRamp.WallHeight;
+                        // VPE peut rééchantillonner la même courbe : comparer le tracé, pas les indices de sommets.
+                        float nearest=float.MaxValue;
+                        for(int i=1;i<pairs.Length;i++)
+                        {
+                            var origin=pairs[i-1][side];var span=pairs[i][side]-origin;
+                            float t=span.sqrMagnitude>1e-15f?Mathf.Clamp01(Vector3.Dot(centre-origin,span)/span.sqrMagnitude):0;
+                            nearest=Mathf.Min(nearest,Vector3.Distance(centre,origin+span*t));
+                        }
+                        edgeError=Mathf.Max(edgeError,nearest);
+                    }
+                }
+                Check("Ramp1 : bordures centrées sur les parois (écart="+(edgeError*1000).ToString("F3")+" mm)",edgeError<.0001f);
+                var covered=pairs.Where(v=>(v[0].y+v[1].y)*.5f>=.004f&&(v[0].x+v[1].x)*.5f>.258f).ToArray();
+                var roofMesh=roof.GetComponent<MeshFilter>().sharedMesh;var roofVertices=roofMesh.vertices;
+                int roofRows=roofMesh.triangles.Min()/4;float roofPlanError=float.MaxValue,clearance=float.MaxValue;
+                if(roofRows==covered.Length)
+                {
+                    roofPlanError=0;
+                    for(int row=0;row<roofRows;row++)for(int side=0;side<2;side++)
+                    {
+                        var actual=pf.InverseTransformPoint(roof.transform.TransformPoint(roofVertices[row*4+side]));
+                        var offset=actual-covered[row][side];clearance=Mathf.Min(clearance,offset.y);offset.y=0;
+                        roofPlanError=Mathf.Max(roofPlanError,Mathf.Abs(offset.magnitude-.001f));
+                    }
+                }
+                Check("Ramp1 : plafond aligné et passage de 34 mm (écart="+(roofPlanError*1000).ToString("F3")+" mm)",roofPlanError<.0001f&&clearance>=.0339f);
                 var returnRamp=ramps.First(r=>r.name=="Ramp3");var p=returnRamp.DragPoints[0].Center;
                 var joint=pf.InverseTransformPoint(returnRamp.transform.TransformPoint(new Vector3(p.X*k,returnRamp._heightBottom*k,-p.Y*k)));
                 Check("Ramp1 : raccord au retour sans marche",Vector3.Distance(Point(ramp.DragPoints.Length-1),joint)<.003f

@@ -1,0 +1,11 @@
+Avant correction : les points de la spline restaient en place, tandis que le pivot de Ramp1 était recentré sur leur moyenne.
+Les bordures en cuivre étaient décalées de 50,066 mm par rapport aux sommets correspondants des parois.
+Le plafond était décalé de 47,831 mm par rapport au profil du sol ; VPE ajustait aussi sa hauteur comme enfant Primitive.
+Après correction : bordures, plafond et attaches sous ProductionLayout/Ramp1Cover, dans le repère stable du plateau.
+PASS pose, points de spline et paramètres de Ramp1 conservés par le recalage.
+PASS recentrage SetData et RebuildMeshes natifs VPE : déplacement des pièces de couverture = 0,000000 mm.
+PASS alignement après reconstruction et retour de Play : distance maximale des bordures au tracé des parois = 0,027 mm.
+PASS plafond aligné sur le sol et passage vertical minimal de 34 mm.
+PASS aucun chevauchement transversal détecté avec les maillages voisins visibles.
+VPE peut rééchantillonner le parcours : la comparaison des sommets par index donnait 1,266 mm au raccord du retour, alors que la distance réelle au tracé restait inférieure à 0,03 mm.
+Le menu explicite de recalage permet de suivre une nouvelle modification manuelle du tracé ou de la largeur sans réinitialiser la spline.

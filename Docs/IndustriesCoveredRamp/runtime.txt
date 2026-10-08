@@ -2,19 +2,19 @@ PASS initialisation native et distribution d'une bille
 PASS commandes des deux flippers depuis InputRouter
 PASS lancement VPE : sortie du chenal vers le haut du plateau
 PASS pause : bille native immobile
-PASS collision physique cible sw1
 PASS collision physique cible sw13
+PASS collision physique cible sw1
 PASS collision physique cible sw2
 PASS collision physique cible sw3
-PASS collision physique cible sw12
 PASS collision physique cible sw11
+PASS collision physique cible sw12
 PASS six collisions : banques chargées, bonus différé
-PASS tir complet rampe commune (0.334, 0.013, -0.573) ENTRY 111717 ENTRY 111717 (0.486, 0.063, -0.324) (0.412, 0.060, -0.087) EXIT 111717
-PASS Ramp1 : traversée à 4,5 m/s, même bille et sans nouveau bonus (entrée=112229, sortie=112229) (0.334, 0.013, -0.573) (0.495, 0.060, -0.243)
-PASS Ramp1 : traversée à 5,5 m/s, même bille et sans nouveau bonus (entrée=110693, sortie=110693) (0.334, 0.013, -0.573) (0.471, 0.059, -0.164)
+PASS tir complet rampe commune (0.334, 0.013, -0.573) ENTRY 109449 ENTRY 109449 (0.483, 0.065, -0.341) (0.407, 0.060, -0.085) EXIT 109449
+PASS Ramp1 : traversée à 4,5 m/s, même bille et sans nouveau bonus (entrée=108937, sortie=108937) (0.334, 0.013, -0.573) (0.494, 0.059, -0.239)
+PASS Ramp1 : traversée à 5,5 m/s, même bille et sans nouveau bonus (entrée=110473, sortie=110473) (0.334, 0.013, -0.573) (0.469, 0.059, -0.159)
 PASS Ramp1 : tir faible à 2,5 m/s redescend par l'entrée
-PASS plafond VPE : rebond vertical contenu à (0.491, 0.046, -0.265) (hits=1, sommet=0,0787)
-PASS plafond VPE : rebond vertical contenu à (0.432, 0.046, -0.111) (hits=1, sommet=0,0790)
+PASS plafond VPE : rebond vertical contenu à (0.491, 0.046, -0.265) (hits=1, sommet=0,0792)
+PASS plafond VPE : rebond vertical contenu à (0.432, 0.046, -0.111) (hits=1, sommet=0,0794)
 PASS scoop : livraison, score et libération native (points=11000, hits=1, captured=False, balls=1)
 PASS livraison : commandes consommées et cibles réarmées (loaded=0, processed=0, lit=0, drops=sw1:False,sw2:False,sw3:False)
 PASS drain : 2 bille(s) restante(s)

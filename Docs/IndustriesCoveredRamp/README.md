@@ -4,6 +4,8 @@ Correction appliquée dans la scène Industries ouverte, à la demande de l'util
 
 La scène reste modifiée **sans enregistrement automatique** : Ctrl+S conserve le résultat. Le menu `Flipper > Industries > Retirer la rampe bois et corriger Ramp1` applique cette version aux scènes précédentes, avec Undo. Les marqueurs `ProductionLayout/Ramp1CoveredRefit` et `Ramp1EntryStraightened` protègent ensuite les réglages manuels. Le menu `Redresser l'entrée de Ramp1 (points 2–6)` applique uniquement la correction du segment aux rampes déjà couvertes.
 
+Le recentrage natif du pivot de Ramp1 déplaçait les pièces ajoutées d'environ 5 cm ; VPE ajustait également la hauteur du plafond parce qu'il était un enfant `Primitive` de la rampe. Les bordures, le plafond et ses attaches sont désormais sous `ProductionLayout/Ramp1Cover`, dans le repère du plateau. Ils restent alignés lors du recentrage et de la reconstruction VPE. Le menu `Realigner les bordures et le plafond de Ramp1` recalcule ces pièces depuis le sol actuel, avec Undo, sans changer les points de spline ni les paramètres physiques. Utiliser ce menu après une modification manuelle du tracé ou de la largeur de la rampe.
+
 ## Géométrie finale
 
 - L'entrée est au milieu de `Primitive28` et `Primitive29`, à `(0,377270 ; 0 ; -0,531340)` dans le repère natif du plateau. L'axe d'entrée est perpendiculaire à la ligne des poteaux. Leur placement reste intact.
@@ -19,7 +21,8 @@ La scène reste modifiée **sans enregistrement automatique** : Ctrl+S conserve 
 
 ## Vérification
 
-- [Contrôles d'éditeur](editor.txt) : **30 PASS, 1 FAIL**. Tous les contrôles de Ramp1 passent, dont le nouveau contrôle du segment droit dans le maillage (écart inférieur à 0,001 mm). Le contrôle de la position des cibles bois signale qu'elles sortent de l'ancienne zone attendue par ce test ; leur pose n'a pas été modifiée par cette correction. Leurs six collisions physiques passent en Play.
+- [Contrôles d'éditeur](editor.txt) : **33 PASS, 1 FAIL**. Tous les contrôles de Ramp1 passent, dont le segment droit, l'alignement des bordures et du plafond, et le passage de 34 mm. L'écart des bordures au tracé des parois est inférieur à **0,03 mm** après reconstruction native. Le contrôle de la position des cibles bois signale qu'elles sortent de l'ancienne zone attendue par ce test ; leur pose n'a pas été modifiée par cette correction. Leurs six collisions physiques passent en Play.
+- [Régression du décalage](alignment.txt) : le recentrage et la reconstruction VPE ne déplacent plus les pièces de couverture. Le contrôle compare les tracés géométriques ; VPE peut rééchantillonner une même courbe avec des sommets différents.
 - [23 contrôles en Play](runtime.txt) passent : six cibles accessibles, tirs complets à **3,5 / 4,5 / 5,5 m/s**, même bille entre entrée et sortie, bonus sans répétition, livraison et réarmement, trois drains et nouvelle partie. Un tir faible à **2,5 m/s** redescend par l'entrée ; deux impulsions verticales dans les virages heurtent réellement le plafond et restent dessous.
 - [Contrôle géométrique](geometry.txt) : aucune intersection transversale détectée du sol, des parois ou du plafond avec les maillages voisins visibles. Ce contrôle par triangles ne prouve pas l'absence de contacts coplanaires ou de tout blocage possible en jeu. Les attaches touchent volontairement les bordures et le plafond.
 - Dégagement minimal relevé pour une bille centrée sur la partie élevée du parcours : **9,36 mm** avec le décor voisin, hors contacts prévus avec la rampe, son plafond et le retour.

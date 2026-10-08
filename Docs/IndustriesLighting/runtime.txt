@@ -1,0 +1,31 @@
+PASS initialisation native et distribution d'une bille
+PASS commandes des deux flippers depuis InputRouter
+PASS lancement VPE : sortie du chenal vers le haut du plateau
+PASS pause : bille native immobile
+PASS FX : animations lumineuses figées en pause
+PASS FX : dix-sept contacts natifs reliés
+PASS FX : désabonnement à la désactivation
+PASS FX : réactivation sans doublon
+PASS FX : contact physique bumper et flash HDR
+PASS FX : extinction progressive après le flash
+PASS collision physique cible sw12
+PASS collision physique cible sw1
+PASS collision physique cible sw3
+PASS collision physique cible sw13
+PASS collision physique cible sw2
+PASS collision physique cible sw11
+PASS six collisions : banques chargées, bonus différé
+PASS FX : six cibles physiques déclenchent leurs inserts
+PASS tir complet rampe commune (0.334, 0.013, -0.573) ENTRY 129931 ENTRY 129931 (0.486, 0.064, -0.327) (0.410, 0.060, -0.086) EXIT 129931
+PASS Ramp1 : traversée à 4,5 m/s, même bille et sans nouveau bonus (entrée=130443, sortie=130443) (0.334, 0.013, -0.573) (0.495, 0.059, -0.243) (0.261, 0.054, -0.083)
+PASS Ramp1 : traversée à 5,5 m/s, même bille et sans nouveau bonus (entrée=130955, sortie=130955) (0.334, 0.013, -0.573) (0.460, 0.059, -0.144)
+PASS Ramp1 : tir faible à 2,5 m/s redescend par l'entrée
+PASS plafond VPE : rebond vertical contenu à (0.491, 0.046, -0.265) (hits=1, sommet=0,0785)
+PASS plafond VPE : rebond vertical contenu à (0.432, 0.046, -0.111) (hits=1, sommet=0,0790)
+PASS scoop : livraison, score et libération native (points=11000, hits=1, captured=False, balls=1)
+PASS FX : livraison reliée au feedback lumineux
+PASS livraison : commandes consommées et cibles réarmées (loaded=0, processed=0, lit=0, drops=sw1:False,sw3:False,sw2:False)
+PASS drain : 2 bille(s) restante(s)
+PASS drain : 1 bille(s) restante(s)
+PASS drain : 0 bille(s) restante(s)
+PASS nouvelle partie sans relancer la scène

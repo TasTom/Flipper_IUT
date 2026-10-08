@@ -1,0 +1,4 @@
+PASS Carter_Wall30 : VOSGES, font 160px, all lettering inside top face with inset, clear of overhead opaque geometry.
+PASS Carter_Wall31 : MANIA, font 160px, all lettering inside top face with inset, clear of overhead opaque geometry.
+PASS Carter_Wall33 : TEXTILE, font 128px, all lettering inside top face with inset, clear of overhead opaque geometry.
+PASS Carter_Wall34 : BOIS, font 120px, all lettering inside top face with inset, clear of overhead opaque geometry.

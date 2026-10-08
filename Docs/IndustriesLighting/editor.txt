@@ -1,0 +1,15 @@
+PASS 49 inserts/halos, références complètes
+PASS décor sans collider PhysX/VPE
+PASS 4 lumières locales, sans ombres
+PASS 36 anciennes sources directionnelles remplacées
+PASS URP HDR, caméra post-traitée et masque volume
+PASS Bloom actif, profil dédié
+PASS PostProcessData du renderer présent
+PASS Carter_Wall30 : géométrie conservée, impression UV dédiée
+PASS Carter_Wall31 : géométrie conservée, impression UV dédiée
+PASS Carter_Wall33 : géométrie conservée, impression UV dédiée
+PASS Carter_Wall34 : géométrie conservée, impression UV dédiée
+PASS TimberPlate : ancienne légende masquée
+PASS TextilePlate : ancienne légende masquée
+PASS menu idempotent : réglages et nombre d'objets conservés
+PASS scène modifiée laissée non enregistrée

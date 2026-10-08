@@ -1,0 +1,1 @@
+PASS composants physiques natifs et règles sérialisées conservés

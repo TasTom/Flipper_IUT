@@ -35,6 +35,7 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     public bool IsInitialized => initialized;
     public IndustriesProduction Production => production;
     public int TargetsLit { get { int count = 0; for (int i = 0; i < 6; i++) if ((targets & (1 << i)) != 0) count++; return count; } }
+    public int LitTargetMask=>targets;
     public string Name => "Vosges Mania — Industries";
 
     public GamelogicEngineSwitch[] RequestedSwitches { get; } = {

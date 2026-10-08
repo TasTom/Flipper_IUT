@@ -10,6 +10,7 @@ using VisualPinball.Unity;
 using VisualPinball.Engine.Game;
 using VisualPinball.Engine.Math;
 using Object = UnityEngine.Object;
+using Color = UnityEngine.Color;
 
 /// <summary>Contrôle d'intégration explicite, hors des scènes et exclu du Player.</summary>
 public sealed class IndustriesPlayModeValidation : MonoBehaviour
@@ -59,11 +60,34 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
         Check("lancement VPE : sortie du chenal vers le haut du plateau",game.State==GameManager.GameState.Playing && maxZ-startZ>.5f);
         game.TogglePause();yield return new WaitForSecondsRealtime(.2f);
         Vector3 pausedPos=ball!=null?ball.transform.position:Vector3.zero;
+        var lighting=Object.FindAnyObjectByType<IndustriesTableLighting>();
+        var lightingRenderer=lighting!=null?lighting.GetComponentInChildren<MeshRenderer>():null;
+        Color Glow(){var block=new MaterialPropertyBlock();lightingRenderer.GetPropertyBlock(block);return block.GetColor("_BaseColor");}
+        Color pausedGlow=lightingRenderer!=null?Glow():Color.black;
         yield return new WaitForSecondsRealtime(.4f);
         Check("pause : bille native immobile",Time.timeScale==0f && (ball==null || Vector3.Distance(pausedPos,ball.transform.position)<.0001f));
+        if(lightingRenderer!=null)Check("FX : animations lumineuses figées en pause",pausedGlow==Glow());
         game.TogglePause();yield return null;
-        ClearBalls();int points=score.Score;
+        ClearBalls();
         var pf=Object.FindAnyObjectByType<PlayfieldComponent>().transform;
+        if(lighting!=null)
+        {
+            Check("FX : dix-sept contacts natifs reliés",lighting.BoundContactCount==17);
+            int bindings=lighting.BoundContactCount;
+            lighting.enabled=false;Check("FX : désabonnement à la désactivation",lighting.BoundContactCount==0);
+            lighting.enabled=true;Check("FX : réactivation sans doublon",lighting.BoundContactCount==bindings);
+            int count=lighting.NativeFeedbackCount;
+            var bumper=Array.Find(Object.FindObjectsByType<BumperComponent>(),b=>b.name=="Bumper1");
+            var lens=lighting.transform.Find("Halo_Bumper1/Lens").GetComponent<Renderer>();
+            var block=new MaterialPropertyBlock();lens.GetPropertyBlock(block);var idle=block.GetColor("_BaseColor");
+            game.NotifyBallLaunched();CreateProbe(pf.InverseTransformPoint(bumper.transform.position)+Vector3.left*.06f,Vector3.right);
+            float flashDeadline=Time.time+.6f;while(lighting.NativeFeedbackCount==count&&Time.time<flashDeadline)yield return null;
+            yield return null;lens.GetPropertyBlock(block);var flash=block.GetColor("_BaseColor");
+            Check("FX : contact physique bumper et flash HDR",lighting.NativeFeedbackCount>count&&flash.b>idle.b*1.5f);
+            ClearBalls();yield return new WaitForSeconds(.4f);lens.GetPropertyBlock(block);
+            Check("FX : extinction progressive après le flash",block.GetColor("_BaseColor").b<flash.b*.5f);
+        }
+        int points=score.Score;int feedbackBeforeTargets=lighting!=null?lighting.NativeFeedbackCount:0;
         foreach(var target in Object.FindObjectsByType<TargetComponent>()) {
             var position=pf.InverseTransformPoint(target.transform.position);
             var normal=pf.InverseTransformDirection(target.transform.TransformDirection(Vector3.back));normal.y=0f;normal.Normalize();
@@ -78,6 +102,7 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
         Check("six collisions : banques chargées, bonus différé",engine.Production!=null
             ? score.Score-points==6*config.targetPoints && engine.Production.Loaded==3 && engine.Production.Processed==0 && engine.TargetsLit==6
             : score.Score-points==6*config.targetPoints+config.sixTargetsBonus && engine.TargetsLit==0);
+        if(lighting!=null)Check("FX : six cibles physiques déclenchent leurs inserts",lighting.NativeFeedbackCount>=feedbackBeforeTargets+6);
         if(engine.Production!=null)
         {
             // Vrais tirs sur le(s) parcours, sans appeler les règles directement.
@@ -162,7 +187,7 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
             }
         }
         ClearBalls();
-        points=score.Score;var scoop=api.Kicker("Kicker1");
+        points=score.Score;int feedbackBeforeDelivery=lighting!=null?lighting.NativeFeedbackCount:0;var scoop=api.Kicker("Kicker1");
         int scoopHits=0;EventHandler<HitEventArgs> observe=(_,e)=>scoopHits++;scoop.Hit+=observe;
         var scoopComponent=Object.FindObjectsByType<KickerComponent>()[0];foreach(var k in Object.FindObjectsByType<KickerComponent>())if(k.name=="Kicker1")scoopComponent=k;
         CreateProbe(pf.InverseTransformPoint(scoopComponent.transform.position)+Vector3.back*.055f,Vector3.forward);
@@ -171,6 +196,7 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
         yield return new WaitForSeconds(1.15f);
         int expectedScoop=engine.Production!=null ? config.scoopPoints+2*config.deliveryBonusPerProduct+config.combinedDeliveryBonus : config.scoopPoints;
         Check("scoop : livraison, score et libération native (points="+(score.Score-points)+", hits="+scoopHits+", captured="+scoop.HasBall()+", balls="+Balls().Length+")",score.Score==points+expectedScoop && !scoop.HasBall() && Balls().Length==1);scoop.Hit-=observe;
+        if(lighting!=null)Check("FX : livraison reliée au feedback lumineux",lighting.NativeFeedbackCount>feedbackBeforeDelivery);
         if(engine.Production!=null)
         {
             float rearmDeadline=Time.time+2f;
@@ -187,7 +213,7 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
         ClearBalls();game.StartGame();yield return new WaitForSeconds(.8f);
         Check("nouvelle partie sans relancer la scène",game.BallsRemaining==3 && score.Score==0 && Balls().Length==1);
         SetInput("PlungerHeld",false);input.enabled=inputEnabled;
-        string report=ceiling!=null?"Docs/IndustriesCoveredRamp":config.sharedProductionRamp?"Docs/IndustriesRamp1":engine.Production!=null?"Docs/IndustriesLayout":"Docs/IndustriesValidation";
+        string report=lighting!=null?"Docs/IndustriesLighting":ceiling!=null?"Docs/IndustriesCoveredRamp":config.sharedProductionRamp?"Docs/IndustriesRamp1":engine.Production!=null?"Docs/IndustriesLayout":"Docs/IndustriesValidation";
         Directory.CreateDirectory(report);File.WriteAllLines(report+"/runtime.txt",results);
         Debug.Log("[Industries validation] "+string.Join(" | ",results));
         Destroy(gameObject);

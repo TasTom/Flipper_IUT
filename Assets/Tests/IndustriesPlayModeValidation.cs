@@ -80,23 +80,52 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
             : score.Score-points==6*config.targetPoints+config.sixTargetsBonus && engine.TargetsLit==0);
         if(engine.Production!=null)
         {
-            // Vrais tirs depuis les entrées des deux rampes, sans appeler les règles directement.
-            var shots=new[]{new Vector3(.184f,0,-.73f),new Vector3(.355f,0,-.57f)};
-            var directions=new[]{Vector3.forward,new Vector3(.53f,0,.85f)};
-            for(int line=0;line<2;line++)
+            // Vrais tirs sur le(s) parcours, sans appeler les règles directement.
+            var shots=config.sharedProductionRamp ? new[]{new Vector3(.280f,0,-.799f)}
+                : new[]{new Vector3(.184f,0,-.73f),new Vector3(.355f,0,-.57f)};
+            var directions=config.sharedProductionRamp ? new[]{new Vector3(.32f,0,.95f)}
+                : new[]{Vector3.forward,new Vector3(.53f,0,.85f)};
+            if(config.sharedProductionRamp)
+            {
+                var ramp=Array.Find(Object.FindObjectsByType<RampComponent>(),r=>r.name=="Ramp1");
+                Vector3 Point(int i){var c=ramp.DragPoints[i].Center;float k=VisualPinball.Unity.Physics.ScaleInv;
+                    return pf.InverseTransformPoint(ramp.transform.TransformPoint(new Vector3(c.X*k,c.Z*k,-c.Y*k)));}
+                var direction=Point(1)-Point(0);direction.y=0;directions[0]=direction.normalized;
+                shots[0]=Point(0)-directions[0]*.06f;shots[0].y=0;
+            }
+            for(int line=0;line<shots.Length;line++)
             {
                 var trace=new System.Text.StringBuilder();
                 EventHandler<HitEventArgs> entry=(_,e)=>trace.Append(" ENTRY "+e.BallId);
                 EventHandler<HitEventArgs> exit=(_,e)=>trace.Append(" EXIT "+e.BallId);
-                var entryApi=api.Trigger(line==0?IndustriesProduction.WoodEntry:IndustriesProduction.TextileEntry);
-                var exitApi=api.Trigger(line==0?IndustriesProduction.WoodExit:IndustriesProduction.TextileExit);
+                var entryApi=api.Trigger(line==0&&!config.sharedProductionRamp?IndustriesProduction.WoodEntry:IndustriesProduction.TextileEntry);
+                var exitApi=api.Trigger(line==0&&!config.sharedProductionRamp?IndustriesProduction.WoodExit:IndustriesProduction.TextileExit);
                 entryApi.Hit+=entry;exitApi.Hit+=exit;
                 ClearBalls();points=score.Score;CreateProbe(shots[line],directions[line]*2f);
                 float end=Time.time+2f, next=Time.time;
                 while(Time.time<end && (engine.Production.Processed&(1<<line))==0){
                     if(Time.time>=next){if(Balls().Length>0)trace.Append(" "+pf.InverseTransformPoint(Balls()[0].transform.position).ToString("F3"));next+=.1f;}yield return null;}
-                Check("tir complet rampe "+(line==0?"bois":"textile")+trace,(engine.Production.Processed&(1<<line))!=0 && score.Score>=points+config.processingBonus);
+                int mask=config.sharedProductionRamp?3:1<<line;
+                Check("tir complet rampe "+(config.sharedProductionRamp?"commune":line==0?"bois":"textile")+trace,
+                    (engine.Production.Processed&mask)==mask && score.Score>=points+config.processingBonus*(config.sharedProductionRamp?2:1));
                 entryApi.Hit-=entry;exitApi.Hit-=exit;
+            }
+            if(config.sharedProductionRamp)
+            {
+                foreach(float speed in new[]{2.5f,3.5f})
+                {
+                    int entered=-1,exited=-2;
+                    var entryApi=api.Trigger(IndustriesProduction.TextileEntry);var exitApi=api.Trigger(IndustriesProduction.TextileExit);
+                    EventHandler<HitEventArgs> enter=(_,e)=>entered=e.BallId,leave=(_,e)=>exited=e.BallId;
+                    entryApi.Hit+=enter;exitApi.Hit+=leave;
+                    ClearBalls();points=score.Score;CreateProbe(shots[0],directions[0]*(speed/1.5f));
+                    var trace=new System.Text.StringBuilder();float next=Time.time;
+                    float end=Time.time+2.5f;while(Time.time<end&&entered!=exited){
+                        if(Time.time>=next){if(Balls().Length>0)trace.Append(" "+pf.InverseTransformPoint(Balls()[0].transform.position).ToString("F3"));next+=.1f;}yield return null;}
+                    Check("Ramp1 : traversée à "+speed+" m/s, même bille et sans nouveau bonus (entrée="+entered+", sortie="+exited+")"+trace,
+                        entered>=0&&entered==exited&&score.Score==points);
+                    entryApi.Hit-=enter;exitApi.Hit-=leave;
+                }
             }
         }
         ClearBalls();
@@ -125,7 +154,7 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
         ClearBalls();game.StartGame();yield return new WaitForSeconds(.8f);
         Check("nouvelle partie sans relancer la scène",game.BallsRemaining==3 && score.Score==0 && Balls().Length==1);
         SetInput("PlungerHeld",false);input.enabled=inputEnabled;
-        string report=engine.Production!=null?"Docs/IndustriesLayout":"Docs/IndustriesValidation";
+        string report=config.sharedProductionRamp?"Docs/IndustriesRamp1":engine.Production!=null?"Docs/IndustriesLayout":"Docs/IndustriesValidation";
         Directory.CreateDirectory(report);File.WriteAllLines(report+"/runtime.txt",results);
         Debug.Log("[Industries validation] "+string.Join(" | ",results));
         Destroy(gameObject);

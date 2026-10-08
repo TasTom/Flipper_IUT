@@ -113,8 +113,10 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         }
         if (config.productionEnabled)
         {
-            var sensors = new[] { IndustriesProduction.WoodEntry, IndustriesProduction.WoodExit,
-                IndustriesProduction.TextileEntry, IndustriesProduction.TextileExit };
+            var sensors = config.sharedProductionRamp
+                ? new[] { IndustriesProduction.TextileEntry, IndustriesProduction.TextileExit }
+                : new[] { IndustriesProduction.WoodEntry, IndustriesProduction.WoodExit,
+                    IndustriesProduction.TextileEntry, IndustriesProduction.TextileExit };
             var routes = Array.ConvertAll(sensors, name => api.Trigger(name));
             if (Array.Exists(routes, route => route == null))
                 Debug.LogWarning("[Industries] Un capteur de production manque : règle des six cibles conservée. Appliquer le layout Atelier.", this);
@@ -124,7 +126,11 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
                 for (int i = 0; i < routes.Length; i++)
                 {
                     var trigger = routes[i]; int line = i / 2; bool entry = i % 2 == 0;
-                    EventHandler<HitEventArgs> handler = (_, e) => OnRoute(line, entry, e.BallId);
+                    EventHandler<HitEventArgs> handler = (_, e) =>
+                    {
+                        if (config.sharedProductionRamp) OnSharedRoute(entry, e.BallId);
+                        else OnRoute(line, entry, e.BallId);
+                    };
                     trigger.Hit += handler; unbind.Add(() => trigger.Hit -= handler);
                 }
             }
@@ -221,6 +227,22 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
             game.ShowMessage((line == 0 ? "BOIS" : "TEXTILE") + " TRANSFORMÉ · VISER LIVRAISON", 2f);
             RefreshObjectives();
         }
+    }
+    private void OnSharedRoute(bool entry, int ball)
+    {
+        if (!CanScore() || production == null) return;
+        int transformed = 0;
+        for (int line = 0; line < 2; line++)
+        {
+            if (entry) production.Enter(line, ball, Time.time);
+            else if (production.Exit(line, ball, Time.time)) transformed |= 1 << line;
+        }
+        if (transformed == 0) return;
+        score.AddBonus(config.processingBonus * (transformed == 3 ? 2 : 1));
+        audio?.Play(IndustriesSound.Bonus);
+        string material = transformed == 3 ? "BOIS ET TEXTILE" : transformed == 1 ? "BOIS" : "TEXTILE";
+        game.ShowMessage(material + " TRANSFORMÉ" + (transformed == 3 ? "S" : "") + " · VISER LIVRAISON", 2f);
+        RefreshObjectives();
     }
     private bool CanScore() => initialized && Time.timeScale > 0f && !SceneTransition.IsPlaying &&
         (game.State == GameManager.GameState.Playing || game.State == GameManager.GameState.ReadyToLaunch);

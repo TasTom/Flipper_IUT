@@ -1,5 +1,7 @@
 # Industries — deux lignes de production
 
+**Mise à jour du 8 octobre :** la rampe bois a été retirée et Ramp1 est commune aux deux matières. Voir [la correction actuelle](../IndustriesRamp1/README.md). Le document ci-dessous décrit le layout précédent.
+
 Demande : changer les tirs, les positions et les mécaniques de la seconde table, après la refonte de son habillage.
 
 Le layout est appliqué dans la scène Industries ouverte. La scène reste modifiée et **n'est jamais enregistrée par l'outil**. Ctrl+S conserve le résultat ; les migrations disposent d'Undo. Sur une scène qui n'a pas reçu ce layout : menu `Flipper > Industries > Installer le layout et les règles de production`. Une seconde exécution laisse les placements manuels intacts.

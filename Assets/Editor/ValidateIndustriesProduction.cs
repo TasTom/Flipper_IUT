@@ -46,18 +46,23 @@ public static class ValidateIndustriesProduction
         Check("Industries : production activée",source.productionEnabled&&pf!=null&&pf.Find("ProductionLayout")!=null);
         if(pf!=null)
         {
-            var ramp=pf.GetComponentsInChildren<RampComponent>().FirstOrDefault(c=>c.name=="ProductionWoodRamp");
-            Check("nouvelle rampe : collider VPE actif",ramp!=null&&ramp.GetComponent<RampColliderComponent>().enabled&&ramp.DragPoints.Length>=6);
-            var names=new[]{IndustriesProduction.WoodEntry,IndustriesProduction.WoodExit,IndustriesProduction.TextileEntry,IndustriesProduction.TextileExit};
+            var ramps=pf.GetComponentsInChildren<RampComponent>();
+            var ramp=ramps.FirstOrDefault(c=>c.name==(source.sharedProductionRamp?"Ramp1":"ProductionWoodRamp"));
+            Check("rampe de transformation : collider VPE actif",ramp!=null&&ramp.GetComponent<RampColliderComponent>().enabled&&ramp.DragPoints.Length>=6
+                && (!source.sharedProductionRamp || !ramps.Any(c=>c.name=="ProductionWoodRamp")));
+            var names=source.sharedProductionRamp ? new[]{IndustriesProduction.TextileEntry,IndustriesProduction.TextileExit}
+                : new[]{IndustriesProduction.WoodEntry,IndustriesProduction.WoodExit,IndustriesProduction.TextileEntry,IndustriesProduction.TextileExit};
             var sensors=pf.GetComponentsInChildren<TriggerComponent>();
-            Check("quatre capteurs VPE uniques et actifs",names.All(n=>sensors.Count(t=>t.name==n&&t.GetComponent<TriggerColliderComponent>().enabled)==1));
+            Check("capteurs VPE uniques et actifs",names.All(n=>sensors.Count(t=>t.name==n&&t.GetComponent<TriggerColliderComponent>().enabled)==1)
+                && (!source.sharedProductionRamp || !sensors.Any(t=>t.name==IndustriesProduction.WoodEntry||t.name==IndustriesProduction.WoodExit)));
             var wood=pf.GetComponentsInChildren<DropTargetComponent>().Where(t=>t.name=="sw1"||t.name=="sw2"||t.name=="sw3").ToArray();
             Check("cibles bois dans l'aire centrale",wood.Length==3&&wood.All(t=>{var p=pf.InverseTransformPoint(t.transform.position);return p.x>.24f&&p.x<.32f&&p.z<-.50f&&p.z>-.54f;}));
             var scoop=pf.GetComponentsInChildren<KickerComponent>().First(k=>k.name=="Kicker1");
             Check("scoop de livraison à gauche",Mathf.Abs(pf.InverseTransformPoint(scoop.transform.position).x-.119f)<.0001f);
             Check("plateau manuel conserve l'ouverture",!pf.GetComponent<VisualPinball.Unity.Playfield.PlayfieldMeshComponent>().AutoGenerate);
         }
-        Directory.CreateDirectory("Docs/IndustriesLayout");File.WriteAllLines("Docs/IndustriesLayout/editor.txt",results);
+        string report=source.sharedProductionRamp?"Docs/IndustriesRamp1":"Docs/IndustriesLayout";
+        Directory.CreateDirectory(report);File.WriteAllLines(report+"/editor.txt",results);
         string summary=results.Count(x=>x.StartsWith("PASS"))+" PASS, "+results.Count(x=>x.StartsWith("FAIL"))+" FAIL";
         Debug.Log("[Industries production] "+summary);return summary;
     }

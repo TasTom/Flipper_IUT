@@ -7,7 +7,6 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using VisualPinball.Engine.Math;
 using VisualPinball.Engine.VPT;
-using VisualPinball.Engine.VPT.Ramp;
 using VisualPinball.Engine.VPT.Trigger;
 using VisualPinball.Unity;
 using VisualPinball.Unity.Editor;
@@ -23,10 +22,6 @@ using Material = UnityEngine.Material;
 public static class ArrangeIndustriesProduction
 {
     private const string Folder = "Assets/Generated/Industries/Production";
-    private static readonly Vector3[] WoodPath = {
-        new Vector3(.184f,0,-.689f),new Vector3(.190f,.020f,-.50f),new Vector3(.178f,.033f,-.335f),
-        new Vector3(.142f,.041f,-.245f),new Vector3(.086f,.041f,-.242f),new Vector3(.027f,.0394f,-.2699f)
-    };
     [MenuItem("Flipper/Industries/Installer le layout et les règles de production")]
     public static void Apply()
     {
@@ -99,29 +94,7 @@ public static class ArrangeIndustriesProduction
             { Undo.RecordObject(filter,"Ouverture déplacée du scoop"); filter.sharedMesh = meshAsset; Record(filter); }
             var nativeMesh = pf.GetComponent<VisualPinball.Unity.Playfield.PlayfieldMeshComponent>();
             if (nativeMesh != null) { Undo.RecordObject(nativeMesh,"Plateau avec ouverture"); nativeMesh.AutoGenerate = false; Record(nativeMesh); }
-            float k = VisualPinball.Unity.Physics.ScaleInv;
-            var data = new RampData("ProductionWoodRamp", WoodPath.Select(p => new DragPointData(new Vertex3D(p.x/k,-p.z/k,p.y/k)){IsSmooth=true}).ToArray()) {
-                HeightBottom = 0, HeightTop = 0, WidthBottom = .054f/k, WidthTop = .038f/k,
-                LeftWallHeight = .022f/k, RightWallHeight = .022f/k,
-                LeftWallHeightVisible = .014f/k, RightWallHeightVisible = .014f/k,
-                Elasticity = .15f, Friction = .08f, IsCollidable = true
-            };
-            var ramp = Instantiate(table,new VisualPinball.Engine.VPT.Ramp.Ramp(data),method);
-            var steel = AssetDatabase.LoadAssetAtPath<Material>("Assets/Generated/Industries/Remodel/WorkshopSteel.mat");
-            var copper = AssetDatabase.LoadAssetAtPath<Material>("Assets/Generated/Industries/Remodel/WorkshopCopper.mat");
-            foreach (var renderer in ramp.GetComponentsInChildren<MeshRenderer>(true))
-            { Undo.RecordObject(renderer,"Matériaux de rampe"); renderer.sharedMaterial = renderer.name == "Floor" ? steel : copper; Record(renderer); }
-            foreach (var filter in ramp.GetComponentsInChildren<MeshFilter>(true))
-            {
-                if(filter.sharedMesh==null||filter.sharedMesh.vertexCount==0)continue;
-                string meshPath=Folder+"/WoodRamp"+filter.name+".asset";
-                var persisted=AssetDatabase.LoadAssetAtPath<Mesh>(meshPath);
-                if(persisted==null){persisted=Object.Instantiate(filter.sharedMesh);persisted.name="WoodRamp"+filter.name;AssetDatabase.CreateAsset(persisted,meshPath);}
-                filter.sharedMesh=persisted;Record(filter);
-            }
-            // Volumes minces au niveau de chaque parcours : une bille passant dessous ne valide pas la rampe.
-            Sensor(table, method, IndustriesProduction.WoodEntry, new Vector3(.184f,.001f,-.675f), .054f,.018f);
-            Sensor(table, method, IndustriesProduction.WoodExit, new Vector3(.060f,.036f,-.254f), .020f,.038f);
+            // Une seule rampe de transformation : Ramp1.
             Sensor(table, method, IndustriesProduction.TextileEntry, new Vector3(.390f,.002f,-.512f), .052f,.018f);
             Sensor(table, method, IndustriesProduction.TextileExit, new Vector3(.302f,.044f,-.083f), .018f,.044f);
             RefineRoutes();
@@ -145,7 +118,7 @@ public static class ArrangeIndustriesProduction
             FinishPresentation();
             EditorSceneManager.MarkSceneDirty(scene); Undo.CollapseUndoOperations(group);
             AssetDatabase.SaveAssetIfDirty(config);
-            Debug.Log("[Industries] Layout asymétrique installé : nouvelle rampe bois, cibles centrales, bumpers déplacés, scoop à gauche, deux productions. Ctrl+Z annule ; Ctrl+S à votre choix.");
+            Debug.Log("[Industries] Layout asymétrique installé : Ramp1 commune, cibles centrales, bumpers déplacés, scoop à gauche, deux productions. Ctrl+Z annule ; Ctrl+S à votre choix.");
         }
         catch (Exception e)
         {
@@ -178,93 +151,11 @@ public static class ArrangeIndustriesProduction
             if(mat==null){mat=new Material(card.sharedMaterial){name="ProductionInstructions"};mat.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/Industries/Production/Instructions.png"));AssetDatabase.CreateAsset(mat,path);}
             Undo.RecordObject(card,"Règles de production sur l'apron");card.sharedMaterial=mat;Record(card);
         }
-        var ramp=engine.GetComponentsInChildren<RampComponent>(true).FirstOrDefault(r=>r.name=="ProductionWoodRamp");
-        if(ramp!=null)foreach(var filter in ramp.GetComponentsInChildren<MeshFilter>(true))
-        {
-            if(filter.sharedMesh==null||filter.sharedMesh.vertexCount==0)continue;
-            string path=Folder+"/WoodRamp"+filter.name+".asset";var mesh=AssetDatabase.LoadAssetAtPath<Mesh>(path);
-            if(mesh==null){mesh=Object.Instantiate(filter.sharedMesh);mesh.name="WoodRamp"+filter.name;AssetDatabase.CreateAsset(mesh,path);}
-            Undo.RecordObject(filter,"Mesh de la rampe bois");filter.sharedMesh=mesh;Record(filter);
-        }
         EditorSceneManager.MarkSceneDirty(engine.gameObject.scene);
     }
 
-    // Mise au point des hauteurs : la pente du modèle de base sautait brusquement
-    // de 0 à 46 mm puis devenait plate, ce qui catapultait les tirs rapides.
-    public static void RefineRoutes()
-    {
-        var engine=Object.FindAnyObjectByType<IndustriesVpeGame>();if(engine==null)return;
-        var ramps=engine.GetComponentsInChildren<RampComponent>(true);
-        var wood=ramps.FirstOrDefault(r=>r.name=="ProductionWoodRamp");
-        if(wood!=null)
-        {
-            OwnRouteMeshes(wood,"WoodRamp");
-            Undo.RecordObjects(new UnityEngine.Object[]{wood,wood.DragPointSpline,wood.DragPointSpline.Container},"Raccord progressif de la rampe bois");
-            wood._widthTop=.038f/VisualPinball.Unity.Physics.ScaleInv;
-            wood._heightBottom=wood._heightTop=0;
-            Undo.RecordObject(wood.transform,"Origine du profil bois");
-            var origin=wood.transform.localPosition;origin.y=0;wood.transform.localPosition=origin;Record(wood.transform);
-            float k=VisualPinball.Unity.Physics.ScaleInv;
-            var pf=engine.GetComponentInChildren<PlayfieldComponent>().transform;
-            var points=WoodPath.Select(p=>{var v=wood.transform.InverseTransformPoint(pf.TransformPoint(p));
-                return new DragPointData(new Vertex3D(v.x/k,-v.z/k,v.y/k)){IsSmooth=true};}).ToArray();
-            wood.DragPoints=points;wood.RebuildMeshes();Record(wood);Record(wood.DragPointSpline);Record(wood.DragPointSpline.Container);
-            var exit=engine.GetComponentsInChildren<TriggerComponent>(true).FirstOrDefault(t=>t.name==IndustriesProduction.WoodExit);
-            if(exit!=null)Place(exit.transform,pf,new Vector3(.060f,.036f,-.254f),0);
-        }
-        var textile=ramps.FirstOrDefault(r=>r.name=="Ramp1");
-        if(textile!=null)
-        {
-            OwnRouteMeshes(textile,"TextileRamp");
-            Undo.RecordObjects(new UnityEngine.Object[]{textile,textile.DragPointSpline,textile.DragPointSpline.Container},"Pente continue de la rampe textile");
-            textile._heightBottom=0;textile._heightTop=0;
-            Undo.RecordObject(textile.transform,"Origine de la pente textile");
-            var position=textile.transform.localPosition;position.y=0;textile.transform.localPosition=position;Record(textile.transform);
-            var pf=engine.GetComponentInChildren<PlayfieldComponent>().transform;
-            var profile=new[]{new Vector3(.3825f,0,-.5248f),new Vector3(.410f,.023f,-.475f),
-                new Vector3(.4396f,.040f,-.4331f),new Vector3(.4743f,.046f,-.3048f),
-                new Vector3(.4521f,.046f,-.1642f),new Vector3(.3615f,.043f,-.0895f),new Vector3(.2364f,.0394f,-.081f)};
-            float k=VisualPinball.Unity.Physics.ScaleInv;
-            var points=profile.Select(p=>{
-                var v=textile.transform.InverseTransformPoint(pf.TransformPoint(p));
-                return new DragPointData(new Vertex3D(v.x/k,-v.z/k,v.y/k)){IsSmooth=true};
-            }).ToArray();
-            textile.DragPoints=points;
-            var col=textile.GetComponentInChildren<RampColliderComponent>(true);
-            Undo.RecordObject(col,"Guides de rampe textile");col.LeftWallHeight=col.RightWallHeight=.045f/VisualPinball.Unity.Physics.ScaleInv;
-            textile._leftWallHeightVisible=textile._rightWallHeightVisible=.040f/VisualPinball.Unity.Physics.ScaleInv;
-            col.OverwritePhysics=true;col.Elasticity=.15f;col.Friction=.08f;col.Scatter=0;
-            textile.RebuildMeshes();Record(textile);Record(textile.DragPointSpline);Record(textile.DragPointSpline.Container);Record(col);
-            // Les deux rubans du modèle initial suivaient l'ancienne pente, sans collider.
-            var presentation=Object.FindAnyObjectByType<IndustriesPresentation>();
-            var so=new SerializedObject(presentation);var hidden=so.FindProperty("hiddenRenderers");
-            foreach(var r in ramps.Where(r=>r.name=="Ramp6"||r.name=="Ramp7").SelectMany(r=>r.GetComponentsInChildren<MeshRenderer>(true)))
-            {
-                bool found=false;for(int i=0;i<hidden.arraySize;i++)if(hidden.GetArrayElementAtIndex(i).objectReferenceValue==r)found=true;
-                if(!found){hidden.InsertArrayElementAtIndex(hidden.arraySize);hidden.GetArrayElementAtIndex(hidden.arraySize-1).objectReferenceValue=r;}
-                Undo.RecordObject(r,"Covers de l'ancienne pente");r.enabled=false;Record(r);
-            }
-            so.ApplyModifiedProperties();Record(presentation);
-            var exit=engine.GetComponentsInChildren<TriggerComponent>(true).FirstOrDefault(t=>t.name==IndustriesProduction.TextileExit);
-            if(exit!=null)Place(exit.transform,pf,new Vector3(.302f,.038f,-.083f),0);
-        }
-        foreach(var ramp in new[]{wood,textile}.Where(r=>r!=null))foreach(var filter in ramp.GetComponentsInChildren<MeshFilter>(true))
-            if(filter.sharedMesh!=null&&AssetDatabase.GetAssetPath(filter.sharedMesh).StartsWith(Folder,StringComparison.Ordinal))
-            {EditorUtility.SetDirty(filter.sharedMesh);AssetDatabase.SaveAssetIfDirty(filter.sharedMesh);}
-        EditorSceneManager.MarkSceneDirty(engine.gameObject.scene);
-    }
-
-    private static void OwnRouteMeshes(RampComponent ramp,string prefix)
-    {
-        foreach(var filter in ramp.GetComponentsInChildren<MeshFilter>(true))
-        {
-            if(filter.sharedMesh==null||filter.sharedMesh.vertexCount==0)continue;
-            string path=Folder+"/"+prefix+filter.name+".asset";var mesh=AssetDatabase.LoadAssetAtPath<Mesh>(path);
-            if(mesh==null){mesh=Object.Instantiate(filter.sharedMesh);mesh.name=prefix+filter.name;AssetDatabase.CreateAsset(mesh,path);}
-            Undo.RecordObject(filter,"Mesh propre au layout Industries");filter.sharedMesh=mesh;Record(filter);
-            Undo.RecordObject(mesh,"Géométrie de rampe Industries");
-        }
-    }
+    // Compatibilité avec les anciens appels : la correction ne réécrit pas un layout déjà ajusté.
+    public static void RefineRoutes() => RefineIndustriesRamp.Apply();
 
     private static void Sensor(TableComponent table, MethodInfo method, string name, Vector3 p, float width, float depth)
     {

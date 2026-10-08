@@ -1,0 +1,1 @@
+PASS seconde application conserve le profil, la pose et la hiérarchie.

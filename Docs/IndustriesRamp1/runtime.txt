@@ -1,0 +1,20 @@
+PASS initialisation native et distribution d'une bille
+PASS commandes des deux flippers depuis InputRouter
+PASS lancement VPE : sortie du chenal vers le haut du plateau
+PASS pause : bille native immobile
+PASS collision physique cible sw11
+PASS collision physique cible sw12
+PASS collision physique cible sw13
+PASS collision physique cible sw2
+PASS collision physique cible sw3
+PASS collision physique cible sw1
+PASS six collisions : banques chargées, bonus différé
+PASS tir complet rampe commune (0.339, 0.013, -0.636) ENTRY 86501 (0.436, 0.095, -0.412) (0.429, 0.117, -0.216) (0.324, 0.091, -0.086) EXIT 86501
+PASS Ramp1 : traversée à 2,5 m/s, même bille et sans nouveau bonus (entrée=87013, sortie=87013) (0.339, 0.013, -0.636) (0.414, 0.076, -0.451) (0.455, 0.102, -0.297) (0.409, 0.098, -0.175) (0.341, 0.093, -0.097)
+PASS Ramp1 : traversée à 3,5 m/s, même bille et sans nouveau bonus (entrée=87525, sortie=87525) (0.339, 0.013, -0.636) (0.445, 0.112, -0.374) (0.401, 0.146, -0.154)
+PASS scoop : livraison, score et libération native (points=11000, hits=1, captured=False, balls=1)
+PASS livraison : commandes consommées et cibles réarmées (loaded=0, processed=0, lit=0, drops=sw2:False,sw3:False,sw1:False)
+PASS drain : 2 bille(s) restante(s)
+PASS drain : 1 bille(s) restante(s)
+PASS drain : 0 bille(s) restante(s)
+PASS nouvelle partie sans relancer la scène

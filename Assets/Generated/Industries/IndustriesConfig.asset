@@ -21,6 +21,7 @@ MonoBehaviour:
   scoopPoints: 1000
   sixTargetsBonus: 5000
   productionEnabled: 1
+  sharedProductionRamp: 1
   productionRouteSeconds: 8
   processingBonus: 1000
   deliveryBonusPerProduct: 4000

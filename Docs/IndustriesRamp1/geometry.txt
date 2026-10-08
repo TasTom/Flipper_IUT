@@ -1,0 +1,5 @@
+﻿PASS aucun croisement des triangles Floor/Walls de Ramp1 avec les autres maillages visibles exportés du plateau.
+PASS dégagement d'une bille de rayon 13,5 mm sur le parcours élevé : minimum 18,754 mm.
+Objet le plus proche dans ce contrôle : QualityScenery/WorkshopVice, près du retour.
+Contact attendu avec Ramp3/Ramp8 exclu du contrôle de dégagement de la bille ; leur géométrie reste incluse dans la recherche d'intersections.
+Le contrôle géométrique porte sur les triangles de rendu ; les traversées natives VPE sont vérifiées séparément en Play.

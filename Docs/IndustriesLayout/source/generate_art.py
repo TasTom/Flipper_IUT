@@ -51,10 +51,9 @@ text(d,.325,-.322,'MACHINES',42,INK)
 text(d,.310,-.466,'BOIS : CHARGEMENT',38,CYAN)
 text(d,.333,-.627,'TEXTILE',38,CYAN)
 text(d,.115,-.613,'LIVRAISON',38,INK)
-text(d,.155,-.700,'RAMPE BOIS',34,INK)
-text(d,.332,-.573,'RAMPE TEXTILE',32,INK)
-line(d,[(.177,-.710),(.184,-.697),(.191,-.710)],INK,6)
-line(d,[(.375,-.591),(.384,-.559),(.393,-.580)],INK,6)
+# Ramp1 est la seule rampe de transformation ; plus de flèche vers la gauche.
+text(d,.286,-.581,'TRANSFORMATION',30,INK)
+line(d,[(.348,-.622),(.360,-.592),(.366,-.618)],INK,6)
 ring(d,.119,-.574,.023,INK,6)
 # Factory and Vosges skyline, drawn as ink rather than geometry in the ball path.
 line(d,[(.11,-.065),(.16,-.035),(.195,-.057),(.24,-.026),(.28,-.05),(.33,-.032),(.40,-.075)],'#538b8d',7)
@@ -86,7 +85,7 @@ im.save(OUT/'Playfield.png')
 card=Image.new('RGB',(1024,640),'#eadbb4');c=ImageDraw.Draw(card)
 c.rounded_rectangle((16,16,1008,624),radius=20,outline='#a98a53',width=8)
 for y,label,size in [(75,'PRODUCTION',58),(180,'3 CIBLES : CHARGER',42),
-    (260,'RAMPE : TRANSFORMER',42),(340,'SCOOP : LIVRER',42),
+    (260,'RAMPE COMMUNE : TRANSFORMER',34),(340,'SCOOP : LIVRER',42),
     (455,'BOIS + TEXTILE',40),(525,'DOUBLE LIVRAISON +10 000',38)]:
     c.text((512,y),label,font=font(size),fill='#304c51',anchor='mm')
 card.save(OUT/'Instructions.png')

@@ -2,11 +2,12 @@
 
 Correction appliquée dans la scène Industries ouverte, à la demande de l'utilisateur. Elle relève des sections Rampes et Physique du GDD. `ProductionWoodRamp` reste supprimée ; Ramp1 conserve la transformation commune des matières et son retour métallique gauche.
 
-La scène reste modifiée **sans enregistrement automatique** : Ctrl+S conserve le résultat. Le menu `Flipper > Industries > Retirer la rampe bois et corriger Ramp1` applique cette version aux scènes précédentes, avec Undo. Le marqueur `ProductionLayout/Ramp1CoveredRefit` protège ensuite les réglages manuels.
+La scène reste modifiée **sans enregistrement automatique** : Ctrl+S conserve le résultat. Le menu `Flipper > Industries > Retirer la rampe bois et corriger Ramp1` applique cette version aux scènes précédentes, avec Undo. Les marqueurs `ProductionLayout/Ramp1CoveredRefit` et `Ramp1EntryStraightened` protègent ensuite les réglages manuels. Le menu `Redresser l'entrée de Ramp1 (points 2–6)` applique uniquement la correction du segment aux rampes déjà couvertes.
 
 ## Géométrie finale
 
 - L'entrée est au milieu de `Primitive28` et `Primitive29`, à `(0,377270 ; 0 ; -0,531340)` dans le repère natif du plateau. L'axe d'entrée est perpendiculaire à la ligne des poteaux. Leur placement reste intact.
+- Les points d'index 1 à 6 sont alignés sur un même axe en trois dimensions : direction et pente constantes. Les tangentes aux extrémités isolent cette portion des points extérieurs. Le sol, les parois, les bordures et le plafond suivent le segment redressé ; les autres points restent en place.
 - Le tracé suit le contour extérieur réel de `Wall36`, auquel est ajusté `Carter_Wall36`. Les courbes partent des sommets du maillage natif, avec un décalage tenant compte de la largeur de rampe.
 - Le sol culmine à **46,22 mm**, contre 84,60 mm auparavant. Les parois visibles et physiques mesurent **20 mm**, contre 55 mm.
 - Le plafond `Ramp1TurnCeiling` couvre la montée après le début de l'entrée et les virages. Sa face inférieure suit le sol, avec **34 mm de passage vertical** pour une bille de 26,99 mm. Son bord d'entrée est progressivement relevé. La plaque mesure 1,2 mm d'épaisseur ; ses attaches en cuivre sont du décor sans collider.
@@ -18,7 +19,7 @@ La scène reste modifiée **sans enregistrement automatique** : Ctrl+S conserve 
 
 ## Vérification
 
-- [30 contrôles d'éditeur](editor.txt) passent : règles de production, capteurs, entrée centrée, axe du portail, hauteur, parois, plafond et raccord.
+- [Contrôles d'éditeur](editor.txt) : **30 PASS, 1 FAIL**. Tous les contrôles de Ramp1 passent, dont le nouveau contrôle du segment droit dans le maillage (écart inférieur à 0,001 mm). Le contrôle de la position des cibles bois signale qu'elles sortent de l'ancienne zone attendue par ce test ; leur pose n'a pas été modifiée par cette correction. Leurs six collisions physiques passent en Play.
 - [23 contrôles en Play](runtime.txt) passent : six cibles accessibles, tirs complets à **3,5 / 4,5 / 5,5 m/s**, même bille entre entrée et sortie, bonus sans répétition, livraison et réarmement, trois drains et nouvelle partie. Un tir faible à **2,5 m/s** redescend par l'entrée ; deux impulsions verticales dans les virages heurtent réellement le plafond et restent dessous.
 - [Contrôle géométrique](geometry.txt) : aucune intersection transversale détectée du sol, des parois ou du plafond avec les maillages voisins visibles. Ce contrôle par triangles ne prouve pas l'absence de contacts coplanaires ou de tout blocage possible en jeu. Les attaches touchent volontairement les bordures et le plafond.
 - Dégagement minimal relevé pour une bille centrée sur la partie élevée du parcours : **9,36 mm** avec le décor voisin, hors contacts prévus avec la rampe, son plafond et le retour.

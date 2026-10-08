@@ -73,6 +73,19 @@ public static class ValidateIndustriesProduction
                 Check("Ramp1 : entrée perpendiculaire au portail",Mathf.Abs(Vector3.Dot(normal,across))<.001f);
                 var floor=ramp.GetComponentsInChildren<MeshFilter>().First(f=>f.name=="Floor");
                 Check("Ramp1 : sol abaissé sous 47 mm",floor.sharedMesh.vertices.Max(v=>pf.InverseTransformPoint(floor.transform.TransformPoint(v)).y)<.047f);
+                if(pf.Find("ProductionLayout/Ramp1EntryStraightened")!=null)
+                {
+                    var start=Point(1);var span=Point(6)-start;var vertices=floor.sharedMesh.vertices;
+                    float deviation=0;int samples=0;
+                    for(int i=0;i<vertices.Length;i+=2)
+                    {
+                        var centre=pf.InverseTransformPoint(floor.transform.TransformPoint((vertices[i]+vertices[i+1])*.5f));
+                        float t=Vector3.Dot(centre-start,span)/span.sqrMagnitude;
+                        if(t<=.001f||t>=.999f)continue;
+                        deviation=Mathf.Max(deviation,Vector3.Distance(centre,start+span*t));samples++;
+                    }
+                    Check("Ramp1 : segment 2–6 droit dans le maillage (écart="+(deviation*1000).ToString("F3")+" mm)",samples>=4&&deviation<.0002f);
+                }
                 var collider=ramp.GetComponent<RampColliderComponent>();
                 Check("Ramp1 : parois visuelles et physiques de 20 mm",Mathf.Abs(collider.LeftWallHeight*k-.020f)<.0001f
                     && Mathf.Abs(collider.RightWallHeight*k-.020f)<.0001f && Mathf.Abs(ramp._leftWallHeightVisible*k-.020f)<.0001f

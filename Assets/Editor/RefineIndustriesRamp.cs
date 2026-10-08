@@ -19,6 +19,7 @@ public static class RefineIndustriesRamp
 {
     private const string Folder = "Assets/Generated/Industries/Ramp1";
     private const string Marker = "Ramp1CoveredRefit";
+    private const string StraightMarker = "Ramp1EntryStraightened";
     public const string RoofName = "Ramp1TurnCeiling";
     public const float WallHeight = .020f;
     public const float CeilingClearance = .034f;
@@ -60,7 +61,64 @@ public static class RefineIndustriesRamp
         }
         result.AddRange(new[] { new Vector3(.380f,.044f,-.079f), new Vector3(.329f,.042f,-.081f),
             new Vector3(.275f,.040f,-.081f), new Vector3(.2411f,.03940175f,-.08096f) });
-        return result.ToArray();
+        var profile = result.ToArray(); AlignEntry(profile); return profile;
+    }
+
+    // Points 2 à 6, en incluant le nœud d'index 6 : axe et pente constants.
+    private static void AlignEntry(Vector3[] profile)
+    {
+        var start = profile[1]; var end = profile[6]; var span = end-start;
+        var plan = span; plan.y = 0;
+        for(int i=2;i<6;i++)
+        {
+            var offset = profile[i]-start; offset.y=0;
+            profile[i]=Vector3.Lerp(start,end,Mathf.Clamp01(Vector3.Dot(offset,plan)/plan.sqrMagnitude));
+        }
+    }
+
+    [MenuItem("Flipper/Industries/Redresser l'entrée de Ramp1 (points 2–6)")]
+    public static void StraightenEntry()
+    {
+        var scene=EditorSceneManager.GetActiveScene();
+        if(scene.name!="Industries" || EditorApplication.isPlaying)
+        { Debug.LogWarning("[Industries] Ouvrir Industries hors Play pour redresser Ramp1."); return; }
+        var game=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<IndustriesVpeGame>(true)).FirstOrDefault();
+        var pf=game?.GetComponentInChildren<PlayfieldComponent>()?.transform;
+        var ramp=game?.GetComponentsInChildren<RampComponent>(true).FirstOrDefault(r=>r.name=="Ramp1");
+        var layout=pf?.Find("ProductionLayout");
+        if(layout==null || layout.Find(Marker)==null || ramp==null || ramp.DragPoints.Length<7)
+        { Debug.LogWarning("[Industries] Ramp1 ou son layout manque ; aucune modification."); return; }
+        if(layout.Find(StraightMarker)!=null)return;
+        float k=VisualPinball.Unity.Physics.ScaleInv;
+        var data=ramp.DragPoints;
+        var profile=data.Select(d=>pf.InverseTransformPoint(ramp.transform.TransformPoint(new Vector3(d.Center.X*k,d.Center.Z*k,-d.Center.Y*k)))).ToArray();
+        var entrySpan=profile[6]-profile[1];entrySpan.y=0;
+        if(entrySpan.sqrMagnitude<.0001f)
+        { Debug.LogWarning("[Industries] Segment d'entrée trop court pour être redressé."); return; }
+        Undo.IncrementCurrentGroup();int group=Undo.GetCurrentGroup();Undo.SetCurrentGroupName("Redresser les points 2–6 de Ramp1");
+        try
+        {
+            AlignEntry(profile);
+            Undo.RecordObjects(new Object[]{ramp,ramp.DragPointSpline,ramp.DragPointSpline.Container},"Segment droit de Ramp1");
+            foreach(var filter in ramp.GetComponentsInChildren<MeshFilter>(true))
+                if(filter.sharedMesh!=null && AssetDatabase.GetAssetPath(filter.sharedMesh).StartsWith(Folder,StringComparison.Ordinal))
+                    Undo.RecordObject(filter.sharedMesh,"Maillages suivant le segment droit");
+            for(int i=1;i<=6;i++)
+            {
+                var p=ramp.transform.InverseTransformPoint(pf.TransformPoint(profile[i]));
+                data[i].Center=new Vertex3D(p.x/k,-p.z/k,p.y/k);
+                // Empêche les tangentes des points extérieurs de courber le segment aligné.
+                if(i==1 || i==6)data[i].IsSmooth=false;
+            }
+            ramp.DragPoints=data;ramp.RebuildMeshes();BuildEdgeRails(ramp,pf);BuildCeiling(ramp,pf,true);
+            foreach(var filter in ramp.GetComponentsInChildren<MeshFilter>(true))
+                if(filter.sharedMesh!=null && AssetDatabase.GetAssetPath(filter.sharedMesh).StartsWith(Folder,StringComparison.Ordinal))
+                { EditorUtility.SetDirty(filter.sharedMesh);AssetDatabase.SaveAssetIfDirty(filter.sharedMesh); }
+            foreach(var obj in new Object[]{ramp,ramp.DragPointSpline,ramp.DragPointSpline.Container})Record(obj);
+            var marker=new GameObject(StraightMarker);Undo.RegisterCreatedObjectUndo(marker,"Entrée droite de Ramp1");marker.transform.SetParent(layout,false);
+            EditorSceneManager.MarkSceneDirty(scene);Undo.CollapseUndoOperations(group);Selection.activeGameObject=ramp.gameObject;
+        }
+        catch(Exception e){Undo.RevertAllDownToGroup(group);Debug.LogError("[Industries] Redressement annulé : "+e);}
     }
 
     [MenuItem("Flipper/Industries/Retirer la rampe bois et corriger Ramp1")]
@@ -77,7 +135,7 @@ public static class RefineIndustriesRamp
         { Debug.LogWarning("[Industries] Ramp1, plateau ou config manquant ; aucune modification."); return; }
         var layout = pf.Find("ProductionLayout");
         if (layout == null) { Debug.LogWarning("[Industries] Installer le layout Industries avant cette correction."); return; }
-        if (layout.Find(Marker) != null) { Debug.Log("[Industries] Ramp1 couverte déjà corrigée ; réglages manuels conservés."); return; }
+        if (layout.Find(Marker) != null) { StraightenEntry(); Debug.Log("[Industries] Ramp1 couverte déjà corrigée ; réglages manuels conservés."); return; }
         if (!game.GetComponentsInChildren<PrimitiveComponent>(true).Any(p => p.name == "Primitive28") ||
             !game.GetComponentsInChildren<PrimitiveComponent>(true).Any(p => p.name == "Primitive29") ||
             !game.GetComponentsInChildren<SurfaceComponent>(true).Any(s => s.name == "Wall36"))
@@ -103,6 +161,7 @@ public static class RefineIndustriesRamp
             Undo.RecordObject(config, "Rampe de transformation commune");
             config.productionEnabled = true; config.sharedProductionRamp = true; EditorUtility.SetDirty(config);
             var marker = new GameObject(Marker); Undo.RegisterCreatedObjectUndo(marker, "Correction Ramp1"); marker.transform.SetParent(layout, false);
+            var straightMarker = new GameObject(StraightMarker); Undo.RegisterCreatedObjectUndo(straightMarker,"Entrée droite de Ramp1");straightMarker.transform.SetParent(layout,false);
             EditorSceneManager.MarkSceneDirty(scene); Undo.CollapseUndoOperations(group);
             AssetDatabase.SaveAssetIfDirty(config);
             Selection.activeGameObject = ramp.gameObject;
@@ -128,9 +187,9 @@ public static class RefineIndustriesRamp
         ramp._heightBottom = ramp._heightTop = 0;
         ramp._widthBottom = MouthWidth / k; ramp._widthTop = ReturnWidth / k;
         ramp._leftWallHeightVisible = ramp._rightWallHeightVisible = WallHeight / k;
-        ramp.DragPoints = BuildProfile(ramp.GetComponentInParent<IndustriesVpeGame>(), pf).Select(p => {
+        ramp.DragPoints = BuildProfile(ramp.GetComponentInParent<IndustriesVpeGame>(), pf).Select((p,i) => {
             var v = ramp.transform.InverseTransformPoint(pf.TransformPoint(p));
-            return new DragPointData(new Vertex3D(v.x / k, -v.z / k, v.y / k)) { IsSmooth = true };
+            return new DragPointData(new Vertex3D(v.x / k, -v.z / k, v.y / k)) { IsSmooth = i!=1 && i!=6 };
         }).ToArray();
         var collider = ramp.GetComponent<RampColliderComponent>(); Undo.RecordObject(collider, "Guides de Ramp1");
         collider.LeftWallHeight = collider.RightWallHeight = WallHeight / k;
@@ -200,7 +259,7 @@ public static class RefineIndustriesRamp
     }
 
     // Plafond réel, pas un MeshCollider PhysX : la bille est simulée par VPE.
-    private static void BuildCeiling(RampComponent ramp, Transform pf)
+    private static void BuildCeiling(RampComponent ramp, Transform pf, bool preservePhysics=false)
     {
         var floor = ramp.GetComponentsInChildren<MeshFilter>(true).First(f => f.name == "Floor");
         var rows = floor.sharedMesh.vertices;
@@ -269,9 +328,12 @@ public static class RefineIndustriesRamp
         }
         filter.sharedMesh = mesh; renderer.sharedMaterial = material;
         renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        collider.enabled = true; collider.OverwritePhysics = true; collider.CollisionReductionFactor = 0;
-        collider.Elasticity = .05f; collider.ElasticityFalloff = 0; collider.Friction = .04f; collider.Scatter = 0;
-        collider.HitEvent = true; collider.Threshold = .01f;
+        if(!preservePhysics)
+        {
+            collider.enabled = true; collider.OverwritePhysics = true; collider.CollisionReductionFactor = 0;
+            collider.Elasticity = .05f; collider.ElasticityFalloff = 0; collider.Friction = .04f; collider.Scatter = 0;
+            collider.HitEvent = true; collider.Threshold = .01f;
+        }
         Record(filter); Record(renderer); Record(collider); EditorUtility.SetDirty(mesh); AssetDatabase.SaveAssetIfDirty(mesh);
         BuildRoofClips(ramp, pf, pairs);
     }

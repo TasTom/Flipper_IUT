@@ -1,0 +1,9 @@
+PASS aucune intersection transversale détectée avec les maillages voisins visibles pour Floor, Walls, Ramp1TurnCeiling et RoofClips.
+Méthode : boîtes englobantes puis intersections segment/triangle dans les deux sens ; contacts coplanaires non couverts.
+Floor : 190 triangles ; y maximal 0.04621987 m.
+Walls : 380 triangles ; y maximal 0.06621987 m ; élévation des parois 0.020 m.
+Ramp1TurnCeiling : 700 triangles ; y maximal 0.08141987 m.
+RoofClips : 216 triangles ; décor sans collider, contacts prévus avec la rampe et le plafond.
+PASS dégagement minimal de la surface d'une bille centrée sur la partie élevée : 0.0093589175 m par rapport au décor voisin.
+Point le plus proche : Primitive52 ; centre de bille (0.49108285, 0.0595, -0.26487492) m.
+Ce dernier contrôle exclut les contacts prévus avec Ramp1, son plafond et Ramp3/Ramp8. Il n'est pas une preuve pour toutes les trajectoires possibles.

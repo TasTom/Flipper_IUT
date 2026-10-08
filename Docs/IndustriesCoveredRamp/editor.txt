@@ -1,0 +1,30 @@
+PASS rampe sans matière refusée
+PASS index cible hors banque refusé
+PASS répétition cible sans chargement prématuré
+PASS troisième cible charge le bois
+PASS même banque chargée une seule fois
+PASS sortie seule ou ordre inverse refusé
+PASS autre bille refusée
+PASS la bille ayant pris l'entrée termine
+PASS traitement répété sans bonus
+PASS livraison consomme seulement produit terminé
+PASS scoop vide sans bonus de livraison
+PASS textile conserve sa progression partielle
+PASS parcours expiré refusé
+PASS bille drainée ne termine pas le parcours
+PASS temps de pause exclu (horloge de jeu)
+PASS deux matières préparées indépendamment
+PASS double livraison et bonus
+PASS nouvelle bille réinitialise la production
+PASS Industries : production activée
+PASS rampe de transformation : collider VPE actif
+PASS capteurs VPE uniques et actifs
+PASS cibles bois dans l'aire centrale
+PASS scoop de livraison à gauche
+PASS plateau manuel conserve l'ouverture
+PASS Ramp1 : entrée centrée entre Primitive28/29
+PASS Ramp1 : entrée perpendiculaire au portail
+PASS Ramp1 : sol abaissé sous 47 mm
+PASS Ramp1 : parois visuelles et physiques de 20 mm
+PASS Ramp1 : plafond physique natif VPE
+PASS Ramp1 : raccord au retour sans marche

@@ -1,0 +1,23 @@
+PASS initialisation native et distribution d'une bille
+PASS commandes des deux flippers depuis InputRouter
+PASS lancement VPE : sortie du chenal vers le haut du plateau
+PASS pause : bille native immobile
+PASS collision physique cible sw11
+PASS collision physique cible sw1
+PASS collision physique cible sw2
+PASS collision physique cible sw12
+PASS collision physique cible sw13
+PASS collision physique cible sw3
+PASS six collisions : banques chargées, bonus différé
+PASS tir complet rampe commune (0.334, 0.013, -0.573) ENTRY 105108 ENTRY 105108 (0.437, 0.053, -0.433) (0.480, 0.060, -0.353) (0.496, 0.060, -0.271) (0.486, 0.060, -0.202) (0.465, 0.060, -0.153) (0.440, 0.060, -0.116) (0.417, 0.060, -0.090) (0.389, 0.058, -0.081) (0.357, 0.057, -0.079) (0.323, 0.055, -0.084) (0.286, 0.054, -0.084) EXIT 105108
+PASS Ramp1 : traversée à 4,5 m/s, même bille et sans nouveau bonus (entrée=104596, sortie=104596) (0.334, 0.013, -0.573) (0.458, 0.061, -0.406) (0.495, 0.059, -0.279) (0.468, 0.059, -0.158) (0.402, 0.059, -0.083) (0.303, 0.054, -0.082)
+PASS Ramp1 : traversée à 5,5 m/s, même bille et sans nouveau bonus (entrée=106132, sortie=106132) (0.334, 0.013, -0.573) (0.477, 0.064, -0.364) (0.483, 0.059, -0.193) (0.377, 0.058, -0.076)
+PASS Ramp1 : tir faible à 2,5 m/s redescend par l'entrée
+PASS plafond VPE : rebond vertical contenu à (0.491, 0.046, -0.265) (hits=1, sommet=0,0775)
+PASS plafond VPE : rebond vertical contenu à (0.432, 0.046, -0.111) (hits=1, sommet=0,0783)
+PASS scoop : livraison, score et libération native (points=11000, hits=1, captured=False, balls=1)
+PASS livraison : commandes consommées et cibles réarmées (loaded=0, processed=0, lit=0, drops=sw1:False,sw2:False,sw3:False)
+PASS drain : 2 bille(s) restante(s)
+PASS drain : 1 bille(s) restante(s)
+PASS drain : 0 bille(s) restante(s)
+PASS nouvelle partie sans relancer la scène

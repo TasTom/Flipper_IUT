@@ -101,7 +101,7 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
                 var entryApi=api.Trigger(line==0&&!config.sharedProductionRamp?IndustriesProduction.WoodEntry:IndustriesProduction.TextileEntry);
                 var exitApi=api.Trigger(line==0&&!config.sharedProductionRamp?IndustriesProduction.WoodExit:IndustriesProduction.TextileExit);
                 entryApi.Hit+=entry;exitApi.Hit+=exit;
-                ClearBalls();points=score.Score;CreateProbe(shots[line],directions[line]*2f);
+                ClearBalls();points=score.Score;CreateProbe(shots[line],directions[line]*(config.sharedProductionRamp?3.5f/1.5f:2f));
                 float end=Time.time+2f, next=Time.time;
                 while(Time.time<end && (engine.Production.Processed&(1<<line))==0){
                     if(Time.time>=next){if(Balls().Length>0)trace.Append(" "+pf.InverseTransformPoint(Balls()[0].transform.position).ToString("F3"));next+=.1f;}yield return null;}
@@ -112,7 +112,7 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
             }
             if(config.sharedProductionRamp)
             {
-                foreach(float speed in new[]{2.5f,3.5f})
+                foreach(float speed in new[]{4.5f,5.5f})
                 {
                     int entered=-1,exited=-2;
                     var entryApi=api.Trigger(IndustriesProduction.TextileEntry);var exitApi=api.Trigger(IndustriesProduction.TextileExit);
@@ -126,6 +126,39 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
                         entered>=0&&entered==exited&&score.Score==points);
                     entryApi.Hit-=enter;exitApi.Hit-=leave;
                 }
+                // Un tir insuffisant doit pouvoir redescendre par l'entrée, sans sortir du guide.
+                ClearBalls();CreateProbe(shots[0],directions[0]*(2.5f/1.5f));
+                float high=0,weakEnd=Time.time+1.8f;bool returned=false;
+                while(Time.time<weakEnd){
+                    foreach(var probe in Balls()){
+                        var p=pf.InverseTransformPoint(probe.transform.position);high=Mathf.Max(high,p.y);
+                        if(high>.040f&&p.y<.025f&&p.z<shots[0].z+.055f)returned=true;
+                    }
+                    if(returned)break;yield return null;
+                }
+                Check("Ramp1 : tir faible à 2,5 m/s redescend par l'entrée",returned&&Balls().Length==1);
+            }
+        }
+        var ceiling=Array.Find(Object.FindObjectsByType<PrimitiveComponent>(),p=>p.name=="Ramp1TurnCeiling");
+        if(ceiling!=null)
+        {
+            var ramp=Array.Find(Object.FindObjectsByType<RampComponent>(),r=>r.name=="Ramp1");
+            var floor=Array.Find(ramp.GetComponentsInChildren<MeshFilter>(),f=>f.name=="Floor");
+            var vertices=floor.sharedMesh.vertices;
+            foreach(var sample in new[]{new Vector3(.490f,.046f,-.267f),new Vector3(.434f,.046f,-.113f)})
+            {
+                Vector3 origin=Vector3.zero;float distance=float.MaxValue;
+                for(int i=0;i<vertices.Length;i+=2){
+                    var p=pf.InverseTransformPoint(floor.transform.TransformPoint((vertices[i]+vertices[i+1])*.5f));
+                    float d=(p-sample).sqrMagnitude;if(d<distance){distance=d;origin=p;}
+                }
+                ClearBalls();int roofHits=0;
+                EventHandler<HitEventArgs> hit=(_,e)=>roofHits++;ceiling.PrimitiveApi.Hit+=hit;
+                CreateProbe(origin+Vector3.up*.001f,Vector3.up);float top=0,end=Time.time+.25f;
+                while(Time.time<end){foreach(var probe in Balls())top=Mathf.Max(top,pf.InverseTransformPoint(probe.transform.position).y+probe.Radius*VisualPinball.Unity.Physics.ScaleInv);yield return null;}
+                ceiling.PrimitiveApi.Hit-=hit;
+                Check("plafond VPE : rebond vertical contenu à "+origin.ToString("F3")+" (hits="+roofHits+", sommet="+top.ToString("F4")+")",
+                    roofHits>0&&Balls().Length==1&&top<=origin.y+.0355f);
             }
         }
         ClearBalls();
@@ -154,7 +187,7 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
         ClearBalls();game.StartGame();yield return new WaitForSeconds(.8f);
         Check("nouvelle partie sans relancer la scène",game.BallsRemaining==3 && score.Score==0 && Balls().Length==1);
         SetInput("PlungerHeld",false);input.enabled=inputEnabled;
-        string report=config.sharedProductionRamp?"Docs/IndustriesRamp1":engine.Production!=null?"Docs/IndustriesLayout":"Docs/IndustriesValidation";
+        string report=ceiling!=null?"Docs/IndustriesCoveredRamp":config.sharedProductionRamp?"Docs/IndustriesRamp1":engine.Production!=null?"Docs/IndustriesLayout":"Docs/IndustriesValidation";
         Directory.CreateDirectory(report);File.WriteAllLines(report+"/runtime.txt",results);
         Debug.Log("[Industries validation] "+string.Join(" | ",results));
         Destroy(gameObject);
@@ -172,7 +205,7 @@ public sealed class IndustriesPlayModeValidation : MonoBehaviour
             float scale=VisualPinball.Unity.Physics.ScaleInv;
             position=new Vertex3D(p.x/scale,-p.z/scale,p.y/scale);
             // La vitesse VPE est exprimée par pas de référence de 10 ms.
-            velocity=new Vertex3D(d.x*.015f/scale,-d.z*.015f/scale,0);
+            velocity=new Vertex3D(d.x*.015f/scale,-d.z*.015f/scale,d.y*.015f/scale);
         }
         public Vertex3D GetBallCreationPosition()=>position;
         public Vertex3D GetBallCreationVelocity()=>velocity;

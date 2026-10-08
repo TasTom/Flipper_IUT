@@ -1,6 +1,6 @@
 # Industries — deux lignes de production
 
-**Mise à jour du 8 octobre :** la rampe bois a été retirée et Ramp1 est commune aux deux matières. Voir [la correction actuelle](../IndustriesRamp1/README.md). Le document ci-dessous décrit le layout précédent.
+**Mise à jour du 8 octobre :** la rampe bois a été retirée et Ramp1 est commune aux deux matières. Voir [la correction actuelle](../IndustriesCoveredRamp/README.md). Le document ci-dessous décrit le layout précédent.
 
 Demande : changer les tirs, les positions et les mécaniques de la seconde table, après la refonte de son habillage.
 

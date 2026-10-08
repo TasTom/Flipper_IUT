@@ -53,7 +53,7 @@ text(d,.333,-.627,'TEXTILE',38,CYAN)
 text(d,.115,-.613,'LIVRAISON',38,INK)
 # Ramp1 est la seule rampe de transformation ; plus de flèche vers la gauche.
 text(d,.286,-.581,'TRANSFORMATION',30,INK)
-line(d,[(.348,-.622),(.360,-.592),(.366,-.618)],INK,6)
+line(d,[(.3479,-.5715),(.3576,-.5499),(.3356,-.5584)],INK,6)
 ring(d,.119,-.574,.023,INK,6)
 # Factory and Vosges skyline, drawn as ink rather than geometry in the ball path.
 line(d,[(.11,-.065),(.16,-.035),(.195,-.057),(.24,-.026),(.28,-.05),(.33,-.032),(.40,-.075)],'#538b8d',7)

@@ -1,5 +1,7 @@
 ﻿# Industries — correction de Ramp1 (8 octobre 2026)
 
+**Version suivante :** entrée entre Primitive28/29, rampe abaissée et virages couverts. Voir [la correction actuelle](../IndustriesCoveredRamp/README.md). Les mesures ci-dessous concernent la première correction.
+
 La rampe `ProductionWoodRamp` et ses deux capteurs sont retirés de la scène Industries ouverte. `Ramp1` devient le parcours de transformation commun au bois et au textile : trois cibles chargent chaque matière, un passage complet transforme les commandes chargées, puis le scoop les livre. Le bonus double reste disponible. Cette adaptation relève des sections Cibles fixes, Rampes et Score/combos du GDD.
 
 La scène reste modifiée, sans enregistrement automatique : **Ctrl+S conserve le résultat**. Sur une ancienne scène : `Flipper > Industries > Retirer la rampe bois et corriger Ramp1`. La correction utilise Undo. Sa seconde exécution conserve les ajustements manuels. Le menu d'installation du layout ne crée plus la rampe bois.

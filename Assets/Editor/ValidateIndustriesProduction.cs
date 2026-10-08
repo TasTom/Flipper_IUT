@@ -60,8 +60,32 @@ public static class ValidateIndustriesProduction
             var scoop=pf.GetComponentsInChildren<KickerComponent>().First(k=>k.name=="Kicker1");
             Check("scoop de livraison à gauche",Mathf.Abs(pf.InverseTransformPoint(scoop.transform.position).x-.119f)<.0001f);
             Check("plateau manuel conserve l'ouverture",!pf.GetComponent<VisualPinball.Unity.Playfield.PlayfieldMeshComponent>().AutoGenerate);
+            var roof=pf.GetComponentsInChildren<PrimitiveComponent>().FirstOrDefault(p=>p.name==RefineIndustriesRamp.RoofName);
+            if(roof!=null && ramp!=null)
+            {
+                float k=VisualPinball.Unity.Physics.ScaleInv;
+                Vector3 Point(int i){var p=ramp.DragPoints[i].Center;return pf.InverseTransformPoint(ramp.transform.TransformPoint(new Vector3(p.X*k,p.Z*k,-p.Y*k)));}
+                var posts=pf.GetComponentsInChildren<PrimitiveComponent>();
+                var a=pf.InverseTransformPoint(posts.First(p=>p.name=="Primitive28").transform.position);
+                var b=pf.InverseTransformPoint(posts.First(p=>p.name=="Primitive29").transform.position);
+                Check("Ramp1 : entrée centrée entre Primitive28/29",Vector3.Distance(Point(0),(a+b)*.5f)<.0001f);
+                var normal=Point(1)-Point(0);normal.y=0;normal.Normalize();var across=a-b;across.y=0;across.Normalize();
+                Check("Ramp1 : entrée perpendiculaire au portail",Mathf.Abs(Vector3.Dot(normal,across))<.001f);
+                var floor=ramp.GetComponentsInChildren<MeshFilter>().First(f=>f.name=="Floor");
+                Check("Ramp1 : sol abaissé sous 47 mm",floor.sharedMesh.vertices.Max(v=>pf.InverseTransformPoint(floor.transform.TransformPoint(v)).y)<.047f);
+                var collider=ramp.GetComponent<RampColliderComponent>();
+                Check("Ramp1 : parois visuelles et physiques de 20 mm",Mathf.Abs(collider.LeftWallHeight*k-.020f)<.0001f
+                    && Mathf.Abs(collider.RightWallHeight*k-.020f)<.0001f && Mathf.Abs(ramp._leftWallHeightVisible*k-.020f)<.0001f
+                    && Mathf.Abs(ramp._rightWallHeightVisible*k-.020f)<.0001f);
+                Check("Ramp1 : plafond physique natif VPE",roof.GetComponent<PrimitiveColliderComponent>()?.enabled==true&&roof.GetUnityMesh()!=null);
+                var returnRamp=ramps.First(r=>r.name=="Ramp3");var p=returnRamp.DragPoints[0].Center;
+                var joint=pf.InverseTransformPoint(returnRamp.transform.TransformPoint(new Vector3(p.X*k,returnRamp._heightBottom*k,-p.Y*k)));
+                Check("Ramp1 : raccord au retour sans marche",Vector3.Distance(Point(ramp.DragPoints.Length-1),joint)<.003f
+                    && Mathf.Abs(Point(ramp.DragPoints.Length-1).y-joint.y)<.0001f);
+            }
         }
-        string report=source.sharedProductionRamp?"Docs/IndustriesRamp1":"Docs/IndustriesLayout";
+        string report=pf!=null&&pf.GetComponentsInChildren<PrimitiveComponent>().Any(p=>p.name==RefineIndustriesRamp.RoofName)
+            ?"Docs/IndustriesCoveredRamp":source.sharedProductionRamp?"Docs/IndustriesRamp1":"Docs/IndustriesLayout";
         Directory.CreateDirectory(report);File.WriteAllLines(report+"/editor.txt",results);
         string summary=results.Count(x=>x.StartsWith("PASS"))+" PASS, "+results.Count(x=>x.StartsWith("FAIL"))+" FAIL";
         Debug.Log("[Industries production] "+summary);return summary;

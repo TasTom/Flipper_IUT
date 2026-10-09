@@ -6,11 +6,17 @@ Réglage demandé le 9 octobre 2026, lié au fonctionnement des bumpers et à la
 
 Dans le repère local du Playfield, Bumper3 passe de **(0,124 ; 0 ; −0,432)** à **(0,154 ; 0 ; −0,395)**. Il remonte donc de 0,5774 unité de scène et se décale de 0,4682 unité vers le centre. Le décalage latéral évite de remplacer le passage fermé contre Wall2 par un passage fermé contre Rubber10.
 
-Les deux lampes natives `b3l1`, `b3l2` et le halo `Halo_Bumper3` suivent ce déplacement. Le manomètre est déjà enfant du bumper. La force (7), le scatter (0), le rayon, les murs, rampes et rubbers ne sont pas modifiés. Chaque retouche passe par Undo. La scène ouverte reste **non enregistrée** : Ctrl+S conserve le placement.
+Les deux lampes natives `b3l1`, `b3l2` et le halo `Halo_Bumper3` suivent ce déplacement. Le manomètre est déjà enfant du bumper. La force (7), le scatter (0), le rayon, les murs, rampes et rubbers ne sont pas modifiés. Les retouches de placement passent par Undo ; l'outil n'enregistre pas la scène. Ctrl+S conserve le placement.
 
 Le même emplacement devient la valeur initiale de `ArrangeIndustriesProduction`, qui préserve toujours les scènes déjà équipées du marqueur ProductionLayout.
 
 [Avant](before.png) · [Après](after.png)
+
+## Décor imprimé au sol
+
+L'anneau gradué sous Bumper3 était resté à son ancienne position : il appartient à la texture du plateau, et ne suit donc pas le Transform du bumper. Le centre de ce seul anneau est corrigé dans [la source du dessin](../IndustriesLayout/source/generate_art.py), puis `Assets/Art/Industries/Production/Playfield.png` est régénéré et réimporté dans Unity. La capture Après inclut cette correction.
+
+La génération d'origine reproduit exactement les deux PNG existants. Après correction, seuls 7 352 pixels changent, tous dans les emprises de l'ancien et du nouvel anneau ; les autres pixels et `Instructions.png` restent identiques. Le contrôle dans l'éditeur confirme le nouveau centre (0,154 ; −0,395), la texture active corrigée, et 1 039 transforms ainsi que 162 composants de collision inchangés. La scène était propre avant le réimport et le reste ; cette retouche de texture ne nécessite pas d'enregistrement de scène. Voir [le relevé](floor-art.txt) et [le script de réimport et capture](source/refresh-floor-art.cs).
 
 ## Vérification
 

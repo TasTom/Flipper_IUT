@@ -1,0 +1,5 @@
+Anneau imprime Bumper3: ancien centre (0.124000, -0.432000), nouveau centre (0.154000, -0.395000).
+Bumper3 local Playfield: (0.154000, 0.000000, -0.395000); texture=Assets/Art/Industries/Production/Playfield.png; dimensions=2048x4096.
+Reimport synchrone: 1039 transforms et 162 composants de collision inchanges.
+Scene dirty avant=False; apres=False; aucun enregistrement de scene. Capture after.png actualisee.
+Regeneration comparee au baseline: 7352 pixels modifies, tous dans les deux emprises de l'anneau Bumper3; autres pixels et Instructions.png identiques.

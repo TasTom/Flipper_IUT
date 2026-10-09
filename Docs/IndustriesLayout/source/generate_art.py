@@ -42,7 +42,7 @@ for points in [
     line(d,points,'#377275',6)
     line(d,[(x+.003,z) for x,z in points],'#285359',3)
 # Boiler station rings are printing beneath the actual native bumpers.
-for i,(x,z) in enumerate([(.284,-.401),(.366,-.370),(.124,-.432),(.357,-.235),(.278,-.268)]):
+for i,(x,z) in enumerate([(.284,-.401),(.366,-.370),(.154,-.395),(.357,-.235),(.278,-.268)]):
     ring(d,x,z,.035,'#3d6769',4)
     for j in range(16):
         a=j*math.tau/16

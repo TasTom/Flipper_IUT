@@ -71,7 +71,7 @@ public static class ArrangeIndustriesProduction
                 point.y = .0005f; Place(lamps[i].transform, pf, point, 0);
             }
             var bumperPositions = new[] {
-                new Vector3(.284f,0,-.401f), new Vector3(.366f,0,-.370f), new Vector3(.124f,0,-.432f),
+                new Vector3(.284f,0,-.401f), new Vector3(.366f,0,-.370f), new Vector3(.154f,0,-.395f),
                 new Vector3(.357f,0,-.235f), new Vector3(.278f,0,-.268f)
             };
             for (int i = 0; i < 5; i++)

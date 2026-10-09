@@ -1,0 +1,25 @@
+Bumper3 transform=(285.317300, 731.820400, 0.000000) local=(0.154000, 0.000000, -0.395000)
+COL CircleCollider[48545] (285,3173/731,8204) 2,070565E-05 -> 90,00003
+FIELD Center=float2(285,3173f, 731,8204f)
+FIELD Radius=40,5
+FIELD Header=VisualPinball.Unity.ColliderHeader
+HEADER Type=Bumper
+HEADER ItemType=Bumper
+HEADER Id=397
+HEADER ItemId=48545
+HEADER IsTransformed=True
+HEADER Material=VisualPinball.Unity.PhysicsMaterialData
+HEADER Threshold=1
+HEADER FireEvents=True
+COL CircleCollider[48545] (285,3173/731,8204) 2,070565E-05 -> 90,00003
+FIELD Center=float2(285,3173f, 731,8204f)
+FIELD Radius=20,25
+FIELD Header=VisualPinball.Unity.ColliderHeader
+HEADER Type=Circle
+HEADER ItemType=Bumper
+HEADER Id=398
+HEADER ItemId=48545
+HEADER IsTransformed=True
+HEADER Material=VisualPinball.Unity.PhysicsMaterialData
+HEADER Threshold=1
+HEADER FireEvents=True

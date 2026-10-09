@@ -1,0 +1,7 @@
+START trial=0 nativePosition=(142.97330, 524.25070, 25.00625) velocity=(0.94204, -12.63146, 0.16670) ball=61794
+FAIL trial=0 escapedOriginalZone=False bumper3Hits=0 wall2Hits=2 nativeX=141,495..256,5084 nativeY=290,5818..762,414
+START trial=1 nativePosition=(185.98570, 733.90420, 24.99368) velocity=(4.14633, 8.96866, 0.17533) ball=65378
+FAIL trial=1 escapedOriginalZone=False bumper3Hits=0 wall2Hits=0 nativeX=171,9632..199,7576 nativeY=703,3425..762,4083
+START trial=2 nativePosition=(400.00000, 730.00000, 25.00000) velocity=(-5.00000, 0.00000, 0.00000) ball=64866
+PASS trial=2 escapedOriginalZone=True bumper3Hits=1 wall2Hits=0 nativeX=294,8291..705,0895 nativeY=730..2022,659
+COMPLETED trials=3; placement-only change; Force=7 Scatter=0 retained; probes destroyed.

@@ -1,0 +1,1 @@
+PASS Edit-mode placement=(0.154000, 0.000000, -0.395000) haloAligned=True remainingProbes=0 Force=7 Scatter=0 Radius=45 unsavedScene=True

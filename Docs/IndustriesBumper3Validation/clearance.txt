@@ -1,0 +1,5 @@
+Final native center: (285.31727651690596, 731.8202871699862)
+Wall2 gap from bumper active radius: 74.6751 VPX
+Rubber10 gap from bumper active radius (5 VPX tube margin): 65.2744 VPX
+Ball diameter: 50 VPX
+Target clearance: >= 65 VPX (1.3 diameters)

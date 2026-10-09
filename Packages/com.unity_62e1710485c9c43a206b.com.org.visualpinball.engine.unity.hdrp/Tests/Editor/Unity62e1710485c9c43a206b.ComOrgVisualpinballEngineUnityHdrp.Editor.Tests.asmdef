@@ -1,0 +1,14 @@
+{
+    "name": "Unity62e1710485c9c43a206b.ComOrgVisualpinballEngineUnityHdrp.Editor.Tests",
+    "references": [
+        "Unity62e1710485c9c43a206b.ComOrgVisualpinballEngineUnityHdrp.Editor",
+        "Unity62e1710485c9c43a206b.ComOrgVisualpinballEngineUnityHdrp"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

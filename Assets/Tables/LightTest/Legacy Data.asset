@@ -1,0 +1,2513 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1641408d3d13c5d4e9da47f456751d14, type: 3}
+  m_Name: Legacy Data
+  m_EditorClassIdentifier: VisualPinball.Unity::VisualPinball.Unity.LegacyContainer
+  TableData:
+    StoragePrefix: 0
+    StorageIndex: -1
+    IsLocked: 0
+    EditorLayerName: 
+    EditorLayerVisibility: 1
+    Name: Table1
+    Left: 0
+    Right: 1000
+    Top: 0
+    Bottom: 2000
+    BgEnableFss: 0
+    OverridePhysics: 0
+    OverridePhysicsFlipper: 0
+    Gravity: 1.7629848
+    Friction: 0.075
+    Elasticity: 0.25
+    ElasticityFalloff: 0
+    Scatter: 0
+    DefaultScatter: 0
+    NudgeTime: 5
+    PlungerNormalize: 100
+    PlungerFilter: 0
+    PhysicsMaxLoops: -1
+    RenderDecals: 1
+    RenderEmReels: 1
+    Offset:
+    - 518.6666
+    - 380.00024
+    Zoom: 1.6875
+    StereoMaxSeparation: 0.015
+    StereoZeroParallaxDisplacement: 0.1
+    StereoOffset: 0
+    OverwriteGlobalStereo3D: 0
+    AngleTiltMax: 0.5
+    AngleTiltMin: 0.5
+    GlassHeight: 400
+    TableHeight: 0
+    Image: wood
+    BallImage: ball_HDR
+    BallImageFront: Scratches
+    Notes: 
+    ScreenShot: 
+    DisplayBackdrop: 0
+    NumGameItems: 15
+    NumSounds: 0
+    NumTextures: 3
+    NumFonts: 0
+    NumCollections: 0
+    ImageBackdropNightDay: 0
+    ImageColorGrade: ColorGradeLUT256x16_ConSat
+    EnvImage: environment
+    PlayfieldMaterial: 
+    LightAmbient:
+      Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    Light:
+    - Emission:
+        Red: 255
+        Green: 255
+        Blue: 240
+        Alpha: 0
+      Pos:
+        X: 0
+        Y: 0
+        Z: 0
+    LightHeight: 5000
+    LightRange: 4000000
+    LightEmissionScale: 4000000
+    EnvEmissionScale: 2
+    GlobalEmissionScale: 0.52
+    AoScale: 1.75
+    SsrScale: 1
+    UseReflectionForBalls: -1
+    PlayfieldReflectionStrength: 0.29411766
+    UseTrailForBalls: -1
+    BallTrailStrength: 0.49019608
+    BallPlayfieldReflectionStrength: 1
+    DefaultBulbIntensityScaleOnBall: 1
+    UseAA: -1
+    UseAO: -1
+    UseSSR: -1
+    UseFXAA: -1
+    BloomStrength: 1.8
+    ColorBackdrop:
+      Red: 35
+      Green: 35
+      Blue: 35
+      Alpha: 0
+    CustomColors:
+    - Red: 255
+      Green: 197
+      Blue: 143
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    GlobalDifficulty: 0.2
+    TableSoundVolume: 1
+    BallDecalMode: 0
+    TableMusicVolume: 1
+    TableAdaptiveVSync: -1
+    OverwriteGlobalDetailLevel: 0
+    OverwriteGlobalDayNight: 1
+    ShowGrid: 1
+    ReflectElementsOnPlayfield: 1
+    UserDetailLevel: 5
+    NumMaterials: 1
+    Code: 
+    BgRotation:
+    - 0
+    - 270
+    - 0
+    BgLayback:
+    - 0
+    - 36
+    - 0
+    BgInclination:
+    - 45
+    - 15
+    - 45
+    BgFov:
+    - 65
+    - 17
+    - 65
+    BgScaleX:
+    - 1.2
+    - 1.2
+    - 1.2
+    BgScaleY:
+    - 1.1
+    - 1.1
+    - 1.1
+    BgScaleZ:
+    - 1
+    - 1.4
+    - 1
+    BgOffsetX:
+    - 10
+    - 0
+    - 0
+    BgOffsetY:
+    - 100
+    - 90
+    - 0
+    BgOffsetZ:
+    - -50
+    - 400
+    - -50
+    BgImage:
+    - 
+    - 
+    - 
+    Materials:
+    - Name: Playfield
+      WrapLighting: 0
+      Roughness: 0.1
+      GlossyImageLerp: 1
+      Thickness: 0.047058824
+      Edge: 0.5
+      EdgeAlpha: 1
+      Opacity: 0
+      BaseColor:
+        Red: 180
+        Green: 180
+        Blue: 180
+        Alpha: 0
+      Glossiness:
+        Red: 150
+        Green: 150
+        Blue: 150
+        Alpha: 0
+      ClearCoat:
+        Red: 10
+        Green: 10
+        Blue: 10
+        Alpha: 0
+      IsMetal: 0
+      IsOpacityActive: 0
+      Elasticity: 0
+      ElasticityFalloff: 0
+      Friction: 0
+      ScatterAngle: 0
+    NumVpeGameItems: 0
+    BgCurrentSet: 0
+  Bumpers:
+    keys: []
+    values: []
+  Flippers:
+    keys: []
+    values: []
+  Gates:
+    keys: []
+    values: []
+  HitTargets:
+    keys: []
+    values: []
+  Kickers:
+    keys: []
+    values: []
+  Lights:
+    keys:
+    - StaticBulb
+    - Surface
+    - Bulb
+    - Scaled
+    - CustomParams
+    - NoBulb
+    - PlayfieldLight
+    - SurfaceLight
+    - Light1
+    - Light2
+    - Light3
+    - SurfaceLightCollection
+    values:
+    - StoragePrefix: 0
+      StorageIndex: 1
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: StaticBulb
+      Center:
+        X: 247.66661
+        Y: 1403.6663
+      Falloff: 50
+      FalloffPower: 2
+      State: 1
+      Color:
+        Red: 255
+        Green: 255
+        Blue: 0
+        Alpha: 0
+      Color2:
+        Red: 255
+        Green: 255
+        Blue: 255
+        Alpha: 0
+      OffImage: 
+      IsRoundLight: 0
+      BlinkPattern: 10
+      BlinkInterval: 125
+      Intensity: 1
+      TransmissionScale: 0.5
+      Surface: 
+      IsBackglass: 0
+      DepthBias: 0
+      FadeSpeedUp: 0.2
+      FadeSpeedDown: 0.2
+      IsBulbLight: 1
+      IsImageMode: 0
+      ShowBulbMesh: 1
+      HasStaticBulbMesh: 1
+      ShowReflectionOnBall: 1
+      MeshRadius: 20
+      BulbModulateVsAdd: 0.9
+      BulbHaloHeight: 28
+      DragPoints:
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 63627cf1
+        Center:
+          X: 247.66661
+          Y: 1353.6663
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 654e8378
+        Center:
+          X: 212.31128
+          Y: 1368.3109
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 4124d31c
+        Center:
+          X: 197.66664
+          Y: 1403.6663
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: f3116357
+        Center:
+          X: 212.31128
+          Y: 1439.0216
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: f11f938a
+        Center:
+          X: 247.66661
+          Y: 1453.6663
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: a013d68b
+        Center:
+          X: 283.02194
+          Y: 1439.0216
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: a814a917
+        Center:
+          X: 297.66663
+          Y: 1403.6663
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: a3ffa976
+        Center:
+          X: 283.02194
+          Y: 1368.3109
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      IsTimerEnabled: 0
+      TimerInterval: 100
+    - StoragePrefix: 0
+      StorageIndex: 2
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: Surface
+      Center:
+        X: 497
+        Y: 1155.6666
+      Falloff: 50
+      FalloffPower: 2
+      State: 2
+      Color:
+        Red: 255
+        Green: 255
+        Blue: 0
+        Alpha: 0
+      Color2:
+        Red: 255
+        Green: 255
+        Blue: 255
+        Alpha: 0
+      OffImage: 
+      IsRoundLight: 0
+      BlinkPattern: 10
+      BlinkInterval: 125
+      Intensity: 1
+      TransmissionScale: 0.5
+      Surface: Wall1
+      IsBackglass: 0
+      DepthBias: 0
+      FadeSpeedUp: 0.2
+      FadeSpeedDown: 0.2
+      IsBulbLight: 1
+      IsImageMode: 0
+      ShowBulbMesh: 1
+      HasStaticBulbMesh: 1
+      ShowReflectionOnBall: 1
+      MeshRadius: 20
+      BulbModulateVsAdd: 0.9
+      BulbHaloHeight: 28
+      DragPoints:
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 45f9b7a9
+        Center:
+          X: 497
+          Y: 1105.6666
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: ba3e8fcc
+        Center:
+          X: 461.6447
+          Y: 1120.3113
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 16fb44fc
+        Center:
+          X: 447.00003
+          Y: 1155.6666
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: c28b70eb
+        Center:
+          X: 461.64468
+          Y: 1191.022
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: b00dab69
+        Center:
+          X: 497
+          Y: 1205.6666
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 285b1207
+        Center:
+          X: 532.3553
+          Y: 1191.022
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: f0b78193
+        Center:
+          X: 546.99994
+          Y: 1155.6666
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: b176c5d4
+        Center:
+          X: 532.3553
+          Y: 1120.3113
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      IsTimerEnabled: 0
+      TimerInterval: 100
+    - StoragePrefix: 0
+      StorageIndex: 3
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: Bulb
+      Center:
+        X: 497
+        Y: 1402.3334
+      Falloff: 50
+      FalloffPower: 2
+      State: 0
+      Color:
+        Red: 255
+        Green: 255
+        Blue: 0
+        Alpha: 0
+      Color2:
+        Red: 255
+        Green: 255
+        Blue: 255
+        Alpha: 0
+      OffImage: 
+      IsRoundLight: 0
+      BlinkPattern: 10
+      BlinkInterval: 125
+      Intensity: 1
+      TransmissionScale: 0.5
+      Surface: 
+      IsBackglass: 0
+      DepthBias: 0
+      FadeSpeedUp: 0.2
+      FadeSpeedDown: 0.2
+      IsBulbLight: 1
+      IsImageMode: 0
+      ShowBulbMesh: 1
+      HasStaticBulbMesh: 0
+      ShowReflectionOnBall: 1
+      MeshRadius: 20
+      BulbModulateVsAdd: 0.9
+      BulbHaloHeight: 28
+      DragPoints:
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 0789cd18
+        Center:
+          X: 497
+          Y: 1352.3334
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: d94154ea
+        Center:
+          X: 461.64468
+          Y: 1366.978
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: d433cf3a
+        Center:
+          X: 447
+          Y: 1402.3334
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 7166436c
+        Center:
+          X: 461.64465
+          Y: 1437.6887
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 09ac1150
+        Center:
+          X: 497
+          Y: 1452.3334
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 439c8df9
+        Center:
+          X: 532.35535
+          Y: 1437.6887
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 94be0408
+        Center:
+          X: 547
+          Y: 1402.3334
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 6bb0359d
+        Center:
+          X: 532.35535
+          Y: 1366.978
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      IsTimerEnabled: 0
+      TimerInterval: 100
+    - StoragePrefix: 0
+      StorageIndex: 4
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: Scaled
+      Center:
+        X: 699.6667
+        Y: 1395.6666
+      Falloff: 50
+      FalloffPower: 2
+      State: 0
+      Color:
+        Red: 255
+        Green: 255
+        Blue: 0
+        Alpha: 0
+      Color2:
+        Red: 255
+        Green: 255
+        Blue: 255
+        Alpha: 0
+      OffImage: 
+      IsRoundLight: 0
+      BlinkPattern: 10
+      BlinkInterval: 125
+      Intensity: 1
+      TransmissionScale: 0.5
+      Surface: 
+      IsBackglass: 0
+      DepthBias: 0
+      FadeSpeedUp: 0.2
+      FadeSpeedDown: 0.2
+      IsBulbLight: 1
+      IsImageMode: 0
+      ShowBulbMesh: 1
+      HasStaticBulbMesh: 1
+      ShowReflectionOnBall: 1
+      MeshRadius: 25.1
+      BulbModulateVsAdd: 0.9
+      BulbHaloHeight: 50.1
+      DragPoints:
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: d777e595
+        Center:
+          X: 699.6667
+          Y: 1345.6666
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: a380598a
+        Center:
+          X: 664.31134
+          Y: 1360.3113
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 00de4195
+        Center:
+          X: 649.6667
+          Y: 1395.6666
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 7117c874
+        Center:
+          X: 664.31134
+          Y: 1431.022
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 43eb63a4
+        Center:
+          X: 699.6667
+          Y: 1445.6666
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 6d1e9c02
+        Center:
+          X: 735.02203
+          Y: 1431.022
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: c816dbd1
+        Center:
+          X: 749.6667
+          Y: 1395.6666
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 2c2c0194
+        Center:
+          X: 735.02203
+          Y: 1360.3113
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      IsTimerEnabled: 0
+      TimerInterval: 100
+    - StoragePrefix: 0
+      StorageIndex: 5
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: CustomParams
+      Center:
+        X: 498.3333
+        Y: 1597
+      Falloff: 64.1
+      FalloffPower: 3.2
+      State: 1
+      Color:
+        Red: 89
+        Green: 238
+        Blue: 17
+        Alpha: 0
+      Color2:
+        Red: 255
+        Green: 255
+        Blue: 255
+        Alpha: 0
+      OffImage: 
+      IsRoundLight: 0
+      BlinkPattern: 10
+      BlinkInterval: 125
+      Intensity: 5.2
+      TransmissionScale: 0.5
+      Surface: 
+      IsBackglass: 0
+      DepthBias: 0
+      FadeSpeedUp: 0.2
+      FadeSpeedDown: 0.2
+      IsBulbLight: 1
+      IsImageMode: 0
+      ShowBulbMesh: 1
+      HasStaticBulbMesh: 1
+      ShowReflectionOnBall: 1
+      MeshRadius: 20
+      BulbModulateVsAdd: 0.9
+      BulbHaloHeight: 28
+      DragPoints:
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 4208f0a8
+        Center:
+          X: 498.3333
+          Y: 1547
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: defc9dcb
+        Center:
+          X: 462.978
+          Y: 1561.6447
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 2893b387
+        Center:
+          X: 448.3333
+          Y: 1597
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 2268bd95
+        Center:
+          X: 462.97797
+          Y: 1632.3553
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 4f649889
+        Center:
+          X: 498.3333
+          Y: 1647
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 3028ca3a
+        Center:
+          X: 533.68866
+          Y: 1632.3553
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 5fa06c41
+        Center:
+          X: 548.3333
+          Y: 1597
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 65b4c7dc
+        Center:
+          X: 533.68866
+          Y: 1561.6447
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      IsTimerEnabled: 0
+      TimerInterval: 100
+    - StoragePrefix: 0
+      StorageIndex: 6
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: NoBulb
+      Center:
+        X: 801.00006
+        Y: 1149
+      Falloff: 50
+      FalloffPower: 2
+      State: 0
+      Color:
+        Red: 255
+        Green: 255
+        Blue: 0
+        Alpha: 0
+      Color2:
+        Red: 255
+        Green: 255
+        Blue: 255
+        Alpha: 0
+      OffImage: 
+      IsRoundLight: 0
+      BlinkPattern: 10
+      BlinkInterval: 125
+      Intensity: 1
+      TransmissionScale: 0.5
+      Surface: 
+      IsBackglass: 0
+      DepthBias: 0
+      FadeSpeedUp: 0.2
+      FadeSpeedDown: 0.2
+      IsBulbLight: 0
+      IsImageMode: 0
+      ShowBulbMesh: 0
+      HasStaticBulbMesh: 1
+      ShowReflectionOnBall: 1
+      MeshRadius: 20
+      BulbModulateVsAdd: 0.9
+      BulbHaloHeight: 28
+      DragPoints:
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 5c1aa186
+        Center:
+          X: 801.00006
+          Y: 1099
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 28352c86
+        Center:
+          X: 765.6447
+          Y: 1113.6447
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: d00eabc8
+        Center:
+          X: 751.00006
+          Y: 1149
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: c64208ac
+        Center:
+          X: 765.6447
+          Y: 1184.3553
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: c6834509
+        Center:
+          X: 801.00006
+          Y: 1199
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 1b3b36a0
+        Center:
+          X: 836.3554
+          Y: 1184.3553
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 6bcb2f37
+        Center:
+          X: 851.00006
+          Y: 1149
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: aec5d366
+        Center:
+          X: 836.3554
+          Y: 1113.6447
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      IsTimerEnabled: 0
+      TimerInterval: 100
+    - StoragePrefix: 0
+      StorageIndex: 7
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: PlayfieldLight
+      Center:
+        X: 491.6666
+        Y: 426.88885
+      Falloff: 50
+      FalloffPower: 2
+      State: 0
+      Color:
+        Red: 255
+        Green: 255
+        Blue: 0
+        Alpha: 0
+      Color2:
+        Red: 255
+        Green: 255
+        Blue: 255
+        Alpha: 0
+      OffImage: wood
+      IsRoundLight: 0
+      BlinkPattern: 10
+      BlinkInterval: 125
+      Intensity: 1
+      TransmissionScale: 0.5
+      Surface: 
+      IsBackglass: 0
+      DepthBias: 0
+      FadeSpeedUp: 0.2
+      FadeSpeedDown: 0.2
+      IsBulbLight: 0
+      IsImageMode: 0
+      ShowBulbMesh: 0
+      HasStaticBulbMesh: 1
+      ShowReflectionOnBall: 1
+      MeshRadius: 20
+      BulbModulateVsAdd: 0.9
+      BulbHaloHeight: 28
+      DragPoints:
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 374588d6
+        Center:
+          X: 491.6666
+          Y: 376.882
+          Z: 0
+        IsSmooth: 0
+        IsSlingshot: 1
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 38303055
+        Center:
+          X: 420.75583
+          Y: 371.08914
+          Z: 0
+        IsSmooth: 0
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 84490eb8
+        Center:
+          X: 441.6666
+          Y: 426.88885
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 46dabd3a
+        Center:
+          X: 435.86688
+          Y: 490.6885
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 602b6c3b
+        Center:
+          X: 496.9999
+          Y: 485.7777
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: eb0e173d
+        Center:
+          X: 561.689
+          Y: 484.46634
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: f0a3102b
+        Center:
+          X: 541.6666
+          Y: 426.88885
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 7e7ec1c6
+        Center:
+          X: 559.9114
+          Y: 354.20032
+          Z: 0
+        IsSmooth: 0
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      IsTimerEnabled: 0
+      TimerInterval: 100
+    - StoragePrefix: 0
+      StorageIndex: 9
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: SurfaceLight
+      Center:
+        X: 144.99992
+        Y: 184.2222
+      Falloff: 50
+      FalloffPower: 2
+      State: 0
+      Color:
+        Red: 255
+        Green: 255
+        Blue: 0
+        Alpha: 0
+      Color2:
+        Red: 255
+        Green: 255
+        Blue: 255
+        Alpha: 0
+      OffImage: test_pattern
+      IsRoundLight: 0
+      BlinkPattern: 10
+      BlinkInterval: 125
+      Intensity: 1
+      TransmissionScale: 0.5
+      Surface: Wall2
+      IsBackglass: 0
+      DepthBias: 0
+      FadeSpeedUp: 0.2
+      FadeSpeedDown: 0.2
+      IsBulbLight: 0
+      IsImageMode: 0
+      ShowBulbMesh: 0
+      HasStaticBulbMesh: 1
+      ShowReflectionOnBall: 1
+      MeshRadius: 20
+      BulbModulateVsAdd: 0.9
+      BulbHaloHeight: 28
+      DragPoints:
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 08a68cc1
+        Center:
+          X: 145.88882
+          Y: 130.66666
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 4c8301a4
+        Center:
+          X: 109.64459
+          Y: 148.86685
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: c96863a3
+        Center:
+          X: 106.55545
+          Y: 185.11108
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 94e5e265
+        Center:
+          X: 97.20017
+          Y: 224.02196
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 760ac06b
+        Center:
+          X: 152.11101
+          Y: 247.55548
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 7910354c
+        Center:
+          X: 172.3552
+          Y: 197.35524
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: dd1b5784
+        Center:
+          X: 194.99992
+          Y: 184.2222
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: d3ed905e
+        Center:
+          X: 180.35526
+          Y: 148.86685
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      IsTimerEnabled: 0
+      TimerInterval: 100
+    - StoragePrefix: 0
+      StorageIndex: 10
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: Light1
+      Center:
+        X: 450.7777
+        Y: 109.552
+      Falloff: 50
+      FalloffPower: 2.021
+      State: 0
+      Color:
+        Red: 151
+        Green: 221
+        Blue: 34
+        Alpha: 0
+      Color2:
+        Red: 235
+        Green: 50
+        Blue: 193
+        Alpha: 0
+      OffImage: smiley
+      IsRoundLight: 0
+      BlinkPattern: 10011
+      BlinkInterval: 126
+      Intensity: 1.293
+      TransmissionScale: 0.5916
+      Surface: 
+      IsBackglass: 0
+      DepthBias: 0.0012
+      FadeSpeedUp: 0.265
+      FadeSpeedDown: 0.223
+      IsBulbLight: 1
+      IsImageMode: 0
+      ShowBulbMesh: 0
+      HasStaticBulbMesh: 1
+      ShowReflectionOnBall: 1
+      MeshRadius: 20.231
+      BulbModulateVsAdd: 0.9723
+      BulbHaloHeight: 28.298
+      DragPoints:
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 4fdb78e4
+        Center:
+          X: 450.7777
+          Y: 59.55551
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: f5505b7b
+        Center:
+          X: 415.4224
+          Y: 74.200165
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: fb7533a9
+        Center:
+          X: 400.7777
+          Y: 109.55551
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: ccae5109
+        Center:
+          X: 415.42236
+          Y: 144.91084
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 9f81ffe4
+        Center:
+          X: 450.7777
+          Y: 159.55551
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: b2ba7bb4
+        Center:
+          X: 486.13306
+          Y: 144.91086
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 506aaa8c
+        Center:
+          X: 500.7777
+          Y: 109.55551
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: d45a24eb
+        Center:
+          X: 486.13306
+          Y: 74.20017
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      IsTimerEnabled: 0
+      TimerInterval: 100
+    - StoragePrefix: 0
+      StorageIndex: 11
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: Light2
+      Center:
+        X: 595.6666
+        Y: 103.33328
+      Falloff: 50
+      FalloffPower: 2
+      State: 0
+      Color:
+        Red: 255
+        Green: 255
+        Blue: 0
+        Alpha: 0
+      Color2:
+        Red: 255
+        Green: 255
+        Blue: 255
+        Alpha: 0
+      OffImage: smiley
+      IsRoundLight: 0
+      BlinkPattern: 10
+      BlinkInterval: 125
+      Intensity: 1
+      TransmissionScale: 0.5
+      Surface: 
+      IsBackglass: 0
+      DepthBias: 0
+      FadeSpeedUp: 0.2
+      FadeSpeedDown: 0.2
+      IsBulbLight: 0
+      IsImageMode: 0
+      ShowBulbMesh: 0
+      HasStaticBulbMesh: 1
+      ShowReflectionOnBall: 1
+      MeshRadius: 20
+      BulbModulateVsAdd: 0.9
+      BulbHaloHeight: 28
+      DragPoints:
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 487113c6
+        Center:
+          X: 595.6666
+          Y: 53.333282
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: ba062457
+        Center:
+          X: 560.3113
+          Y: 67.977936
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 461e788c
+        Center:
+          X: 545.6666
+          Y: 103.33328
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 9915121a
+        Center:
+          X: 560.3113
+          Y: 138.68861
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: a5c65664
+        Center:
+          X: 595.6666
+          Y: 153.33328
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 46049b35
+        Center:
+          X: 631.022
+          Y: 138.68863
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 81fd1d8a
+        Center:
+          X: 645.6666
+          Y: 103.33328
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: bb3e4cd7
+        Center:
+          X: 631.022
+          Y: 67.97794
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      IsTimerEnabled: 0
+      TimerInterval: 100
+    - StoragePrefix: 0
+      StorageIndex: 12
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: Light3
+      Center:
+        X: 763.6666
+        Y: 115.777725
+      Falloff: 50
+      FalloffPower: 2
+      State: 0
+      Color:
+        Red: 255
+        Green: 255
+        Blue: 0
+        Alpha: 0
+      Color2:
+        Red: 255
+        Green: 255
+        Blue: 255
+        Alpha: 0
+      OffImage: smiley
+      IsRoundLight: 0
+      BlinkPattern: 10
+      BlinkInterval: 125
+      Intensity: 1
+      TransmissionScale: 0.5
+      Surface: 
+      IsBackglass: 0
+      DepthBias: 0
+      FadeSpeedUp: 0.2
+      FadeSpeedDown: 0.2
+      IsBulbLight: 0
+      IsImageMode: 0
+      ShowBulbMesh: 0
+      HasStaticBulbMesh: 1
+      ShowReflectionOnBall: 1
+      MeshRadius: 20
+      BulbModulateVsAdd: 0.9
+      BulbHaloHeight: 28
+      DragPoints:
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: a115b444
+        Center:
+          X: 763.6666
+          Y: 65.777725
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: d8bf8d27
+        Center:
+          X: 728.3113
+          Y: 80.42238
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 9fb6401c
+        Center:
+          X: 713.6666
+          Y: 115.777725
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: c2968d6b
+        Center:
+          X: 728.3113
+          Y: 151.13306
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 3a4ab27d
+        Center:
+          X: 763.6666
+          Y: 165.77773
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 005fb687
+        Center:
+          X: 799.022
+          Y: 151.13306
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: ac0a2e2d
+        Center:
+          X: 813.6666
+          Y: 115.777725
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 0bbacda5
+        Center:
+          X: 799.022
+          Y: 80.422386
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      IsTimerEnabled: 0
+      TimerInterval: 100
+    - StoragePrefix: 0
+      StorageIndex: 13
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: SurfaceLightCollection
+      Center:
+        X: 835.6666
+        Y: 215.33328
+      Falloff: 50
+      FalloffPower: 2
+      State: 0
+      Color:
+        Red: 255
+        Green: 255
+        Blue: 0
+        Alpha: 0
+      Color2:
+        Red: 255
+        Green: 255
+        Blue: 255
+        Alpha: 0
+      OffImage: smiley
+      IsRoundLight: 0
+      BlinkPattern: 10
+      BlinkInterval: 125
+      Intensity: 1
+      TransmissionScale: 0.5
+      Surface: 
+      IsBackglass: 0
+      DepthBias: 0
+      FadeSpeedUp: 0.2
+      FadeSpeedDown: 0.2
+      IsBulbLight: 0
+      IsImageMode: 0
+      ShowBulbMesh: 0
+      HasStaticBulbMesh: 1
+      ShowReflectionOnBall: 1
+      MeshRadius: 20
+      BulbModulateVsAdd: 0.9
+      BulbHaloHeight: 28
+      DragPoints:
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 0679ff68
+        Center:
+          X: 835.6666
+          Y: 165.33328
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: df712b2b
+        Center:
+          X: 800.3113
+          Y: 179.97794
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 27eb1c8e
+        Center:
+          X: 785.6666
+          Y: 215.33328
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 93ebf9d5
+        Center:
+          X: 800.3113
+          Y: 250.68861
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 92e7d39b
+        Center:
+          X: 835.6666
+          Y: 265.33328
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 9bae6e38
+        Center:
+          X: 871.022
+          Y: 250.68863
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: fcb6e1cc
+        Center:
+          X: 885.6666
+          Y: 215.33328
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      - StoragePrefix: 0
+        StorageIndex: -1
+        Id: 4c3220d8
+        Center:
+          X: 871.022
+          Y: 179.97794
+          Z: 0
+        IsSmooth: 1
+        IsSlingshot: 0
+        HasAutoTexture: 1
+        TextureCoord: 0
+        IsLocked: 0
+        EditorLayer: 0
+        EditorLayerName: 
+        EditorLayerVisibility: 1
+        CalcHeight: 0
+      IsTimerEnabled: 0
+      TimerInterval: 100
+  Plungers:
+    keys: []
+    values: []
+  Primitives:
+    keys: []
+    values: []
+  Ramps:
+    keys: []
+    values: []
+  Rubbers:
+    keys: []
+    values: []
+  Spinners:
+    keys: []
+    values: []
+  Surfaces:
+    keys:
+    - Wall1
+    - Wall2
+    - Wall3
+    values:
+    - StoragePrefix: 0
+      StorageIndex: 0
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: Wall1
+      HitEvent: 0
+      IsDroppable: 0
+      IsFlipbook: 0
+      IsBottomSolid: 1
+      IsCollidable: 1
+      Threshold: 2
+      Image: 
+      SideImage: 
+      SideMaterial: 
+      TopMaterial: 
+      PhysicsMaterial: 
+      SlingShotMaterial: 
+      Inner: 1
+      DisplayTexture: 0
+      SlingshotForce: 80
+      SlingshotThreshold: 0
+      SlingshotAnimation: 1
+      Elasticity: 0.3
+      ElasticityFalloff: 0
+      Friction: 0.3
+      Scatter: 0
+      IsTopBottomVisible: 1
+      OverwritePhysics: 1
+      DisableLightingTop: 0
+      DisableLightingBelow: 0
+      IsSideVisible: 1
+      IsReflectionEnabled: 1
+      IsTimerEnabled: 0
+      TimerInterval: 100
+      Points: 1
+      IsDisabled: 0
+    - StoragePrefix: 0
+      StorageIndex: 8
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: Wall2
+      HitEvent: 0
+      IsDroppable: 0
+      IsFlipbook: 0
+      IsBottomSolid: 1
+      IsCollidable: 1
+      Threshold: 2
+      Image: test_pattern
+      SideImage: 
+      SideMaterial: 
+      TopMaterial: 
+      PhysicsMaterial: 
+      SlingShotMaterial: 
+      Inner: 1
+      DisplayTexture: 0
+      SlingshotForce: 80
+      SlingshotThreshold: 0
+      SlingshotAnimation: 1
+      Elasticity: 0.3
+      ElasticityFalloff: 0
+      Friction: 0.3
+      Scatter: 0
+      IsTopBottomVisible: 1
+      OverwritePhysics: 1
+      DisableLightingTop: 0
+      DisableLightingBelow: 0
+      IsSideVisible: 1
+      IsReflectionEnabled: 1
+      IsTimerEnabled: 0
+      TimerInterval: 100
+      Points: 1
+      IsDisabled: 0
+    - StoragePrefix: 0
+      StorageIndex: 14
+      IsLocked: 0
+      EditorLayerName: Layer_1
+      EditorLayerVisibility: 1
+      Name: Wall3
+      HitEvent: 0
+      IsDroppable: 0
+      IsFlipbook: 0
+      IsBottomSolid: 1
+      IsCollidable: 1
+      Threshold: 2
+      Image: 
+      SideImage: 
+      SideMaterial: 
+      TopMaterial: 
+      PhysicsMaterial: 
+      SlingShotMaterial: 
+      Inner: 1
+      DisplayTexture: 0
+      SlingshotForce: 80
+      SlingshotThreshold: 0
+      SlingshotAnimation: 1
+      Elasticity: 0.3
+      ElasticityFalloff: 0
+      Friction: 0.3
+      Scatter: 0
+      IsTopBottomVisible: 1
+      OverwritePhysics: 1
+      DisableLightingTop: 0
+      DisableLightingBelow: 0
+      IsSideVisible: 1
+      IsReflectionEnabled: 1
+      IsTimerEnabled: 0
+      TimerInterval: 100
+      Points: 1
+      IsDisabled: 0
+  Triggers:
+    keys: []
+    values: []
+  MetalWireGuides:
+    keys: []
+    values: []
+  Decals: []
+  DispReels: []
+  Flashers: []
+  LightSeqs: []
+  TextBoxes: []
+  Timers: []
+  Textures:
+  - InternalName: wood
+    Path: C:\Users\neh\Downloads\wood.jpg
+    AlphaTestValue: 1
+    Texture: {fileID: 2800000, guid: 72a483086b29f9b4b8a2cc75a56f801a, type: 3}
+    OriginalPath: 
+  - InternalName: test_pattern
+    Path: C:\dev\vpx-toolbox\test\fixtures\test_pattern.png
+    AlphaTestValue: 1
+    Texture: {fileID: 2800000, guid: 2074edebf9c38e8448fc48de7361f388, type: 3}
+    OriginalPath: 
+  - InternalName: smiley
+    Path: C:\Users\neh\Downloads\smiley.png
+    AlphaTestValue: 1
+    Texture: {fileID: 0}
+    OriginalPath: 
+  Sounds: []

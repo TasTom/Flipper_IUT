@@ -1,0 +1,349 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1641408d3d13c5d4e9da47f456751d14, type: 3}
+  m_Name: Legacy Data
+  m_EditorClassIdentifier: VisualPinball.Unity::VisualPinball.Unity.LegacyContainer
+  TableData:
+    StoragePrefix: 0
+    StorageIndex: -1
+    IsLocked: 0
+    EditorLayerName: 
+    EditorLayerVisibility: 1
+    Name: TestTable
+    Left: 0
+    Right: 1112
+    Top: 0
+    Bottom: 2224
+    BgEnableFss: 0
+    OverridePhysics: 1
+    OverridePhysicsFlipper: 1
+    Gravity: 1.454008
+    Friction: 0.076
+    Elasticity: 0.23
+    ElasticityFalloff: 1.3098
+    Scatter: 2.02
+    DefaultScatter: 3.2908
+    NudgeTime: 6.2931
+    PlungerNormalize: 34
+    PlungerFilter: 0
+    PhysicsMaxLoops: 12203
+    RenderDecals: 1
+    RenderEmReels: 1
+    Offset:
+    - 556
+    - 1112
+    Zoom: 0.5
+    StereoMaxSeparation: 0.01435
+    StereoZeroParallaxDisplacement: 0.53
+    StereoOffset: 0.002
+    OverwriteGlobalStereo3D: 1
+    AngleTiltMax: 0.60606
+    AngleTiltMin: 0.2033
+    GlassHeight: 404
+    TableHeight: 2.009231
+    Image: test_pattern
+    BallImage: test_pattern
+    BallImageFront: 
+    Notes: 
+    ScreenShot: 
+    DisplayBackdrop: 1
+    NumGameItems: 1
+    NumSounds: 0
+    NumTextures: 1
+    NumFonts: 0
+    NumCollections: 0
+    ImageBackdropNightDay: 0
+    ImageColorGrade: ColorGradeLUT256x16_ConSat
+    EnvImage: 
+    PlayfieldMaterial: Material1
+    LightAmbient:
+      Red: 23
+      Green: 221
+      Blue: 142
+      Alpha: 0
+    Light:
+    - Emission:
+        Red: 255
+        Green: 255
+        Blue: 17
+        Alpha: 0
+      Pos:
+        X: 0
+        Y: 0
+        Z: 0
+    LightHeight: 5023
+    LightRange: 4040001
+    LightEmissionScale: 4020012
+    EnvEmissionScale: 2.29841
+    GlobalEmissionScale: 0.55
+    AoScale: 1.23
+    SsrScale: 0.4123
+    UseReflectionForBalls: 0
+    PlayfieldReflectionStrength: 0.12941177
+    UseTrailForBalls: 0
+    BallTrailStrength: 0.12941177
+    BallPlayfieldReflectionStrength: 2.3005
+    DefaultBulbIntensityScaleOnBall: 3.3028388
+    UseAA: 0
+    UseAO: 0
+    UseSSR: 0
+    UseFXAA: 1
+    BloomStrength: 1.5055
+    ColorBackdrop:
+      Red: 31
+      Green: 32
+      Blue: 33
+      Alpha: 0
+    CustomColors:
+    - Red: 255
+      Green: 197
+      Blue: 143
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    - Red: 0
+      Green: 0
+      Blue: 0
+      Alpha: 0
+    GlobalDifficulty: 0.03
+    TableSoundVolume: 0.23
+    BallDecalMode: 1
+    TableMusicVolume: 0.24
+    TableAdaptiveVSync: 6649
+    OverwriteGlobalDetailLevel: 1
+    OverwriteGlobalDayNight: 1
+    ShowGrid: 1
+    ReflectElementsOnPlayfield: 1
+    UserDetailLevel: 7
+    NumMaterials: 1
+    Code: 'Option Explicit
+
+'
+    BgRotation:
+    - 12
+    - 270.1
+    - 0.3
+    BgLayback:
+    - 2.1
+    - 36.1
+    - 0.2
+    BgInclination:
+    - 46
+    - 15.1
+    - 45.2
+    BgFov:
+    - 62
+    - 17.1
+    - 65.2
+    BgScaleX:
+    - 1.2023
+    - 1.21
+    - 1.22
+    BgScaleY:
+    - 1.1812
+    - 1.11
+    - 1.12
+    BgScaleZ:
+    - 1.3211
+    - 1.41
+    - 12
+    BgOffsetX:
+    - 12.33
+    - 0.1
+    - 0.2
+    BgOffsetY:
+    - 100.43
+    - 90.1
+    - 0.2332
+    BgOffsetZ:
+    - -50.092
+    - 400.1
+    - -50.223
+    BgImage:
+    - test_pattern
+    - 
+    - test_pattern
+    Materials:
+    - Name: Material1
+      WrapLighting: 0
+      Roughness: 0
+      GlossyImageLerp: 1
+      Thickness: 0.047058824
+      Edge: 1
+      EdgeAlpha: 1
+      Opacity: 1
+      BaseColor:
+        Red: 255
+        Green: 105
+        Blue: 180
+        Alpha: 0
+      Glossiness:
+        Red: 0
+        Green: 0
+        Blue: 0
+        Alpha: 0
+      ClearCoat:
+        Red: 0
+        Green: 0
+        Blue: 0
+        Alpha: 0
+      IsMetal: 0
+      IsOpacityActive: 0
+      Elasticity: 0
+      ElasticityFalloff: 0
+      Friction: 0
+      ScatterAngle: 0
+    NumVpeGameItems: 0
+    BgCurrentSet: 0
+  Bumpers:
+    keys: []
+    values: []
+  Flippers:
+    keys: []
+    values: []
+  Gates:
+    keys: []
+    values: []
+  HitTargets:
+    keys: []
+    values: []
+  Kickers:
+    keys: []
+    values: []
+  Lights:
+    keys: []
+    values: []
+  Plungers:
+    keys: []
+    values: []
+  Primitives:
+    keys: []
+    values: []
+  Ramps:
+    keys: []
+    values: []
+  Rubbers:
+    keys: []
+    values: []
+  Spinners:
+    keys: []
+    values: []
+  Surfaces:
+    keys: []
+    values: []
+  Triggers:
+    keys: []
+    values: []
+  MetalWireGuides:
+    keys: []
+    values: []
+  Decals: []
+  DispReels: []
+  Flashers: []
+  LightSeqs: []
+  TextBoxes:
+  - StoragePrefix: 0
+    StorageIndex: 0
+    IsLocked: 0
+    EditorLayerName: Layer_1
+    EditorLayerVisibility: 1
+    Name: NudgeText
+    V1:
+      X: 8
+      Y: 8
+    V2:
+      X: 808
+      Y: 108
+    BackColor:
+      Red: 7
+      Green: 7
+      Blue: 7
+      Alpha: 0
+    FontColor:
+      Red: 254
+      Green: 238
+      Blue: 175
+      Alpha: 0
+    IntensityScale: 1.5
+    Text: Nudge Test
+    Align: 0
+    IsTransparent: 0
+    IsDmd: 0
+    Font:
+      Name: Lucida Sans Unicode
+      Weight: 700
+      Size: 105000
+      Italic: 0
+    IsTimerEnabled: 0
+    TimerInterval: 100
+  Timers: []
+  Textures:
+  - InternalName: test_pattern
+    Path: C:\Development\vpx-js\test\fixtures\test_pattern.png
+    AlphaTestValue: 1
+    Texture: {fileID: 2800000, guid: 9555bffe43a8dfa4595cfa6d11200d43, type: 3}
+    OriginalPath: 
+  Sounds: []

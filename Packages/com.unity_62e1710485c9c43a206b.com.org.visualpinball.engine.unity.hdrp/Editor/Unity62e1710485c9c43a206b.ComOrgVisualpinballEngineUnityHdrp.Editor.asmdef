@@ -1,0 +1,10 @@
+{
+    "name": "Unity62e1710485c9c43a206b.ComOrgVisualpinballEngineUnityHdrp.Editor",
+    "references": [
+      "Unity62e1710485c9c43a206b.ComOrgVisualpinballEngineUnityHdrp"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

@@ -1,7 +1,8 @@
 using UnityEngine;
 
 /// <summary>Fits the cabinet playfield and score panel edge to edge without stretching physics
-/// or the camera projection. The table's viewing angle adapts to the display aspect ratio.</summary>
+/// or the camera projection. Portrait displays keep the table upright and the score above it;
+/// landscape displays retain the rotated cabinet layout.</summary>
 [ExecuteAlways, RequireComponent(typeof(Camera))]
 public sealed class CabinetViewport : MonoBehaviour
 {
@@ -29,12 +30,14 @@ public sealed class CabinetViewport : MonoBehaviour
         float width=(horizontalLimits.y-horizontalLimits.x)*metricScale;
         float length=(lengthLimits.y-lengthLimits.x)*Mathf.Abs(table.lossyScale.z);
         if(width<=0 || length<=0)return;
-        float cosine=Mathf.Clamp(view.aspect*width/length,.25f,1f);
+        bool portrait=view.aspect<1f;
+        float cosine=Mathf.Clamp(portrait?width/(view.aspect*length):view.aspect*width/length,.25f,1f);
         float sine=Mathf.Sqrt(1-cosine*cosine);
         Vector3 centre=new Vector3((horizontalLimits.x+horizontalLimits.y)*.5f,0,(lengthLimits.x+lengthLimits.y)*.5f);
         transform.position=table.TransformPoint(centre+new Vector3(0,cosine*35,-sine*35));
-        transform.rotation=Quaternion.LookRotation(table.TransformDirection(new Vector3(0,-cosine,sine)),table.forward)*Quaternion.Euler(0,0,90);
-        view.orthographic=true;view.orthographicSize=Mathf.Max(width*.5f,length*cosine/(2*view.aspect));
+        transform.rotation=Quaternion.LookRotation(table.TransformDirection(new Vector3(0,-cosine,sine)),table.forward)*Quaternion.Euler(0,0,portrait?0:90);
+        view.orthographic=true;
+        view.orthographicSize=portrait?Mathf.Max(width/(2*view.aspect),length*cosine*.5f):Mathf.Max(width*.5f,length*cosine/(2*view.aspect));
         // The score panel is two units from the camera. Keep it visible while
         // tightening the depth range around the table to reduce surface flicker.
         float farDepth=35*metricScale;
@@ -44,12 +47,13 @@ public sealed class CabinetViewport : MonoBehaviour
         view.nearClipPlane=.5f*metricScale;view.farClipPlane=farDepth+2*metricScale;view.rect=new Rect(0,0,1,1);
         if(scorePanel!=null && scorePanel.rect.width>0 && scorePanel.rect.height>0)
         {
-            // The cabinet roll is also applied to the display. A camera-facing plane
-            // keeps the score within the screen and clear of raised table furniture.
-            scorePanel.position=view.ViewportToWorldPoint(new Vector3(1-scoreScreenFraction*.5f,.5f,2f*metricScale));
-            scorePanel.rotation=Quaternion.LookRotation(transform.forward,transform.right);
-            scorePanel.localScale=new Vector3(2*view.orthographicSize/scorePanel.rect.width,
-                2*view.orthographicSize*view.aspect*scoreScreenFraction/scorePanel.rect.height,1);
+            // Match the score panel to the screen orientation, independently of physics.
+            Vector2 scoreCentre=portrait?new Vector2(.5f,1-scoreScreenFraction*.5f):new Vector2(1-scoreScreenFraction*.5f,.5f);
+            scorePanel.position=view.ViewportToWorldPoint(new Vector3(scoreCentre.x,scoreCentre.y,2f*metricScale));
+            scorePanel.rotation=Quaternion.LookRotation(transform.forward,portrait?transform.up:transform.right);
+            float panelWidth=2*view.orthographicSize*(portrait?view.aspect:1f);
+            float panelHeight=2*view.orthographicSize*scoreScreenFraction*(portrait?1f:view.aspect);
+            scorePanel.localScale=new Vector3(panelWidth/scorePanel.rect.width,panelHeight/scorePanel.rect.height,1);
         }
         previousAspect=view.aspect;previousTable=table.localToWorldMatrix;
     }

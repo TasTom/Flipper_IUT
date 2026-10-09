@@ -1,0 +1,3 @@
+PASS Industries démarre en portrait : bille distribuée, trois billes, aucune pause.
+screen=1080x1920 cameraRoll=0 aspect=0,5625
+PASS Carton de transition vertical : rotation=0 référence=(1080.00, 1920.00)

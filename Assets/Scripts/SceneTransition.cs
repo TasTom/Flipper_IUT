@@ -279,7 +279,8 @@ public class SceneTransition : MonoBehaviour
 
         var scaler = canvasGo.GetComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920f, 1080f);
+        bool portrait = Screen.height > Screen.width;
+        scaler.referenceResolution = portrait ? new Vector2(1080f, 1920f) : new Vector2(1920f, 1080f);
         scaler.matchWidthOrHeight = 0.5f;
 
         var rect = canvasGo.GetComponent<RectTransform>();
@@ -292,7 +293,7 @@ public class SceneTransition : MonoBehaviour
         content.SetParent(rect, false);
         content.anchorMin = content.anchorMax = new Vector2(.5f,.5f);
         content.sizeDelta = new Vector2(1080f,1920f);
-        content.localRotation = Quaternion.Euler(0f,0f,cabinetRotation);
+        content.localRotation = Quaternion.Euler(0f,0f,portrait ? 0f : cabinetRotation);
         rect = content;
 
         bar = NewImage("MeltBar", rect, accentColor);

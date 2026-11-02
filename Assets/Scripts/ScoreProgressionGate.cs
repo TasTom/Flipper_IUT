@@ -184,28 +184,21 @@ public class ScoreProgressionGate : MonoBehaviour
     /// garde-fou elle s'installerait sa propre porte et renverrait le joueur vers elle-même en
     /// boucle dès le premier point marqué.</para>
     /// </summary>
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void EnsureGateExists()
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void InitSceneListener()
     {
-        if (FindAnyObjectByType<ScoreProgressionGate>() != null)
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += (scene, mode) =>
         {
-            return;
-        }
+            EnsureGateExistsForScene(scene.name);
+        };
+    }
+
+    private static void EnsureGateExistsForScene(string sceneName)
+    {
+        if (FindAnyObjectByType<ScoreProgressionGate>() != null) return;
 
         var config = Resources.Load<ProgressionConfig>(DefaultConfigPath);
-        if (config == null)
-        {
-            // Sans config, il n'y a pas de scène cible à nommer : on ne devine pas.
-            Debug.Log("[ScoreProgressionGate] Aucune config de progression dans Resources/" +
-                      DefaultConfigPath + " : la bascule vers la seconde table reste inactive.", null);
-            return;
-        }
-
-        var activeScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        if (activeScene != config.sourceSceneName)
-        {
-            return;
-        }
+        if (config == null || sceneName != config.sourceSceneName) return;
 
         var go = new GameObject(nameof(ScoreProgressionGate));
         var gate = go.AddComponent<ScoreProgressionGate>();

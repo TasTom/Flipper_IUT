@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 /// <summary>
 /// Lanceur à ressort (GDD §Bille et lanceur) : le joueur charge en maintenant la touche,
@@ -17,6 +17,7 @@
 /// </summary>
 public class Plunger : MonoBehaviour
 {
+    public static Plunger Instance { get; private set; }
     [Header("Charge")]
     [Tooltip("Vitesse de charge, par seconde.")]
     [SerializeField] private float pullSpeed = 3f;
@@ -121,6 +122,12 @@ public class Plunger : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogWarning($"[Plunger] Un second lanceur existe sur '{name}' : attention aux conflits.", this);
+        }
+        Instance = this;
+
         restPosition = transform.localPosition;
         restWorldPosition = transform.position;
 
@@ -171,6 +178,8 @@ public class Plunger : MonoBehaviour
         {
             cabinet.GamePlayPF.Enable();
         }
+
+        PublishCharge(true);
     }
 
     private void OnDisable()
@@ -183,6 +192,11 @@ public class Plunger : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+
         if (cabinet == null)
         {
             return;
@@ -235,7 +249,7 @@ public class Plunger : MonoBehaviour
         }
 
         transform.localPosition = restPosition + Vector3.back * pullAmount;
-        PublishCharge();
+        PublishCharge(launching && pullAmount <= 0.001f);
     }
 
     private void Launch()
@@ -344,13 +358,13 @@ public class Plunger : MonoBehaviour
         pullAmount = 0f;
         transform.localPosition = restPosition;
         launching = false;
-        PublishCharge();
+        PublishCharge(true);
     }
 
-    private void PublishCharge()
+    public void PublishCharge(bool force = false)
     {
         float charge = Mathf.Clamp01(Charge);
-        if (Mathf.Abs(charge - lastPublishedCharge) < 0.01f)
+        if (!force && charge > 0f && Mathf.Abs(charge - lastPublishedCharge) < 0.005f)
         {
             return;
         }

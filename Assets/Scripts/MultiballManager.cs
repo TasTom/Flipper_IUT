@@ -69,8 +69,13 @@ public class MultiballManager : MonoBehaviour
             var sphere = ballPrefab.GetComponentInChildren<SphereCollider>();
             if (sphere != null)
             {
-                Vector3 scale = sphere.transform.lossyScale;
+                Vector3 scale = sphere.transform.localScale;
                 ballRadius = sphere.radius * Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y), Mathf.Abs(scale.z));
+                if (ballRadius <= 0f) ballRadius = sphere.radius > 0f ? sphere.radius : 0.225f;
+            }
+            else
+            {
+                ballRadius = 0.225f;
             }
         }
     }

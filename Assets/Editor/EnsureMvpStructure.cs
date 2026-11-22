@@ -479,10 +479,30 @@ public static class EnsureMvpStructure
             new Vector2(1400f, 170f), 78f, TextAlignmentOptions.Center);
 
         EnsurePlungerGauge(canvasGo.transform);
+
+        HudController hud = canvasGo.GetComponent<HudController>();
+        if (hud != null)
+        {
+            SerializedObject hudSo = new SerializedObject(hud);
+            bool hudChanged = false;
+            hudChanged |= AssignIfEmpty(hudSo, "plungerGaugeFill", () => canvasGo.transform.Find("PlungerGaugeBackground/PlungerGaugeFill")?.GetComponent<Image>());
+            hudChanged |= AssignIfEmpty(hudSo, "plungerGaugeLabel", () => canvasGo.transform.Find("PlungerGaugeBackground/PlungerGaugeLabel")?.GetComponent<TMP_Text>());
+            hudChanged |= AssignIfEmpty(hudSo, "scoreText", () => canvasGo.transform.Find("ScoreText")?.GetComponent<TMP_Text>());
+            hudChanged |= AssignIfEmpty(hudSo, "highScoreText", () => canvasGo.transform.Find("HighScoreText")?.GetComponent<TMP_Text>());
+            hudChanged |= AssignIfEmpty(hudSo, "ballsText", () => canvasGo.transform.Find("BallsText")?.GetComponent<TMP_Text>());
+            hudChanged |= AssignIfEmpty(hudSo, "messageText", () => canvasGo.transform.Find("MessageText")?.GetComponent<TMP_Text>());
+            if (hudChanged)
+            {
+                hudSo.ApplyModifiedPropertiesWithoutUndo();
+                EditorUtility.SetDirty(hud);
+            }
+        }
     }
 
     private static void EnsurePlungerGauge(Transform canvas)
     {
+        Sprite uiSprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/UISprite.psd");
+
         Transform existing = null;
         foreach (Transform child in canvas.GetComponentsInChildren<Transform>(true))
         {
@@ -494,6 +514,11 @@ public static class EnsureMvpStructure
         }
         if (existing != null)
         {
+            Image existingImg = existing.GetComponent<Image>();
+            if (existingImg != null && existingImg.sprite == null)
+            {
+                existingImg.sprite = uiSprite;
+            }
             Kept.Add("PlungerGaugeFill");
             return;
         }
@@ -507,9 +532,13 @@ public static class EnsureMvpStructure
         backgroundRect.anchorMin = new Vector2(0.5f, 0f);
         backgroundRect.anchorMax = new Vector2(0.5f, 0f);
         backgroundRect.pivot = new Vector2(0.5f, 0f);
-        backgroundRect.anchoredPosition = new Vector2(0f, 54f);
-        backgroundRect.sizeDelta = new Vector2(620f, 24f);
-        background.GetComponent<Image>().color = new Color(0.08f, 0.08f, 0.08f, 0.95f);
+        backgroundRect.anchoredPosition = new Vector2(0f, 40f);
+        backgroundRect.sizeDelta = new Vector2(500f, 26f);
+        Image bgImg = background.GetComponent<Image>();
+        bgImg.sprite = uiSprite;
+        bgImg.type = Image.Type.Sliced;
+        bgImg.color = new Color(0.08f, 0.10f, 0.14f, 0.90f);
+        bgImg.raycastTarget = false;
 
         GameObject fill = new GameObject("PlungerGaugeFill", typeof(RectTransform), typeof(Image));
         fill.transform.SetParent(background.transform, false);
@@ -519,16 +548,36 @@ public static class EnsureMvpStructure
         RectTransform fillRect = fill.GetComponent<RectTransform>();
         fillRect.anchorMin = Vector2.zero;
         fillRect.anchorMax = Vector2.one;
-        fillRect.offsetMin = Vector2.zero;
-        fillRect.offsetMax = Vector2.zero;
+        fillRect.offsetMin = new Vector2(3f, 3f);
+        fillRect.offsetMax = new Vector2(-3f, -3f);
 
         Image fillImage = fill.GetComponent<Image>();
+        fillImage.sprite = uiSprite;
         fillImage.type = Image.Type.Filled;
         fillImage.fillMethod = Image.FillMethod.Horizontal;
         fillImage.fillOrigin = (int)Image.OriginHorizontal.Left;
         fillImage.fillAmount = 0f;
         fillImage.color = Color.green;
         fillImage.raycastTarget = false;
+
+        GameObject label = new GameObject("PlungerGaugeLabel", typeof(RectTransform), typeof(TextMeshProUGUI));
+        label.transform.SetParent(background.transform, false);
+        Undo.RegisterCreatedObjectUndo(label, "Ajouter le libellé du lanceur");
+        Created.Add("PlungerGaugeLabel");
+
+        RectTransform labelRect = label.GetComponent<RectTransform>();
+        labelRect.anchorMin = new Vector2(0f, 1f);
+        labelRect.anchorMax = new Vector2(1f, 1f);
+        labelRect.pivot = new Vector2(0.5f, 0f);
+        labelRect.anchoredPosition = new Vector2(0f, 4f);
+        labelRect.sizeDelta = new Vector2(0f, 24f);
+
+        TextMeshProUGUI labelText = label.GetComponent<TextMeshProUGUI>();
+        labelText.fontSize = 18f;
+        labelText.alignment = TextAlignmentOptions.Center;
+        labelText.text = "LANCEUR [ESPACE]";
+        labelText.color = new Color(0.9f, 0.9f, 0.9f, 0.95f);
+        labelText.raycastTarget = false;
     }
 
     /// <summary>

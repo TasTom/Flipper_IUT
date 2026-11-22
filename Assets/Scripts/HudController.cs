@@ -23,7 +23,12 @@ public class HudController : MonoBehaviour
     [SerializeField] private TMP_Text multiplierText;
     [SerializeField] private TMP_Text scoreFeedbackText;
     [SerializeField] private bool compactMultiplierLabel;
+
+    [Header("Jauge de puissance du lanceur")]
     [SerializeField] private Image plungerGaugeFill;
+    [SerializeField] private TMP_Text plungerGaugeLabel;
+    [SerializeField] private GameObject plungerGaugeRoot;
+    [SerializeField] private bool showGaugeOnlyWhenCharged;
 
     [Header("Découverte automatique")]
     [Tooltip("Remplit les champs vides en cherchant les enfants nommés ScoreText, " +
@@ -58,9 +63,18 @@ public class HudController : MonoBehaviour
             ResolveMissingPlungerGauge();
         }
 
-        plungers = FindObjectsByType<Plunger>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        RefreshPlungers();
 
         WarnAboutMissingTexts();
+    }
+
+    private void RefreshPlungers()
+    {
+        plungers = FindObjectsByType<Plunger>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        if ((plungers == null || plungers.Length == 0) && Plunger.Instance != null)
+        {
+            plungers = new Plunger[] { Plunger.Instance };
+        }
     }
 
     private void OnEnable()
@@ -68,9 +82,18 @@ public class HudController : MonoBehaviour
         Subscribe();
     }
 
+    private void LateUpdate()
+    {
+        if ((plungers == null || plungers.Length == 0) && Plunger.Instance != null)
+        {
+            Subscribe();
+        }
+    }
+
     private void Subscribe()
     {
         Unsubscribe();
+        RefreshPlungers();
         for (int i = 0; i < plungers.Length; i++)
         {
             if (plungers[i] != null)
@@ -79,6 +102,25 @@ public class HudController : MonoBehaviour
                 plungers[i].ChargeChanged += OnPlungerChargeChanged;
             }
         }
+        if (Plunger.Instance != null && System.Array.IndexOf(plungers, Plunger.Instance) < 0)
+        {
+            Plunger.Instance.ChargeChanged -= OnPlungerChargeChanged;
+            Plunger.Instance.ChargeChanged += OnPlungerChargeChanged;
+        }
+
+        if (plungers.Length > 0 && plungers[0] != null)
+        {
+            OnPlungerChargeChanged(plungers[0].Charge);
+        }
+        else if (Plunger.Instance != null)
+        {
+            OnPlungerChargeChanged(Plunger.Instance.Charge);
+        }
+        else
+        {
+            OnPlungerChargeChanged(0f);
+        }
+
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.ScoreChanged += OnScoreChanged;
@@ -108,6 +150,10 @@ public class HudController : MonoBehaviour
             {
                 plungers[i].ChargeChanged -= OnPlungerChargeChanged;
             }
+        }
+        if (Plunger.Instance != null)
+        {
+            Plunger.Instance.ChargeChanged -= OnPlungerChargeChanged;
         }
         if (ScoreManager.Instance != null)
         {
@@ -273,21 +319,152 @@ public class HudController : MonoBehaviour
         }
     }
 
+    private static Sprite whiteSprite;
+    private static Sprite GetOrCreateWhiteSprite()
+    {
+        if (whiteSprite == null)
+        {
+            Texture2D tex = Texture2D.whiteTexture;
+            whiteSprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+            whiteSprite.name = "PlungerGauge_WhiteSprite";
+        }
+        return whiteSprite;
+    }
+
+    private void EnsureValidFillSprite(Image image)
+    {
+        if (image == null) return;
+        if (image.sprite == null)
+        {
+            image.sprite = GetOrCreateWhiteSprite();
+        }
+        image.type = Image.Type.Filled;
+        image.fillMethod = Image.FillMethod.Horizontal;
+        image.fillOrigin = (int)Image.OriginHorizontal.Left;
+    }
+
     private void ResolveMissingPlungerGauge()
     {
-        if (plungerGaugeFill != null)
+        if (plungerGaugeFill == null)
         {
-            return;
+            Image[] candidates = GetComponentsInChildren<Image>(true);
+            foreach (Image candidate in candidates)
+            {
+                if (candidate.gameObject.name == "PlungerGaugeFill")
+                {
+                    plungerGaugeFill = candidate;
+                    break;
+                }
+            }
         }
 
-        Image[] candidates = GetComponentsInChildren<Image>(true);
-        foreach (Image candidate in candidates)
+        if (plungerGaugeFill == null)
         {
-            if (candidate.gameObject.name == "PlungerGaugeFill")
+            CreateRuntimePlungerGauge();
+        }
+
+        if (plungerGaugeFill != null)
+        {
+            EnsureValidFillSprite(plungerGaugeFill);
+            if (plungerGaugeRoot == null && plungerGaugeFill.transform.parent != null)
             {
-                plungerGaugeFill = candidate;
-                break;
+                plungerGaugeRoot = plungerGaugeFill.transform.parent.gameObject;
             }
+        }
+
+        if (plungerGaugeLabel == null)
+        {
+            TMP_Text[] textCandidates = GetComponentsInChildren<TMP_Text>(true);
+            foreach (TMP_Text candidate in textCandidates)
+            {
+                if (candidate.gameObject.name == "PlungerGaugeLabel")
+                {
+                    plungerGaugeLabel = candidate;
+                    break;
+                }
+            }
+        }
+    }
+
+    private void CreateRuntimePlungerGauge()
+    {
+        Transform existingBg = transform.Find("PlungerGaugeBackground");
+        GameObject backgroundGo;
+        if (existingBg != null)
+        {
+            backgroundGo = existingBg.gameObject;
+        }
+        else
+        {
+            backgroundGo = new GameObject("PlungerGaugeBackground", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            backgroundGo.transform.SetParent(transform, false);
+
+            RectTransform bgRect = backgroundGo.GetComponent<RectTransform>();
+            bgRect.anchorMin = new Vector2(0.5f, 0f);
+            bgRect.anchorMax = new Vector2(0.5f, 0f);
+            bgRect.pivot = new Vector2(0.5f, 0f);
+            bgRect.anchoredPosition = new Vector2(0f, 40f);
+            bgRect.sizeDelta = new Vector2(500f, 26f);
+
+            Image bgImage = backgroundGo.GetComponent<Image>();
+            bgImage.sprite = GetOrCreateWhiteSprite();
+            bgImage.color = new Color(0.08f, 0.10f, 0.14f, 0.90f);
+            bgImage.raycastTarget = false;
+        }
+
+        plungerGaugeRoot = backgroundGo;
+
+        Transform existingLabel = backgroundGo.transform.Find("PlungerGaugeLabel");
+        if (existingLabel != null)
+        {
+            plungerGaugeLabel = existingLabel.GetComponent<TMP_Text>();
+        }
+        else
+        {
+            GameObject labelGo = new GameObject("PlungerGaugeLabel", typeof(RectTransform), typeof(TextMeshProUGUI));
+            labelGo.transform.SetParent(backgroundGo.transform, false);
+
+            RectTransform labelRect = labelGo.GetComponent<RectTransform>();
+            labelRect.anchorMin = new Vector2(0f, 1f);
+            labelRect.anchorMax = new Vector2(1f, 1f);
+            labelRect.pivot = new Vector2(0.5f, 0f);
+            labelRect.anchoredPosition = new Vector2(0f, 4f);
+            labelRect.sizeDelta = new Vector2(0f, 24f);
+
+            TextMeshProUGUI labelText = labelGo.GetComponent<TextMeshProUGUI>();
+            labelText.fontSize = 18f;
+            labelText.alignment = TextAlignmentOptions.Center;
+            labelText.text = "LANCEUR [ESPACE]";
+            labelText.color = new Color(0.9f, 0.9f, 0.9f, 0.95f);
+            labelText.raycastTarget = false;
+            plungerGaugeLabel = labelText;
+        }
+
+        Transform existingFill = backgroundGo.transform.Find("PlungerGaugeFill");
+        if (existingFill != null)
+        {
+            plungerGaugeFill = existingFill.GetComponent<Image>();
+        }
+        else
+        {
+            GameObject fillGo = new GameObject("PlungerGaugeFill", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            fillGo.transform.SetParent(backgroundGo.transform, false);
+
+            RectTransform fillRect = fillGo.GetComponent<RectTransform>();
+            fillRect.anchorMin = Vector2.zero;
+            fillRect.anchorMax = Vector2.one;
+            fillRect.offsetMin = new Vector2(3f, 3f);
+            fillRect.offsetMax = new Vector2(-3f, -3f);
+
+            Image fillImage = fillGo.GetComponent<Image>();
+            fillImage.sprite = GetOrCreateWhiteSprite();
+            fillImage.type = Image.Type.Filled;
+            fillImage.fillMethod = Image.FillMethod.Horizontal;
+            fillImage.fillOrigin = (int)Image.OriginHorizontal.Left;
+            fillImage.fillAmount = 0f;
+            fillImage.color = Color.green;
+            fillImage.raycastTarget = false;
+            plungerGaugeFill = fillImage;
         }
     }
 
@@ -295,11 +472,48 @@ public class HudController : MonoBehaviour
     {
         if (plungerGaugeFill == null)
         {
-            return;
+            ResolveMissingPlungerGauge();
+            if (plungerGaugeFill == null)
+            {
+                return;
+            }
         }
 
-        plungerGaugeFill.fillAmount = Mathf.Clamp01(charge);
-        plungerGaugeFill.color = Color.Lerp(Color.green, Color.red, Mathf.Clamp01(charge));
+        float clamped = Mathf.Clamp01(charge);
+        plungerGaugeFill.fillAmount = clamped;
+
+        // Arcade gradient: Green -> Yellow -> Orange -> Red
+        Color fillColor;
+        if (clamped < 0.5f)
+        {
+            fillColor = Color.Lerp(new Color(0.2f, 0.95f, 0.2f), new Color(1f, 0.9f, 0.1f), clamped * 2f);
+        }
+        else
+        {
+            fillColor = Color.Lerp(new Color(1f, 0.9f, 0.1f), new Color(1f, 0.15f, 0.15f), (clamped - 0.5f) * 2f);
+        }
+        plungerGaugeFill.color = fillColor;
+
+        if (plungerGaugeLabel != null)
+        {
+            if (clamped > 0.01f)
+            {
+                plungerGaugeLabel.text = $"LANCEUR : {Mathf.RoundToInt(clamped * 100f)}%";
+            }
+            else
+            {
+                plungerGaugeLabel.text = "LANCEUR [ESPACE]";
+            }
+        }
+
+        if (showGaugeOnlyWhenCharged && plungerGaugeRoot != null)
+        {
+            bool shouldBeVisible = clamped > 0.005f;
+            if (plungerGaugeRoot.activeSelf != shouldBeVisible)
+            {
+                plungerGaugeRoot.SetActive(shouldBeVisible);
+            }
+        }
     }
 
     /// <summary>

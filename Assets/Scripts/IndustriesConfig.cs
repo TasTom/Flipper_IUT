@@ -19,6 +19,7 @@ public class IndustriesConfig : ScriptableObject
     [Min(0)] public int processingBonus = 1000;
     [Min(0)] public int deliveryBonusPerProduct = 4000;
     [Min(0)] public int combinedDeliveryBonus = 2000;
+    [Min(0)] public int multiballJackpot = 30000;
     [Header("Automate déréglé (GDD : Boss et FX)")]
     [Min(0)] public int automateBonus = 50000;
     [Min(1)] public int automateHits = 3;

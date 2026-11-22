@@ -45,6 +45,8 @@ public class AudioManager : MonoBehaviour
     private readonly Dictionary<string, AudioClip> registry = new Dictionary<string, AudioClip>();
     private int nextVoice;
     private bool paused;
+    private const string MusicVolumeKey = "VosgesTilt_MusicVolume";
+    public float MusicVolume { get; private set; }
     private long[] voiceOrder;
     private long playbackOrder;
     private readonly Dictionary<PinballSound, CueState> cues = new Dictionary<PinballSound, CueState>();
@@ -54,7 +56,6 @@ public class AudioManager : MonoBehaviour
         public int next;
         public float lastTime = float.NegativeInfinity;
     }
-    private float MusicGain => config != null ? config.musicVolume : musicVolume;
     private float EffectsGain => config != null ? config.effectsVolume : sfxVolume;
 
     /// <summary>Nom d'un clip présent au registre, ou null si absent ou muet.</summary>
@@ -73,6 +74,7 @@ public class AudioManager : MonoBehaviour
         }
 
         Instance = this;
+        MusicVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(MusicVolumeKey, config != null ? config.musicVolume : musicVolume));
 
         // Reuse an authored scene source instead of playing an offset second copy.
         var background = GameObject.Find("BackgroundMusic");
@@ -89,7 +91,7 @@ public class AudioManager : MonoBehaviour
         }
 
         // Authored sources and newly created sources follow the same configured gain.
-        musicSource.volume = Mathf.Clamp01(MusicGain);
+        musicSource.volume = MusicVolume;
         if (config != null && config.musicGroup != null)
             musicSource.outputAudioMixerGroup = config.musicGroup;
 
@@ -127,6 +129,13 @@ public class AudioManager : MonoBehaviour
         if (Instance == this) { Instance = null; }
     }
 
+    public void SetMusicVolume(float value)
+    {
+        MusicVolume = Mathf.Clamp01(value);
+        PlayerPrefs.SetFloat(MusicVolumeKey, MusicVolume);
+        if (musicSource != null && musicFade == null) musicSource.volume = MusicVolume;
+    }
+
     /// <summary>Lance la musique de fond en boucle. Sans effet si déjà en cours.</summary>
     public void PlayMusic()
     {
@@ -151,10 +160,10 @@ public class AudioManager : MonoBehaviour
         while (elapsed < seconds)
         {
             if (!paused) elapsed += Time.unscaledDeltaTime;
-            musicSource.volume = Mathf.Clamp01(MusicGain) * Mathf.SmoothStep(0f, 1f, elapsed / seconds);
+            musicSource.volume = MusicVolume * Mathf.SmoothStep(0f, 1f, elapsed / seconds);
             yield return null;
         }
-        musicSource.volume = Mathf.Clamp01(MusicGain);
+        musicSource.volume = MusicVolume;
         musicFade = null;
     }
 

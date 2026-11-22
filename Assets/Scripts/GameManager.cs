@@ -42,9 +42,13 @@ public class GameManager : MonoBehaviour
     [Tooltip("Lance une partie automatiquement au démarrage de la scène.")]
     [SerializeField] private bool autoStartOnPlay = true;
 
+    [Tooltip("Table à ouvrir quand le joueur rejoue après un Game Over. Vide pour rejouer sur cette table.")]
+    [SerializeField] private string replayScene;
+
     [Tooltip("Le moteur de table (VPE) fournit et retire les billes à la place de PhysX.")]
     [SerializeField] private bool externalBallLifecycle;
     public event Action ExternalBallRequested;
+    public event Action NewGameStarted;
 
     [Tooltip("Délai avant la bille suivante, en secondes.")]
     [SerializeField] private float respawnDelay = 1.2f;
@@ -150,6 +154,11 @@ public class GameManager : MonoBehaviour
         if (SceneTransition.IsPlaying) return;
         if (ValidatePressed() && (State == GameState.GameOver || State == GameState.Attract))
         {
+            if (State == GameState.GameOver && SceneTransition.CanLoad(replayScene))
+            {
+                TableSessionTransfer.Clear();
+                if (SceneTransition.Play(replayScene, "NOUVELLE PARTIE")) return;
+            }
             StartGame();
             return;
         }
@@ -204,6 +213,7 @@ public class GameManager : MonoBehaviour
         BallsRemaining = startingBalls;
         BallsChanged?.Invoke(BallsRemaining);
 
+        NewGameStarted?.Invoke();
         SpawnBall();
         Broadcast("BONNE PARTIE !", 2f);
     }

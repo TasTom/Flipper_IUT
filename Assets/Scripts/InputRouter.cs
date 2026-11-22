@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -19,7 +20,14 @@ using UnityEngine;
 [DefaultExecutionOrder(-100)]
 public class InputRouter : MonoBehaviour
 {
+    public enum ActionBinding { LeftFlipper, RightFlipper, UpperFlipper, Plunger, TiltLeft, TiltRight }
+
     public static InputRouter Instance { get; private set; }
+    private const string BindingPrefix = "VosgesTilt_Key_";
+    private static readonly KeyCode[] KeyboardKeys = Array.FindAll((KeyCode[])Enum.GetValues(typeof(KeyCode)),
+        key => key >= KeyCode.Backspace && key < KeyCode.Mouse0);
+    private readonly KeyCode[] bindings = new KeyCode[6];
+    private bool capturingBinding;
 
     [Header("Disposition")]
     [Tooltip("Décoche : flippers Q/A/D et tilt sur les flèches (fidèle au GDD).\n" +
@@ -78,6 +86,10 @@ public class InputRouter : MonoBehaviour
         }
 
         Instance = this;
+        for (int i = 0; i < bindings.Length; i++)
+            bindings[i] = (KeyCode)PlayerPrefs.GetInt(BindingPrefix + (ActionBinding)i, 0);
+        for (int i = 0; i < bindings.Length; i++)
+            if (!CanBind((ActionBinding)i, bindings[i])) bindings[i] = KeyCode.None;
         WarnAboutKeyClash();
     }
 
@@ -91,25 +103,98 @@ public class InputRouter : MonoBehaviour
 
     private void Update()
     {
-        KeyCode leftFlipper = alternateLayout ? altLeftFlipperKey : leftFlipperKey;
-        KeyCode rightFlipper = alternateLayout ? altRightFlipperKey : rightFlipperKey;
-        KeyCode tiltLeft = alternateLayout ? altTiltLeftKey : tiltLeftKey;
-        KeyCode tiltRight = alternateLayout ? altTiltRightKey : tiltRightKey;
+        LeftFlipperHeld = Held(GetKey(ActionBinding.LeftFlipper)) || Held(GetAlias(ActionBinding.LeftFlipper));
+        RightFlipperHeld = Held(GetKey(ActionBinding.RightFlipper));
+        UpperFlipperHeld = Held(GetKey(ActionBinding.UpperFlipper)) || Held(GetAlias(ActionBinding.UpperFlipper));
 
-        LeftFlipperHeld = Held(leftFlipper) ||
-                          (!alternateLayout && Held(leftFlipperSecondKey));
-        RightFlipperHeld = Held(rightFlipper);
-        UpperFlipperHeld = Held(upperFlipperKey) || Held(upperFlipperSecondKey);
+        TiltLeftPressed = Pressed(GetKey(ActionBinding.TiltLeft));
+        TiltRightPressed = Pressed(GetKey(ActionBinding.TiltRight));
 
-        TiltLeftPressed = Pressed(tiltLeft);
-        TiltRightPressed = Pressed(tiltRight);
-
-        bool plungerNow = Held(plungerKey);
+        bool plungerNow = Held(GetKey(ActionBinding.Plunger));
         PlungerReleased = PlungerHeld && !plungerNow;
         PlungerHeld = plungerNow;
 
-        PausePressed = Pressed(pauseKey);
-        ValidatePressed = Pressed(validateKey);
+        PausePressed = !capturingBinding && Pressed(pauseKey);
+        ValidatePressed = !capturingBinding && Pressed(validateKey);
+    }
+
+    public KeyCode GetKey(ActionBinding action)
+    {
+        var chosen = bindings[(int)action];
+        if (chosen != KeyCode.None) return chosen;
+        return action switch
+        {
+            ActionBinding.LeftFlipper => alternateLayout ? altLeftFlipperKey : leftFlipperKey,
+            ActionBinding.RightFlipper => alternateLayout ? altRightFlipperKey : rightFlipperKey,
+            ActionBinding.UpperFlipper => upperFlipperKey,
+            ActionBinding.Plunger => plungerKey,
+            ActionBinding.TiltLeft => alternateLayout ? altTiltLeftKey : tiltLeftKey,
+            ActionBinding.TiltRight => alternateLayout ? altTiltRightKey : tiltRightKey,
+            _ => KeyCode.None
+        };
+    }
+
+    public KeyCode GetAlias(ActionBinding action)
+    {
+        if (bindings[(int)action] != KeyCode.None) return KeyCode.None;
+        return action switch
+        {
+            ActionBinding.LeftFlipper when !alternateLayout => leftFlipperSecondKey,
+            ActionBinding.UpperFlipper => upperFlipperSecondKey,
+            _ => KeyCode.None
+        };
+    }
+
+    public static string KeyLabel(KeyCode key) => key switch
+    {
+        KeyCode.None => "—", KeyCode.Space => "Espace", KeyCode.LeftArrow => "←", KeyCode.RightArrow => "→",
+        KeyCode.UpArrow => "↑", KeyCode.DownArrow => "↓", KeyCode.LeftShift => "Maj gauche", KeyCode.RightShift => "Maj droite",
+        _ when key >= KeyCode.Alpha0 && key <= KeyCode.Alpha9 => ((int)key - (int)KeyCode.Alpha0).ToString(),
+        _ => key.ToString()
+    };
+
+    public bool SetBinding(ActionBinding action, KeyCode key)
+    {
+        if (!CanBind(action, key)) return false;
+        bindings[(int)action] = key;
+        PlayerPrefs.SetInt(BindingPrefix + action, (int)key);
+        return true;
+    }
+
+    public void ResetBindings()
+    {
+        for (int i = 0; i < bindings.Length; i++)
+        {
+            bindings[i] = KeyCode.None;
+            PlayerPrefs.DeleteKey(BindingPrefix + (ActionBinding)i);
+        }
+    }
+
+    public void CaptureBinding(bool value) => capturingBinding = value;
+
+    public bool TryReadBindingKey(out KeyCode key)
+    {
+        key = KeyCode.None;
+        if (!capturingBinding || !Input.anyKeyDown) return false;
+        foreach (var candidate in KeyboardKeys)
+        {
+            if (!Pressed(candidate)) continue;
+            key = candidate;
+            return true;
+        }
+        return false;
+    }
+
+    private bool CanBind(ActionBinding action, KeyCode key)
+    {
+        if (key == pauseKey || key == validateKey || key == KeyCode.Escape || key == KeyCode.Return ||
+            key == KeyCode.KeypadEnter || !Array.Exists(KeyboardKeys, candidate => candidate == key)) return false;
+        for (int i = 0; i < bindings.Length; i++)
+        {
+            var other = (ActionBinding)i;
+            if (other != action && (GetKey(other) == key || GetAlias(other) == key)) return false;
+        }
+        return true;
     }
 
     /// <summary>

@@ -106,8 +106,9 @@ public sealed class IndustriesTableLighting : MonoBehaviour
         int targets=engine!=null?engine.LitTargetMask:0;
         var production=engine!=null?engine.Production:null;
         bool bossActive=engine!=null&&engine.AutomateActive;
-        bool guideRamp=!attract&&!bossActive&&production!=null&&production.NeedsRamp;
-        bool guideDelivery=!attract&&!bossActive&&production!=null&&!guideRamp&&production.CanDeliver;
+        bool multiball=engine!=null&&engine.MultiballActive;
+        bool guideRamp=!attract&&!bossActive&&!multiball&&production!=null&&production.NeedsRamp;
+        bool guideDelivery=!attract&&(multiball||!bossActive&&production!=null&&!guideRamp&&production.CanDeliver);
         bool guideTargets=!attract&&!bossActive&&production!=null&&!guideRamp&&!guideDelivery;
         for(int i=0;i<lamps.Length;i++)
         {

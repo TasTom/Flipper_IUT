@@ -458,7 +458,7 @@ public class HudController : MonoBehaviour
             TextMeshProUGUI labelText = labelGo.GetComponent<TextMeshProUGUI>();
             labelText.fontSize = 18f;
             labelText.alignment = TextAlignmentOptions.Center;
-            labelText.text = "LANCEUR [ESPACE]";
+            labelText.text = PlungerKeyLabel();
             labelText.color = new Color(0.9f, 0.9f, 0.9f, 0.95f);
             labelText.raycastTarget = false;
             plungerGaugeLabel = labelText;
@@ -526,7 +526,7 @@ public class HudController : MonoBehaviour
             }
             else
             {
-                plungerGaugeLabel.text = "LANCEUR [ESPACE]";
+                plungerGaugeLabel.text = PlungerKeyLabel();
             }
         }
 
@@ -538,6 +538,13 @@ public class HudController : MonoBehaviour
                 plungerGaugeRoot.SetActive(shouldBeVisible);
             }
         }
+    }
+
+    private static string PlungerKeyLabel()
+    {
+        var router = InputRouter.Instance;
+        var key = router != null ? router.GetKey(InputRouter.ActionBinding.Plunger) : KeyCode.Space;
+        return "LANCEUR [" + InputRouter.KeyLabel(key).ToUpperInvariant() + "]";
     }
 
     /// <summary>

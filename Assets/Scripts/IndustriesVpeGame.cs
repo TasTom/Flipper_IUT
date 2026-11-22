@@ -25,7 +25,6 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     [SerializeField] private float ballSaverDuration = 8f;
     private float ballSaverEnd = float.NegativeInfinity;
     private bool ballSaverUsed;
-    private float lastDrainTime = float.NegativeInfinity;
     private Player player;
     private TableApi api;
     private FlipperApi left, right;
@@ -43,11 +42,15 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     private IndustriesAutomate automate;
     private IndustriesAutomateFx automateFx;
     private readonly HashSet<int> drains = new HashSet<int>();
+    private readonly Dictionary<int, Transform> liveBalls = new Dictionary<int, Transform>();
+    private bool startingMultiball;
     private readonly List<Action> unbind = new List<Action>();
-    private readonly List<DropTargetApi> dropTargets = new List<DropTargetApi>();
+    private readonly List<(DropTargetApi target, int bit)> dropTargets = new List<(DropTargetApi, int)>();
+    private Coroutine serveRoutine;
     public bool IsInitialized => initialized;
     public IndustriesProduction Production => production;
     public bool AutomateActive => automate?.IsActive == true;
+    public bool MultiballActive { get; private set; }
     public int AutomateHits => automate?.Hits ?? 0;
     public int TargetsLit { get { int count = 0; for (int i = 0; i < 6; i++) if ((targets & (1 << i)) != 0) count++; return count; } }
     public int LitTargetMask=>targets;
@@ -129,7 +132,7 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
             int bit = Array.IndexOf(targetNames, c.name);
             if (bit < 0) continue;
             EventHandler<HitEventArgs> handler = (_, __) => HitTarget(bit);
-            target.Hit += handler; unbind.Add(() => target.Hit -= handler); dropTargets.Add(target);
+            target.Hit += handler; unbind.Add(() => target.Hit -= handler); dropTargets.Add((target, bit));
         }
         foreach (var c in GetComponentsInChildren<HitTargetComponent>())
         {
@@ -203,8 +206,12 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         if (troughDrain == null)
             Debug.LogWarning("[Industries] Drain VPE non relié au trough : récupération hors zone indisponible.", this);
         if (scoop != null) { scoop.Hit += OnScoop; unbind.Add(() => scoop.Hit -= OnScoop); }
+        p.OnBallCreated += TrackBallCreated;
+        p.OnBallDestroyed += TrackBallDestroyed;
+        unbind.Add(() => { p.OnBallCreated -= TrackBallCreated; p.OnBallDestroyed -= TrackBallDestroyed; });
         initialized = true;
         game.ExternalBallRequested += Serve;
+        game.NewGameStarted += ResetForNewGame;
         game.StateChanged += OnState;
         for (int i = 1; i <= 16; i++) player.SetLamp("gi_" + i, 1f);
         if (TableSessionTransfer.TryConsume(gameObject.scene.name, out var session))
@@ -263,19 +270,22 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     private IEnumerator ResetTargets()
     {
         yield return new WaitForSeconds(config.targetResetSeconds);
-        if (production == null || (production.Loaded & 1) == 0)
-            foreach (var t in dropTargets) t.IsDropped = false;
+        foreach (var (target, bit) in dropTargets)
+            if ((targets & (1 << bit)) == 0) target.IsDropped = false;
     }
     private void RefreshObjectives()
     {
         if (nextShotText != null && production != null)
-            nextShotText.text = AutomateActive ? "TOUCHEZ L’AUTOMATE"
+            nextShotText.text = MultiballActive ? "JACKPOT AU SCOOP"
+                : startingMultiball ? "MULTIBALL"
+                : AutomateActive ? "TOUCHEZ L’AUTOMATE"
                 : production.NeedsRamp ? "VISEZ LA RAMPE"
                 : production.CanDeliver ? "VISEZ LA LIVRAISON"
                 : automate != null ? "CIBLES BOSS  " + automate.QualificationHits + "/" + IndustriesAutomate.RequiredTargets
                 : "TOUCHEZ LES CIBLES";
         if (objectivesText != null) objectivesText.text = AutomateActive
             ? "AUTOMATE" + (compactObjectivesLabel ? "\n" : "  ") + automate.Hits + "/" + automate.RequiredHits
+            : MultiballActive ? "MULTIBALL\n2 BILLES"
             : production != null
             ? "BOIS " + production.Status(0) + (compactObjectivesLabel ? "\n" : " · ") + "TEXTILE " + production.Status(1)
             : compactObjectivesLabel ? TargetsLit+" / 6" : "PRODUCTION  " + TargetsLit + "/6  ·  BONUS " + config.sixTargetsBonus.ToString("N0");
@@ -292,16 +302,35 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
 
     private void HandleDrainBall(int ballId)
     {
-        if (!initialized || Time.time - lastDrainTime < 0.5f) return;
-        lastDrainTime = Time.time;
+        if (!initialized || (game.State != GameManager.GameState.Playing && game.State != GameManager.GameState.ReadyToLaunch) ||
+            !drains.Add(ballId)) return;
         production?.ForgetBall(ballId);
+        if (startingMultiball) return;
+        if (MultiballActive)
+        {
+            MultiballActive = false;
+            RefreshObjectives();
+            if (liveBalls.Count > (liveBalls.ContainsKey(ballId) ? 1 : 0))
+            {
+                game.ShowMessage("FIN DU MULTIBALL · UNE BILLE EN JEU", 2f);
+                return;
+            }
+        }
+        LoseBall();
+    }
+
+    private void TrackBallCreated(object sender, BallEvent e) => liveBalls[e.BallId] = e.Ball.transform;
+    private void TrackBallDestroyed(object sender, BallEvent e) => liveBalls.Remove(e.BallId);
+
+    private void LoseBall()
+    {
         if (ballSaverDuration > 0f && !ballSaverUsed && Time.time < ballSaverEnd)
         {
             ballSaverUsed = true;
             audio?.Play(IndustriesSound.Bonus);
             game.NotifyBallReturnedToLane();
             game.ShowMessage("BILLE SAUVÉE !", 1.8f);
-            StartCoroutine(ServeAfterDelay());
+            QueueServe();
             return;
         }
         audio?.Play(IndustriesSound.Drain);
@@ -354,7 +383,7 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         {
             score.AddBonus(config.automateBonus);
             audio?.Play(IndustriesSound.Bonus);
-            foreach (var target in dropTargets) target.IsDropped = false;
+            foreach (var (target, _) in dropTargets) target.IsDropped = false;
             game.ShowMessage(progress + "  AUTOMATE ARRÊTÉ  +" + config.automateBonus.ToString("N0"), 2.6f);
         }
         else game.ShowMessage(progress + "  AUTOMATE TOUCHÉ", 1.3f);
@@ -366,37 +395,91 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         if (!CanScore()) return;
         Award(config.scoopPoints);
         audio?.Play(IndustriesSound.Scoop);
+        bool jackpot = MultiballActive;
+        bool multiStarted = false;
         if (production != null && production.Processed != 0)
         {
+            bool doubleDelivery = production.Processed == 0b11;
             int bonus = production.Deliver();
             score.AddBonus(bonus);
             targets = production.Targets;
             StartCoroutine(ResetTargets());
             audio?.Play(IndustriesSound.Bonus);
-            if (!AutomateActive)
+            if (doubleDelivery && !startingMultiball && !MultiballActive)
+            {
+                startingMultiball = true;
+                ballSaverEnd = float.NegativeInfinity;
+                multiStarted = true;
+                game.ShowMessage("DOUBLE LIVRAISON · MULTIBALL", 2.5f);
+                StartCoroutine(StartMultiball());
+            }
+            if (!AutomateActive && !multiStarted && !jackpot)
                 game.ShowMessage("LIVRAISON +" + bonus.ToString("N0"), 2f);
             RefreshObjectives();
         }
-        StartCoroutine(EjectScoop());
+        if (jackpot)
+        {
+            score.AddBonus(config.multiballJackpot);
+            audio?.Play(IndustriesSound.Bonus);
+            game.ShowMessage("JACKPOT +" + config.multiballJackpot.ToString("N0"), 2.2f);
+        }
+        if (!multiStarted) StartCoroutine(EjectScoop());
+    }
+
+    private IEnumerator StartMultiball()
+    {
+        // Le scoop tient la première bille pendant le chargement du lanceur.
+        plunger.PullBack();
+        bool served = false;
+        yield return MoveBallToLane(value => served = value);
+        if (served) yield return new WaitForSeconds(.65f);
+        plunger.FireFromFullRetract();
+        if (served) audio?.Play(IndustriesSound.Launch);
+        KickScoopBall();
+        startingMultiball = false;
+        MultiballActive = served && liveBalls.Count >= 2;
+        if (MultiballActive)
+            game.ShowMessage("MULTIBALL · VISEZ LE SCOOP", 2.6f);
+        else if (liveBalls.Count == 0)
+            LoseBall();
+        RefreshObjectives();
     }
     private IEnumerator EjectScoop()
     {
         yield return new WaitForSeconds(config.scoopHoldSeconds);
+        KickScoopBall();
+    }
+
+    private void KickScoopBall()
+    {
         if (scoop != null && scoop.HasBall()) scoop.Kick(config.scoopKickAngle, config.scoopKickSpeed);
     }
     private void Serve()
     {
-        StopAllCoroutines();
         drains.Clear();
         ballSaverUsed = false;
         ballSaverEnd = float.NegativeInfinity;
+        QueueServe();
+    }
+    private void ResetForNewGame()
+    {
+        StopAllCoroutines();
+        serveRoutine = null;
+        startingMultiball = false;
+        MultiballActive = false;
         targets = 0;
         production?.Reset();
-        foreach (var t in dropTargets) t.IsDropped = false;
+        automate?.Reset();
+        automateFx?.RestoreBumper();
+        foreach (var (target, _) in dropTargets) target.IsDropped = false;
         RefreshObjectives();
-        StartCoroutine(ServeAfterDelay());
     }
-    private IEnumerator ServeAfterDelay()
+    private void QueueServe()
+    {
+        if (serveRoutine != null) StopCoroutine(serveRoutine);
+        serveRoutine = StartCoroutine(MoveBallToLane());
+    }
+    private IEnumerator MoveBallToLane(Action<bool> completed = null)
     {
         yield return new WaitForSeconds(config.serveDelay);
         bool served = trough.EjectBall();
@@ -408,17 +491,20 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         if (!served)
         {
             Debug.LogWarning("[Industries] Le trough n'a pas pu fournir de bille ; vérifier ses références.", this);
+            completed?.Invoke(false);
             yield break;
         }
 
-        if (retryBallRelease == null) yield break;
         yield return new WaitForSeconds(0.5f);
-        if (!ballRelease.HasBall()) yield break;
-        // Relâcher la bille déjà servie sans la prélever une seconde fois dans le trough.
-        retryBallRelease();
-        yield return new WaitForSeconds(0.5f);
-        if (ballRelease.HasBall())
-            Debug.LogWarning("[Industries] BallRelease retient toujours la bille après la rééjection.", this);
+        if (ballRelease != null && ballRelease.HasBall())
+        {
+            // Relâcher la bille déjà servie sans la prélever une seconde fois dans le trough.
+            retryBallRelease?.Invoke();
+            yield return new WaitForSeconds(0.5f);
+            if (ballRelease.HasBall())
+                Debug.LogWarning("[Industries] BallRelease retient toujours la bille après la rééjection.", this);
+        }
+        completed?.Invoke(true);
     }
     private void Update()
     {
@@ -430,9 +516,9 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         if (l != lastLeft) { if (l) left.RotateToEnd(); else left.RotateToStart(); audio?.Play(l?IndustriesSound.FlipperUp:IndustriesSound.FlipperDown); lastLeft = l; }
         if (r != lastRight) { if (r) right.RotateToEnd(); else right.RotateToStart(); audio?.Play(r?IndustriesSound.FlipperUp:IndustriesSound.FlipperDown); lastRight = r; }
         bool releaseOccupied = ballRelease != null && ballRelease.HasBall();
-        bool launch = canPlay && !releaseOccupied && (input.PlungerHeld || cabinet.GamePlayPF.LaunchBall.IsPressed());
+        bool launch = canPlay && !startingMultiball && !releaseOccupied && (input.PlungerHeld || cabinet.GamePlayPF.LaunchBall.IsPressed());
         if (launch && !lastLaunch) plunger.PullBack();
-        if (!launch && lastLaunch && canPlay && !releaseOccupied)
+        if (!launch && lastLaunch && canPlay && !startingMultiball && !releaseOccupied)
         {
             plunger.Fire();
             audio?.Play(IndustriesSound.Launch);
@@ -441,17 +527,17 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         }
         lastLaunch = launch;
 
-        if (canPlay && game.State == GameManager.GameState.Playing && troughDrain != null &&
-            Time.time - lastDrainTime >= 0.5f)
+        if (canPlay && game.State == GameManager.GameState.Playing && troughDrain != null)
         {
-            foreach (var b in FindObjectsByType<BallComponent>(FindObjectsInactive.Exclude))
+            foreach (var (id, ball) in liveBalls)
             {
-                Vector3 p = b.transform.position;
+                if (ball == null) continue;
+                Vector3 p = ball.position;
                 // Bille tombée dans le bac du bas (sous le drain, hors couloir de lancement)
-                if (p.z < 1.85f && p.x < 3.0f)
+                if (p.z < 1.85f && p.x < 3.0f && !drains.Contains(id))
                 {
                     // Le drain natif recycle également le prefab dans le stock du trough.
-                    troughDrain.OnHit(b.Id, false);
+                    troughDrain.OnHit(id, false);
                     break;
                 }
             }
@@ -460,6 +546,7 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     private void OnState(GameManager.GameState state)
     {
         if (state != GameManager.GameState.GameOver) return;
+        MultiballActive = false;
         automate?.Reset();
         automateFx?.RestoreBumper();
         RefreshObjectives();
@@ -468,7 +555,12 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     private void OnDestroy()
     {
         foreach (var action in unbind) action();
-        if (game != null) { game.ExternalBallRequested -= Serve; game.StateChanged -= OnState; }
+        if (game != null)
+        {
+            game.ExternalBallRequested -= Serve;
+            game.NewGameStarted -= ResetForNewGame;
+            game.StateChanged -= OnState;
+        }
         cabinet?.Dispose();
     }
     public void Switch(string id, bool closed) => OnSwitchChanged?.Invoke(this, new SwitchEventArgs2(id, closed));

@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Affichage de la partie (GDD §Interface).
@@ -22,16 +23,19 @@ public class HudController : MonoBehaviour
     [SerializeField] private TMP_Text multiplierText;
     [SerializeField] private TMP_Text scoreFeedbackText;
     [SerializeField] private bool compactMultiplierLabel;
+    [SerializeField] private Image plungerGaugeFill;
 
     [Header("Découverte automatique")]
     [Tooltip("Remplit les champs vides en cherchant les enfants nommés ScoreText, " +
              "HighScoreText, BallsText et MessageText.")]
     [SerializeField] private bool autoFindTexts = true;
+    [SerializeField] private bool autoFindPlungerGauge = true;
 
     [Header("Message temporaire")]
     [SerializeField] private float defaultMessageDuration = 2f;
 
     private Coroutine messageRoutine;
+    private Plunger[] plungers = System.Array.Empty<Plunger>();
 
     private void Awake()
     {
@@ -49,6 +53,13 @@ public class HudController : MonoBehaviour
             ResolveMissingTexts();
         }
 
+        if (autoFindPlungerGauge)
+        {
+            ResolveMissingPlungerGauge();
+        }
+
+        plungers = FindObjectsByType<Plunger>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+
         WarnAboutMissingTexts();
     }
 
@@ -60,6 +71,14 @@ public class HudController : MonoBehaviour
     private void Subscribe()
     {
         Unsubscribe();
+        for (int i = 0; i < plungers.Length; i++)
+        {
+            if (plungers[i] != null)
+            {
+                plungers[i].ChargeChanged -= OnPlungerChargeChanged;
+                plungers[i].ChargeChanged += OnPlungerChargeChanged;
+            }
+        }
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.ScoreChanged += OnScoreChanged;
@@ -83,6 +102,13 @@ public class HudController : MonoBehaviour
 
     private void Unsubscribe()
     {
+        for (int i = 0; i < plungers.Length; i++)
+        {
+            if (plungers[i] != null)
+            {
+                plungers[i].ChargeChanged -= OnPlungerChargeChanged;
+            }
+        }
         if (ScoreManager.Instance != null)
         {
             ScoreManager.Instance.ScoreChanged -= OnScoreChanged;
@@ -245,6 +271,35 @@ public class HudController : MonoBehaviour
             else if (multiplierText == null && n == "MultiplierText") multiplierText = candidate;
             else if (scoreFeedbackText == null && n == "ScoreFeedbackText") scoreFeedbackText = candidate;
         }
+    }
+
+    private void ResolveMissingPlungerGauge()
+    {
+        if (plungerGaugeFill != null)
+        {
+            return;
+        }
+
+        Image[] candidates = GetComponentsInChildren<Image>(true);
+        foreach (Image candidate in candidates)
+        {
+            if (candidate.gameObject.name == "PlungerGaugeFill")
+            {
+                plungerGaugeFill = candidate;
+                break;
+            }
+        }
+    }
+
+    private void OnPlungerChargeChanged(float charge)
+    {
+        if (plungerGaugeFill == null)
+        {
+            return;
+        }
+
+        plungerGaugeFill.fillAmount = Mathf.Clamp01(charge);
+        plungerGaugeFill.color = Color.Lerp(Color.green, Color.red, Mathf.Clamp01(charge));
     }
 
     /// <summary>

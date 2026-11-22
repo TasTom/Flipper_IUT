@@ -477,6 +477,58 @@ public static class EnsureMvpStructure
 
         EnsureHudText(canvasGo.transform, "MessageText", new Vector2(0.5f, 0.5f), Vector2.zero,
             new Vector2(1400f, 170f), 78f, TextAlignmentOptions.Center);
+
+        EnsurePlungerGauge(canvasGo.transform);
+    }
+
+    private static void EnsurePlungerGauge(Transform canvas)
+    {
+        Transform existing = null;
+        foreach (Transform child in canvas.GetComponentsInChildren<Transform>(true))
+        {
+            if (child.name == "PlungerGaugeFill")
+            {
+                existing = child;
+                break;
+            }
+        }
+        if (existing != null)
+        {
+            Kept.Add("PlungerGaugeFill");
+            return;
+        }
+
+        GameObject background = new GameObject("PlungerGaugeBackground", typeof(RectTransform), typeof(Image));
+        background.transform.SetParent(canvas, false);
+        Undo.RegisterCreatedObjectUndo(background, "Ajouter la jauge du lanceur");
+        Created.Add("PlungerGaugeBackground");
+
+        RectTransform backgroundRect = background.GetComponent<RectTransform>();
+        backgroundRect.anchorMin = new Vector2(0.5f, 0f);
+        backgroundRect.anchorMax = new Vector2(0.5f, 0f);
+        backgroundRect.pivot = new Vector2(0.5f, 0f);
+        backgroundRect.anchoredPosition = new Vector2(0f, 54f);
+        backgroundRect.sizeDelta = new Vector2(620f, 24f);
+        background.GetComponent<Image>().color = new Color(0.08f, 0.08f, 0.08f, 0.95f);
+
+        GameObject fill = new GameObject("PlungerGaugeFill", typeof(RectTransform), typeof(Image));
+        fill.transform.SetParent(background.transform, false);
+        Undo.RegisterCreatedObjectUndo(fill, "Ajouter la jauge du lanceur");
+        Created.Add("PlungerGaugeFill");
+
+        RectTransform fillRect = fill.GetComponent<RectTransform>();
+        fillRect.anchorMin = Vector2.zero;
+        fillRect.anchorMax = Vector2.one;
+        fillRect.offsetMin = Vector2.zero;
+        fillRect.offsetMax = Vector2.zero;
+
+        Image fillImage = fill.GetComponent<Image>();
+        fillImage.type = Image.Type.Filled;
+        fillImage.fillMethod = Image.FillMethod.Horizontal;
+        fillImage.fillOrigin = (int)Image.OriginHorizontal.Left;
+        fillImage.fillAmount = 0f;
+        fillImage.color = Color.green;
+        fillImage.raycastTarget = false;
     }
 
     /// <summary>

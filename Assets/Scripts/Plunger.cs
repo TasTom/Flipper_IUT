@@ -81,6 +81,7 @@ public class Plunger : MonoBehaviour
     private bool heldLastFrame;               // état de l'appui à la frame précédente
     private string currentSource = "aucune";  // qui presse en ce moment
     private string lastSource = "aucune";     // qui a chargé en dernier, pour le log de relâche
+    private float lastPublishedCharge = -1f;
 
     /// <summary>
     /// Avance maximale du bouchon par frame, en unités. 0,1 u = 6 mm, soit moins de la moitié
@@ -91,6 +92,7 @@ public class Plunger : MonoBehaviour
     /// <summary>Charge courante, de 0 à 1.</summary>
     public float Charge => maxPull > 0f ? pullAmount / maxPull : 0f;
     public event System.Action Released;
+    public event System.Action<float> ChargeChanged;
 
     /// <summary>
     /// Vitesse de la course de retour, bornée pour que le bouchon n'avance jamais de plus de
@@ -233,6 +235,7 @@ public class Plunger : MonoBehaviour
         }
 
         transform.localPosition = restPosition + Vector3.back * pullAmount;
+        PublishCharge();
     }
 
     private void Launch()
@@ -341,6 +344,19 @@ public class Plunger : MonoBehaviour
         pullAmount = 0f;
         transform.localPosition = restPosition;
         launching = false;
+        PublishCharge();
+    }
+
+    private void PublishCharge()
+    {
+        float charge = Mathf.Clamp01(Charge);
+        if (Mathf.Abs(charge - lastPublishedCharge) < 0.01f)
+        {
+            return;
+        }
+
+        lastPublishedCharge = charge;
+        ChargeChanged?.Invoke(charge);
     }
 
     /// <summary>

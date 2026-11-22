@@ -11,6 +11,8 @@ public class MultiballManager : MonoBehaviour
     [SerializeField] private Transform[] releasePoints;
     [SerializeField] private int extraBalls = 2;
     [SerializeField] private float spawnImpulse = 5f;
+    [Tooltip("Nombre maximal de billes actives pendant un multiball.")]
+    [SerializeField] private int maxActiveBalls = 3;
     [SerializeField] private BallLock ballLock;
     private float ballRadius;
     private bool fromPhysicalLock;
@@ -90,7 +92,11 @@ public class MultiballManager : MonoBehaviour
 
         bool alreadyMultiball = BallManager.Instance != null && BallManager.Instance.LiveBallCount > 1;
         int released = 0;
-        int needed = BallManager.Instance != null ? Mathf.Max(0, Mathf.Min(3, extraBalls + 1) - BallManager.Instance.LiveBallCount) : extraBalls;
+        int target = Mathf.Clamp(extraBalls + 1, 1, Mathf.Clamp(maxActiveBalls, 1, 3));
+        int current = BallManager.Instance != null ? Mathf.Max(0, BallManager.Instance.LiveBallCount) : 1;
+        int needed = Mathf.Max(0, target - current);
+        bool physicalLockActivation = fromPhysicalLock;
+        fromPhysicalLock = false;
         for (int i = 0; i < needed; i++)
         {
             Physics.SyncTransforms();
@@ -111,9 +117,8 @@ public class MultiballManager : MonoBehaviour
                 released++;
             }
         }
-        if (released > 0 && (!alreadyMultiball || fromPhysicalLock) && ScoreManager.Instance != null)
+        if ((released > 0 || physicalLockActivation) && (!alreadyMultiball || physicalLockActivation) && ScoreManager.Instance != null)
             ScoreManager.Instance.RecordMultiballStarted();
-        fromPhysicalLock = false;
     }
 
     public void TriggerLockedMultiball() { fromPhysicalLock = true; TriggerMultiball(); }

@@ -14,8 +14,19 @@ public class MultiballManager : MonoBehaviour
     [Tooltip("Nombre maximal de billes actives pendant un multiball.")]
     [SerializeField] private int maxActiveBalls = 3;
     [SerializeField] private BallLock ballLock;
+
+    [Header("Jackpots multiball")]
+    [Tooltip("Points d'un jackpot sur rampe ou loop pendant un multiball.")]
+    [SerializeField] private int jackpotPoints = 25000;
+    [Tooltip("Points d'un super jackpot (tous les 3 jackpots).")]
+    [SerializeField] private int superJackpotPoints = 75000;
+    [SerializeField] private int jackpotsForSuper = 3;
+
     private float ballRadius;
     private bool fromPhysicalLock;
+    private int jackpotsThisMultiball;
+
+    public bool IsMultiballActive => BallManager.Instance != null && BallManager.Instance.LiveBallCount > 1;
 
     private void Awake()
     {
@@ -122,8 +133,34 @@ public class MultiballManager : MonoBehaviour
                 released++;
             }
         }
-        if ((released > 0 || physicalLockActivation) && (!alreadyMultiball || physicalLockActivation) && ScoreManager.Instance != null)
-            ScoreManager.Instance.RecordMultiballStarted();
+        if ((released > 0 || physicalLockActivation) && (!alreadyMultiball || physicalLockActivation))
+        {
+            jackpotsThisMultiball = 0;
+            if (ScoreManager.Instance != null) ScoreManager.Instance.RecordMultiballStarted();
+            var saver = BallManager.Instance != null ? BallManager.Instance.GetComponent<BallSaver>() : null;
+            if (saver != null) saver.ArmMultiball();
+            AudioManager.Instance?.Play(PinballSound.ExtraBall);
+        }
+    }
+
+    /// <summary>
+    /// Récompense un tir majeur (rampe ou loop) pendant un multiball par un Jackpot ou Super Jackpot.
+    /// </summary>
+    public bool TryAwardJackpot()
+    {
+        if (!IsMultiballActive || GameManager.Instance == null || GameManager.Instance.State != GameManager.GameState.Playing)
+            return false;
+
+        jackpotsThisMultiball++;
+        bool isSuper = jackpotsForSuper > 0 && jackpotsThisMultiball % jackpotsForSuper == 0;
+        int pts = isSuper ? superJackpotPoints : jackpotPoints;
+
+        if (pts > 0) GameManager.Instance.AddBonus(pts);
+        GameManager.Instance.ShowMessage(
+            isSuper ? $"SUPER JACKPOT !  +{pts:N0}" : $"JACKPOT !  +{pts:N0}",
+            isSuper ? 2.5f : 1.8f);
+        AudioManager.Instance?.Play(isSuper ? PinballSound.ExtraBall : PinballSound.MultiplierRaised);
+        return true;
     }
 
     public void TriggerLockedMultiball() { fromPhysicalLock = true; TriggerMultiball(); }

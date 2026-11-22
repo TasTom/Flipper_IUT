@@ -140,7 +140,7 @@ public static class AdaptIndustriesTable
         RenderSettings.ambientMode=AmbientMode.Trilight; RenderSettings.ambientSkyColor=new Color(.24f,.29f,.33f);RenderSettings.ambientEquatorColor=new Color(.12f,.17f,.19f);RenderSettings.ambientGroundColor=new Color(.055f,.07f,.08f);
         RenderSettings.fog=false;
         var progression=AssetDatabase.LoadAssetAtPath<ProgressionConfig>("Assets/Resources/Progression/ProgressionConfig.asset");
-        if(progression!=null){Undo.RecordObject(progression,"Seuil 100000");progression.scoreThreshold=100000;progression.sourceSceneName="Neutral";progression.cabinetRotation=-90f;EditorUtility.SetDirty(progression);}
+        if(progression!=null){Undo.RecordObject(progression,"Seuil 100000");progression.scoreThreshold=100000;progression.sourceSceneName="VosgesMania";progression.cabinetRotation=-90f;EditorUtility.SetDirty(progression);}
         EditorSceneManager.MarkSceneDirty(scene); AssetDatabase.SaveAssets();
         Undo.CollapseUndoOperations(undo);
         Debug.Log("[Industries] Table adaptée : assets, six cibles, caméra de borne, HUD et règles VPE. Scène non enregistrée.");

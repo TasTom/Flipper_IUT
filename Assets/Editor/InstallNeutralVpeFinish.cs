@@ -20,7 +20,7 @@ public static class InstallNeutralVpeFinish
     {
         if (Application.isPlaying) throw new InvalidOperationException("Stop Play first.");
         var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-        if (scene.path != "Assets/Scenes/Neutral.unity") throw new InvalidOperationException("Neutral required.");
+        if (scene.path != "Assets/Scenes/VosgesMania.unity") throw new InvalidOperationException("Neutral required.");
         var table = GameObject.Find("PinballTable");
         if (table == null) throw new InvalidOperationException("PinballTable missing.");
         var art = table.transform.Find("ReferencePlayfield/ProfessionalArt");

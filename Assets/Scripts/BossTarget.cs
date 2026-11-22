@@ -138,6 +138,7 @@ public class BossTarget : MonoBehaviour
         }
 
         if (ScoreManager.Instance != null) ScoreManager.Instance.RecordBossActivated();
+        AudioManager.Instance?.Play(PinballSound.MultiplierRaised);
     }
 
     /// <summary>
@@ -154,6 +155,7 @@ public class BossTarget : MonoBehaviour
         {
             GameManager.Instance.ShowMessage("BUG CORRIGÉ — COMPILATION FINALE", dureeMessage);
         }
+        AudioManager.Instance?.Play(PinballSound.TargetValidated);
     }
 
     /// <summary>Remet le boss à zéro pour une nouvelle partie.</summary>
@@ -238,6 +240,7 @@ public class BossTarget : MonoBehaviour
                 }
 
                 // C'est ce qui débloque la mission 7 et, derrière, la Nuit de l'Info.
+                AudioManager.Instance?.Play(PinballSound.ExtraBall);
                 if (MissionManager.Instance != null)
                 {
                     MissionManager.Instance.NotifyBossDefeated();

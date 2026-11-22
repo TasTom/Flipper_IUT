@@ -23,7 +23,7 @@ public static class RefineNeutralFlow
     [MenuItem("Flipper/Neutral/Proportions et retours croisÃ©s")]
     public static void Apply()
     {
-        if(Application.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().path!="Assets/Scenes/Neutral.unity")throw new InvalidOperationException("Ouvrir Neutral hors Play.");
+        if(Application.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().path!="Assets/Scenes/VosgesMania.unity")throw new InvalidOperationException("Ouvrir Neutral hors Play.");
         table=GameObject.Find("PinballTable").transform;gp=table.Find("Gameplay");old=table.Find("ReferencePlayfield");art=old.Find("ProfessionalArt");
         if(old.Find("FlowRefinement")!=null)throw new InvalidOperationException("RÃ©vision dÃ©jÃ  prÃ©sente : conserver les ajustements.");
         if(!AssetDatabase.IsValidFolder(Folder))AssetDatabase.CreateFolder("Assets/Generated","NeutralFlow");

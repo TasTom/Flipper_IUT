@@ -103,6 +103,8 @@ public class Kickback : MonoBehaviour
         balle.angularVelocity = Vector3.zero;
         balle.AddForce(direction * force, ForceMode.Impulse);
 
+        AudioManager.Instance?.Play(PinballSound.Launch);
+
         if (GameManager.Instance != null && !string.IsNullOrEmpty(message))
         {
             GameManager.Instance.ShowMessage(message, dureeMessage);

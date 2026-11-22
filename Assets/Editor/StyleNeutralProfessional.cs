@@ -20,7 +20,7 @@ public static class StyleNeutralProfessional
     [MenuItem("Flipper/Neutral/Habillage professionnel")]
     public static void Apply()
     {
-        if (Application.isPlaying || UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().path != "Assets/Scenes/Neutral.unity")
+        if (Application.isPlaying || UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene().path != "Assets/Scenes/VosgesMania.unity")
             throw new InvalidOperationException("Ouvrir Neutral hors Play.");
         table = GameObject.Find("PinballTable")?.transform;
         physical = table?.Find("ReferencePlayfield"); gameplay = table?.Find("Gameplay");
@@ -44,7 +44,7 @@ public static class StyleNeutralProfessional
             cover = Mat("ClearGuard", new Color(.65f,.85f,.88f,.035f), 0, .88f, true);
             print = Mat("PlayfieldPrint", Color.white, 0, .32f); print.mainTexture = texture;
             var importer = (TextureImporter)AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(texture));
-            importer.maxTextureSize = 2048; importer.textureCompression = TextureImporterCompression.Uncompressed;
+            importer.maxTextureSize = 2048; importer.textureCompression = TextureImporterCompression.CompressedHQ;
             importer.anisoLevel = 8; importer.wrapMode = TextureWrapMode.Clamp; importer.SaveAndReimport();
             art = New("ProfessionalArt", physical);
             var floor = MeshObject("PrintedPlayfield", new[]{new Vector3(-4.285f,.008f,1),new Vector3(4.285f,.008f,1),new Vector3(4.285f,.008f,17.77f),new Vector3(-4.285f,.008f,17.77f)}, new[]{0,2,1,0,3,2}, print);

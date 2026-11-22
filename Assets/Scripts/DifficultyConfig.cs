@@ -39,4 +39,8 @@ public class DifficultyConfig : ScriptableObject
 
     [Tooltip("Billes supplémentaires maximum par partie. 0 = illimité.")]
     public int maxExtraBalls = 3;
+
+    [Header("Ball Saver (GDD §Difficultés)")]
+    [Tooltip("Durée de protection après lancement, en secondes. 0 = désactivé.")]
+    [Min(0f)] public float ballSaverDuration = 8f;
 }

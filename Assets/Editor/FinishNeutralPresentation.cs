@@ -28,7 +28,7 @@ public static class FinishNeutralPresentation
     public static void Apply()
     {
         var scene = EditorSceneManager.GetActiveScene();
-        if (Application.isPlaying || scene.path != "Assets/Scenes/Neutral.unity")
+        if (Application.isPlaying || scene.path != "Assets/Scenes/VosgesMania.unity")
             throw new InvalidOperationException("Ouvrir Neutral hors mode Play avant la finition.");
         var table = GameObject.Find("PinballTable");
         if (table == null) throw new InvalidOperationException("PinballTable absent.");

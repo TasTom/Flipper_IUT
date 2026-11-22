@@ -386,6 +386,8 @@ public class HudController : MonoBehaviour
         }
     }
 
+    private bool gaugeOnBackglass;
+
     private void CreateRuntimePlungerGauge()
     {
         Transform existingBg = transform.Find("PlungerGaugeBackground");
@@ -397,14 +399,31 @@ public class HudController : MonoBehaviour
         else
         {
             backgroundGo = new GameObject("PlungerGaugeBackground", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            backgroundGo.transform.SetParent(transform, false);
-
             RectTransform bgRect = backgroundGo.GetComponent<RectTransform>();
-            bgRect.anchorMin = new Vector2(0.5f, 0f);
-            bgRect.anchorMax = new Vector2(0.5f, 0f);
-            bgRect.pivot = new Vector2(0.5f, 0f);
-            bgRect.anchoredPosition = new Vector2(0f, 40f);
-            bgRect.sizeDelta = new Vector2(500f, 26f);
+
+            // Tout l'affichage vit sur l'écran du cabinet : la jauge se pose en fine barre au bas
+            // du fronton, sous la rangée billes/missions. Sans fronton, repli sur l'overlay.
+            BackglassDisplay fronton = FindAnyObjectByType<BackglassDisplay>(FindObjectsInactive.Include);
+
+            if (fronton != null)
+            {
+                backgroundGo.transform.SetParent(fronton.transform, false);
+                bgRect.anchorMin = new Vector2(0.5f, 0.5f);
+                bgRect.anchorMax = new Vector2(0.5f, 0.5f);
+                bgRect.pivot = new Vector2(0.5f, 0.5f);
+                bgRect.anchoredPosition = new Vector2(0f, -262f);
+                bgRect.sizeDelta = new Vector2(1400f, 16f);
+                gaugeOnBackglass = true;
+            }
+            else
+            {
+                backgroundGo.transform.SetParent(transform, false);
+                bgRect.anchorMin = new Vector2(0.5f, 0f);
+                bgRect.anchorMax = new Vector2(0.5f, 0f);
+                bgRect.pivot = new Vector2(0.5f, 0f);
+                bgRect.anchoredPosition = new Vector2(0f, 40f);
+                bgRect.sizeDelta = new Vector2(500f, 26f);
+            }
 
             Image bgImage = backgroundGo.GetComponent<Image>();
             bgImage.sprite = GetOrCreateWhiteSprite();
@@ -415,7 +434,12 @@ public class HudController : MonoBehaviour
         plungerGaugeRoot = backgroundGo;
 
         Transform existingLabel = backgroundGo.transform.Find("PlungerGaugeLabel");
-        if (existingLabel != null)
+        if (gaugeOnBackglass && existingLabel == null)
+        {
+            // Pas d'étiquette sur le fronton : la barre est trop fine, et l'invite de lancement
+            // est déjà dans MessageValue.
+        }
+        else if (existingLabel != null)
         {
             plungerGaugeLabel = existingLabel.GetComponent<TMP_Text>();
         }
@@ -522,6 +546,12 @@ public class HudController : MonoBehaviour
     /// </summary>
     private void WarnAboutMissingTexts()
     {
+        // Le fronton du cabinet porte score, billes et messages : l'overlay n'a rien à afficher.
+        if (FindAnyObjectByType<BackglassDisplay>(FindObjectsInactive.Include) != null)
+        {
+            return;
+        }
+
         if (scoreText != null && highScoreText != null && ballsText != null && messageText != null)
         {
             return;

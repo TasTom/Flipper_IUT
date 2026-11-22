@@ -19,7 +19,7 @@ public static class CloseNeutralOutlanes
     public static void Apply()
     {
         var scene = EditorSceneManager.GetActiveScene();
-        if (Application.isPlaying || scene.path != "Assets/Scenes/Neutral.unity")
+        if (Application.isPlaying || scene.path != "Assets/Scenes/VosgesMania.unity")
             throw new InvalidOperationException("Ouvrir Neutral hors Play pour fermer ses passages extérieurs.");
 
         var table = GameObject.Find("PinballTable")?.transform;

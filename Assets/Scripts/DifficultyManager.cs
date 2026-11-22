@@ -106,6 +106,8 @@ public class DifficultyManager : MonoBehaviour
         if (BallManager.Instance != null)
         {
             BallManager.Instance.SetMaxSpeed(Active.maxBallSpeed);
+            var saver = BallManager.Instance.GetComponent<BallSaver>();
+            if (saver != null) saver.SetDuration(Active.ballSaverDuration);
         }
 
         // Bille supplémentaire : les paliers.

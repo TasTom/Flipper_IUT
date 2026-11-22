@@ -104,9 +104,10 @@ Les paramètres principaux peuvent être ajustés directement depuis l'inspecteu
    ```
 2. Ouvrir **Unity Hub**, cliquer sur **Add** et sélectionner le dossier racine du projet.
 3. Vérifier la configuration des scènes dans **File > Build Settings...** :
-   - Index `0` : `Assets/Scenes/MainMenu.unity`
-   - Index `1` : `Assets/Scenes/Neutral.unity`
-   - Index `2` : `Assets/Scenes/Industries.unity`
+   - Index `0` : `Assets/Scenes/Main.unity`
+   - Index `1` : `Assets/Scenes/MainMenu.unity`
+   - Index `2` : `Assets/Scenes/VosgesMania.unity`
+   - Index `3` : `Assets/Scenes/Industries.unity`
 4. Ouvrir la scène `MainMenu` et lancer le mode **Play**.
 
 ---

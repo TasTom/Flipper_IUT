@@ -19,7 +19,7 @@ public static class PinballSceneryAuthoring
     public static void AddScenery()
     {
         var scene=EditorSceneManager.GetActiveScene();
-        if(EditorApplication.isPlaying || (scene.name!="Neutral" && scene.name!="Industries"))throw new InvalidOperationException("Neutral ou Industries en édition attendu.");
+        if(EditorApplication.isPlaying || (scene.name!="VosgesMania" && scene.name!="Industries"))throw new InvalidOperationException("Neutral ou Industries en édition attendu.");
         EnsureFolder(Folder);Undo.IncrementCurrentGroup();var group=Undo.GetCurrentGroup();Undo.SetCurrentGroupName("Maquettes de flipper");
         bool industry=scene.name=="Industries";
         var host=industry?Object.FindAnyObjectByType<PlayfieldComponent>()?.transform:GameObject.Find("PinballTable")?.transform;

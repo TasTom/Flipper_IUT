@@ -180,7 +180,8 @@ public class LoopGate : MonoBehaviour
             if (ScoreManager.Instance != null)
                 ScoreManager.Instance.RecordHit(ScoreElement.Loop, partner, points, allowRepeat: true);
 
-            if (!string.IsNullOrEmpty(displayName))
+            bool jackpot = MultiballManager.Instance != null && MultiballManager.Instance.TryAwardJackpot();
+            if (!jackpot && !string.IsNullOrEmpty(displayName))
             {
                 GameManager.Instance.ShowMessage($"{displayName}  {partner.completions}", messageDuration);
             }

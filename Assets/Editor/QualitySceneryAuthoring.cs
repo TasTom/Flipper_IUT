@@ -71,7 +71,7 @@ public static class QualitySceneryAuthoring
     public static void ApplyQualityReplacement()
     {
         var scene = EditorSceneManager.GetActiveScene();
-        if (EditorApplication.isPlaying || (scene.name != "Neutral" && scene.name != "Industries"))
+        if (EditorApplication.isPlaying || (scene.name != "VosgesMania" && scene.name != "Industries"))
             throw new InvalidOperationException("Neutral ou Industries en mode édition attendu.");
         bool industries = scene.name == "Industries";
         var host = industries ? GameObject.Find("ExampleTable/Playfield")?.transform : GameObject.Find("PinballTable")?.transform;

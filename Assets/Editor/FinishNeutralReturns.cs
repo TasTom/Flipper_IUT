@@ -11,7 +11,7 @@ public static class FinishNeutralReturns
     [MenuItem("Flipper/Finition Neutral/Raccorder les retours aux flippers")]
     public static void Apply()
     {
-        if (Application.isPlaying || EditorSceneManager.GetActiveScene().path != "Assets/Scenes/Neutral.unity")
+        if (Application.isPlaying || EditorSceneManager.GetActiveScene().path != "Assets/Scenes/VosgesMania.unity")
             throw new InvalidOperationException("Ouvrir Neutral hors Play.");
         var table = GameObject.Find("PinballTable").transform;
         var ramps = table.Find("Gameplay/Ramps_V2");

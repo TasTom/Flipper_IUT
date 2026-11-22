@@ -17,7 +17,7 @@ MonoBehaviour:
   linearDamping: 0
   contactOffset: 0.003
   simulationStep: 0.002
-  flipperRiseSpeed: 2600
+  flipperRiseSpeed: 3400
   flipperReturnSpeed: 700
   ballMaterial: {fileID: 13400000, guid: f0d9cdcc40f63e348957a8148d2714e9, type: 2}
   playfieldMaterial: {fileID: 13400000, guid: 73633375b71a16042917885735d5c6b2, type: 2}

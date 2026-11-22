@@ -12,7 +12,7 @@ public static class PrepareNeutralCollisionMeshes
     public static void Prepare()
     {
         var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-        if (Application.isPlaying || scene.path != "Assets/Scenes/Neutral.unity")
+        if (Application.isPlaying || scene.path != "Assets/Scenes/VosgesMania.unity")
             throw new InvalidOperationException("Neutral hors Play requise.");
         var table = GameObject.Find("PinballTable");
         if (table == null) throw new InvalidOperationException("PinballTable absente.");

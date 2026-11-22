@@ -16,6 +16,8 @@ public sealed class IndustriesProduction
     public int Targets { get; private set; }
     public int Loaded { get; private set; }
     public int Processed { get; private set; }
+    public bool NeedsRamp => (Loaded & ~Processed) != 0;
+    public bool CanDeliver => Processed != 0;
 
     public IndustriesProduction(IndustriesConfig config) => this.config = config;
 

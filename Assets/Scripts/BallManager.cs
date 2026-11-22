@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,6 +46,7 @@ public class BallManager : MonoBehaviour
              "désactivée dans la scène, que la recherche par tag ne voit pas.")]
     [SerializeField] private Rigidbody sceneBall;
 
+    private BallSaver ballSaver;
     private readonly List<Rigidbody> liveBalls = new List<Rigidbody>();
     private readonly HashSet<Rigidbody> heldBalls = new HashSet<Rigidbody>();
     private readonly Dictionary<Rigidbody, float> stuckTimers = new Dictionary<Rigidbody, float>();
@@ -103,6 +104,13 @@ public class BallManager : MonoBehaviour
         }
 
         Instance = this;
+
+        ballSaver = GetComponent<BallSaver>();
+
+        if (ballSaver == null)
+        {
+            ballSaver = gameObject.AddComponent<BallSaver>();
+        }
 
         // Le champ n'est qu'un repli : la bille posée dans la scène se trouve par son tag.
         if (sceneBall == null)
@@ -197,7 +205,11 @@ public class BallManager : MonoBehaviour
 
         Rigidbody body = ballCollider.attachedRigidbody;
 
-        Unregister(body);
+        // Ball saver : la bille repart au lanceur, rien n'est décompté.
+        if (ballSaver != null && ballSaver.TrySave(body))
+        {
+            return;
+        }
 
         // La bille de scène est parquée au lieu d'être détruite : c'est celle que l'utilisateur
         // a posée dans la scène, et la bille suivante doit la retrouver.
@@ -210,6 +222,9 @@ public class BallManager : MonoBehaviour
             DestroyBallObject(ballCollider);
         }
 
+        // Les abonnés à BallCountChanged peuvent relire LiveBallCount immédiatement.
+        // Désactiver d'abord la bille empêche le repli de recherche de la réenregistrer.
+        Unregister(body);
         BallDrained?.Invoke(body);
     }
 

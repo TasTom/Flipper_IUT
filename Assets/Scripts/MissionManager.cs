@@ -174,6 +174,10 @@ public class MissionManager : MonoBehaviour
 
         Instance = this;
         bosses = FindObjectsByType<BossTarget>();
+        if (GetComponent<MissionShotGuide>() == null)
+        {
+            gameObject.AddComponent<MissionShotGuide>();
+        }
 
         if (missions == null || missions.Length == 0)
         {

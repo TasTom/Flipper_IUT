@@ -16,7 +16,7 @@ public static class RebuildNeutralShots
     [MenuItem("Flipper/Finition Neutral/Remplacer les rampes et repositionner les six cibles")]
     public static void Apply()
     {
-        if (Application.isPlaying || EditorSceneManager.GetActiveScene().path != "Assets/Scenes/Neutral.unity")
+        if (Application.isPlaying || EditorSceneManager.GetActiveScene().path != "Assets/Scenes/VosgesMania.unity")
             throw new InvalidOperationException("Ouvrir Neutral hors Play.");
         var table = GameObject.Find("PinballTable").transform;
         var gameplay = table.Find("Gameplay");

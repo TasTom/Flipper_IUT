@@ -1,132 +1,93 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Porte à sens unique du couloir de lancement (GDD §Rampe IUT, Wikipédia « Pinball » §Components :
-/// « This block will allow balls to come through one way but will block the ball if it is going the
-/// other way. »).
-///
-/// <para><b>Pourquoi elle existe.</b> Le couloir du plongeur débouche en haut dans l'aire de jeu.
-/// Sans porte, une bille qui n'a pas assez d'élan pour se dégager <b>redescend le couloir</b> et
-/// revient au plongeur — mesuré : à 60 u/s elle revient, et la partie se bloque puisqu'elle n'est
-/// ni perdue ni jouable. Une vraie table a exactement ce clapet.</para>
-///
-/// <para><b>Comment il fonctionne.</b> Le clapet est un <b>collider solide</b>, donc fermé par
-/// défaut. Un déclencheur placé juste en dessous surveille la direction de la bille : si elle
-/// <i>monte</i>, le solide est désactivé le temps qu'elle passe ; sinon il reste fermé et la bille
-/// bute dessus. C'est le comportement mécanique réel — le clapet s'ouvre dans un sens et se
-/// referme sous son propre poids.</para>
-///
-/// <para>⚠ Le sens de « monter » se lit sur <c>transform.root.forward</c>, pas sur un axe du monde :
-/// la table est inclinée de 7°, et un clapet posé ailleurs que sur cette table devrait continuer à
-/// fonctionner.</para>
-/// </summary>
+/// <summary>Allows balls through a flap from its approach side without opening it for other balls.</summary>
 public class OneWayGate : MonoBehaviour
 {
-    [Header("Clapet")]
-    [Tooltip("Le collider SOLIDE qui bloque la bille qui redescend. Laissé vide, il est cherché " +
-             "sur un enfant — c'est la disposition normale, le clapet étant le maillage du portail.")]
     [SerializeField] private Collider clapet;
-
-    [Tooltip("Déclencheur qui surveille la direction de la bille. Laissé vide, il est pris sur cet " +
-             "objet : le script doit alors être posé sur le déclencheur.")]
     [SerializeField] private Collider surveillance;
+    [SerializeField] private Transform voletVisuel;
+    [SerializeField] private bool utiliserAxeLocal;
+    [SerializeField, Min(0f)] private float seuilMontee = 1f;
 
-    [Header("Détection")]
-    [Tooltip("Vitesse minimale vers le haut, en u/s, pour considérer que la bille monte. En dessous, " +
-             "elle est traitée comme descendante — une bille immobile ne doit pas ouvrir le clapet.")]
-    [SerializeField] private float seuilMontee = 1f;
+    private readonly HashSet<Collider> autorisees = new HashSet<Collider>();
+    private Quaternion rotationFermee;
 
-    [Tooltip("Durée d'ouverture après le passage d'une bille montante, en secondes. Un peu de marge " +
-             "évite que le clapet se referme sur la bille elle-même.")]
-    [SerializeField] private float dureeOuverture = 0.4f;
-
-    private float refermeA;
-    private bool ouvert;
-
-    /// <summary>Le clapet est-il ouvert en ce moment ?</summary>
-    public bool IsOpen => ouvert;
+    public bool IsOpen => autorisees.Count > 0;
 
     private void Awake()
     {
-        if (surveillance == null) { surveillance = GetComponent<Collider>(); }
-
-        if (surveillance != null && !surveillance.isTrigger)
-        {
-            Debug.LogWarning($"[OneWayGate] '{name}' : le collider de surveillance n'est pas un " +
-                             "déclencheur. Le clapet ne s'ouvrira jamais et la bille restera " +
-                             "bloquée dans le couloir.", this);
-        }
-
+        if (surveillance == null) surveillance = GetComponent<Collider>();
         if (clapet == null)
+            foreach (var candidate in GetComponentsInChildren<Collider>(true))
+                if (!candidate.isTrigger && candidate != surveillance)
+                {
+                    clapet = candidate;
+                    break;
+                }
+
+        if (surveillance == null || !surveillance.isTrigger || clapet == null || clapet.isTrigger)
         {
-            // Le premier collider SOLIDE du sous-arbre : c'est le clapet.
-            foreach (var c in GetComponentsInChildren<Collider>(true))
-            {
-                if (!c.isTrigger && c != surveillance) { clapet = c; break; }
-            }
+            Debug.LogWarning($"[OneWayGate] « {name} » exige un capteur trigger et un clapet solide.", this);
+            enabled = false;
+            return;
         }
 
-        if (clapet == null)
-        {
-            Debug.LogWarning($"[OneWayGate] '{name}' n'a aucun collider solide : le clapet ne " +
-                             "bloque rien, et la bille pourra redescendre le couloir.", this);
-        }
-
-        Fermer();
+        if (voletVisuel != null) rotationFermee = voletVisuel.localRotation;
     }
 
-    private void Update()
+    private void OnTriggerEnter(Collider other) => Evaluer(other);
+    private void OnTriggerStay(Collider other) => Evaluer(other);
+    private void OnTriggerExit(Collider other) => RetablirCollision(other);
+
+    private void Evaluer(Collider other)
     {
-        if (ouvert && Time.time >= refermeA) { Fermer(); }
-    }
+        if (!isActiveAndEnabled || !other.CompareTag("Ball")) return;
+        var balle = other.attachedRigidbody;
+        if (balle == null || balle.isKinematic) return;
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (!other.CompareTag("Ball")) { return; }
-
-        Rigidbody balle = other.attachedRigidbody;
-
-        if (balle == null) { return; }
-
-        var racine = transform.root;
-        Vector3 monte = racine != null ? racine.forward : Vector3.forward;
-
-        // Positif = la bille monte vers le haut de table.
-        float versLeHaut = Vector3.Dot(balle.linearVelocity, monte);
-
-        if (versLeHaut > seuilMontee)
+        Vector3 axe = utiliserAxeLocal ? transform.forward : transform.root.forward;
+        float position = Vector3.Dot(other.bounds.center - clapet.bounds.center, axe);
+        bool approche = position < 0f && Vector3.Dot(balle.linearVelocity, axe) > seuilMontee;
+        bool autorisee = autorisees.Contains(other);
+        if (autorisee)
         {
-            Ouvrir();
+            Vector3 projection = new Vector3(Mathf.Abs(axe.x), Mathf.Abs(axe.y), Mathf.Abs(axe.z));
+            float degagement = Vector3.Dot(projection, other.bounds.extents + clapet.bounds.extents);
+            if (!approche && Mathf.Abs(position) > degagement) RetablirCollision(other);
         }
-        else if (ouvert)
+        else if (approche)
         {
-            // Elle redescend : on referme tout de suite, sans attendre la fin du délai. C'est le
-            // clapet qui la retient — sinon elle passerait pendant la marge d'ouverture.
-            Fermer();
+            autorisees.Add(other);
+            Physics.IgnoreCollision(other, clapet);
+            ActualiserVolet();
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void FixedUpdate()
     {
-        if (!other.CompareTag("Ball")) { return; }
-
-        if (ouvert) { refermeA = Time.time + dureeOuverture; }
+        if (autorisees.RemoveWhere(balle => balle == null || !balle.gameObject.activeInHierarchy) > 0)
+            ActualiserVolet();
     }
 
-    private void Ouvrir()
+    private void RetablirCollision(Collider balle)
     {
-        if (ouvert) { return; }
-
-        ouvert = true;
-        refermeA = Time.time + dureeOuverture;
-
-        if (clapet != null) { clapet.enabled = false; }
+        if (!autorisees.Remove(balle)) return;
+        if (balle != null && clapet != null) Physics.IgnoreCollision(balle, clapet, false);
+        ActualiserVolet();
     }
 
-    private void Fermer()
+    private void ActualiserVolet()
     {
-        ouvert = false;
+        if (voletVisuel != null)
+            voletVisuel.localRotation = IsOpen ? rotationFermee * Quaternion.Euler(-88f, 0f, 0f) : rotationFermee;
+    }
 
-        if (clapet != null) { clapet.enabled = true; }
+    private void OnDisable()
+    {
+        foreach (var balle in autorisees)
+            if (balle != null && clapet != null) Physics.IgnoreCollision(balle, clapet, false);
+        autorisees.Clear();
+        ActualiserVolet();
     }
 }

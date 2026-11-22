@@ -14,7 +14,7 @@ public static class InstallNeutralVpeAudio
     [MenuItem("Pinball/Neutral/Installer les sons et le mixage")]
     public static void Install()
     {
-        if (Application.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().path != "Assets/Scenes/Neutral.unity")
+        if (Application.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().path != "Assets/Scenes/VosgesMania.unity")
             throw new InvalidOperationException("Ouvrir Neutral hors Play.");
         var manager = UnityEngine.Object.FindAnyObjectByType<AudioManager>();
         if (manager == null) throw new InvalidOperationException("AudioManager absent.");

@@ -14,7 +14,7 @@ public class ProgressionConfig : ScriptableObject
     [Tooltip("Score à atteindre pour basculer sur la seconde table.")]
     [Min(1)] public int scoreThreshold = 100000;
 
-    public string sourceSceneName = "Neutral";
+    public string sourceSceneName = "VosgesMania";
     [Min(0.01f)] public float fadeInDuration = .8f;
     [Min(0.01f)] public float fadeOutDuration = .6f;
     public float cabinetRotation = -90f;

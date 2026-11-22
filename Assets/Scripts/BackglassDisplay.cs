@@ -258,7 +258,8 @@ public class BackglassDisplay : MonoBehaviour
     {
         if (missionsLabelText == null || MissionManager.Instance == null) { return; }
 
-        string nom = MissionManager.Instance.ActiveName;
+        var mission = MissionManager.Instance;
+        string nom = mission.Active?.but == MissionGoal.Rampe ? mission.ActiveObjective : mission.ActiveName;
 
         missionsLabelText.text = string.IsNullOrEmpty(nom) ? "MISSIONS" : nom;
     }

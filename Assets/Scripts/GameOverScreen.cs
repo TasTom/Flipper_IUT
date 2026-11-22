@@ -65,7 +65,10 @@ public class GameOverScreen : MonoBehaviour
             return;
         }
 
-        bool fin = state == GameManager.GameState.GameOver;
+        // Avec un fronton, la fin de partie s'affiche sur l'ecran du cabinet (score en grand +
+        // message GAME OVER) : aucun panneau ne se superpose a l'ecran.
+        bool surFronton = FindAnyObjectByType<BackglassDisplay>(FindObjectsInactive.Include) != null;
+        bool fin = state == GameManager.GameState.GameOver && !surFronton;
         panel.SetActive(fin);
 
         if (fin)

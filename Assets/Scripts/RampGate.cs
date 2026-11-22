@@ -159,7 +159,8 @@ public class RampGate : MonoBehaviour
                     ? ScoreElement.IutRamp : ScoreElement.VosgesRamp, entry != null ? entry : this,
                     points, allowRepeat: true);
 
-            if (!string.IsNullOrEmpty(displayName))
+            bool jackpot = MultiballManager.Instance != null && MultiballManager.Instance.TryAwardJackpot();
+            if (!jackpot && !string.IsNullOrEmpty(displayName))
             {
                 GameManager.Instance.ShowMessage(displayName, messageDuration);
             }

@@ -24,7 +24,7 @@ public static class BuildNeutralValidationPlayer
     [MenuItem("Pinball/Neutral/Build Windows de contrôle")]
     public static void Build()
     {
-        if (Application.isPlaying || EditorSceneManager.GetActiveScene().path != "Assets/Scenes/Neutral.unity" || EditorSceneManager.GetActiveScene().isDirty)
+        if (Application.isPlaying || EditorSceneManager.GetActiveScene().path != "Assets/Scenes/VosgesMania.unity" || EditorSceneManager.GetActiveScene().isDirty)
             throw new InvalidOperationException("Neutral enregistrée hors Play requise.");
         if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.StandaloneWindows64)
             throw new InvalidOperationException("Activer Windows64 avant ce build.");
@@ -37,7 +37,7 @@ public static class BuildNeutralValidationPlayer
         {
             var options = new BuildPlayerOptions
             {
-                scenes = new[]{ "Assets/Scenes/Neutral.unity" },
+                scenes = new[]{ "Assets/Scenes/VosgesMania.unity" },
                 locationPathName = Path.Combine(folder, "Neutral.exe"),
                 target = BuildTarget.StandaloneWindows64,
                 options = BuildOptions.Development

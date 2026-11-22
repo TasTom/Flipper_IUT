@@ -103,7 +103,7 @@ public class ScoreProgressionGate : MonoBehaviour
 
     private void Check(int score)
     {
-        if (_fired || score < Threshold || gameObject.scene.name != (config != null ? config.sourceSceneName : "Neutral"))
+        if (_fired || score < Threshold || gameObject.scene.name != (config != null ? config.sourceSceneName : "VosgesMania"))
         {
             return;
         }
@@ -184,13 +184,21 @@ public class ScoreProgressionGate : MonoBehaviour
     /// garde-fou elle s'installerait sa propre porte et renverrait le joueur vers elle-même en
     /// boucle dès le premier point marqué.</para>
     /// </summary>
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static bool _listenerRegistered;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void InitSceneListener()
     {
-        UnityEngine.SceneManagement.SceneManager.sceneLoaded += (scene, mode) =>
+        if (!_listenerRegistered)
         {
-            EnsureGateExistsForScene(scene.name);
-        };
+            _listenerRegistered = true;
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += (scene, mode) =>
+            {
+                EnsureGateExistsForScene(scene.name);
+            };
+        }
+
+        EnsureGateExistsForScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 
     private static void EnsureGateExistsForScene(string sceneName)

@@ -17,10 +17,12 @@ public class PinballLightDirector : MonoBehaviour
     private Action[] targetHandlers;
     private BallManager balls;
     private GameManager game;
+    private MissionManager missions;
     private void Awake()
     {
         balls = BallManager.Instance; game = GameManager.Instance;
         if (game == null) game = FindAnyObjectByType<GameManager>();
+        missions = FindAnyObjectByType<MissionManager>();
         targetHandlers = new Action[targets != null ? targets.Length : 0];
         for (int i = 0; i < targetHandlers.Length; i++) { int slot = i; targetHandlers[i] = () => Target(slot); }
     }
@@ -33,7 +35,9 @@ public class PinballLightDirector : MonoBehaviour
         if (scoop != null) { scoop.Captured += Capture; scoop.Ejected += Eject; }
         if (balls != null) { balls.BallCountChanged += Count; balls.BallsCleared += ResetLamps; }
         if (game != null) game.StateChanged += State;
+        if (missions != null) missions.MissionChanged += UpdateRampObjective;
     }
+    private void Start() => UpdateRampObjective();
     private void OnDisable()
     {
         for (int i = 0; i < targetHandlers.Length; i++) if (targets[i] != null) targets[i].Validated -= targetHandlers[i];
@@ -43,6 +47,7 @@ public class PinballLightDirector : MonoBehaviour
         if (scoop != null) { scoop.Captured -= Capture; scoop.Ejected -= Eject; }
         if (balls != null) { balls.BallCountChanged -= Count; balls.BallsCleared -= ResetLamps; }
         if (game != null) game.StateChanged -= State;
+        if (missions != null) missions.MissionChanged -= UpdateRampObjective;
     }
     private void Target(int slot)
     {
@@ -59,7 +64,24 @@ public class PinballLightDirector : MonoBehaviour
     private void Eject() { scoopGroup?.Flash(); AudioManager.Instance?.Play(PinballSound.Launch); }
     private void Lock() { if (ballLock != null) { lockGroup?.SetAnimated(ballLock.IsLit || ballLock.IsReleasing); lockGroup?.SetLevel(ballLock.LockedCount > 0 ? .9f : .1f); } }
     private void Count() { bool multiple = balls != null && balls.LiveBallCount > 1; if (multiballGroups != null) foreach (var group in multiballGroups) if (group != null) group.SetAnimated(multiple); }
-    private void State(GameManager.GameState state) { if (state == GameManager.GameState.GameOver || state == GameManager.GameState.Attract) ResetLamps(); }
+    private void State(GameManager.GameState state)
+    {
+        if (state == GameManager.GameState.GameOver || state == GameManager.GameState.Attract) ResetLamps();
+        UpdateRampObjective();
+    }
+    private void UpdateRampObjective()
+    {
+        if (rampGroups == null || rampExits == null) return;
+        var mission = missions != null ? missions.Active : null;
+        bool show = mission != null && mission.but == MissionGoal.Rampe && game != null &&
+                    game.State != GameManager.GameState.Attract && game.State != GameManager.GameState.GameOver;
+        for (int i = 0; i < Mathf.Min(rampGroups.Length, rampExits.Length); i++)
+        {
+            var entry = rampExits[i] != null ? rampExits[i].Partner : null;
+            if (rampGroups[i] != null)
+                rampGroups[i].SetAnimated(show && entry != null && entry.name == mission.cible);
+        }
+    }
     private void ResetLamps()
     {
         magnet?.Stop(); lockGroup?.ResetGroup(); scoopGroup?.ResetGroup(); loopGroup?.ResetGroup();

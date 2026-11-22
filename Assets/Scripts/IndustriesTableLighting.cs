@@ -104,24 +104,37 @@ public sealed class IndustriesTableLighting : MonoBehaviour
         clock+=dt;celebration=Mathf.MoveTowards(celebration,0,dt/config.flashSeconds);
         bool attract=!Application.isPlaying||game==null||game.State==GameManager.GameState.Attract||game.State==GameManager.GameState.GameOver;
         int targets=engine!=null?engine.LitTargetMask:0;
-        int loaded=engine!=null&&engine.Production!=null?engine.Production.Loaded:0;
-        int processed=engine!=null&&engine.Production!=null?engine.Production.Processed:0;
+        var production=engine!=null?engine.Production:null;
+        bool bossActive=engine!=null&&engine.AutomateActive;
+        bool guideRamp=!attract&&!bossActive&&production!=null&&production.NeedsRamp;
+        bool guideDelivery=!attract&&!bossActive&&production!=null&&!guideRamp&&production.CanDeliver;
+        bool guideTargets=!attract&&!bossActive&&production!=null&&!guideRamp&&!guideDelivery;
         for(int i=0;i<lamps.Length;i++)
         {
             var lamp=lamps[i];if(lamp==null)continue;
             lamp.flash=Mathf.MoveTowards(lamp.flash,0,dt/config.flashSeconds);
             float gain=config.idleEmission*(1+config.breathingAmount*Mathf.Sin(clock*config.chaseSpeed+i*.5f));
             if(lamp.role==IndustriesLampRole.Target)
-                gain=(targets&(1<<lamp.index))!=0?config.activeEmission:config.idleEmission*.28f;
+            {
+                bool hit=(targets&(1<<lamp.index))!=0;
+                gain=production==null
+                    ? (hit?config.activeEmission:config.idleEmission*.28f)
+                    : (guideTargets&&!hit?config.activeEmission:config.idleEmission*.28f);
+            }
             else if(lamp.role==IndustriesLampRole.Ramp)
-                gain=loaded!=0?config.activeEmission*(.4f+.6f*Mathf.Max(0,Mathf.Cos(clock*config.chaseSpeed*3-lamp.index*1.7f))):config.idleEmission*.25f;
+                gain=guideRamp?config.activeEmission*(.65f+.35f*Mathf.Max(0,Mathf.Cos(clock*config.chaseSpeed*3-lamp.index*1.7f))):config.idleEmission*.25f;
             else if(lamp.role==IndustriesLampRole.Delivery)
-                gain=processed!=0?config.activeEmission:config.idleEmission*.4f;
+                gain=guideDelivery?config.activeEmission:config.idleEmission*.4f;
+            else if(lamp.role==IndustriesLampRole.Bumper&&!attract&&production!=null)
+                gain*=.55f;
             if(attract&&(lamp.role==IndustriesLampRole.Ramp||lamp.role==IndustriesLampRole.Target))
                 gain=config.idleEmission*(.4f+.6f*Mathf.Max(0,Mathf.Cos(clock*config.chaseSpeed-lamp.index)));
             gain=Mathf.Lerp(gain,config.flashEmission,Mathf.Max(lamp.flash,celebration*.45f));
-            SetColor(lamp.insert,lamp.color*gain);
-            SetColor(lamp.halo,lamp.color*gain*config.haloGain);
+            bool bossLamp=bossActive&&lamp.role==IndustriesLampRole.Bumper&&lamp.sourceName=="Bumper3";
+            var tint=bossLamp?new Color(1f,.10f,.035f):lamp.color;
+            if(bossLamp)gain=Mathf.Max(gain,config.activeEmission*(.8f+.2f*Mathf.Sin(clock*6f)));
+            SetColor(lamp.insert,tint*gain);
+            SetColor(lamp.halo,tint*gain*config.haloGain);
         }
         foreach(var light in ambientLights)if(light!=null)light.intensity=config.lightIntensity*(1+celebration*.6f);
     }

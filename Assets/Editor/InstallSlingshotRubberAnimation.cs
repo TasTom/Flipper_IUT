@@ -15,7 +15,7 @@ public static class InstallSlingshotRubberAnimation
     {
         if (Application.isPlaying) throw new InvalidOperationException("Stop Play first.");
         var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-        if (scene.path != "Assets/Scenes/Neutral.unity") throw new InvalidOperationException("Neutral required.");
+        if (scene.path != "Assets/Scenes/VosgesMania.unity") throw new InvalidOperationException("Neutral required.");
         GameObject table = GameObject.Find("PinballTable");
         if (table == null) throw new InvalidOperationException("PinballTable missing.");
         if (!AssetDatabase.IsValidFolder(Folder)) AssetDatabase.CreateFolder("Assets/Generated", "NeutralRubberAnimation");

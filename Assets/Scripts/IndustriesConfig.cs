@@ -19,6 +19,10 @@ public class IndustriesConfig : ScriptableObject
     [Min(0)] public int processingBonus = 1000;
     [Min(0)] public int deliveryBonusPerProduct = 4000;
     [Min(0)] public int combinedDeliveryBonus = 2000;
+    [Header("Automate déréglé (GDD : Boss et FX)")]
+    [Min(0)] public int automateBonus = 50000;
+    [Min(1)] public int automateHits = 3;
+    [Min(0)] public float automateHitCooldown = .28f;
     [Min(.1f)] public float scoopHoldSeconds = .65f;
     [Min(.1f)] public float targetResetSeconds = 1f;
     [Min(.1f)] public float serveDelay = .3f;

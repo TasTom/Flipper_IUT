@@ -6,7 +6,7 @@ public class MainMenuController : MonoBehaviour
 {
     [Header("Scène de jeu")]
     [Tooltip("Nom exact de la scène du premier niveau.")]
-    [SerializeField] private string firstLevelScene = "Neutral";
+    [SerializeField] private string firstLevelScene = "VosgesMania";
 
     [Header("Affichage Record")]
     [SerializeField] private TMP_Text highScoreText;

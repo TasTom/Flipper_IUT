@@ -37,7 +37,7 @@ public static class RebuildNeutralMechanisms
     public static void Apply()
     {
         var scene = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene();
-        if (Application.isPlaying || scene.path != "Assets/Scenes/Neutral.unity") throw new InvalidOperationException("Neutral en Edit Mode requise.");
+        if (Application.isPlaying || scene.path != "Assets/Scenes/VosgesMania.unity") throw new InvalidOperationException("Neutral en Edit Mode requise.");
         table = GameObject.Find("PinballTable").transform; gameplay = table.Find("Gameplay");
         if (table.Find("Rails/MechanismRevision") != null) { Debug.Log("Mécanismes déjà installés ; réglages conservés."); return; }
         if (!AssetDatabase.IsValidFolder(Folder)) AssetDatabase.CreateFolder("Assets/Generated", "NeutralMechanisms");
@@ -176,10 +176,10 @@ public static class RebuildNeutralMechanisms
     static PinballScoop Scoop()
     {
         var host=New("Scoop_Semestre",gameplay);host.localPosition=Hole;
-        var part=Part("Scoop_Professional","Assets/Models/Parts/Kickers/Scoop_1.fbx",host,P(0,0,.15f));part.transform.localRotation=Quaternion.Euler(0,180,0)*part.transform.localRotation;foreach(var mf in part.GetComponentsInChildren<MeshFilter>()){var col=Undo.AddComponent<MeshCollider>(mf.gameObject);col.sharedMesh=mf.sharedMesh;col.sharedMaterial=surface;}
-        var sensor=Undo.AddComponent<BoxCollider>(host.gameObject);sensor.isTrigger=true;sensor.center=P(0,-.35f,0);sensor.size=P(.47f,.25f,.47f);
+        var part=Part("Scoop_Professional","Assets/Models/Parts/Kickers/Scoop_1.fbx",host,P(0,0,.90f));part.transform.localRotation=Quaternion.Euler(0,180,0)*part.transform.localRotation;foreach(var mf in part.GetComponentsInChildren<MeshFilter>()){var col=Undo.AddComponent<MeshCollider>(mf.gameObject);col.sharedMesh=mf.sharedMesh;col.sharedMaterial=surface;}
+        var sensor=Undo.AddComponent<BoxCollider>(host.gameObject);sensor.isTrigger=true;sensor.center=P(0,-.2875f,0);sensor.size=P(.47f,.375f,.47f);
         var seat=New("Seat",host);seat.localPosition=P(0,-.45f,0);
-        var eject=New("Eject",host);eject.localPosition=P(0,.25f,-.85f);eject.localRotation=Quaternion.LookRotation(P(-.18f,.23f,-1));
+        var eject=New("Eject",host);eject.localPosition=P(0,.25f,-.85f);eject.localRotation=Quaternion.LookRotation(P(.30f,.23f,-1));
         var scoop=Undo.AddComponent<PinballScoop>(host.gameObject);var ballLock=Undo.AddComponent<BallLock>(host.gameObject);
         Assign(scoop,"config",config);Assign(scoop,"seat",seat);Assign(scoop,"ejectPoint",eject);Assign(scoop,"ballLock",ballLock);
         var slots=new[]{New("LockSlot_1",host),New("LockSlot_2",host)};slots[0].localPosition=P(0,-.8f,.35f);slots[1].localPosition=P(0,-1.3f,.35f);

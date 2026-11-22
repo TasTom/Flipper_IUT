@@ -13,7 +13,7 @@ public static class InstallNeutralSurfaceCoordinates
     [MenuItem("Pinball/Neutral/Compléter les coordonnées des surfaces")]
     public static void Install()
     {
-        if (Application.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().path != "Assets/Scenes/Neutral.unity")
+        if (Application.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().path != "Assets/Scenes/VosgesMania.unity")
             throw new InvalidOperationException("Ouvrir Neutral hors Play.");
         var table = GameObject.Find("PinballTable");
         if (table == null) throw new InvalidOperationException("PinballTable absent.");

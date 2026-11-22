@@ -17,23 +17,38 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     [SerializeField] private ScoreManager score;
     [SerializeField] private InputRouter input;
     [SerializeField] private TMPro.TMP_Text objectivesText;
+    [SerializeField] private TMPro.TMP_Text nextShotText;
     [SerializeField] private bool compactObjectivesLabel;
+    [SerializeField] private BumperComponent automateBumper;
+    [SerializeField] private GameObject automateModel;
+    [Tooltip("Durée du Ball Saver après lancement sur Industries, en secondes.")]
+    [SerializeField] private float ballSaverDuration = 8f;
+    private float ballSaverEnd = float.NegativeInfinity;
+    private bool ballSaverUsed;
+    private float lastDrainTime = float.NegativeInfinity;
     private Player player;
     private TableApi api;
     private FlipperApi left, right;
     private PlungerApi plunger;
     private TroughApi trough;
+    private KickerApi ballRelease;
+    private Action retryBallRelease;
     private KickerApi scoop;
     private PinballControls cabinet;
     private IndustriesAudio audio;
+    private IApiHittable troughDrain;
     private bool initialized, lastLeft, lastRight, lastLaunch;
     private int targets;
     private IndustriesProduction production;
+    private IndustriesAutomate automate;
+    private IndustriesAutomateFx automateFx;
     private readonly HashSet<int> drains = new HashSet<int>();
     private readonly List<Action> unbind = new List<Action>();
     private readonly List<DropTargetApi> dropTargets = new List<DropTargetApi>();
     public bool IsInitialized => initialized;
     public IndustriesProduction Production => production;
+    public bool AutomateActive => automate?.IsActive == true;
+    public int AutomateHits => automate?.Hits ?? 0;
     public int TargetsLit { get { int count = 0; for (int i = 0; i < 6; i++) if ((targets & (1 << i)) != 0) count++; return count; } }
     public int LitTargetMask=>targets;
     public string Name => "Vosges Mania — Industries";
@@ -67,6 +82,8 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         if (game == null) game = FindAnyObjectByType<GameManager>();
         if (score == null) score = FindAnyObjectByType<ScoreManager>();
         if (input == null) input = FindAnyObjectByType<InputRouter>();
+        if (nextShotText == null && objectivesText != null && compactObjectivesLabel)
+            nextShotText = objectivesText.transform.parent?.Find("MissionsLabel")?.GetComponent<TMPro.TMP_Text>();
         cabinet = new PinballControls();
         audio = GetComponent<IndustriesAudio>();
         cabinet.GamePlayPF.Enable();
@@ -79,13 +96,31 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         api = tableApi;
         left = api.Flipper("LeftFlipper"); right = api.Flipper("RightFlipper");
         plunger = api.Plunger("Plunger"); trough = api.Trough("Trough"); scoop = api.Kicker("Kicker1");
+        var troughComponent = GetComponentInChildren<TroughComponent>();
+        var releaseComponent = troughComponent != null ? troughComponent.PlayfieldExitKicker : null;
+        if (releaseComponent != null)
+        {
+            ballRelease = api.Kicker(releaseComponent);
+            foreach (var coil in releaseComponent.Coils)
+            {
+                if (coil.Id != troughComponent.PlayfieldExitKickerItem) continue;
+                if (ballRelease != null)
+                    retryBallRelease = () => ballRelease.Kick(coil.Angle, coil.Speed, coil.Inclination);
+                break;
+            }
+        }
         if (config == null || game == null || score == null || input == null ||
             left == null || right == null || plunger == null || trough == null)
         {
             Debug.LogWarning("[Industries] Config, gestionnaires ou éléments VPE manquants : partie inactive.", this);
             return Task.CompletedTask;
         }
-        foreach (var c in GetComponentsInChildren<BumperComponent>()) BindHit(api.Bumper(c), config.bumperPoints);
+        foreach (var c in GetComponentsInChildren<BumperComponent>())
+        {
+            bool boss = automateBumper != null ? c == automateBumper : c.name == "Bumper3";
+            BindHit(api.Bumper(c), config.bumperPoints, boss);
+            if (boss) automateBumper = c;
+        }
         var targetNames = new[] { "sw1", "sw2", "sw3", "sw11", "sw12", "sw13" };
         foreach (var c in GetComponentsInChildren<DropTargetComponent>())
         {
@@ -143,14 +178,30 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
             EventHandler handler = (_, __) => Award(config.slingshotPoints);
             surface.Slingshot += handler; unbind.Add(() => surface.Slingshot -= handler);
         }
+        if (production != null)
+        {
+            if (automateModel == null) automateModel = Resources.Load<GameObject>("Industries/Automate");
+            if (automateBumper != null && api.Bumper(automateBumper) != null && automateModel != null &&
+                IndustriesAutomateFx.TryCreate(automateBumper.transform, automateModel, out automateFx))
+                automate = new IndustriesAutomate(config.automateHits, config.automateHitCooldown);
+            else
+                Debug.LogWarning("[Industries] Bumper3 ou modèle de l’automate manquant. Le mode boss est désactivé.", this);
+        }
         foreach (var c in GetComponentsInChildren<SpinnerComponent>())
         {
             var spinner = api.Spinner(c);
+            if (spinner == null) continue;
             EventHandler handler = (_, __) => Award(config.spinnerPoints);
             spinner.Spin += handler; unbind.Add(() => spinner.Spin -= handler);
         }
         var drain = api.Kicker("Drain");
         if (drain != null) { drain.Hit += OnDrain; unbind.Add(() => drain.Hit -= OnDrain); }
+        if (troughComponent != null &&
+            troughComponent.PlayfieldEntrySwitch is KickerComponent drainComponent &&
+            api.Kicker(drainComponent) == drain)
+            troughDrain = drain;
+        if (troughDrain == null)
+            Debug.LogWarning("[Industries] Drain VPE non relié au trough : récupération hors zone indisponible.", this);
         if (scoop != null) { scoop.Hit += OnScoop; unbind.Add(() => scoop.Hit -= OnScoop); }
         initialized = true;
         game.ExternalBallRequested += Serve;
@@ -164,10 +215,16 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         return Task.CompletedTask;
     }
 
-    private void BindHit(BumperApi bumper, int points)
+    private void BindHit(BumperApi bumper, int points, bool boss)
     {
         if (bumper == null) return;
-        EventHandler<HitEventArgs> handler = (_, __) => { Award(points); audio?.Play(IndustriesSound.Bumper); };
+        EventHandler<HitEventArgs> handler = (_, __) =>
+        {
+            if (!CanScore()) return;
+            Award(points);
+            audio?.Play(IndustriesSound.Bumper);
+            if (boss) HitAutomate();
+        };
         bumper.Hit += handler; unbind.Add(() => bumper.Hit -= handler);
     }
     private void Award(int points)
@@ -177,13 +234,20 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     private void HitTarget(int index)
     {
         if (!CanScore()) return;
-        Award(config.targetPoints);
+        score.RecordHit(ScoreElement.SimpleTarget, this, config.targetPoints, allowRepeat: true, courseValidated: true);
         audio?.Play(IndustriesSound.Target);
         if (production != null)
         {
-            if (production.HitTarget(index))
-                game.ShowMessage((index < 3 ? "BOIS" : "TEXTILE") + " CHARGÉ · VISER LA RAMPE", 2f);
+            bool loaded = production.HitTarget(index);
             targets = production.Targets;
+            if (automate?.QualifyTarget(index) == true)
+            {
+                automateFx.Activate();
+                audio?.PlayAutomateMotor();
+                game.ShowMessage("AUTOMATE DÉRÉGLÉ · VISEZ LE BUMPER ROUGE", 3.2f);
+            }
+            else if (loaded && !AutomateActive)
+                game.ShowMessage((index < 3 ? "BOIS" : "TEXTILE") + " CHARGÉ · VISER LA RAMPE", 2f);
         }
         else targets |= 1 << index;
         if (production == null && targets == 63)
@@ -204,7 +268,15 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     }
     private void RefreshObjectives()
     {
-        if (objectivesText != null) objectivesText.text = production != null
+        if (nextShotText != null && production != null)
+            nextShotText.text = AutomateActive ? "TOUCHEZ L’AUTOMATE"
+                : production.NeedsRamp ? "VISEZ LA RAMPE"
+                : production.CanDeliver ? "VISEZ LA LIVRAISON"
+                : automate != null ? "CIBLES BOSS  " + automate.QualificationHits + "/" + IndustriesAutomate.RequiredTargets
+                : "TOUCHEZ LES CIBLES";
+        if (objectivesText != null) objectivesText.text = AutomateActive
+            ? "AUTOMATE" + (compactObjectivesLabel ? "\n" : "  ") + automate.Hits + "/" + automate.RequiredHits
+            : production != null
             ? "BOIS " + production.Status(0) + (compactObjectivesLabel ? "\n" : " · ") + "TEXTILE " + production.Status(1)
             : compactObjectivesLabel ? TargetsLit+" / 6" : "PRODUCTION  " + TargetsLit + "/6  ·  BONUS " + config.sixTargetsBonus.ToString("N0");
         for (int i = 0; i < 3; i++)
@@ -215,7 +287,25 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     }
     private void OnDrain(object sender, HitEventArgs e)
     {
-        if (initialized && drains.Add(e.BallId)) { production?.ForgetBall(e.BallId); audio?.Play(IndustriesSound.Drain); game.LoseBall(); }
+        HandleDrainBall(e.BallId);
+    }
+
+    private void HandleDrainBall(int ballId)
+    {
+        if (!initialized || Time.time - lastDrainTime < 0.5f) return;
+        lastDrainTime = Time.time;
+        production?.ForgetBall(ballId);
+        if (ballSaverDuration > 0f && !ballSaverUsed && Time.time < ballSaverEnd)
+        {
+            ballSaverUsed = true;
+            audio?.Play(IndustriesSound.Bonus);
+            game.NotifyBallReturnedToLane();
+            game.ShowMessage("BILLE SAUVÉE !", 1.8f);
+            StartCoroutine(ServeAfterDelay());
+            return;
+        }
+        audio?.Play(IndustriesSound.Drain);
+        game.LoseBall();
     }
     private void OnRoute(int line, bool entry, int ball)
     {
@@ -223,9 +313,10 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         if (entry) production.Enter(line, ball, Time.time);
         else if (production.Exit(line, ball, Time.time))
         {
-            score.AddBonus(config.processingBonus);
+            score.RecordHit(ScoreElement.IutRamp, this, config.processingBonus, allowRepeat: true);
             audio?.Play(IndustriesSound.Bonus);
-            game.ShowMessage((line == 0 ? "BOIS" : "TEXTILE") + " TRANSFORMÉ · VISER LIVRAISON", 2f);
+            if (!AutomateActive)
+                game.ShowMessage((line == 0 ? "BOIS" : "TEXTILE") + " TRANSFORMÉ · VISER LIVRAISON", 2f);
             RefreshObjectives();
         }
     }
@@ -239,14 +330,37 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
             else if (production.Exit(line, ball, Time.time)) transformed |= 1 << line;
         }
         if (transformed == 0) return;
-        score.AddBonus(config.processingBonus * (transformed == 3 ? 2 : 1));
+        score.RecordHit(ScoreElement.IutRamp, this, config.processingBonus * (transformed == 3 ? 2 : 1), allowRepeat: true);
         audio?.Play(IndustriesSound.Bonus);
-        string material = transformed == 3 ? "BOIS ET TEXTILE" : transformed == 1 ? "BOIS" : "TEXTILE";
-        game.ShowMessage(material + " TRANSFORMÉ" + (transformed == 3 ? "S" : "") + " · VISER LIVRAISON", 2f);
+        if (!AutomateActive)
+        {
+            string material = transformed == 3 ? "BOIS ET TEXTILE" : transformed == 1 ? "BOIS" : "TEXTILE";
+            game.ShowMessage(material + " TRANSFORMÉ" + (transformed == 3 ? "S" : "") + " · VISER LIVRAISON", 2f);
+        }
         RefreshObjectives();
     }
     private bool CanScore() => initialized && Time.timeScale > 0f && !SceneTransition.IsPlaying &&
         (game.State == GameManager.GameState.Playing || game.State == GameManager.GameState.ReadyToLaunch);
+
+    private void HitAutomate()
+    {
+        if (!AutomateActive) return;
+        var hit = automate.Hit(Time.time);
+        if (hit == IndustriesAutomateHit.Ignored) return;
+        bool defeated = hit == IndustriesAutomateHit.Defeated;
+        automateFx.Impact(defeated);
+        string progress = automate.Hits + "/" + automate.RequiredHits;
+        if (defeated)
+        {
+            score.AddBonus(config.automateBonus);
+            audio?.Play(IndustriesSound.Bonus);
+            foreach (var target in dropTargets) target.IsDropped = false;
+            game.ShowMessage(progress + "  AUTOMATE ARRÊTÉ  +" + config.automateBonus.ToString("N0"), 2.6f);
+        }
+        else game.ShowMessage(progress + "  AUTOMATE TOUCHÉ", 1.3f);
+        RefreshObjectives();
+    }
+
     private void OnScoop(object sender, HitEventArgs e)
     {
         if (!CanScore()) return;
@@ -256,10 +370,11 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         {
             int bonus = production.Deliver();
             score.AddBonus(bonus);
-            audio?.Play(IndustriesSound.Bonus);
-            game.ShowMessage("LIVRAISON +" + bonus.ToString("N0"), 2f);
             targets = production.Targets;
             StartCoroutine(ResetTargets());
+            audio?.Play(IndustriesSound.Bonus);
+            if (!AutomateActive)
+                game.ShowMessage("LIVRAISON +" + bonus.ToString("N0"), 2f);
             RefreshObjectives();
         }
         StartCoroutine(EjectScoop());
@@ -272,6 +387,9 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     private void Serve()
     {
         StopAllCoroutines();
+        drains.Clear();
+        ballSaverUsed = false;
+        ballSaverEnd = float.NegativeInfinity;
         targets = 0;
         production?.Reset();
         foreach (var t in dropTargets) t.IsDropped = false;
@@ -281,8 +399,26 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     private IEnumerator ServeAfterDelay()
     {
         yield return new WaitForSeconds(config.serveDelay);
-        if (!trough.EjectBall())
+        bool served = trough.EjectBall();
+        for (int attempt = 0; !served && attempt < 4; attempt++)
+        {
+            yield return new WaitForSeconds(0.25f);
+            served = trough.EjectBall();
+        }
+        if (!served)
+        {
             Debug.LogWarning("[Industries] Le trough n'a pas pu fournir de bille ; vérifier ses références.", this);
+            yield break;
+        }
+
+        if (retryBallRelease == null) yield break;
+        yield return new WaitForSeconds(0.5f);
+        if (!ballRelease.HasBall()) yield break;
+        // Relâcher la bille déjà servie sans la prélever une seconde fois dans le trough.
+        retryBallRelease();
+        yield return new WaitForSeconds(0.5f);
+        if (ballRelease.HasBall())
+            Debug.LogWarning("[Industries] BallRelease retient toujours la bille après la rééjection.", this);
     }
     private void Update()
     {
@@ -293,14 +429,40 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         bool r = canPlay && (input.RightFlipperHeld || cabinet.GamePlayPF.RightFlipper.IsPressed());
         if (l != lastLeft) { if (l) left.RotateToEnd(); else left.RotateToStart(); audio?.Play(l?IndustriesSound.FlipperUp:IndustriesSound.FlipperDown); lastLeft = l; }
         if (r != lastRight) { if (r) right.RotateToEnd(); else right.RotateToStart(); audio?.Play(r?IndustriesSound.FlipperUp:IndustriesSound.FlipperDown); lastRight = r; }
-        bool launch = canPlay && (input.PlungerHeld || cabinet.GamePlayPF.LaunchBall.IsPressed());
+        bool releaseOccupied = ballRelease != null && ballRelease.HasBall();
+        bool launch = canPlay && !releaseOccupied && (input.PlungerHeld || cabinet.GamePlayPF.LaunchBall.IsPressed());
         if (launch && !lastLaunch) plunger.PullBack();
-        if (!launch && lastLaunch && canPlay) { plunger.Fire(); audio?.Play(IndustriesSound.Launch); game.NotifyBallLaunched(); }
+        if (!launch && lastLaunch && canPlay && !releaseOccupied)
+        {
+            plunger.Fire();
+            audio?.Play(IndustriesSound.Launch);
+            if (ballSaverDuration > 0f && !ballSaverUsed) ballSaverEnd = Time.time + ballSaverDuration;
+            game.NotifyBallLaunched();
+        }
         lastLaunch = launch;
+
+        if (canPlay && game.State == GameManager.GameState.Playing && troughDrain != null &&
+            Time.time - lastDrainTime >= 0.5f)
+        {
+            foreach (var b in FindObjectsByType<BallComponent>(FindObjectsInactive.Exclude))
+            {
+                Vector3 p = b.transform.position;
+                // Bille tombée dans le bac du bas (sous le drain, hors couloir de lancement)
+                if (p.z < 1.85f && p.x < 3.0f)
+                {
+                    // Le drain natif recycle également le prefab dans le stock du trough.
+                    troughDrain.OnHit(b.Id, false);
+                    break;
+                }
+            }
+        }
     }
     private void OnState(GameManager.GameState state)
     {
         if (state != GameManager.GameState.GameOver) return;
+        automate?.Reset();
+        automateFx?.RestoreBumper();
+        RefreshObjectives();
         left.RotateToStart(); right.RotateToStart();
     }
     private void OnDestroy()

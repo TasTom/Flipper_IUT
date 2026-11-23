@@ -97,8 +97,11 @@ public class MainMenuController : MonoBehaviour
     private Quaternion MenuRotation => menuLayout != null ? menuLayout.localRotation : Quaternion.identity;
 
     /// <summary>Quitte le jeu ou le mode Play dans l'éditeur.</summary>
-    public void QuitGame()
+    public void QuitGame() => ExitApplication();
+
+    internal static void ExitApplication()
     {
+        PlayerPrefs.Save();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

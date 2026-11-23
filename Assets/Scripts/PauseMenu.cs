@@ -10,6 +10,7 @@ public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject panel;
 
+    private const string MainMenuScene = "MainMenu";
     private static readonly Color Ink = new Color32(17, 32, 36, 255);
     private static readonly Color ButtonColor = new Color32(32, 54, 59, 255);
     private static readonly Color Gold = new Color32(238, 188, 111, 255);
@@ -17,6 +18,11 @@ public class PauseMenu : MonoBehaviour
     private static readonly string[] Labels = { "Flipper gauche", "Flipper droit", "Flipper secondaire", "Lanceur", "Tilt gauche", "Tilt droit" };
 
     private GameObject overlay;
+    private GameObject settingsCard, exitPrompt;
+    private TMP_Text exitPromptTitle;
+    private Button cancelExit;
+    private Button exitSource;
+    private Action confirmedExit;
     private Slider music;
     private TMP_Text volumeText, feedback;
     private readonly TMP_Text[] keyLabels = new TMP_Text[Labels.Length];
@@ -67,6 +73,7 @@ public class PauseMenu : MonoBehaviour
             else
             {
                 EndCapture(false);
+                DismissExitPrompt();
                 PlayerPrefs.Save();
             }
         }
@@ -113,11 +120,21 @@ public class PauseMenu : MonoBehaviour
         veil.anchorMin = Vector2.zero;
         veil.anchorMax = Vector2.one;
         veil.gameObject.AddComponent<Image>().color = new Color(.01f, .025f, .032f, .80f);
-        var card = Rect("Panneau", veil, Vector2.zero, new Vector2(650, 664));
+        float height = standalone ? 664f : 802f;
+        float offset = (height - 664f) / 2f;
+        var card = Rect("Panneau", veil, Vector2.zero, new Vector2(650, height));
+        settingsCard = card.gameObject;
         card.localRotation = cardRotation;
         card.gameObject.AddComponent<Image>().color = Ink;
-        Rect("Filet", card, new Vector2(0, 329), new Vector2(650, 6)).gameObject.AddComponent<Image>().color = Gold;
+        Rect("Filet", card, new Vector2(0, height / 2f - 3f), new Vector2(650, 6)).gameObject.AddComponent<Image>().color = Gold;
 
+        var body = Rect("Réglages", card, new Vector2(0, offset), new Vector2(650, 664));
+        BuildSettings(body);
+        if (!standalone) BuildExitActions(veil, card);
+    }
+
+    private void BuildSettings(RectTransform card)
+    {
         Text(card, standalone ? "Options" : "Pause", new Vector2(0, 273), new Vector2(540, 53), 43, Gold);
         Text(card, "Musique", new Vector2(-185, 199), new Vector2(200, 32), 24, Color.white, TextAlignmentOptions.MidlineLeft);
         volumeText = Text(card, "", new Vector2(250, 199), new Vector2(78, 32), 22, Gold);
@@ -154,6 +171,64 @@ public class PauseMenu : MonoBehaviour
         }, out var resumeLabel);
         resume.GetComponent<Image>().color = Gold;
         resumeLabel.color = Ink;
+    }
+
+    private void BuildExitActions(RectTransform veil, RectTransform card)
+    {
+        Button menu = null;
+        menu = CreateButton(card, "RetourMenuPrincipal", "Menu principal", new Vector2(-151, -337),
+            new Vector2(270, 54), () => AskToExit(menu, "Revenir au menu principal ?", ReturnToMainMenu), out _);
+        menu.interactable = SceneTransition.CanLoad(MainMenuScene);
+
+        Button quit = null;
+        quit = CreateButton(card, "QuitterJeu", "Quitter le jeu", new Vector2(152, -337),
+            new Vector2(264, 54), () => AskToExit(quit, "Quitter le jeu ?", MainMenuController.ExitApplication), out _);
+
+        var prompt = Rect("ConfirmationSortie", veil, Vector2.zero, new Vector2(550, 246));
+        prompt.localRotation = cardRotation;
+        exitPrompt = prompt.gameObject;
+        exitPrompt.AddComponent<Image>().color = Ink;
+        exitPromptTitle = Text(prompt, "", new Vector2(0, 72), new Vector2(490, 54), 32, Gold);
+        Text(prompt, "La partie en cours sera abandonnée.", new Vector2(0, 12), new Vector2(490, 42), 22, Color.white);
+        cancelExit = CreateButton(prompt, "Annuler", "Annuler", new Vector2(-120, -67),
+            new Vector2(196, 50), DismissExitPrompt, out _);
+        CreateButton(prompt, "Confirmer", "Confirmer", new Vector2(120, -67),
+            new Vector2(196, 50), ConfirmExit, out _);
+        exitPrompt.SetActive(false);
+    }
+
+    private void AskToExit(Button source, string message, Action action)
+    {
+        EndCapture(false);
+        exitSource = source;
+        confirmedExit = action;
+        exitPromptTitle.text = message;
+        settingsCard.SetActive(false);
+        exitPrompt.SetActive(true);
+        EventSystem.current?.SetSelectedGameObject(cancelExit.gameObject);
+    }
+
+    private void DismissExitPrompt()
+    {
+        if (exitPrompt == null || !exitPrompt.activeSelf) return;
+        exitPrompt.SetActive(false);
+        settingsCard.SetActive(true);
+        if (overlay.activeSelf && exitSource != null)
+            EventSystem.current?.SetSelectedGameObject(exitSource.gameObject);
+        confirmedExit = null;
+    }
+
+    private void ConfirmExit()
+    {
+        var action = confirmedExit;
+        DismissExitPrompt();
+        action?.Invoke();
+    }
+
+    private static void ReturnToMainMenu()
+    {
+        if (SceneTransition.Play(MainMenuScene, "MENU PRINCIPAL"))
+            TableSessionTransfer.Clear();
     }
 
     private void Refresh()
@@ -211,6 +286,7 @@ public class PauseMenu : MonoBehaviour
     {
         if (overlay != null) overlay.SetActive(false);
         EndCapture(false);
+        DismissExitPrompt();
     }
 
     private void CloseOptions()

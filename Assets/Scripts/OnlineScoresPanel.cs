@@ -21,7 +21,9 @@ public sealed class OnlineScoresPanel : MonoBehaviour
     private TMP_InputField initials;
     private Button submit;
     private int page, finalScore;
-    private string runId, submittedInitials;
+    private string submittedInitials;
+    private Button replay, mainMenu;
+    private GameManager finishedGame;
     private bool busy, waitingForTransition;
 
     internal bool IsOpen => overlay != null && overlay.activeSelf;
@@ -49,6 +51,7 @@ public sealed class OnlineScoresPanel : MonoBehaviour
     internal void QueueFinalScore(GameManager game, int score)
     {
         if (HandlingFinalScore) return;
+        finishedGame = game;
         waitingForTransition = true;
         StartCoroutine(AfterProgressionCheck(game, score));
     }
@@ -67,16 +70,34 @@ public sealed class OnlineScoresPanel : MonoBehaviour
 
     private void CheckFinalScore(int score)
     {
-        if (score <= 0 || IsOpen) return;
+        if (IsOpen) return;
         finalScore = score;
-        runId = Guid.NewGuid().ToString();
         var camera = Camera.main;
         bool rotated = camera != null && camera.TryGetComponent<CabinetViewport>(out _) && camera.aspect >= 1f;
         Build(rotated ? Quaternion.Euler(0, 0, -90) : Quaternion.identity, new Vector2(560, 370), "SCORE FINAL");
         Label(score.ToString("N0") + " PTS", new Vector2(0, 80), new Vector2(490, 46), 35, Gold);
-        close = MakeButton("Continuer", new Vector2(137, -135), 195, Close);
+        close = MakeButton("Continuer", new Vector2(137, -135), 195, ShowFinalActions);
         retry = MakeButton("Réessayer", new Vector2(-137, -135), 195, CheckQualification);
-        CheckQualification();
+        replay = MakeButton("Rejouer", new Vector2(-137, -135), 195, () =>
+        {
+            Close();
+            finishedGame.Replay();
+        });
+        mainMenu = MakeButton("Menu principal", new Vector2(137, -135), 195, () =>
+        {
+            if (MainMenuController.ReturnToMainMenu()) Close();
+        });
+        replay.gameObject.SetActive(false);
+        mainMenu.gameObject.SetActive(false);
+        if (score <= 0)
+            ShowFinalActions();
+        else if (OnlineScores.RunTicket == null)
+        {
+            status.text = "Classement indisponible pour cette partie.";
+            ShowFinalActions();
+        }
+        else
+            CheckQualification();
     }
 
     private void RefreshRanking()
@@ -136,7 +157,7 @@ public sealed class OnlineScoresPanel : MonoBehaviour
             }
             else
             {
-                Close();
+                ShowFinalActions();
             }
         }));
     }
@@ -178,27 +199,51 @@ public sealed class OnlineScoresPanel : MonoBehaviour
         close.interactable = false;
         busy = true;
         status.text = "Enregistrement…";
-        StartCoroutine(OnlineScores.Submit(runId, submittedInitials, finalScore, accepted =>
+        StartCoroutine(OnlineScores.Submit(OnlineScores.RunTicket, submittedInitials, finalScore, result =>
         {
             busy = false;
             close.interactable = true;
-            if (!accepted.HasValue)
+            if (result == OnlineScores.SubmissionResult.Unavailable)
             {
                 status.text = "Connexion interrompue. Réessaie l’envoi.";
                 submit.interactable = true;
                 Select(submit.gameObject);
                 return;
             }
-            status.text = accepted.Value ? "Score enregistré !" : "Le Top 100 a changé. Ce score est désormais hors classement.";
-            submit.gameObject.SetActive(false);
-            Select(close.gameObject);
+            status.text = result switch
+            {
+                OnlineScores.SubmissionResult.Accepted => "Score enregistré !",
+                OnlineScores.SubmissionResult.OutsideTop => "Le Top 100 a changé. Ce score est désormais hors classement.",
+                _ => "Ce score n’a pas passé les contrôles du classement."
+            };
+            ShowFinalActions();
         }));
     }
 
     private void Update()
     {
-        if (IsOpen && close != null && close.interactable && Input.GetKeyDown(KeyCode.Escape))
+        if (!IsOpen || close == null || !Input.GetKeyDown(KeyCode.Escape)) return;
+        if (finishedGame == null)
             Close();
+        else if (close.gameObject.activeInHierarchy && close.interactable)
+            ShowFinalActions();
+    }
+
+    private void ShowFinalActions()
+    {
+        if (busy)
+        {
+            StopAllCoroutines();
+            busy = false;
+            status.text = "";
+        }
+        if (initials != null) initials.gameObject.SetActive(false);
+        if (submit != null) submit.gameObject.SetActive(false);
+        retry.gameObject.SetActive(false);
+        close.gameObject.SetActive(false);
+        replay.gameObject.SetActive(true);
+        mainMenu.gameObject.SetActive(true);
+        Select(replay.gameObject);
     }
 
     private void Close()

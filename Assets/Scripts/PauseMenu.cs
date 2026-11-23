@@ -177,7 +177,7 @@ public class PauseMenu : MonoBehaviour
     {
         Button menu = null;
         menu = CreateButton(card, "RetourMenuPrincipal", "Menu principal", new Vector2(-151, -337),
-            new Vector2(270, 54), () => AskToExit(menu, "Revenir au menu principal ?", ReturnToMainMenu), out _);
+            new Vector2(270, 54), () => AskToExit(menu, "Revenir au menu principal ?", () => MainMenuController.ReturnToMainMenu()), out _);
         menu.interactable = SceneTransition.CanLoad(MainMenuScene);
 
         Button quit = null;
@@ -223,12 +223,6 @@ public class PauseMenu : MonoBehaviour
         var action = confirmedExit;
         DismissExitPrompt();
         action?.Invoke();
-    }
-
-    private static void ReturnToMainMenu()
-    {
-        if (SceneTransition.Play(MainMenuScene, "MENU PRINCIPAL"))
-            TableSessionTransfer.Clear();
     }
 
     private void Refresh()

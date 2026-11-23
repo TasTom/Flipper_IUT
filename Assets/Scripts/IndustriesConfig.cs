@@ -11,6 +11,7 @@ public class IndustriesConfig : ScriptableObject
     [Min(0)] public int slingshotPoints = 50;
     [Min(0)] public int scoopPoints = 1000;
     [Min(0)] public int sixTargetsBonus = 5000;
+    [Min(0f)] public float keyboardNudgeForce = 2f;
     [Header("Atelier : charger, transformer, livrer (GDD : cibles, rampes, combos)")]
     public bool productionEnabled;
     [Tooltip("Bois et textile utilisent le même parcours physique Ramp1.")]

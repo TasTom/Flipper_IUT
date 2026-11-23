@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using VisualPinball.Engine.Game.Engines;
 using VisualPinball.Unity;
+using VisualPinball.Unity.Simulation;
 using VpeBallManager = VisualPinball.Unity.BallManager;
 
 /// <summary>Règles d'Industries : cycle de partie partagé, contacts et physique exécutés par VPE.</summary>
@@ -34,6 +35,7 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
     private Action retryBallRelease;
     private KickerApi scoop;
     private PinballControls cabinet;
+    private List<NativeInputApi.InputBinding> previousNativeBindings, tableNativeBindings;
     private IndustriesAudio audio;
     private IApiHittable troughDrain;
     private bool initialized, lastLeft, lastRight, lastLaunch;
@@ -90,6 +92,17 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         cabinet = new PinballControls();
         audio = GetComponent<IndustriesAudio>();
         cabinet.GamePlayPF.Enable();
+
+        // VPE peut recevoir le clavier via sa couche native ou via Input System.
+        // Les secousses clavier passent par InputRouter dans les deux cas.
+        previousNativeBindings = NativeInputManager.ConfiguredBindings;
+        tableNativeBindings = new List<NativeInputApi.InputBinding>(previousNativeBindings is { Count: > 0 }
+            ? previousNativeBindings : NativeInputManager.BuildDefaultBindings());
+        tableNativeBindings.RemoveAll(binding =>
+            binding.BindingType == (int)NativeInputApi.BindingType.Keyboard &&
+            (NativeInputApi.InputAction)binding.Action is NativeInputApi.InputAction.LeftNudge
+                or NativeInputApi.InputAction.RightNudge or NativeInputApi.InputAction.CenterNudge);
+        NativeInputManager.ConfiguredBindings = tableNativeBindings;
     }
 
     public Task OnInit(Player p, TableApi tableApi, VpeBallManager balls, CancellationToken ct)
@@ -467,6 +480,7 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         serveRoutine = null;
         startingMultiball = false;
         MultiballActive = false;
+        lastLaunch = false;
         targets = 0;
         production?.Reset();
         automate?.Reset();
@@ -515,17 +529,14 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
         bool r = canPlay && (input.RightFlipperHeld || cabinet.GamePlayPF.RightFlipper.IsPressed());
         if (l != lastLeft) { if (l) left.RotateToEnd(); else left.RotateToStart(); audio?.Play(l?IndustriesSound.FlipperUp:IndustriesSound.FlipperDown); lastLeft = l; }
         if (r != lastRight) { if (r) right.RotateToEnd(); else right.RotateToStart(); audio?.Play(r?IndustriesSound.FlipperUp:IndustriesSound.FlipperDown); lastRight = r; }
-        bool releaseOccupied = ballRelease != null && ballRelease.HasBall();
-        bool launch = canPlay && !startingMultiball && !releaseOccupied && (input.PlungerHeld || cabinet.GamePlayPF.LaunchBall.IsPressed());
-        if (launch && !lastLaunch) plunger.PullBack();
-        if (!launch && lastLaunch && canPlay && !startingMultiball && !releaseOccupied)
+        if (canPlay)
         {
-            plunger.Fire();
-            audio?.Play(IndustriesSound.Launch);
-            if (ballSaverDuration > 0f && !ballSaverUsed) ballSaverEnd = Time.time + ballSaverDuration;
-            game.NotifyBallLaunched();
+            if (input.TiltLeftPressed) player.Nudge(75f, config.keyboardNudgeForce);
+            if (input.TiltRightPressed) player.Nudge(285f, config.keyboardNudgeForce);
+            UpdatePlunger();
         }
-        lastLaunch = launch;
+        else if (game.State != GameManager.GameState.Paused)
+            lastLaunch = false;
 
         if (canPlay && game.State == GameManager.GameState.Playing && troughDrain != null)
         {
@@ -542,6 +553,26 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
                 }
             }
         }
+    }
+
+    private void UpdatePlunger()
+    {
+        if (startingMultiball || (ballRelease != null && ballRelease.HasBall()))
+        {
+            lastLaunch = false;
+            return;
+        }
+
+        bool held = input.PlungerHeld || cabinet.GamePlayPF.LaunchBall.IsPressed();
+        if (held && !lastLaunch) plunger.PullBack();
+        if (!held && lastLaunch)
+        {
+            plunger.Fire();
+            audio?.Play(IndustriesSound.Launch);
+            if (ballSaverDuration > 0f && !ballSaverUsed) ballSaverEnd = Time.time + ballSaverDuration;
+            game.NotifyBallLaunched();
+        }
+        lastLaunch = held;
     }
     private void OnState(GameManager.GameState state)
     {
@@ -562,6 +593,8 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
             game.StateChanged -= OnState;
         }
         cabinet?.Dispose();
+        if (ReferenceEquals(NativeInputManager.ConfiguredBindings, tableNativeBindings))
+            NativeInputManager.ConfiguredBindings = previousNativeBindings;
     }
     public void Switch(string id, bool closed) => OnSwitchChanged?.Invoke(this, new SwitchEventArgs2(id, closed));
     public void SetCoil(string id, bool enabled) => OnCoilChanged?.Invoke(this, new CoilEventArgs(id, enabled));

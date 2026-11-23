@@ -11,6 +11,19 @@ internal static class OnlineScores
     private const string Endpoint = "https://wgwiquzdppexpgjxzgcl.supabase.co/rest/v1/rpc/";
     // Clé publiable Supabase : seules les fonctions SQL accordées à anon sont accessibles.
     private const string PublishableKey = "sb_publishable_exzNw1nQBzMT0OHLlbMUrA_nhDdf4g8";
+    internal static string RunTicket { get; private set; }
+    private static Guid pendingRun;
+
+    internal static IEnumerator BeginRun()
+    {
+        RunTicket = null;
+        var run = pendingRun = Guid.NewGuid();
+        using var request = JsonRequest("flipper_begin_run", "{}");
+        yield return request.SendWebRequest();
+        if (run == pendingRun && request.result == UnityWebRequest.Result.Success &&
+            Guid.TryParse(request.downloadHandler.text.Trim().Trim('"'), out var ticket))
+            RunTicket = ticket.ToString();
+    }
 
     [Serializable]
     internal sealed class Entry
@@ -61,19 +74,28 @@ internal static class OnlineScores
         finished(entries);
     }
 
-    internal static IEnumerator Submit(string runId, string initials, int score, Action<bool?> finished)
+    internal enum SubmissionResult { Accepted, OutsideTop, Rejected, Unavailable }
+
+    internal static IEnumerator Submit(string runId, string initials, int score, Action<SubmissionResult> finished)
     {
         string body = JsonUtility.ToJson(new Submission { p_run_id = runId, p_initials = initials, p_score = score });
-        using var request = new UnityWebRequest(Endpoint + "flipper_submit_score", "POST");
+        using var request = JsonRequest("flipper_submit_score", body);
+        yield return request.SendWebRequest();
+        string response = request.downloadHandler.text.Trim();
+        if (request.result == UnityWebRequest.Result.Success && bool.TryParse(response, out bool accepted))
+            finished(accepted ? SubmissionResult.Accepted : SubmissionResult.OutsideTop);
+        else
+            finished(request.responseCode == 400 ? SubmissionResult.Rejected : SubmissionResult.Unavailable);
+    }
+
+    private static UnityWebRequest JsonRequest(string function, string body)
+    {
+        var request = new UnityWebRequest(Endpoint + function, "POST");
         request.uploadHandler = new UploadHandlerRaw(Encoding.UTF8.GetBytes(body));
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
         Configure(request);
-        yield return request.SendWebRequest();
-        string response = request.downloadHandler.text.Trim();
-        finished(request.result == UnityWebRequest.Result.Success && bool.TryParse(response, out bool accepted)
-            ? accepted
-            : null);
+        return request;
     }
 
     private static void Configure(UnityWebRequest request)

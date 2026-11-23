@@ -156,12 +156,7 @@ public class GameManager : MonoBehaviour
         if (State == GameState.GameOver && finalRanking != null && finalRanking.HandlingFinalScore) return;
         if (ValidatePressed() && (State == GameState.GameOver || State == GameState.Attract))
         {
-            if (State == GameState.GameOver && SceneTransition.CanLoad(replayScene))
-            {
-                TableSessionTransfer.Clear();
-                if (SceneTransition.Play(replayScene, "NOUVELLE PARTIE")) return;
-            }
-            StartGame();
+            Replay();
             return;
         }
 
@@ -169,6 +164,16 @@ public class GameManager : MonoBehaviour
         {
             TogglePause();
         }
+    }
+
+    internal void Replay()
+    {
+        if (State == GameState.GameOver && SceneTransition.CanLoad(replayScene))
+        {
+            TableSessionTransfer.Clear();
+            if (SceneTransition.Play(replayScene, "NOUVELLE PARTIE")) return;
+        }
+        StartGame();
     }
 
     /// <summary>Démarre une nouvelle partie : score à zéro, billes rechargées.</summary>
@@ -184,6 +189,8 @@ public class GameManager : MonoBehaviour
         {
             TogglePause();
         }
+
+        if (SupportsOnlineScores) StartCoroutine(OnlineScores.BeginRun());
 
         if (ScoreManager.Instance != null)
         {
@@ -380,14 +387,15 @@ public class GameManager : MonoBehaviour
         Broadcast(isRecord ? "NOUVEAU RECORD ! — ENTRÉE POUR REJOUER"
                            : "GAME OVER — ENTRÉE POUR REJOUER", 0f);
 
-        string scene = gameObject.scene.name;
         int score = ScoreManager.Instance != null ? ScoreManager.Instance.Score : 0;
-        if (score > 0 && (scene == "VosgesMania" || scene == "Industries"))
+        if (SupportsOnlineScores)
         {
             if (finalRanking == null) finalRanking = gameObject.AddComponent<OnlineScoresPanel>();
             finalRanking.QueueFinalScore(this, score);
         }
     }
+
+    private bool SupportsOnlineScores => gameObject.scene.name == "VosgesMania" || gameObject.scene.name == "Industries";
 
     private void SpawnBall()
     {

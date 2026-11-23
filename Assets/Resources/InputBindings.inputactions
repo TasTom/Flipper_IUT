@@ -1,0 +1,732 @@
+{
+    "version": 1,
+    "name": "InputBindings",
+    "maps": [
+        {
+            "name": "Cabinet Switches",
+            "id": "3f02b511-0aac-4611-9500-d639381eaf35",
+            "actions": [
+                {
+                    "name": "Upper Left Flipper",
+                    "type": "Button",
+                    "id": "9454fc61-28b8-473c-97bd-fe81ea07618d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Upper Right Flipper",
+                    "type": "Button",
+                    "id": "9fb1a2e1-8f68-458c-85d5-63496506aeff",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Left Flipper",
+                    "type": "Button",
+                    "id": "57ae6af3-84b7-4509-9170-f68fb88257b4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Right Flipper",
+                    "type": "Button",
+                    "id": "81118098-1d4c-438a-a80e-3db7873e9ee7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Right Magnasave",
+                    "type": "Button",
+                    "id": "127acc9b-05bd-47e9-9ce5-216c7ea67467",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Left Magnasave",
+                    "type": "Button",
+                    "id": "d9e4b85f-192b-4ec8-9189-a197be551514",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Fire 1",
+                    "type": "Button",
+                    "id": "575ac0c7-fe8a-4cd1-9f58-3c346e2daa9f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Fire 2",
+                    "type": "Button",
+                    "id": "72153a46-eb6d-4f0f-b1d1-455bab3ffde2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Front (buy-in)",
+                    "type": "Button",
+                    "id": "9b60a323-b24a-4727-ad89-91c0f7d26b19",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Start Game",
+                    "type": "Button",
+                    "id": "a0fe7202-666a-41d7-81c2-c563d29e5975",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Plunger",
+                    "type": "Button",
+                    "id": "3bfa2c59-e45e-495c-864b-ba57d362920f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Plunger (analog)",
+                    "type": "Button",
+                    "id": "3fa371a9-970e-4ad3-af1e-352b3746125f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Insert Coin Slot 1",
+                    "type": "Button",
+                    "id": "d7d5cf83-6ae3-430d-a08b-04a6873c80bf",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Insert Coin Slot 2",
+                    "type": "Button",
+                    "id": "16e00761-fe15-4dcb-be00-8ef43033b360",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Insert Coin Slot 3",
+                    "type": "Button",
+                    "id": "7a69f0c8-382c-44e7-9dd2-c7c7bb2dd04d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Insert Coin Slot 4",
+                    "type": "Button",
+                    "id": "e54907e9-f792-407f-9a85-a31ef24579f2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Coin Door Open/Close",
+                    "type": "Button",
+                    "id": "b6899c6b-1380-4e06-8877-4c83729e46a8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Coin Door Cancel (WPC)",
+                    "type": "Button",
+                    "id": "e616fac1-be46-48b8-bfcd-586df8b208b5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Coin Door Down (WPC)",
+                    "type": "Button",
+                    "id": "a80e6a58-b368-46d6-b4e7-136a719713f8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Coin Door Up (WPC)",
+                    "type": "Button",
+                    "id": "df2b2068-744e-4cad-80ec-e7fb9ad18000",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Coin Door Enter (WPC)",
+                    "type": "Button",
+                    "id": "8010ff81-db94-47ca-9059-fa19865b99c4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Coin Door Advance",
+                    "type": "Button",
+                    "id": "23908210-5ac2-48c8-bf60-4d13c1d7a5e0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Coin Door Up/Down",
+                    "type": "Button",
+                    "id": "5e9afef5-53b7-4150-bddb-ccd643fce5b7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Coin Door Back (SAM)",
+                    "type": "Button",
+                    "id": "109354d3-a3d3-46da-a85b-659182628273",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Coin Door Minus (-) (SAM)",
+                    "type": "Button",
+                    "id": "7f248cfc-e54a-491d-82b6-17976342c987",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Coin Door Plus (+) (SAM)",
+                    "type": "Button",
+                    "id": "23032188-c9ed-4425-809d-46db58d07fe4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Coin Door Select (SAM)",
+                    "type": "Button",
+                    "id": "2bf56bb3-3ade-483b-a479-3c8563529da0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Slam Tilt",
+                    "type": "Button",
+                    "id": "a6e441a0-340d-4a1b-971f-6da77d569d80",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Left Nudge",
+                    "type": "Button",
+                    "id": "417e98c9-ce23-4bba-871a-75f31a6f0d3f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Right Nudge",
+                    "type": "Button",
+                    "id": "ad995766-a7be-48e8-8554-6dd182826662",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Center Nudge",
+                    "type": "Button",
+                    "id": "df158027-ec5d-4467-92fd-26f262cfcd52",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Tilt",
+                    "type": "Button",
+                    "id": "e75d84f3-3115-40f7-9099-7f32ba537773",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Self Test",
+                    "type": "Button",
+                    "id": "29f01852-e4a2-4b9f-85b5-1ea6d0ef4a55",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Left Advance",
+                    "type": "Button",
+                    "id": "53e09189-fc1b-4884-9f84-04a56019167c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Right Advance",
+                    "type": "Button",
+                    "id": "097cc689-00b5-4c8b-8a23-08011378fff3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f2aeee90-4e61-4677-bc75-f432284e5645",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Upper Left Flipper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1d49b5c9-a92e-4f16-b486-066a1e890087",
+                    "path": "<Keyboard>/quote",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Upper Right Flipper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "500a3aca-ecfa-4e29-9d02-cd9ec9fb5e1f",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Flipper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9625038c-769c-4983-ba77-128ad67ec9cc",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Flipper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0348dc9d-49f0-47e8-a05f-e2a9d4b5971e",
+                    "path": "<Keyboard>/rightShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right Flipper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "47b6be5b-7b15-4c8a-9954-b3148d15fb9c",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right Flipper",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5d73f4c2-bb2c-4c61-a037-cbf089a27c51",
+                    "path": "<Keyboard>/rightCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Right Magnasave",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1b8fea70-7c93-40a3-9e56-f5de2ebc2c94",
+                    "path": "<Keyboard>/leftCtrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Left Magnasave",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8b790feb-be38-4986-984f-27fd014094f4",
+                    "path": "<Keyboard>/rightAlt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Fire 2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cd8f3fe5-bc18-4955-836a-1dc803680948",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Front (buy-in)",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b692169e-440a-43ca-a545-ec32cfde1945",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Start Game",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2a78fa7c-3df8-4165-a453-7abe049f79c2",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Plunger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "49575247-73a7-4216-a0eb-c95328b2b172",
+                    "path": "<Gamepad>/rightStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Plunger (analog)",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "87f8a4f7-5b99-48e7-9af5-315aebd99b1b",
+                    "path": "<Keyboard>/5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Insert Coin Slot 1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "06d2bc97-0639-4948-9640-63f5977b9e0e",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Insert Coin Slot 2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0b6da994-966c-453a-9f1b-18581c8eccde",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Insert Coin Slot 3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "83022b83-4e50-47d2-a995-4120721bc335",
+                    "path": "<Keyboard>/6",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Insert Coin Slot 4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "97b6feac-0c62-4792-af5b-57e4fff1b66f",
+                    "path": "<Keyboard>/end",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Coin Door Open/Close",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "aef038fe-59ce-43c2-a358-3c18b1c852b3",
+                    "path": "<Keyboard>/7",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Coin Door Cancel (WPC)",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "343a13a6-ea10-4442-93d0-68c3ac8ba2af",
+                    "path": "<Keyboard>/8",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Coin Door Down (WPC)",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "836f8352-1fff-4c21-9486-7896194dab36",
+                    "path": "<Keyboard>/9",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Coin Door Up (WPC)",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f271df4d-6e53-412d-bd13-8af64214e9e8",
+                    "path": "<Keyboard>/0",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Coin Door Enter (WPC)",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "08c78596-9892-4360-819a-05b4f47a81f8",
+                    "path": "<Keyboard>/home",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Slam Tilt",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4adca706-b88e-4925-9db4-5340cd80fbf4",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tilt",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Visual Pinball Engine",
+            "id": "ed073f10-53e5-483a-a54a-80d0d9d9d9da",
+            "actions": [
+                {
+                    "name": "Create Ball",
+                    "type": "Button",
+                    "id": "6cc3ba7f-467f-4daf-b06e-684f04db4a64",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Kicker",
+                    "type": "Button",
+                    "id": "5944e7f2-2c0b-4fe7-b26b-4eaf016a12d7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Slow Motion",
+                    "type": "Button",
+                    "id": "34290474-35b3-4af1-9d23-81e0e73c3a38",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "Time Lapse",
+                    "type": "Button",
+                    "id": "aa34acb3-ed72-402e-9c2a-c4249514e7e8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "cecd6777-af81-414c-8bac-48b8adc766b7",
+                    "path": "<Keyboard>/b",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Create Ball",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "164ff44b-eeb9-42c2-9edc-4a7349d19a50",
+                    "path": "<Keyboard>/n",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Kicker",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "30ccf1d2-ca74-45a6-ade0-241aba5c053f",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Slow Motion",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7783e1d0-347d-46cb-836c-379aa3b80c71",
+                    "path": "<Gamepad>/leftStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Slow Motion",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ac22393-c1af-4c8b-a35f-b077b7004818",
+                    "path": "<Gamepad>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Time Lapse",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

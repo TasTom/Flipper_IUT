@@ -99,6 +99,13 @@ public class MainMenuController : MonoBehaviour
     /// <summary>Quitte le jeu ou le mode Play dans l'éditeur.</summary>
     public void QuitGame() => ExitApplication();
 
+    internal static bool ReturnToMainMenu()
+    {
+        if (!SceneTransition.Play("MainMenu", "MENU PRINCIPAL")) return false;
+        TableSessionTransfer.Clear();
+        return true;
+    }
+
     internal static void ExitApplication()
     {
         PlayerPrefs.Save();

@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
 
     [Tooltip("Table à ouvrir quand le joueur rejoue après un Game Over. Vide pour rejouer sur cette table.")]
     [SerializeField] private string replayScene;
+    private OnlineScoresPanel finalRanking;
 
     [Tooltip("Le moteur de table (VPE) fournit et retire les billes à la place de PhysX.")]
     [SerializeField] private bool externalBallLifecycle;
@@ -152,6 +153,7 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         if (SceneTransition.IsPlaying) return;
+        if (State == GameState.GameOver && finalRanking != null && finalRanking.HandlingFinalScore) return;
         if (ValidatePressed() && (State == GameState.GameOver || State == GameState.Attract))
         {
             if (State == GameState.GameOver && SceneTransition.CanLoad(replayScene))
@@ -377,6 +379,14 @@ public class GameManager : MonoBehaviour
 
         Broadcast(isRecord ? "NOUVEAU RECORD ! — ENTRÉE POUR REJOUER"
                            : "GAME OVER — ENTRÉE POUR REJOUER", 0f);
+
+        string scene = gameObject.scene.name;
+        int score = ScoreManager.Instance != null ? ScoreManager.Instance.Score : 0;
+        if (score > 0 && (scene == "VosgesMania" || scene == "Industries"))
+        {
+            if (finalRanking == null) finalRanking = gameObject.AddComponent<OnlineScoresPanel>();
+            finalRanking.QueueFinalScore(this, score);
+        }
     }
 
     private void SpawnBall()

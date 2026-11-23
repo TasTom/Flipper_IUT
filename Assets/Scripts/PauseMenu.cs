@@ -27,6 +27,22 @@ public class PauseMenu : MonoBehaviour
     private InputRouter captureRouter;
     private EventSystem captureEvents;
     private bool navigationWasEnabled;
+    private bool standalone, optionsOpen;
+    private Quaternion cardRotation = Quaternion.identity;
+    private GameObject returnFocus;
+
+    public void ShowOptions(Quaternion rotation)
+    {
+        if (optionsOpen) return;
+        standalone = true;
+        optionsOpen = true;
+        cardRotation = rotation;
+        returnFocus = EventSystem.current?.currentSelectedGameObject;
+        if (overlay == null) Build();
+        overlay.SetActive(true);
+        Refresh();
+        EventSystem.current?.SetSelectedGameObject(resume.gameObject);
+    }
 
     private void Awake()
     {
@@ -36,7 +52,8 @@ public class PauseMenu : MonoBehaviour
     private void LateUpdate()
     {
         var game = GameManager.Instance;
-        bool show = game != null && game.State == GameManager.GameState.Paused && !SceneTransition.IsPlaying;
+        bool show = standalone ? optionsOpen :
+            game != null && game.State == GameManager.GameState.Paused && !SceneTransition.IsPlaying;
         if (show && overlay == null) Build();
         if (overlay == null) return;
         if (overlay.activeSelf != show)
@@ -53,7 +70,13 @@ public class PauseMenu : MonoBehaviour
                 PlayerPrefs.Save();
             }
         }
-        if (!show || !focusedAction.HasValue || Time.frameCount == captureFrame || captureRouter == null) return;
+        if (!show) return;
+        if (standalone && !focusedAction.HasValue && Input.GetKeyDown(KeyCode.Escape))
+        {
+            CloseOptions();
+            return;
+        }
+        if (!focusedAction.HasValue || Time.frameCount == captureFrame || captureRouter == null) return;
         if (!captureRouter.TryReadBindingKey(out var key)) return;
         if (key == KeyCode.Escape)
         {
@@ -79,7 +102,7 @@ public class PauseMenu : MonoBehaviour
         var scaler = overlay.GetComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1080f, 1080f);
-        scaler.matchWidthOrHeight = .5f;
+        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
         if (EventSystem.current == null)
         {
             var input = new GameObject("NavigationPause", typeof(EventSystem), typeof(StandaloneInputModule));
@@ -91,16 +114,18 @@ public class PauseMenu : MonoBehaviour
         veil.anchorMax = Vector2.one;
         veil.gameObject.AddComponent<Image>().color = new Color(.01f, .025f, .032f, .80f);
         var card = Rect("Panneau", veil, Vector2.zero, new Vector2(650, 664));
+        card.localRotation = cardRotation;
         card.gameObject.AddComponent<Image>().color = Ink;
         Rect("Filet", card, new Vector2(0, 329), new Vector2(650, 6)).gameObject.AddComponent<Image>().color = Gold;
 
-        Text(card, "Pause", new Vector2(0, 273), new Vector2(540, 53), 43, Gold);
+        Text(card, standalone ? "Options" : "Pause", new Vector2(0, 273), new Vector2(540, 53), 43, Gold);
         Text(card, "Musique", new Vector2(-185, 199), new Vector2(200, 32), 24, Color.white, TextAlignmentOptions.MidlineLeft);
         volumeText = Text(card, "", new Vector2(250, 199), new Vector2(78, 32), 22, Gold);
         music = CreateSlider(card);
         music.onValueChanged.AddListener(value =>
         {
-            AudioManager.Instance?.SetMusicVolume(value / 100f);
+            if (AudioManager.Instance != null) AudioManager.Instance.SetMusicVolume(value / 100f);
+            else AudioManager.SaveMusicVolume(value / 100f);
             volumeText.text = Mathf.RoundToInt(value) + " %";
         });
         Text(card, "Touches", new Vector2(-185, 139), new Vector2(200, 36), 29, Gold, TextAlignmentOptions.MidlineLeft);
@@ -118,10 +143,14 @@ public class PauseMenu : MonoBehaviour
             InputRouter.Instance?.ResetBindings();
             Refresh();
         }, out _);
-        resume = CreateButton(card, "Reprendre", "Reprendre", new Vector2(152, -267), new Vector2(264, 54), () =>
+        resume = CreateButton(card, "Reprendre", standalone ? "Retour" : "Reprendre", new Vector2(152, -267), new Vector2(264, 54), () =>
         {
-            EndCapture(false);
-            GameManager.Instance?.TogglePause();
+            if (standalone) CloseOptions();
+            else
+            {
+                EndCapture(false);
+                GameManager.Instance?.TogglePause();
+            }
         }, out var resumeLabel);
         resume.GetComponent<Image>().color = Gold;
         resumeLabel.color = Ink;
@@ -130,8 +159,8 @@ public class PauseMenu : MonoBehaviour
     private void Refresh()
     {
         var audio = AudioManager.Instance;
-        music.interactable = audio != null;
-        var volume = Mathf.RoundToInt((audio != null ? audio.MusicVolume : 0f) * 100f);
+        music.interactable = audio != null || standalone;
+        var volume = Mathf.RoundToInt((audio != null ? audio.MusicVolume : AudioManager.GetSavedMusicVolume()) * 100f);
         music.SetValueWithoutNotify(volume);
         volumeText.text = volume + " %";
         var input = InputRouter.Instance;
@@ -184,6 +213,16 @@ public class PauseMenu : MonoBehaviour
         EndCapture(false);
     }
 
+    private void CloseOptions()
+    {
+        optionsOpen = false;
+        EndCapture(false);
+        overlay.SetActive(false);
+        PlayerPrefs.Save();
+        if (returnFocus != null && returnFocus.activeInHierarchy)
+            EventSystem.current?.SetSelectedGameObject(returnFocus);
+    }
+
     private void OnDestroy()
     {
         if (overlay != null) Destroy(overlay);
@@ -211,7 +250,7 @@ public class PauseMenu : MonoBehaviour
         return slider;
     }
 
-    private static Button CreateButton(Transform parent, string name, string label, Vector2 position, Vector2 size,
+    internal static Button CreateButton(Transform parent, string name, string label, Vector2 position, Vector2 size,
         Action onClick, out TMP_Text title)
     {
         var r = Rect(name, parent, position, size);
@@ -228,7 +267,7 @@ public class PauseMenu : MonoBehaviour
         return button;
     }
 
-    private static TMP_Text Text(Transform parent, string label, Vector2 position, Vector2 size, float fontSize,
+    internal static TMP_Text Text(Transform parent, string label, Vector2 position, Vector2 size, float fontSize,
         Color color, TextAlignmentOptions alignment = TextAlignmentOptions.Center)
     {
         var r = Rect("Texte", parent, position, size);
@@ -241,7 +280,7 @@ public class PauseMenu : MonoBehaviour
         return text;
     }
 
-    private static RectTransform Rect(string name, Transform parent, Vector2 position, Vector2 size)
+    internal static RectTransform Rect(string name, Transform parent, Vector2 position, Vector2 size)
     {
         var r = new GameObject(name, typeof(RectTransform)).GetComponent<RectTransform>();
         r.SetParent(parent, false);

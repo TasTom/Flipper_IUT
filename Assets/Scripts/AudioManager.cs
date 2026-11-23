@@ -27,7 +27,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip musicClip;
 
     [Tooltip("Volume de la musique, 0 à 1.")]
-    [SerializeField] [Range(0f, 1f)] private float musicVolume = 0.45f;
+    private const float DefaultMusicVolume = .45f;
+    [SerializeField] [Range(0f, 1f)] private float musicVolume = DefaultMusicVolume;
 
     [Header("Effets sonores")]
     [Tooltip("Clips jouables par nom (le nom du clip sert d'identifiant).")]
@@ -46,6 +47,11 @@ public class AudioManager : MonoBehaviour
     private int nextVoice;
     private bool paused;
     private const string MusicVolumeKey = "VosgesTilt_MusicVolume";
+    public static float GetSavedMusicVolume(float defaultVolume = DefaultMusicVolume)
+        => Mathf.Clamp01(PlayerPrefs.GetFloat(MusicVolumeKey, defaultVolume));
+
+    public static void SaveMusicVolume(float value)
+        => PlayerPrefs.SetFloat(MusicVolumeKey, Mathf.Clamp01(value));
     public float MusicVolume { get; private set; }
     private long[] voiceOrder;
     private long playbackOrder;
@@ -74,7 +80,7 @@ public class AudioManager : MonoBehaviour
         }
 
         Instance = this;
-        MusicVolume = Mathf.Clamp01(PlayerPrefs.GetFloat(MusicVolumeKey, config != null ? config.musicVolume : musicVolume));
+        MusicVolume = GetSavedMusicVolume(config != null ? config.musicVolume : musicVolume);
 
         // Reuse an authored scene source instead of playing an offset second copy.
         var background = GameObject.Find("BackgroundMusic");
@@ -132,7 +138,7 @@ public class AudioManager : MonoBehaviour
     public void SetMusicVolume(float value)
     {
         MusicVolume = Mathf.Clamp01(value);
-        PlayerPrefs.SetFloat(MusicVolumeKey, MusicVolume);
+        SaveMusicVolume(MusicVolume);
         if (musicSource != null && musicFade == null) musicSource.volume = MusicVolume;
     }
 

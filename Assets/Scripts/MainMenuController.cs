@@ -13,6 +13,12 @@ public class MainMenuController : MonoBehaviour
 
     [Header("Panneau d'aide / Contrôles")]
     [SerializeField] private GameObject controlsPanel;
+    [SerializeField] private PauseMenu options;
+    [SerializeField] private OnlineScoresPanel ranking;
+    [SerializeField] private RectTransform menuLayout;
+    [SerializeField] private RectTransform background;
+    [SerializeField] private GameObject startButton;
+    private Vector2 lastSize;
 
     private const string HighScoreKey = "VosgesTilt_HighScore";
 
@@ -32,12 +38,36 @@ public class MainMenuController : MonoBehaviour
         {
             controlsPanel.SetActive(false);
         }
+        FitMenu();
+        if (startButton != null)
+            UnityEngine.EventSystems.EventSystem.current?.SetSelectedGameObject(startButton);
+    }
+
+    private void LateUpdate() => FitMenu();
+
+    private void FitMenu()
+    {
+        if (menuLayout == null || !(menuLayout.parent is RectTransform canvas)) return;
+        Vector2 size = canvas.rect.size;
+        if (size == lastSize) return;
+        lastSize = size;
+        bool landscape = size.x > size.y;
+        menuLayout.localRotation = landscape ? Quaternion.Euler(0f, 0f, -90f) : Quaternion.identity;
+        if (background == null) return;
+        background.localRotation = menuLayout.localRotation;
+        // L'illustration d'origine est en portrait et couvre tout l'écran.
+        Vector2 rotatedSize = landscape ? new Vector2(size.y, size.x) : size;
+        float aspect = 1536f / 2752f;
+        float width = Mathf.Max(rotatedSize.x, rotatedSize.y * aspect);
+        background.sizeDelta = new Vector2(width, width / aspect);
     }
 
     /// <summary>Lance la table principale.</summary>
     public void PlayGame()
     {
+        if (SceneTransition.IsPlaying) return;
         Time.timeScale = 1f;
+        TableSessionTransfer.Clear();
 
         // Utilise la transition animée du projet si disponible, sinon LoadScene classique
         if (SceneTransition.CanLoad(firstLevelScene))
@@ -50,14 +80,21 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    /// <summary>Bascule l'affichage du volet d'aide/contrôles.</summary>
+    /// <summary>Ouvre les mêmes réglages que le menu de pause.</summary>
     public void ToggleControlsPanel()
     {
-        if (controlsPanel != null)
+        if (!SceneTransition.IsPlaying && options != null && (ranking == null || !ranking.IsOpen))
         {
-            controlsPanel.SetActive(!controlsPanel.activeSelf);
+            options.ShowOptions(MenuRotation);
         }
     }
+
+    public void ShowScores()
+    {
+        if (!SceneTransition.IsPlaying) ranking?.ShowRanking(MenuRotation);
+    }
+
+    private Quaternion MenuRotation => menuLayout != null ? menuLayout.localRotation : Quaternion.identity;
 
     /// <summary>Quitte le jeu ou le mode Play dans l'éditeur.</summary>
     public void QuitGame()

@@ -84,6 +84,7 @@ public class IndustriesVpeGame : MonoBehaviour, IGamelogicEngine
 
     private void Awake()
     {
+        WebGLSimulationFallback.ApplyNow();
         if (game == null) game = FindAnyObjectByType<GameManager>();
         if (score == null) score = FindAnyObjectByType<ScoreManager>();
         if (input == null) input = FindAnyObjectByType<InputRouter>();

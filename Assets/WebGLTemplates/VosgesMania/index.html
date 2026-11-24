@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <title>Vosges Mania — flipper 3D</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305070e'/%3E%3Cpath d='M12 20h9l6 13 5-13h9L28 48h-8z' fill='%23e85d3f'/%3E%3C/svg%3E">
+    <style>
+      :root {
+        --night: #05070e;
+        --night-edge: #0b1120;
+        --ink: #f4f1ea;
+        --muted: #9aa6b5;
+        --accent: #e85d3f;
+        --line: rgba(244, 241, 234, 0.16);
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body {
+        background: var(--night);
+        color: var(--ink);
+        height: 100%;
+        overflow: hidden;
+        font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+
+      #unity-container {
+        background:
+          radial-gradient(120% 90% at 50% 0%, #16233a 0%, transparent 55%),
+          radial-gradient(90% 70% at 50% 100%, #1b0f0b 0%, transparent 60%),
+          var(--night);
+        inset: 0;
+        overflow: hidden;
+        position: fixed;
+      }
+
+      /*
+        La borne garde son format portrait 9:16, centrée sur fond noir. Sans
+        cette contrainte, Unity remplit l'écran et CabinetViewport bascule la
+        table en paysage (rotation de 90°) dès que la fenêtre est plus large
+        que haute. Les bandes noires sont le fond du conteneur.
+      */
+      #unity-fullscreen-container {
+        align-items: center;
+        background: #000;
+        display: flex;
+        height: 100%;
+        inset: 0;
+        justify-content: center;
+        position: absolute;
+        width: 100%;
+      }
+
+      #unity-canvas {
+        aspect-ratio: 9 / 16;
+        background: var(--night);
+        display: block;
+        height: auto;
+        outline: none;
+        width: min(100%, calc(100vh * 9 / 16));
+      }
+
+      /* L'écran de chargement appartient à la borne : fond nocturne, titre
+         condensé, filet terracotta. Il disparaît dès la première frame. */
+      #unity-loading {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        inset: 0;
+        justify-content: center;
+        padding: 32px;
+        position: absolute;
+        text-align: center;
+        transition: opacity 0.5s ease;
+        z-index: 2;
+      }
+
+      #unity-loading.is-hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .loader__kicker {
+        color: var(--muted);
+        font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        letter-spacing: 0.28em;
+        margin-bottom: 18px;
+        text-transform: uppercase;
+      }
+
+      .loader__title {
+        font-size: clamp(38px, 9vw, 74px);
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 0.92;
+        text-transform: uppercase;
+      }
+
+      .loader__title span {
+        color: var(--accent);
+        display: block;
+      }
+
+      .loader__track {
+        background: var(--line);
+        border-radius: 999px;
+        height: 3px;
+        margin: 34px auto 14px;
+        max-width: 320px;
+        overflow: hidden;
+        width: min(72vw, 320px);
+      }
+
+      #unity-progress-bar-full {
+        background: var(--accent);
+        border-radius: inherit;
+        height: 100%;
+        transition: width 0.2s linear;
+        width: 0%;
+      }
+
+      .loader__label {
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 0.06em;
+      }
+
+      .loader__hint {
+        bottom: max(20px, env(safe-area-inset-bottom));
+        color: rgba(154, 166, 181, 0.75);
+        font-family: 'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 10px;
+        left: 50%;
+        letter-spacing: 0.12em;
+        position: absolute;
+        text-align: center;
+        transform: translateX(-50%);
+        width: 92%;
+      }
+
+      #unity-fullscreen-button {
+        background: rgba(5, 7, 14, 0.55);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        bottom: 14px;
+        color: var(--ink);
+        cursor: pointer;
+        font-size: 16px;
+        height: 34px;
+        line-height: 1;
+        opacity: 0.55;
+        position: absolute;
+        right: 14px;
+        transition: opacity 0.2s ease, border-color 0.2s ease;
+        width: 34px;
+        z-index: 3;
+      }
+
+      #unity-fullscreen-button:hover,
+      #unity-fullscreen-button:focus-visible {
+        border-color: var(--accent);
+        opacity: 1;
+        outline: none;
+      }
+
+      #unity-warning {
+        left: 50%;
+        max-width: 92vw;
+        position: absolute;
+        top: 12px;
+        transform: translateX(-50%);
+        z-index: 4;
+      }
+
+      #unity-warning div {
+        background: var(--night-edge);
+        border: 1px solid var(--accent);
+        border-radius: 6px;
+        color: var(--ink);
+        font-size: 12px;
+        margin-bottom: 6px;
+        padding: 8px 12px;
+      }
+
+      @media (max-width: 480px) {
+        .loader__hint { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="unity-container">
+      <div id="unity-fullscreen-container">
+        <canvas id="unity-canvas" width="{{{ WIDTH }}}" height="{{{ HEIGHT }}}" tabindex="-1" aria-label="Vosges Mania, flipper 3D jouable"></canvas>
+      </div>
+
+      <div id="unity-loading">
+        <p class="loader__kicker">IUT Vosges · flipper 3D</p>
+        <h1 class="loader__title">Vosges <span>Mania</span></h1>
+        <div class="loader__track" role="progressbar" aria-label="Chargement du jeu" aria-valuemin="0" aria-valuemax="100">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+        <p class="loader__label" id="unity-loading-label">Chargement de la table… 0 %</p>
+        <p class="loader__hint">Q / D — flippers &nbsp;·&nbsp; Espace — lanceur &nbsp;·&nbsp; Échap — pause</p>
+      </div>
+
+      <div id="unity-warning"></div>
+      <button id="unity-fullscreen-button" type="button" aria-label="Passer en plein écran" title="Plein écran">⛶</button>
+    </div>
+
+    <script>
+      const canvas = document.querySelector('#unity-canvas');
+      const container = document.querySelector('#unity-container');
+      const loading = document.querySelector('#unity-loading');
+      const progressBar = document.querySelector('#unity-progress-bar-full');
+      const loadingLabel = document.querySelector('#unity-loading-label');
+      const warning = document.querySelector('#unity-warning');
+
+      function unityShowBanner(message, type) {
+        const div = document.createElement('div');
+        div.textContent = message;
+        if (type === 'error') div.style.borderColor = '#e85d3f';
+        warning.appendChild(div);
+        if (type !== 'error') setTimeout(() => div.remove(), 6000);
+      }
+
+      const buildUrl = 'Build';
+      const config = {
+        arguments: [],
+#if PROGRESSIVE_ASSET_LOADING
+        primaryDataUrls: {{{ JSON.stringify(PRIMARY_DATA_FILES) }}},
+        secondaryDataUrls: {{{ JSON.stringify(SECONDARY_DATA_FILES) }}},
+#else
+        dataUrl: buildUrl + '/{{{ DATA_FILENAME }}}',
+#endif
+        frameworkUrl: buildUrl + '/{{{ FRAMEWORK_FILENAME }}}',
+        codeUrl: buildUrl + '/{{{ CODE_FILENAME }}}',
+        streamingAssetsUrl: 'StreamingAssets',
+        fullscreenElementID: 'unity-fullscreen-container',
+        companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
+        productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
+        productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+        showBanner: unityShowBanner,
+        matchWebGLToCanvasSize: true,
+      };
+
+      const mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      config.devicePixelRatio = mobile ? 1 : Math.min(2, Math.max(1.5, window.devicePixelRatio || 1));
+
+      const script = document.createElement('script');
+      script.src = buildUrl + '/{{{ LOADER_FILENAME }}}';
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          const percent = Math.round(progress * 100);
+          progressBar.style.width = percent + '%';
+          progressBar.parentElement.setAttribute('aria-valuenow', String(percent));
+          loadingLabel.textContent = progress < 1
+            ? 'Chargement de la table… ' + percent + ' %'
+            : 'Entrée dans la salle d’arcade…';
+        }).then((unityInstance) => {
+          loading.classList.add('is-hidden');
+          setTimeout(() => loading.remove(), 600);
+          canvas.focus();
+          document.querySelector('#unity-fullscreen-button').onclick = () => {
+            unityInstance.SetFullscreen(1);
+          };
+          // Un clic sur le décor rend le clavier au jeu : sans ce focus, les
+          // flippers ne répondent pas après avoir cliqué à côté du canvas.
+          container.addEventListener('pointerdown', (event) => {
+            if (event.target === container || event.target === canvas) canvas.focus();
+          });
+        }).catch((message) => {
+          loading.classList.add('is-hidden');
+          unityShowBanner('Le jeu n’a pas pu démarrer : ' + message, 'error');
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

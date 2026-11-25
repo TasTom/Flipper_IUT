@@ -22,8 +22,20 @@ public class ExtraBallAward : MonoBehaviour
     [Tooltip("Écart entre deux paliers successifs. 0 = un seul palier.")]
     [SerializeField] private int thresholdStep = 30000;
 
-    [Tooltip("Nombre maximum de billes supplémentaires par partie. 0 = illimité.")]
-    [SerializeField] private int maxExtraBalls = 3;
+    [Tooltip("Nombre maximum de billes supplémentaires par partie. Plafonné à " +
+             "MaxExtraBallsPerGame : une seule bille bonus, quel que soit le réglage importé.")]
+    [SerializeField] private int maxExtraBalls = MaxExtraBallsPerGame;
+
+    /// <summary>
+    /// Une seule bille supplémentaire par partie.
+    ///
+    /// <para>Le réglage reste un champ — les paliers de score, eux, sont de l'équilibrage — mais
+    /// le nombre, non : mesuré en jeu, les trois paliers à 30 000 / 60 000 / 90 000 points
+    /// portaient le compteur à <b>six</b> billes en moins d'une minute, et le joueur lisait ce
+    /// compteur comme un bug. Le plafond est donc une constante, et non une valeur d'Inspector :
+    /// une scène qui porte encore 3 ne peut plus le dépasser.</para>
+    /// </summary>
+    public const int MaxExtraBallsPerGame = 1;
 
     [Header("Message")]
     [Tooltip("Durée d'affichage du message, en secondes.")]
@@ -32,6 +44,14 @@ public class ExtraBallAward : MonoBehaviour
     private int nextThreshold;
     private int awarded;
     private int lastScore;
+
+    /// <summary>
+    /// Billes bonus réellement autorisées : le réglage, ramené sous le plafond
+    /// <see cref="MaxExtraBallsPerGame"/>. La valeur d'Inspector reste lisible — elle dit ce que
+    /// la configuration demande — mais elle ne peut pas faire dépasser le plafond.
+    /// </summary>
+    private int Budget => Mathf.Clamp(maxExtraBalls <= 0 ? MaxExtraBallsPerGame : maxExtraBalls,
+                                      1, MaxExtraBallsPerGame);
 
     private void OnEnable()
     {
@@ -89,8 +109,7 @@ public class ExtraBallAward : MonoBehaviour
 
         bool awardedAny = false;
         // Un gros bonus peut franchir plusieurs paliers en une seule fois.
-        while (nextThreshold > 0 && score >= nextThreshold
-               && (maxExtraBalls <= 0 || awarded < maxExtraBalls))
+        while (nextThreshold > 0 && score >= nextThreshold && awarded < Budget)
         {
             awarded++;
             long next = (long)nextThreshold + thresholdStep;

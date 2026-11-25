@@ -37,8 +37,8 @@ public class DifficultyConfig : ScriptableObject
     [Tooltip("Écart entre deux paliers successifs. 0 = un seul palier.")]
     public int extraBallThresholdStep = 30000;
 
-    [Tooltip("Billes supplémentaires maximum par partie. 0 = illimité.")]
-    public int maxExtraBalls = 3;
+    [Tooltip("Billes supplémentaires maximum par partie. Plafonné à 1 en jeu.")]
+    public int maxExtraBalls = ExtraBallAward.MaxExtraBallsPerGame;
 
     [Header("Ball Saver (GDD §Difficultés)")]
     [Tooltip("Durée de protection après lancement, en secondes. 0 = désactivé.")]

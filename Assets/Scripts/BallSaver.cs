@@ -37,6 +37,20 @@ public class BallSaver : MonoBehaviour
         duree = Mathf.Max(0f, seconds);
     }
 
+    /// <summary>
+    /// Remet la protection à neuf pour une nouvelle bille.
+    ///
+    /// <para>Appelée par <see cref="GameManager.SpawnBall"/> à chaque bille : c'est ce qui rend le
+    /// ball saver de nouveau disponible après une bille sauvée, sans pour autant le réarmer sur
+    /// la bille déjà en jeu (une bille sauvée revient au lanceur sans passer par là).</para>
+    /// </summary>
+    public void PrepareNewBall()
+    {
+        consomme = false;
+        finProtection = float.NegativeInfinity;
+        finProtectionMultiball = float.NegativeInfinity;
+    }
+
     /// <summary>Arme le ball saver de multiball : toutes les billes drainées sont renvoyées en jeu.</summary>
     public void ArmMultiball(float seconds = -1f)
     {
@@ -71,6 +85,11 @@ public class BallSaver : MonoBehaviour
         }
 
         // Playing revient aussi après une pause : on ne réarme que si la protection est neuve.
+        //
+        // ⚠ C'est `PrepareNewBall`, appelée au départ de chaque bille, qui rend la protection
+        // disponible pour la bille suivante. Sans elle, une bille sauvée consommait le ball saver
+        // pour toute la partie : mesuré, `consomme` restait vrai et les billes 2, 3 et 4 se
+        // drainaient sans aucune protection, alors que le réglage en annonce une par bille.
         if (Time.time >= finProtection)
         {
             finProtection = Time.time + duree;

@@ -18,11 +18,28 @@ internal static class OnlineScores
     {
         RunTicket = null;
         var run = pendingRun = Guid.NewGuid();
-        using var request = JsonRequest("flipper_begin_run", "{}");
-        yield return request.SendWebRequest();
-        if (run == pendingRun && request.result == UnityWebRequest.Result.Success &&
-            Guid.TryParse(request.downloadHandler.text.Trim().Trim('"'), out var ticket))
-            RunTicket = ticket.ToString();
+
+        // Trois tentatives, pas une : le premier appel part pendant le chargement de la scène,
+        // quand le navigateur télécharge encore 90 Mo et que le réseau peut lâcher. Un ticket
+        // manquant condamne la partie entière — `RunTicket` sert de clé au score final — donc
+        // on réessaie pendant que le joueur commence à jouer plutôt que d'abandonner en silence.
+        for (int attempt = 0; attempt < 3 && RunTicket == null; attempt++)
+        {
+            if (attempt > 0) yield return new WaitForSecondsRealtime(2f);
+
+            using var request = JsonRequest("flipper_begin_run", "{}");
+            yield return request.SendWebRequest();
+
+            if (run != pendingRun) yield break;
+
+            if (request.result == UnityWebRequest.Result.Success &&
+                Guid.TryParse(request.downloadHandler.text.Trim().Trim('"'), out var ticket))
+                RunTicket = ticket.ToString();
+        }
+
+        if (RunTicket == null)
+            Debug.LogWarning("[OnlineScores] Ticket de partie indisponible : le score final ne pourra " +
+                             "pas être classé.");
     }
 
     [Serializable]
@@ -100,7 +117,9 @@ internal static class OnlineScores
 
     private static void Configure(UnityWebRequest request)
     {
-        request.timeout = 6;
+        // 6 s mesurées trop courtes en WebGL : le premier appel part pendant le chargement et
+        // expire, ce qui laissait la partie sans ticket.
+        request.timeout = 12;
         request.SetRequestHeader("apikey", PublishableKey);
     }
 }

@@ -31,7 +31,7 @@ public class MainMenuController : MonoBehaviour
         int highScore = PlayerPrefs.GetInt(HighScoreKey, 0);
         if (highScoreText != null)
         {
-            highScoreText.text = $"MEILLEUR SCORE : {highScore:N0} PTS";
+            highScoreText.text = highScore.ToString("N0");
         }
 
         if (controlsPanel != null)

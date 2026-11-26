@@ -443,6 +443,11 @@ public class GameManager : MonoBehaviour
 
         SetState(GameState.ReadyToLaunch);
         if (ScoreManager.Instance != null) ScoreManager.Instance.BeginBall();
+
+        // Chaque bille repart avec son propre ball saver : sans cette remise à zéro, une bille
+        // sauvée consommait la protection de toute la partie (voir BallSaver.OnStateChanged).
+        var saver = BallManager.Instance != null ? BallManager.Instance.GetComponent<BallSaver>() : null;
+        if (saver != null) saver.PrepareNewBall();
     }
 
     /// <summary>Suspend ou reprend la partie (Échap, GDD §Contrôles).</summary>

@@ -10,8 +10,6 @@ using UnityEngine.UI;
 public sealed class OnlineScoresPanel : MonoBehaviour
 {
     private const int PageSize = 10;
-    private static readonly Color Dark = new Color32(17, 32, 36, 255);
-    private static readonly Color Gold = new Color32(238, 188, 111, 255);
     private RectTransform card;
     private GameObject overlay;
     private TMP_Text title, status, ranks, names, scores, pageLabel;
@@ -33,13 +31,13 @@ public sealed class OnlineScoresPanel : MonoBehaviour
     {
         if (IsOpen) return;
         Build(rotation, new Vector2(596, 686), "TOP 100 MONDIAL");
-        Label("RANG", new Vector2(-208, 233), new Vector2(110, 34), 22, Gold);
-        Label("PSEUDO", new Vector2(-42, 233), new Vector2(130, 34), 22, Gold);
-        Label("SCORE", new Vector2(160, 233), new Vector2(190, 34), 22, Gold);
+        Label("RANG", new Vector2(-208, 233), new Vector2(110, 34), 22, UiTheme.Muted);
+        Label("PSEUDO", new Vector2(-42, 233), new Vector2(130, 34), 22, UiTheme.Muted);
+        Label("SCORE", new Vector2(160, 233), new Vector2(190, 34), 22, UiTheme.Muted);
         ranks = Column(-208, 110);
         names = Column(-42, 130);
         scores = Column(160, 190);
-        pageLabel = Label("", new Vector2(0, -226), new Vector2(140, 42), 22, Gold);
+        pageLabel = Label("", new Vector2(0, -226), new Vector2(140, 42), 22, UiTheme.Muted);
         previous = MakeButton("Précédent", new Vector2(-164, -226), 150, () => { page--; RenderPage(); });
         next = MakeButton("Suivant", new Vector2(164, -226), 150, () => { page++; RenderPage(); });
         retry = MakeButton("Actualiser", new Vector2(-139, -288), 185, RefreshRanking);
@@ -75,7 +73,9 @@ public sealed class OnlineScoresPanel : MonoBehaviour
         var camera = Camera.main;
         bool rotated = camera != null && camera.TryGetComponent<CabinetViewport>(out _) && camera.aspect >= 1f;
         Build(rotated ? Quaternion.Euler(0, 0, -90) : Quaternion.identity, new Vector2(560, 370), "SCORE FINAL");
-        Label(score.ToString("N0") + " PTS", new Vector2(0, 80), new Vector2(490, 46), 35, Gold);
+        UiTheme.Apply(Label(score.ToString("N0") + " PTS", new Vector2(0, 52), new Vector2(490, 60), 56, UiTheme.Gold),
+            UiTheme.NumberFont);
+        status.rectTransform.anchoredPosition = new Vector2(0, -14);
         close = MakeButton("Continuer", new Vector2(137, -135), 195, ShowFinalActions);
         retry = MakeButton("Réessayer", new Vector2(-137, -135), 195, CheckQualification);
         replay = MakeButton("Rejouer", new Vector2(-137, -135), 195, () =>
@@ -167,10 +167,10 @@ public sealed class OnlineScoresPanel : MonoBehaviour
         title.text = "TOP 100 MONDIAL";
         status.text = "Saisis trois lettres de A à Z.";
         var field = PauseMenu.Rect("Pseudo", card, new Vector2(0, -66), new Vector2(166, 52));
-        field.gameObject.AddComponent<Image>().color = new Color32(40, 62, 65, 255);
-        var value = PauseMenu.Text(field, "", Vector2.zero, new Vector2(148, 48), 32, Color.white);
+        UiTheme.Round(field.gameObject.AddComponent<Image>(), UiTheme.Surface, 12);
+        var value = PauseMenu.Text(field, "", Vector2.zero, new Vector2(148, 48), 32, UiTheme.Cream, font: UiTheme.NumberFont);
         var placeholder = PauseMenu.Text(field, "ABC", Vector2.zero, new Vector2(148, 48), 32,
-            new Color32(142, 160, 158, 255));
+            new Color32(142, 160, 158, 255), font: UiTheme.NumberFont);
         initials = field.gameObject.AddComponent<TMP_InputField>();
         initials.textViewport = field;
         initials.textComponent = (TextMeshProUGUI)value;
@@ -281,17 +281,18 @@ public sealed class OnlineScoresPanel : MonoBehaviour
         veil.gameObject.AddComponent<Image>().color = new Color(.01f, .025f, .032f, .86f);
         card = PauseMenu.Rect("Carte", veil, Vector2.zero, size);
         card.localRotation = rotation;
-        card.gameObject.AddComponent<Image>().color = Dark;
-        PauseMenu.Rect("Filet", card, new Vector2(0, size.y / 2 - 3), new Vector2(size.x, 6))
-            .gameObject.AddComponent<Image>().color = Gold;
-        title = Label(heading, new Vector2(0, size.y / 2 - 52), new Vector2(size.x - 50, 62), 38, Gold);
-        status = Label("", new Vector2(0, size.y / 2 - 140), new Vector2(size.x - 50, 48), 21, Color.white);
+        UiTheme.Round(card.gameObject.AddComponent<Image>(), UiTheme.Ink, 28);
+        UiTheme.Round(PauseMenu.Rect("Filet", card, new Vector2(0, size.y / 2 - 84), new Vector2(64, 5))
+            .gameObject.AddComponent<Image>(), UiTheme.Gold, 2.5f);
+        title = Label(heading, new Vector2(0, size.y / 2 - 48), new Vector2(size.x - 50, 62), 48, UiTheme.Cream);
+        UiTheme.Apply(title, UiTheme.DisplayFont);
+        status = Label("", new Vector2(0, size.y / 2 - 140), new Vector2(size.x - 50, 48), 21, UiTheme.Muted);
     }
 
     private TMP_Text Column(float x, float width)
     {
-        var text = PauseMenu.Text(card, "", new Vector2(x, 16), new Vector2(width, 380), 25, Color.white,
-            TextAlignmentOptions.Top);
+        var text = PauseMenu.Text(card, "", new Vector2(x, 16), new Vector2(width, 380), 25, UiTheme.Cream,
+            TextAlignmentOptions.Top, UiTheme.StrongFont);
         text.lineSpacing = 9;
         text.richText = false;
         return text;

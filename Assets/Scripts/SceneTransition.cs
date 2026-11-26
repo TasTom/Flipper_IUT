@@ -35,14 +35,14 @@ public class SceneTransition : MonoBehaviour
     [SerializeField] private float fadeOutDuration = 0.6f;
 
     [Header("Habillage")]
-    [Tooltip("Fond du voile : acier sombre de l'atelier.")]
-    [SerializeField] private Color backgroundColor = new Color(0.043f, 0.055f, 0.071f, 1f);
+    [Tooltip("Fond du voile : vert nuit de la charte.")]
+    [SerializeField] private Color backgroundColor = UiTheme.Ink;
 
-    [Tooltip("Couleur du bandeau qui balaie l'écran : orange de métal en fusion.")]
-    [SerializeField] private Color accentColor = new Color(1f, 0.451f, 0.086f, 1f);
+    [Tooltip("Couleur du bandeau qui balaie l'écran : or de la charte.")]
+    [SerializeField] private Color accentColor = UiTheme.Gold;
 
-    [Tooltip("Éclat de la seconde station : blanc de neige vosgienne.")]
-    [SerializeField] private Color secondaryColor = new Color(0.82f, 0.89f, 0.96f, 1f);
+    [Tooltip("Éclat de la seconde station : crème de la charte.")]
+    [SerializeField] private Color secondaryColor = UiTheme.Cream;
 
     /// <summary>Vrai tant qu'une transition est en cours.</summary>
     public static bool IsPlaying { get; private set; }
@@ -308,8 +308,8 @@ public class SceneTransition : MonoBehaviour
         stationB = NewStation(rect, new Vector2(0f, 0f), secondaryColor, "MONTAGNE");
         stationC = NewStation(rect, new Vector2(0f, -92f), accentColor, "IUT");
 
-        AddText(rect, title, new Vector2(0f, 232f), 62f, FontStyles.Bold, 1.6f);
-        AddText(rect, subtitle, new Vector2(0f, -232f), 30f, FontStyles.Normal, 2.4f);
+        AddText(rect, title, new Vector2(0f, 232f), 96f, UiTheme.DisplayFont, 1.6f);
+        AddText(rect, subtitle, new Vector2(0f, -232f), 30f, UiTheme.BodyFont, 2.4f);
 
         return canvas;
     }
@@ -323,7 +323,7 @@ public class SceneTransition : MonoBehaviour
         rect.sizeDelta = new Vector2(360f, 3f);
         rect.anchoredPosition = position;
 
-        AddText(parent, label, position + new Vector2(0f, 34f), 34f, FontStyles.Bold, 1.8f);
+        AddText(parent, label, position + new Vector2(0f, 34f), 42f, UiTheme.NumberFont, 8f);
         return image;
     }
 
@@ -350,14 +350,15 @@ public class SceneTransition : MonoBehaviour
     /// pas, le texte est simplement absent — l'animation, elle, reste.
     /// </summary>
     private static void AddText(RectTransform parent, string content, Vector2 position, float size,
-                                FontStyles style, float characterSpacing)
+                                string fontPath, float characterSpacing)
     {
         if (string.IsNullOrEmpty(content))
         {
             return;
         }
 
-        var font = TMP_Settings.defaultFontAsset;
+        var font = UiTheme.Font(fontPath);
+        if (font == null) font = TMP_Settings.defaultFontAsset;
         if (font == null)
         {
             Debug.LogWarning("[SceneTransition] Aucune police TextMeshPro par défaut : les textes " +
@@ -370,9 +371,8 @@ public class SceneTransition : MonoBehaviour
         text.text = content;
         text.font = font;
         text.fontSize = size;
-        text.fontStyle = style;
         text.characterSpacing = characterSpacing;
-        text.color = Color.white;
+        text.color = UiTheme.Cream;
         text.alignment = TextAlignmentOptions.Center;
         text.raycastTarget = false;
         text.textWrappingMode = TextWrappingModes.NoWrap;

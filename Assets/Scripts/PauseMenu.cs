@@ -11,10 +11,6 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject panel;
 
     private const string MainMenuScene = "MainMenu";
-    private static readonly Color Ink = new Color32(17, 32, 36, 255);
-    private static readonly Color ButtonColor = new Color32(32, 54, 59, 255);
-    private static readonly Color Gold = new Color32(238, 188, 111, 255);
-    private static readonly Color Muted = new Color32(171, 195, 195, 255);
     private static readonly string[] Labels = { "Flipper gauche", "Flipper droit", "Flipper secondaire", "Lanceur", "Tilt gauche", "Tilt droit" };
 
     private GameObject overlay;
@@ -125,8 +121,7 @@ public class PauseMenu : MonoBehaviour
         var card = Rect("Panneau", veil, Vector2.zero, new Vector2(650, height));
         settingsCard = card.gameObject;
         card.localRotation = cardRotation;
-        card.gameObject.AddComponent<Image>().color = Ink;
-        Rect("Filet", card, new Vector2(0, height / 2f - 3f), new Vector2(650, 6)).gameObject.AddComponent<Image>().color = Gold;
+        UiTheme.Round(card.gameObject.AddComponent<Image>(), UiTheme.Ink, 28);
 
         var body = Rect("Réglages", card, new Vector2(0, offset), new Vector2(650, 664));
         BuildSettings(body);
@@ -135,9 +130,13 @@ public class PauseMenu : MonoBehaviour
 
     private void BuildSettings(RectTransform card)
     {
-        Text(card, standalone ? "Options" : "Pause", new Vector2(0, 273), new Vector2(540, 53), 43, Gold);
-        Text(card, "Musique", new Vector2(-185, 199), new Vector2(200, 32), 24, Color.white, TextAlignmentOptions.MidlineLeft);
-        volumeText = Text(card, "", new Vector2(250, 199), new Vector2(78, 32), 22, Gold);
+        Text(card, standalone ? "OPTIONS" : "PAUSE", new Vector2(0, 278), new Vector2(540, 56), 54, UiTheme.Cream,
+            font: UiTheme.DisplayFont);
+        UiTheme.Round(Rect("Filet", card, new Vector2(0, 241), new Vector2(64, 5)).gameObject.AddComponent<Image>(),
+            UiTheme.Gold, 2.5f);
+        Text(card, "Musique", new Vector2(-185, 199), new Vector2(200, 32), 24, UiTheme.Cream, TextAlignmentOptions.MidlineLeft);
+        volumeText = Text(card, "", new Vector2(250, 199), new Vector2(78, 32), 24, UiTheme.Gold,
+            font: UiTheme.NumberFont);
         music = CreateSlider(card);
         music.onValueChanged.AddListener(value =>
         {
@@ -145,15 +144,16 @@ public class PauseMenu : MonoBehaviour
             else AudioManager.SaveMusicVolume(value / 100f);
             volumeText.text = Mathf.RoundToInt(value) + " %";
         });
-        Text(card, "Touches", new Vector2(-185, 139), new Vector2(200, 36), 29, Gold, TextAlignmentOptions.MidlineLeft);
+        Text(card, "Touches", new Vector2(-185, 139), new Vector2(200, 36), 32, UiTheme.Gold, TextAlignmentOptions.MidlineLeft,
+            UiTheme.NumberFont);
         for (int i = 0; i < Labels.Length; i++)
         {
             float y = 91 - i * 48;
             var action = (Binding)i;
-            Text(card, Labels[i], new Vector2(-130, y), new Vector2(310, 40), 23, Color.white, TextAlignmentOptions.MidlineLeft);
+            Text(card, Labels[i], new Vector2(-130, y), new Vector2(310, 40), 22, UiTheme.Cream, TextAlignmentOptions.MidlineLeft);
             rebindButtons[i] = CreateButton(card, action.ToString(), "", new Vector2(174, y), new Vector2(222, 40), () => BeginCapture(action), out keyLabels[i]);
         }
-        feedback = Text(card, "", new Vector2(0, -200), new Vector2(575, 45), 19, Muted);
+        feedback = Text(card, "", new Vector2(0, -200), new Vector2(575, 45), 19, UiTheme.Muted);
         reset = CreateButton(card, "TouchesParDefaut", "Touches par défaut", new Vector2(-151, -267), new Vector2(270, 54), () =>
         {
             EndCapture(false);
@@ -169,8 +169,10 @@ public class PauseMenu : MonoBehaviour
                 GameManager.Instance?.TogglePause();
             }
         }, out var resumeLabel);
-        resume.GetComponent<Image>().color = Gold;
-        resumeLabel.color = Ink;
+        UiTheme.StyleButton(resume, true);
+        UiTheme.Apply(resumeLabel, UiTheme.DisplayFont);
+        resumeLabel.fontSize = 30;
+        resumeLabel.color = UiTheme.Ink;
     }
 
     private void BuildExitActions(RectTransform veil, RectTransform card)
@@ -187,9 +189,10 @@ public class PauseMenu : MonoBehaviour
         var prompt = Rect("ConfirmationSortie", veil, Vector2.zero, new Vector2(550, 246));
         prompt.localRotation = cardRotation;
         exitPrompt = prompt.gameObject;
-        exitPrompt.AddComponent<Image>().color = Ink;
-        exitPromptTitle = Text(prompt, "", new Vector2(0, 72), new Vector2(490, 54), 32, Gold);
-        Text(prompt, "La partie en cours sera abandonnée.", new Vector2(0, 12), new Vector2(490, 42), 22, Color.white);
+        UiTheme.Round(exitPrompt.AddComponent<Image>(), UiTheme.Ink, 24);
+        exitPromptTitle = Text(prompt, "", new Vector2(0, 72), new Vector2(490, 54), 34, UiTheme.Cream,
+            font: UiTheme.NumberFont);
+        Text(prompt, "La partie en cours sera abandonnée.", new Vector2(0, 12), new Vector2(490, 42), 22, UiTheme.Muted);
         cancelExit = CreateButton(prompt, "Annuler", "Annuler", new Vector2(-120, -67),
             new Vector2(196, 50), DismissExitPrompt, out _);
         CreateButton(prompt, "Confirmer", "Confirmer", new Vector2(120, -67),
@@ -302,14 +305,15 @@ public class PauseMenu : MonoBehaviour
     {
         var root = Rect("VolumeMusique", card, new Vector2(65, 199), new Vector2(276, 38));
         root.gameObject.AddComponent<Image>().color = Color.clear;
-        Rect("Piste", root, Vector2.zero, new Vector2(276, 8)).gameObject.AddComponent<Image>().color = ButtonColor;
+        UiTheme.Round(Rect("Piste", root, Vector2.zero, new Vector2(276, 8)).gameObject.AddComponent<Image>(),
+            UiTheme.Surface, 4);
         var fillArea = Rect("ZoneNiveau", root, Vector2.zero, new Vector2(276, 8));
         var fill = Rect("Niveau", fillArea, Vector2.zero, Vector2.zero);
-        fill.gameObject.AddComponent<Image>().color = Gold;
+        UiTheme.Round(fill.gameObject.AddComponent<Image>(), UiTheme.Gold, 4);
         var rail = Rect("Course", root, Vector2.zero, new Vector2(260, 38));
-        var handle = Rect("Curseur", rail, Vector2.zero, new Vector2(17, 30));
+        var handle = Rect("Curseur", rail, Vector2.zero, new Vector2(17, -10)); // Le Slider l'étire en hauteur.
         var image = handle.gameObject.AddComponent<Image>();
-        image.color = Gold;
+        UiTheme.Round(image, UiTheme.Gold, 8);
         var slider = root.gameObject.AddComponent<Slider>();
         slider.targetGraphic = image;
         slider.handleRect = handle;
@@ -325,23 +329,20 @@ public class PauseMenu : MonoBehaviour
     {
         var r = Rect(name, parent, position, size);
         var image = r.gameObject.AddComponent<Image>();
-        image.color = ButtonColor;
         var button = r.gameObject.AddComponent<Button>();
         button.targetGraphic = image;
-        var colors = button.colors;
-        colors.highlightedColor = new Color(1.35f, 1.35f, 1.35f);
-        colors.selectedColor = new Color(1.25f, 1.25f, 1.25f);
-        button.colors = colors;
+        UiTheme.StyleButton(button, false);
         button.onClick.AddListener(() => onClick());
-        title = Text(r, label, Vector2.zero, size - new Vector2(12, 4), 21, Color.white);
+        title = Text(r, label, Vector2.zero, size - new Vector2(12, 4), 21, UiTheme.Cream, font: UiTheme.StrongFont);
         return button;
     }
 
     internal static TMP_Text Text(Transform parent, string label, Vector2 position, Vector2 size, float fontSize,
-        Color color, TextAlignmentOptions alignment = TextAlignmentOptions.Center)
+        Color color, TextAlignmentOptions alignment = TextAlignmentOptions.Center, string font = UiTheme.BodyFont)
     {
         var r = Rect("Texte", parent, position, size);
         var text = r.gameObject.AddComponent<TextMeshProUGUI>();
+        UiTheme.Apply(text, font);
         text.text = label;
         text.fontSize = fontSize;
         text.color = color;

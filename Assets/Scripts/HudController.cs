@@ -426,8 +426,8 @@ public class HudController : MonoBehaviour
             }
 
             Image bgImage = backgroundGo.GetComponent<Image>();
-            bgImage.sprite = GetOrCreateWhiteSprite();
-            bgImage.color = new Color(0.08f, 0.10f, 0.14f, 0.90f);
+            UiTheme.Round(bgImage, UiTheme.Surface, 8);
+            backgroundGo.AddComponent<Mask>(); // La jauge épouse les coins arrondis du fond.
             bgImage.raycastTarget = false;
         }
 
@@ -456,10 +456,11 @@ public class HudController : MonoBehaviour
             labelRect.sizeDelta = new Vector2(0f, 24f);
 
             TextMeshProUGUI labelText = labelGo.GetComponent<TextMeshProUGUI>();
+            UiTheme.Apply(labelText, UiTheme.StrongFont);
             labelText.fontSize = 18f;
             labelText.alignment = TextAlignmentOptions.Center;
             labelText.text = PlungerKeyLabel();
-            labelText.color = new Color(0.9f, 0.9f, 0.9f, 0.95f);
+            labelText.color = UiTheme.Cream;
             labelText.raycastTarget = false;
             plungerGaugeLabel = labelText;
         }
@@ -486,7 +487,7 @@ public class HudController : MonoBehaviour
             fillImage.fillMethod = Image.FillMethod.Horizontal;
             fillImage.fillOrigin = (int)Image.OriginHorizontal.Left;
             fillImage.fillAmount = 0f;
-            fillImage.color = Color.green;
+            fillImage.color = UiTheme.Cream;
             fillImage.raycastTarget = false;
             plungerGaugeFill = fillImage;
         }
@@ -506,16 +507,10 @@ public class HudController : MonoBehaviour
         float clamped = Mathf.Clamp01(charge);
         plungerGaugeFill.fillAmount = clamped;
 
-        // Arcade gradient: Green -> Yellow -> Orange -> Red
-        Color fillColor;
-        if (clamped < 0.5f)
-        {
-            fillColor = Color.Lerp(new Color(0.2f, 0.95f, 0.2f), new Color(1f, 0.9f, 0.1f), clamped * 2f);
-        }
-        else
-        {
-            fillColor = Color.Lerp(new Color(1f, 0.9f, 0.1f), new Color(1f, 0.15f, 0.15f), (clamped - 0.5f) * 2f);
-        }
+        // De la crème à l'or puis au vermillon : la puissance se lit sans quitter la charte.
+        Color fillColor = clamped < 0.5f
+            ? Color.Lerp(UiTheme.Cream, UiTheme.Gold, clamped * 2f)
+            : Color.Lerp(UiTheme.Gold, new Color32(232, 106, 74, 255), (clamped - 0.5f) * 2f);
         plungerGaugeFill.color = fillColor;
 
         if (plungerGaugeLabel != null)
